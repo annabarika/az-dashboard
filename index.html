@@ -1,18 +1,22 @@
 <!doctype html>
-<html ng-app="Core">
+<html ng-app="core">
 <head>
     <title>Azimuth: Compass front-end app</title>
-    <script src="/lib/angular/1.3.9/angular.min.js"></script>
+    <script src="/vendor/angular/1.3.9/angular.min.js"></script>
+    <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
+    <script src="/vendor/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="/vendor/bootstrap/2.3.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/vendor/bootstrap/2.3.2/css/bootstrap-theme.min.css"/>
+
     <script src="/app/app.js"></script>
-
-    <script src="/lib/jquery/jquery-1.11.2.min.js"></script>
-    <script src="/lib/bootstrap/2.3.2/js/bootstrap.min.js"></script>
-
-
-    <link rel="stylesheet" href="/lib/bootstrap/2.3.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/lib/bootstrap/2.3.2/css/bootstrap-theme.min.css"/>
+    <script src="/app/common/directives.js"></script>
 </head>
-<body ng-controller="BaseController">
 
+<body ng-controller="LayoutController as layout">
+    <header></header>
+    <sidebar></sidebar>
+    <footer></footer>
 </body>
 </html>
