@@ -1,4 +1,5 @@
 (function(){
+
 	var app = angular.module('core', ['directives']);
 
 	app.controller('LayoutController', ['$http', '$scope', function($http, $scope){
