@@ -1,0 +1,35 @@
+<!-- start: page header -->
+<div class="page-header">
+    <h3>Orders</h3>
+    <div class="box-layout">
+
+        <div class="col-sm-6 va-m">
+                Choose payment date
+            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
+            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
+        </div>
+
+        <div class="col-md-3">
+                <p>Filter by factory</p>
+                <multi-select
+                        input-model="Factory"
+                        button-label="icon name"
+                        item-label="icon name maker"
+                        tick-property="ticked"
+                        >
+                </multi-select>
+            </div>
+        <div class="col-md-3">
+                <p>Filter by order status</p>
+                <multi-select
+                        input-model="Status"
+                        button-label="icon name"
+                        item-label="icon name maker"
+                        tick-property="ticked"
+                        >
+                </multi-select>
+        </div>
+
+    </div>
+</div>
+<!--/ end: page header -->

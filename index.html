@@ -1,23 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html ng-app="core">
 <head>
     <title>Azimuth: Compass front-end app</title>
-    <script src="/vendor/angular/1.3.9/angular.min.js"></script>
-    <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
-    <script src="/vendor/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 
-    <link rel="stylesheet" href="/vendor/bootstrap/2.3.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/vendor/bootstrap/2.3.2/css/bootstrap-theme.min.css"/>
 
-    <script src="/app/app.js"></script>
-    <script src="/app/common/directives.js"></script>
+    <script src="vendor/jquery/jquery-1.11.2.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/velocity/1.2.1/velocity.min.js"></script>
+    <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/angular/angular.min.js"></script>
+    <script src="vendor/angular/angular-route.min.js"></script>
+    <script src="vendor/angular/multi-select/js/angular-multi-select.js"></script>
+
+
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="vendor/angular/multi-select/css/angular-multi-select.css">
+    <link rel="stylesheet" href="views/theme/css/fontawesome.css">
+    <link rel="stylesheet" href="views/theme/css/layout.css">
+    <link rel="stylesheet" href="views/theme/css/common.css">
+
+    <script src="app/app.js"></script>
+    <script src="app/modules/BuyingOffice/app.js"></script>
+    <script src="app/modules/BuyingOffice/controllers/orders.js"></script>
+    <script src="app/modules/BuyingOffice/services/orders.js"></script>
+    <script src="views/widgets/table.js"></script>
+    <script src="views/widgets/toolbar.js"></script>
+    <script src="app/common/directives.js"></script>
+    <base href="/index.html">
+
 </head>
 
 <body ng-controller="LayoutController as layout">
-    <header></header>
-    <sidebar></sidebar>
-    <content></content>
-    <footer></footer>
+<section id="app-wrapper" data-ui-view="" class="ng-scope">
+    <sidebar class="app-sidebar sidebar-left ng-scope"></sidebar>
+
+    <header id="app-header" class="navbar"></header>
+
+    <footer id="app-footer" class="ng-scope"></footer>
+
+    <section id="app-content" class="clearfix ng-scope">
+        <!-- start: indicator -->
+
+        <div class="spinner-wrapper"><div data-indicator=""></div></div>
+
+        <!--/ end: indicator -->
+
+        <!-- start: content-body -->
+
+        <!-- uiView:  --><div class="content-body slide-down ng-scope"><!-- start: box layout -->
+
+
+
+        <ng-view></ng-view>
+
+    </div>
+        <!--/ end: content-body -->
+
+    </section>
+
+    <!--/ end: application content -->
+
+
+
+    <!-- start: application backdrop -->
+
+</section>
 </body>
 </html>
