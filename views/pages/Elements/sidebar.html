@@ -1,3 +1,11 @@
 <ul class="nav navbar nav-pills" ng-repeat="item in Navigation">
-    <li>{{item.title}}</li>
+    <li>
+        <a href="" ng-click="back()">{{item.title}}</a>
+
+        <ul>
+            <li ng-repeat="subitem in item.menu">
+                <a href="" ng-click=module_route(subitem.url)>{{subitem.title}}</a>
+            </li>
+        </ul>
+    </li>
 </ul>

@@ -1,3 +1,23 @@
-[{ "title": "Buying office"},
-{"title": "Orders"}
+[
+  { "title": "buying office",
+    "icon":"ai ai-email",
+    "menu":
+    [
+      {
+        "title": "orders",
+        "url":"buyingOffice/orders"
+      },
+      {
+        "title": "bestsellers",
+        "url":"buyingOffice/bestsellers"
+      },
+      {
+        "title": "cargo",
+        "url":"buyingOffice/cargo"
+      }
+    ]
+  },
+  {
+    "title":"Application"
+  }
 ]
