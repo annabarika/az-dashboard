@@ -3,8 +3,10 @@
     var app = angular.module('core',
         [
             'directives',
+            'commonFilters',
             "ngRoute",
             "BuyingOffice",
+            "widgmodal",
             "widgtoolbar",
             "widgtable"
 

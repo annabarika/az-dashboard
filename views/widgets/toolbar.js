@@ -10,10 +10,7 @@
 
             restict:'EA',
             templateUrl:"views/widgets/toolbar.wgt.html"
-
-
         };
-
     });
 
 })();

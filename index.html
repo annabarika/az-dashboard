@@ -3,22 +3,23 @@
 <head>
     <title>Azimuth: Compass front-end app</title>
 
-
-
     <script src="vendor/jquery/jquery-1.11.2.min.js"></script>
     <script src="http://cdn.jsdelivr.net/velocity/1.2.1/velocity.min.js"></script>
     <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.3.1/less.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="vendor/angular/angular.min.js"></script>
     <script src="vendor/angular/angular-route.min.js"></script>
     <script src="vendor/angular/multi-select/js/angular-multi-select.js"></script>
-
 
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="vendor/angular/multi-select/css/angular-multi-select.css">
     <link rel="stylesheet" href="views/theme/css/fontawesome.css">
     <link rel="stylesheet" href="views/theme/css/layout.css">
     <link rel="stylesheet" href="views/theme/css/common.css">
+    <link rel="stylesheet" href="views/theme/css/datatable.css">
+    <link rel="stylesheet" href="views/theme/css/less/component.less">
+    <link rel="stylesheet" href="views/theme/css/less/mixins.less">
 
     <script src="app/app.js"></script>
     <script src="app/modules/BuyingOffice/app.js"></script>
@@ -26,7 +27,9 @@
     <script src="app/modules/BuyingOffice/services/orders.js"></script>
     <script src="views/widgets/table.js"></script>
     <script src="views/widgets/toolbar.js"></script>
+    <script src="views/widgets/modal.js"></script>
     <script src="app/common/directives.js"></script>
+    <script src="app/common/filters.js"></script>
     <base href="/index.html">
 
 </head>
@@ -41,29 +44,20 @@
 
     <section id="app-content" class="clearfix ng-scope">
         <!-- start: indicator -->
-
         <div class="spinner-wrapper"><div data-indicator=""></div></div>
-
         <!--/ end: indicator -->
 
         <!-- start: content-body -->
-
-        <!-- uiView:  --><div class="content-body slide-down ng-scope"><!-- start: box layout -->
-
-
-
+        <!-- uiView:  -->
+        <div class="content-body slide-down ng-scope">
+        <!-- start: box layout -->
         <ng-view></ng-view>
-
-    </div>
+        <!--/ end: box layout -->
+        </div>
         <!--/ end: content-body -->
 
     </section>
-
     <!--/ end: application content -->
-
-
-
-    <!-- start: application backdrop -->
 
 </section>
 </body>

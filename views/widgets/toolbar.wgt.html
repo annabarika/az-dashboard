@@ -3,10 +3,11 @@
     <h3>Orders</h3>
     <div class="box-layout">
 
+
         <div class="col-sm-6 va-m">
                 Choose payment date
-            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
-            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
+                <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
+                <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
         </div>
 
         <div class="col-md-3">
@@ -16,6 +17,7 @@
                         button-label="icon name"
                         item-label="icon name maker"
                         tick-property="ticked"
+                        max-labels="2"
                         >
                 </multi-select>
             </div>
@@ -26,10 +28,12 @@
                         button-label="icon name"
                         item-label="icon name maker"
                         tick-property="ticked"
+                        max-labels="2"
                         >
                 </multi-select>
+
         </div>
 
-    </div>
+        </div>
 </div>
 <!--/ end: page header -->

@@ -79,7 +79,6 @@
             "$filter",
             "orderService",
 
-
         function($http, $scope,$rootScope,$filter,orderService){
 
         $scope.test="orders routing work!";
@@ -114,13 +113,34 @@
                     $scope.statusModel = $scope.status_list[0];
                 });
 
+
             $scope.Factory = [
-                { name: "Factory1",  maker: "(Tiger Nixon)",        ticked: false },
-                { name: "Factory2",  maker: "(Garrett Winters)",    ticked: false },
-                { name: "Factory3",  maker: "(Garrett Winters)",    ticked: false },
-                { name: "Factory4",  maker: "(Airi Satou)",         ticked: false },
-                { name: "Factory5",  maker: "(Colleen Hurst)",      ticked: false }
+                { name: "Factory1 (Tiger Nixon)",        ticked: false },
+                { name: "Factory2 (Garrett Winters)",    ticked: false },
+                { name: "Factory3 (Garrett Winters)",    ticked: false },
+                { name: "Factory4 (Airi Satou)",         ticked: false },
+                { name: "Factory5 (Colleen Hurst)",      ticked: false }
             ];
+
+            //$scope.Factorytrim = function (){
+            //     //var array = {};
+            //     angular.forEach($scope.Factory, function(v,k){
+            //
+            //         v.name= $filter("limitTo")(v.name,7);
+            //         v.name= v.name+"...";
+            //         //console.log("test", v.name);
+            //
+            //     });
+            //    console.log($scope.Factory);
+            //    return $scope.Factory;
+            // };
+            //
+            // $scope.Factorytrim();
+
+
+
+
+
 
             $scope.Status = [
                 { name: "Complete",     ticked: false },
@@ -192,3 +212,4 @@
 
 
 })();
+

@@ -21,7 +21,6 @@
 	});
 
 
-
 //widget sidebar
     app.directive('navSidebar', ['$timeout', function ($timeout) {
         return {
