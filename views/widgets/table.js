@@ -4,7 +4,29 @@
      */
     var app=angular.module("widgtable",[]);
 
-    app.directive("widgtable", ["$filter",function($filter){
+
+    /**
+     * Factory for
+     */
+    app.factory("tableFactory",["$filter",function($filter){
+
+        var service={};
+
+        service.date_filter=function(value){
+            var date;
+
+            date=$filter('date')(value,"dd/MM/yyyy");
+
+            return date;
+        };
+
+
+        return service;
+    }]);
+
+
+
+    app.directive("widgtable", ["tableFactory",function(tableFactory){
 
         return{
 
@@ -14,7 +36,7 @@
                     datarows:"="
             },
 
-            link:function($scope,$filter){
+            link:function($scope){
 
                 $scope.column_sorter=function(key){
                     console.log(key);
@@ -30,31 +52,44 @@
                     //console.log("order_delete",row);
                 };
 
-                /*$scope.$watch('datarows',function(newVal){
+                $scope.$watch('datarows',function(newVal,oldVal){
+
+                    // console.log(oldVal,newVal);
 
                     if(newVal!=undefined){
 
-                        var length=newVal.length,
-                            date=/date/i;
+                        var length= newVal.length,
+                            date=/date/i,
+                            num;
 
                         for(var i=0;i<length;i++){
 
-                            angular.forEach(newVal[i], function(value,key){
+                            angular.forEach( newVal[i], function(value,key){
 
-                                if(date.exec(key)!=null){
-                                    //console.log(key,value);
+                                if(date .exec(key)!=null){
 
-                                    //value=$filter('date')(value,'medium');
-                                   // item.date = $filter('date')(item.date, "dd/MM/yyyy");
+                                    newVal[i][key]=tableFactory.date_filter(value);
+
                                 }
-                            })
+                                else{
 
+                                    num = parseInt(value);
+
+                                    if(num){
+
+                                        newVal[i][key]=num;
+
+                                    }
+                                }
+                            });
                         }
 
                     }
-                })*/
+                });
 
-
+                $scope.edit=function(obj){
+                    console.log(obj);
+                };
 
             }
 

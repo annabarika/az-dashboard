@@ -1,6 +1,8 @@
 (function(){
     /**
      *  toolbar widget
+     *  @param1:scope.modalTitle
+     *  @param2:scope.modalContent
      */
     var app=angular.module("widgmodal",[]);
 
@@ -9,7 +11,12 @@
         return{
 
             restict:'EA',
-            templateUrl:"views/widgets/modal.wgt.html"
+            templateUrl:"views/widgets/modal.wgt.html",
+            //scope:{
+            //    modalTitle:"=",
+            //    modalContent:"@"
+            //}
+            scope:true
         };
     });
 
