@@ -90,7 +90,7 @@
                 orderService.getData("/mock/factory.json")
                     .then(function(response){
 
-                        $scope.factory_list=response;
+                        $scope.FactoryList=response;
                     });
                 /*get statuses*/
                 orderService.getData("/mock/orderstatus.json")
@@ -100,19 +100,19 @@
                     });
 
 
-                $scope.Factory = [
-                    { name: "Factory1 (Tiger Nixon)",        ticked: false },
-                    { name: "Factory2 (Garrett Winters)",    ticked: false },
-                    { name: "Factory3 (Garrett Winters)",    ticked: false },
-                    { name: "Factory4 (Airi Satou)",         ticked: false },
-                    { name: "Factory5 (Colleen Hurst)",      ticked: false }
-                ];
-
-                $scope.Status = [
-                    { name: "Complete",     ticked: false },
-                    { name: "In Complete",  ticked: false },
-                    { name: "On Hold",      ticked: false }
-                ];
+                //$scope.Factory = [
+                //    { name: "Factory1 (Tiger Nixon)",        ticked: false },
+                //    { name: "Factory2 (Garrett Winters)",    ticked: false },
+                //    { name: "Factory3 (Garrett Winters)",    ticked: false },
+                //    { name: "Factory4 (Airi Satou)",         ticked: false },
+                //    { name: "Factory5 (Colleen Hurst)",      ticked: false }
+                //];
+                //
+                //$scope.Status = [
+                //    { name: "Complete",     ticked: false },
+                //    { name: "In Complete",  ticked: false },
+                //    { name: "On Hold",      ticked: false }
+                //];
 
 
                 $scope.$watch('orders',function(newVal,oldVal){

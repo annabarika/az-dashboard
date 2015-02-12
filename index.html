@@ -4,10 +4,12 @@
     <title>Azimuth: Compass front-end app</title>
 
     <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/velocity/1.2.1/velocity.min.js"></script>
-    <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.3.1/less.min.js"></script>
+    <script src="/vendor/jquery/velocity.min.js"></script>
+    <!--<script src="/vendor/jquery/dataTables.min.js"></script>-->
+    <script src="/vendor/jquery/less.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/vendor/bootstrap/js/tabs.js"></script>
+
     <script src="/vendor/angular/angular.min.js"></script>
     <script src="/vendor/angular/angular-route.min.js"></script>
     <script src="/vendor/angular/multi-select/js/angular-multi-select.js"></script>
@@ -48,16 +50,16 @@
         <!--/ end: indicator -->
 
         <!-- start: content-body -->
-        <!-- uiView:  -->
+        <!-- uiView  -->
         <div class="content-body slide-down ng-scope">
-            <!-- start: box layout -->
+            <!-- start box layout -->
             <ng-view></ng-view>
-            <!--/ end: box layout -->
+            <!--/ end box layout -->
         </div>
-        <!--/ end: content-body -->
+        <!--/ end content-body -->
 
     </section>
-    <!--/ end: application content -->
+    <!--/ end application content -->
 
 </section>
 </body>

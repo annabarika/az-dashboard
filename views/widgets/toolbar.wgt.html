@@ -1,39 +1,37 @@
-<!-- start: page header -->
-<div class="page-header">
-    <h3>Orders</h3>
+<!-- start page header -->
+<div class="page-header ng-scope">
     <div class="box-layout">
-
-
-        <div class="col-sm-6 va-m">
-                Choose payment date
-                <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
-                <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
+        <div class="row">
+                <div class="col-xs-6">
+                        <label>Filter by factory
+                            <multi-select
+                                    input-model="FactoryList"
+                                    output-model="resultData"
+                                    button-label="icon name"
+                                    item-label="icon name maker"
+                                    tick-property="ticked"
+                                    max-labels="2">
+                            </multi-select>
+                        </label>
+                        <label>Filter by order status
+                             <multi-select
+                                    input-model="status_list"
+                                    output-model="resultData"
+                                    button-label="icon name"
+                                    item-label="icon name maker"
+                                    tick-property="ticked"
+                                    max-labels="2">
+                             </multi-select>
+                        </label>
+                </div>
+                <div class="col-xs-6">
+                    <label>Choose payment date:</label>
+                    <p class="input-group">
+                        <input class="form-control" type="date" data-ng-model="min" placeholder="from">
+                        <input class="form-control" type="date" data-ng-model="max" placeholder="from">
+                    </p>
+                </div>
         </div>
-
-        <div class="col-md-3">
-                <p>Filter by factory</p>
-                <multi-select
-                        input-model="Factory"
-                        button-label="icon name"
-                        item-label="icon name maker"
-                        tick-property="ticked"
-                        max-labels="2"
-                        >
-                </multi-select>
-            </div>
-        <div class="col-md-3">
-                <p>Filter by order status</p>
-                <multi-select
-                        input-model="Status"
-                        button-label="icon name"
-                        item-label="icon name maker"
-                        tick-property="ticked"
-                        max-labels="2"
-                        >
-                </multi-select>
-
-        </div>
-
-        </div>
+    </div>
 </div>
-<!--/ end: page header -->
+<!--/ end page header -->
