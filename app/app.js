@@ -6,7 +6,9 @@
 			"ngRoute",
 			"BuyingOffice",
 			"widgtable",
-			"multi-select"
+			"multi-select",
+			"widgtoolbar",
+			"widgmodal",
 		]);
 
 		app.config(function($routeProvider, $locationProvider, $httpProvider){

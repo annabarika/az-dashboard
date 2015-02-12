@@ -1,23 +1,24 @@
 [
-  { "title": "buying office",
-    "icon":"ai ai-email",
+  { "title": "Buying office",
+    "icon":"ai ai-style",
     "menu":
     [
-      {
-        "title": "orders",
+      {"title": "Orders",
+        "count": "2",
         "url":"buyingOffice/orders"
       },
-      {
-        "title": "bestsellers",
+      {"title": "Bestsellers",
+        "count": "4",
         "url":"buyingOffice/bestsellers"
       },
-      {
-        "title": "cargo",
+      {"title": "Cargo",
+        "count": "22",
         "url":"buyingOffice/cargo"
       }
     ]
   },
   {
-    "title":"Application"
+    "title":"Application",
+    "icon":"ai ai-email"
   }
 ]

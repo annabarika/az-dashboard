@@ -4,7 +4,7 @@
      */
     var app=angular.module("widgtable",[]);
 
-    app.directive("widgtable",["$filter",function($filter){
+    app.directive("widgtable", ["$filter",function($filter){
 
         return{
 

@@ -1,6 +1,6 @@
 (function(){
 
-    var app = angular.module('BuyingOffice', []);
+    var app = angular.module('BuyingOffice', ['multi-select']);
 
     app.config(function($routeProvider){
 
@@ -8,18 +8,21 @@
 
             .when('/buyingOffice/orders',
             {
+                //templateUrl:"/views/pages/BuyingOffice/orders.html",
                 templateUrl:"/app/modules/BuyingOffice/views/orders.html",
                 controller:"OrdersController"
             }
         )
             .when('/buyingOffice/bestsellers',
             {
+                //templateUrl:"/views/pages/BuyingOffice/bests.html",
                 templateUrl:"/app/modules/BuyingOffice/views/bests.html",
                 controller:"BestsController"
             }
         )
             .when("/buyingOffice/cargo",
             {
+                //templateUrl:"/views/pages/BuyingOffice/cargo.html",
                 templateUrl:"/app/modules/BuyingOffice/views/cargo.html",
                 controller:"CargoController"
             }
@@ -27,193 +30,156 @@
     });
 
 
-    /** factory for orders
-     * @Param: $http
-     * @param:$q
-     */
 
-        app.factory("orderService",["$http","$q",
-                function($http,$q){
 
-                    var service={};
 
-                    service.getData=function(url){
+    app.factory("orderService",["$http","$q",
+            function($http,$q){
 
-                        var deferred = $q.defer();
+                var service={};
 
-                        $http.get(url)
-                            .success(function (response) {
-                                if(response)
-                                {
-                                    deferred.resolve(response);
-                                }
-                                else
-                                {
-                                    deferred.resolve(response);
-                                }
+                service.getData=function(url){
 
-                            })
-                            .error(function (error) {
-                                deferred.reject(error);
-                            });
+                    var deferred = $q.defer();
 
-                        return deferred.promise;
-                    };
+                    $http.get(url)
+                        .success(function (response) {
+                            if(response)
+                            {
+                                deferred.resolve(response);
+                            }
+                            else
+                            {
+                                deferred.resolve(response);
+                            }
 
-                    return service;
-                }]
-        );
+                        })
+                        .error(function (error) {
+                            deferred.reject(error);
+                        });
+
+                    return deferred.promise;
+                };
+
+
+
+
+                return service;
+            }]
+    );
     /**
      * Order controller
      */
     app.controller('OrdersController',
 
         [
+            '$http',
             '$scope',
-            "orderService",
+            "$rootScope",
             "$filter",
+            "orderService",
+
+            function($http, $scope,$rootScope,$filter,orderService){
+
+                $scope.test="orders routing work!";
+
+                var orderBy = $filter('orderBy');
+                //rows=0;
 
 
-        function($scope,orderService,$filter){
+                orderService.getData("/mock/order.json")
+                    .then(function(response){
 
-            /* get orders */
-            orderService.getData("/mock/order.json")
-                .then(function(response){
+                        $scope.orders=response;
 
-                    $scope.dataOrders=response;
 
-                    $scope.orders=$scope.dataOrders;
-                });
-            /*get factories*/
-            orderService.getData("/mock/factory.json")
-                .then(function(response){
+                        //console.log($scope.rowsCount);
+                    });
 
-                    $scope.factory_list=response;
-                });
-            /*get statuses*/
-            orderService.getData("/mock/orderstatus.json")
-                .then(function(response){
+                orderService.getData("/mock/factory.json")
+                    .then(function(response){
 
-                    $scope.status_list=response;
-                });
-            /*parse dataOrders date and numbers*/
-            $scope.$watch('orders',function(newVal,oldVal){
+                        $scope.factory_list=response;
+                        //console.log($scope.factory_list);
 
-               // console.log(oldVal,newVal);
+                        $scope.factoryModel = $scope.factory_list[0];
+                    });
 
-                if(newVal!=undefined){
+                orderService.getData("/mock/orderstatus.json")
+                    .then(function(response){
 
-                    var length= newVal.length,
-                        date=/date/i,
-                        num;
-                   // console.log(length);
-                    for(var i=0;i<length;i++){
+                        $scope.status_list=response;
 
-                        angular.forEach( newVal[i], function(value,key){
+                        $scope.statusModel = $scope.status_list[0];
+                    });
 
-                            if(date.exec(key)!=null){
 
-                                newVal[i][key]=$filter('date')(value,"dd/MM/yyyy");
+                $scope.Factory = [
+                    { name: "Factory1 (Tiger Nixon)",        ticked: false },
+                    { name: "Factory2 (Garrett Winters)",    ticked: false },
+                    { name: "Factory3 (Garrett Winters)",    ticked: false },
+                    { name: "Factory4 (Airi Satou)",         ticked: false },
+                    { name: "Factory5 (Colleen Hurst)",      ticked: false }
+                ];
 
-                            }
-                            else{
+                //$scope.Factorytrim = function (){
+                //     //var array = {};
+                //     angular.forEach($scope.Factory, function(v,k){
+                //
+                //         v.name= $filter("limitTo")(v.name,7);
+                //         v.name= v.name+"...";
+                //         //console.log("test", v.name);
+                //
+                //     });
+                //    console.log($scope.Factory);
+                //    return $scope.Factory;
+                // };
+                //
+                // $scope.Factorytrim();
 
-                                num = parseInt(value);
 
-                                if(num){
 
-                                    newVal[i][key]=num;
-                                    //console.log(newVal[i][key]);
-                                }
+
+
+
+                $scope.Status = [
+                    { name: "Complete",     ticked: false },
+                    { name: "In Complete",  ticked: false },
+                    { name: "On Hold",      ticked: false }
+                ];
+
+                $scope.sort = function(predicate, reverse) {
+                    //console.log(typeof $scope.orders[1].number);
+                    /* angular.forEach($scope.orders,function(value,key){
+                     console.log(key,predicate);
+                     if(key==predicate){
+                     console.log(value)
+                     }
+
+                     });*/
+
+                    var length=$scope.orders.length,
+                        reg='/[^a-z]/i';
+
+                    for(i=0;i<length;i++){
+
+                        angular.forEach($scope.orders[i], function(value,key){
+
+                            if(key==predicate){
+                                //console.log(value, typeof value)
+
                             }
                         });
                     }
 
-                   // $scope.orders= newVal;
-                }
-            });
 
 
-
-            /*get selected items for factory  */
-
-            var filter={};
-            $scope.$watch('resultData',function(newVal){
-                var arr=[];
-
-               angular.forEach( newVal, function( value, key ) {
-
-                   if ( value.ticked === true ) {
-
-                       filter[value.name]=value;
-
-                        orderService.getData("/mock/orderfilter.json?"+value.name)
-
-                            .then(function(response){
-
-                                for(var i=0; i<response[value.name].length;i++){
-                                    arr.push(response[value.name][i]);
-                                }
-                                $scope.orders=arr;
-                            });
-
-                   }
-
-               });
-               /* return orders without filters*/
-                    try{
-                        if(newVal.length==0){
-
-                            $scope.orders=$scope.dataOrders;
-                        }
-                    }
-                    catch(e){
-
-                    }
-
-            });
+                    $scope.orders = orderBy($scope.orders, predicate, reverse);
+                };
 
 
-            /*get selected items for statuses */
+            }]);
 
-           /* $scope.$watch('resultDataStatus',function(newVal){
-                var arr=[];
-                angular.forEach( newVal, function( value, key ) {
-
-                    if ( value.ticked === true ) {
-
-                        orderService.filterData("/mock/orderfilter.json", value.name)
-
-                            .then(function(response){
-
-                                for(var i=0; i<response[value.name].length;i++){
-                                    arr.push(response[value.name][i]);
-                                }
-                                $scope.orders=arr;
-                            });
-
-                    }
-                });
-
-                try{
-                    if(newVal.length==0){
-
-                        $scope.orders=$scope.dataOrders;
-                    }
-                }
-                catch(e){
-
-                }
-
-            });*/
-
-        }]);
-
-
-
-    /**
-     * controller for bestsellers
-     */
 
     app.controller('BestsController',
 
@@ -227,7 +193,7 @@
 
                 $scope.test="bestsellers routing is work!";
 
-    }]);
+            }]);
 
 
 
@@ -242,10 +208,7 @@
 
                 $scope.test="cargo routing is work!";
 
-    }]);
-
-
-
+            }]);
 
 
 })();
