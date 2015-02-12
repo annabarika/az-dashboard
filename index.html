@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html ng-app="core">
+<html ng-app="Azimuth">
 <head>
     <title>Azimuth: Compass front-end app</title>
 
+    <!-- Third-party components -->
     <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
     <script src="http://cdn.jsdelivr.net/velocity/1.2.1/velocity.min.js"></script>
     <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
@@ -11,30 +12,29 @@
     <script src="/vendor/angular/angular.min.js"></script>
     <script src="/vendor/angular/angular-route.min.js"></script>
     <script src="/vendor/angular/multi-select/js/angular-multi-select.js"></script>
+    <!--/ Third-party components -->
 
+    <!-- Style -->
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="/vendor/angular/multi-select/css/angular-multi-select.css">
-    <link rel="stylesheet" href="/views/theme/css/fontawesome.css">
-    <link rel="stylesheet" href="/views/theme/css/layout.css">
-    <link rel="stylesheet" href="/views/theme/css/common.css">
-    <link rel="stylesheet" href="/views/theme/css/datatable.css">
-    <link rel="stylesheet" href="/views/theme/css/less/component.less">
-    <link rel="stylesheet" href="/views/theme/css/less/mixins.less">
+    <link rel="stylesheet" href="/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <link rel="stylesheet" href="/assets/css/datatable.css">
+    <link rel="stylesheet" href="/assets/css/less/component.less">
+    <link rel="stylesheet" href="/assets/css/less/mixins.less">
+    <!--/ Style -->
 
+    <!-- Application level JS -->
     <script src="/app/app.js"></script>
-    <script src="/app/modules/BuyingOffice/app.js"></script>
-    <script src="/app/modules/BuyingOffice/controllers/orders.js"></script>
-    <script src="/app/modules/BuyingOffice/services/orders.js"></script>
-    <script src="/views/widgets/table.js"></script>
-    <script src="/views/widgets/toolbar.js"></script>
-    <script src="/views/widgets/modal.js"></script>
+    <script src="/app/common/models/navigation.js"></script>
     <script src="/app/common/directives.js"></script>
     <script src="/app/common/filters.js"></script>
-    <base href="/index.html">
+    <!--/ Application level JS -->
 
 </head>
 
-<body ng-controller="LayoutController as layout">
+<body ng-controller="Controller as layout">
 <section id="app-wrapper" data-ui-view="" class="ng-scope">
     <sidebar class="app-sidebar sidebar-left ng-scope"></sidebar>
 
@@ -60,5 +60,15 @@
     <!--/ end: application content -->
 
 </section>
+
+<!-- Module level JS -->
+<script src="/app/modules/buyer/app.js"></script>
+<script src="/app/modules/buyer/controllers/orders.js"></script>
+<script src="/app/modules/buyer/services/orders.js"></script>
+<script src="/app/widgets/table.js"></script>
+<script src="/app/widgets/toolbar.js"></script>
+<script src="/app/widgets/modal.js"></script>
+<!--/ Module level JS -->
+
 </body>
 </html>

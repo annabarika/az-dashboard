@@ -1,6 +1,6 @@
 (function(){
 
-	var app = angular.module('core',
+	var app = angular.module('Azimuth',
 		[
 			'directives',
 			"ngRoute",
