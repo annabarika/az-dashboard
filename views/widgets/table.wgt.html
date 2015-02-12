@@ -1,6 +1,6 @@
-
-    <!-- start: padder -->
+<!-- start: padder -->
 <div class="pa-md">
+
     <div class="row">
         <div class="col-md-12">
             <!-- start: panel -->
@@ -8,35 +8,39 @@
                 <div class="panel-heading">
                     <h5 class="panel-title">Order list</h5>
                 </div>
-                <table class="table table-bordered table-striped" id="DataTable">
-
-        <thead>
-        <tr>
-            <th ng-repeat="(k,v) in datarows[0]"><a href="">{{k}}</a></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="row in datarows">
-
-            <td ng-repeat="(k,v) in row">{{v}}</td>
-
-            <td>
-                <div class="toolbar">
-                    <a href="" class="btn btn-sm btn-default"><span class="fa fa-file-o"></span></a>
-                    <a href="" class="btn btn-sm btn-default"><span class="fa fa-trash-o"></span></a>
+                <div class="dataTables_wrapper form-inline no-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                             <div class="pull-right">
+                                <div class="dataTables_filter">
+                                    <label>Search:<input type="search"  ng-model="searchText" class="" placeholder=""></label>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-striped dataTable no-footer" id="DataTable">
+                        <thead>
+                        <tr>
+                            <th class="sorting" ng-repeat="(k,v) in datarows[0]"><a href="">{{k}}</a></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="row in datarows|filter:searchText">
+                            <td ng-repeat="v in row">{{v}}</td>
+                            <td>
+                                <div class="toolbar">
+                                    <a href="" class="btn btn-sm btn-default" data-toggle="modal" data-target="#Modal"><span class="fa fa-file-o"></span></a>
+                                    <a href="" class="btn btn-sm btn-default"><span class="fa fa-trash-o"></span></a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </td>
-        </tr>
-        </tbody>
-                </table>
             </div>
             <!-- start: panel -->
         </div>
     </div>
 </div>
-<!--<script>-->
-    <!--$(document).ready(function(){-->
-        <!--$('#DataTable').DataTable();-->
-    <!--});-->
-<!--</script>-->
+

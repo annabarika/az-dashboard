@@ -8,10 +8,12 @@
     <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
     <script src="http://cdn.jsdelivr.net/velocity/1.2.1/velocity.min.js"></script>
     <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/vendor/angular/angular.min.js"></script>
-    <script src="/vendor/angular/angular-route.min.js"></script>
-    <script src="/vendor/angular/multi-select/js/angular-multi-select.js"></script>
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.3.1/less.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/angular/angular.min.js"></script>
+    <script src="vendor/angular/angular-route.min.js"></script>
+    <script src="vendor/angular/multi-select/js/angular-multi-select.js"></script>
 
 
     <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css"/>
@@ -41,29 +43,20 @@
 
     <section id="app-content" class="clearfix ng-scope">
         <!-- start: indicator -->
-
         <div class="spinner-wrapper"><div data-indicator=""></div></div>
-
         <!--/ end: indicator -->
 
         <!-- start: content-body -->
-
-        <!-- uiView:  --><div class="content-body slide-down ng-scope"><!-- start: box layout -->
-
-
-
-        <ng-view></ng-view>
-
-    </div>
+        <!-- uiView:  -->
+        <div class="content-body slide-down ng-scope">
+            <!-- start: box layout -->
+            <ng-view></ng-view>
+            <!--/ end: box layout -->
+        </div>
         <!--/ end: content-body -->
 
     </section>
-
     <!--/ end: application content -->
-
-
-
-    <!-- start: application backdrop -->
 
 </section>
 </body>

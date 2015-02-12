@@ -58,7 +58,7 @@ body > #app-wrapper {
     -o-transition: -o-transform .3s ease;
     transition: transform .3s ease;
 }
-.header-fixed #app-header.navbar {
+#app-header.navbar {
     position: fixed;
     right: 0;
     left: 0;
@@ -213,10 +213,10 @@ body > #app-wrapper {
     margin-top: 11px;
     margin-bottom: 11px;
 }
-#app-header.navbar .navbar-nocollapse .navbar-form .form-control {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-color: transparent;
-}
+/*#app-header.navbar .navbar-nocollapse .navbar-form .form-control {*/
+    /*background-color: rgba(0, 0, 0, 0.1);*/
+    /*border-color: transparent;*/
+/*}*/
 #app-header.navbar .navbar-nocollapse .navbar-form .form-control::-webkit-input-placeholder {
     color: rgba(0, 0, 0, 0.7);
 }
@@ -255,11 +255,6 @@ body > #app-wrapper {
     right: 15px;
 }
 @media (min-width: 768px) {
-    #app-header.navbar {
-        position: absolute;
-        right: 0;
-        min-height: 60px;
-    }
     #app-header.navbar .navbar-nocollapse .navbar-nav > li > .btn,
     #app-header.navbar .navbar-nocollapse .navbar-nav > li > .btn-group {
         margin-top: 13px;
@@ -429,9 +424,10 @@ body > #app-wrapper {
         border: inherit;
     }
     .app-sidebar.sidebar-left {
-        position: relative;
+        position: fixed;
         float: left;
         left: auto;
+        overflow: scroll;
     }
     .app-sidebar.sidebar-left .sidebar-header {
         height: 60px;
@@ -485,7 +481,7 @@ body > #app-wrapper {
     }
 }
 #app-footer {
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
@@ -622,4 +618,7 @@ body > #app-wrapper {
         height: 100%;
         float: none;
     }
+}
+footer .alert{
+    line-height: 1.14!important;
 }
