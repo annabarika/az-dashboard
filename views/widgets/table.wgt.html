@@ -21,12 +21,12 @@
                     <table class="table table-bordered table-striped dataTable no-footer" id="DataTable">
                         <thead>
                         <tr>
-                            <th class="sorting" ng-repeat="(k,v) in datarows[0]"><a href="">{{k}}</a></th>
+                            <th class="sorting" ng-repeat="(k,v) in datarows[0]"><a href="" ng-click="column_sorter(k)">{{k}}</a></th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="row in datarows|filter:searchText">
+                        <tr ng-repeat="row in datarows|filter:searchText|orderBy:sortField:reverse">
                             <td ng-repeat="v in row">{{v}}</td>
                             <td>
                                 <div class="toolbar">
