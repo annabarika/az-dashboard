@@ -5,21 +5,22 @@
         <thead>
         <tr >
 
-            <th ng-repeat="(k,v) in datarows[0]"> <a href="">{{k}}</a></th>
-            <th></th>
+            <th ng-repeat="(k,v) in datarows[0]|filter:searchText">
+
+                <a href="" ng-click="column_sorter(k)">{{k}}</a>
+
+            </th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="row in datarows">
+        <tr ng-repeat="row in datarows|filter:searchText|orderBy:sortField:reverse">
 
-            <td ng-repeat="(k,v) in row|filter:searchText">{{v}}</td>
-
-            <!--<td>{{row}}</td>-->
+            <td ng-repeat="v in row">{{v}}</td><!--{{v|date:medium}}-->
 
             <td>
                 <div class="toolbar">
-                    <a href="" class="btn btn-sm btn-default"><span class="fa fa-check"></span></a>
-                    <a href="" class="btn btn-sm btn-default"><span class="fa fa-trash-o"></span></a>
+                    <a href="" class="btn btn-sm btn-default" ng-click="row_info(row)"><span class="fa fa-check"></span></a>
+                    <a href="" class="btn btn-sm btn-default" ng-click="delete_row(row)"><span class="fa fa-trash-o"></span></a>
                 </div>
             </td>
         </tr>

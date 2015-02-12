@@ -2,22 +2,37 @@
 <html ng-app="core">
 <head>
     <title>Azimuth: Compass front-end app</title>
-    <script src="/vendor/angular/1.3.9/angular.min.js"></script>
-    <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
-    <script src="/vendor/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
+    <script src="vendor/jquery/jquery-1.11.2.min.js"></script>
+    <script src="vendor/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="vendor/angular/angular.min.js"></script>
+    <script src="vendor/angular/angular-route.min.js"></script>
+    <script src="vendor/angular/angular-multi-select.js"></script>
 
-    <link rel="stylesheet" href="/vendor/bootstrap/2.3.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/vendor/bootstrap/2.3.2/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="vendor/bootstrap/2.3.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="vendor/bootstrap/2.3.2/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="vendor/styles/component.css"/>
+    <link rel="stylesheet" href="vendor/styles/fontawesome.css"/>
+    <link rel="stylesheet" href="vendor/styles/layout.css"/>
+    <link rel="stylesheet" href="vendor/styles/angular-multi-select.css"/>
 
-    <script src="/app/app.js"></script>
-    <script src="/app/common/directives.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/modules/BuyingOffice/app.js"></script>
+    <script src="app/modules/BuyingOffice/controllers/orders.js"></script>
+    <script src="app/modules/BuyingOffice/services/orders.js"></script>
+    <script src="views/widgets/table.js"></script>
+    <script src="app/common/directives.js"></script>
+    <base href="/index.html">
 </head>
 
 <body ng-controller="LayoutController as layout">
     <header></header>
+
     <sidebar></sidebar>
-    <content></content>
+
+    <!--<content></content>-->
+    <ng-view></ng-view>
+
     <footer></footer>
 </body>
 </html>

@@ -71,9 +71,10 @@
         [
             '$scope',
             "orderService",
+            "$filter",
 
 
-        function($scope,orderService){
+        function($scope,orderService,$filter){
 
             /* get orders */
             orderService.getData("/mock/order.json")
@@ -95,6 +96,44 @@
 
                     $scope.status_list=response;
                 });
+            /*parse dataOrders date and numbers*/
+            $scope.$watch('orders',function(newVal,oldVal){
+
+               // console.log(oldVal,newVal);
+
+                if(newVal!=undefined){
+
+                    var length= newVal.length,
+                        date=/date/i,
+                        num;
+                   // console.log(length);
+                    for(var i=0;i<length;i++){
+
+                        angular.forEach( newVal[i], function(value,key){
+
+                            if(date.exec(key)!=null){
+
+                                newVal[i][key]=$filter('date')(value,"dd/MM/yyyy");
+
+                            }
+                            else{
+
+                                num = parseInt(value);
+
+                                if(num){
+
+                                    newVal[i][key]=num;
+                                    //console.log(newVal[i][key]);
+                                }
+                            }
+                        });
+                    }
+
+                   // $scope.orders= newVal;
+                }
+            });
+
+
 
             /*get selected items for factory  */
 
@@ -121,8 +160,7 @@
                    }
 
                });
-                console.log(filter);
-
+               /* return orders without filters*/
                     try{
                         if(newVal.length==0){
 
