@@ -4,7 +4,7 @@
      */
     var app=angular.module("widgtable",[]);
 
-    app.directive("widgtable",function(){
+    app.directive("widgtable",["$filter",function($filter){
 
         return{
 
@@ -14,33 +14,51 @@
                     datarows:"="
             },
 
-            link:function(scope){
+            link:function($scope,$filter){
 
-                scope.$watch("datarows", function(newVal,oldVal){
+                $scope.column_sorter=function(key){
+                    console.log(key);
+                    $scope.sortField=key;
+                    $scope.reverse=!$scope.reverse;
+                };
 
-                    console.log("rows",oldVal,newVal);
+                $scope.row_info=function(row){
+                   // console.log("order_info",row);
+                };
+
+                $scope.delete_row=function(row){
+                    //console.log("order_delete",row);
+                };
+
+                /*$scope.$watch('datarows',function(newVal){
 
                     if(newVal!=undefined){
 
-                        scope.keys=[];
+                        var length=newVal.length,
+                            date=/date/i;
 
-                        angular.forEach(scope.datarows[0],function(value,key){
+                        for(var i=0;i<length;i++){
 
-                            if(key == "$$hashKey"){
-                                return;
-                            }
+                            angular.forEach(newVal[i], function(value,key){
 
-                            this.push({name:key});
+                                if(date.exec(key)!=null){
+                                    //console.log(key,value);
 
-                        },scope.keys);
+                                    //value=$filter('date')(value,'medium');
+                                   // item.date = $filter('date')(item.date, "dd/MM/yyyy");
+                                }
+                            })
 
-                        console.log(scope.keys);
+                        }
+
                     }
-                });
+                })*/
+
+
 
             }
 
         }
-    })
+    }])
 
 })();

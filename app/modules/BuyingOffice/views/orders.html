@@ -1,6 +1,39 @@
-<widgtoolbar></widgtoolbar>
+<h1>This is orders page</h1>
 
-<widgtable datarows="orders"></widgtable>
+<div>
+    Choose payment date
+    <input type="date" data-ng-model="min" placeholder="from" />
+    <input type="date" data-ng-model="max" placeholder="to"/>
+    <!--{{min|date:'MM/dd/yyyy'}}{{max|date:'MM/dd/yyyy'}}-->
 
-<widgmodal></widgmodal>
+</div>
+<div class="filters">
+    Filter by
+
+    <multi-select
+            input-model="factory_list"
+            output-model="resultData"
+            button-label=" name"
+            item-label=" name"
+            tick-property="ticked"
+            >
+    </multi-select>
+
+    <multi-select
+            input-model="status_list"
+            output-model="resultData"
+            button-label=" name"
+            item-label=" name"
+            tick-property="ticked"
+            >
+    </multi-select>
+</div>
+
+
+
+
+
+<widgtable datarows="orders">
+
+</widgtable>
 

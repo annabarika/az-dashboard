@@ -1,27 +1,23 @@
 [
-    { "title": "Buying office",
-        "icon":"ai ai-style",
-        "menu":
-            [
-                {"title": "Orders",
-                 "count": "2",
-                    "url":"buyingOffice/orders"
-                },
-                {"title": "Bestsellers",
-                 "count": "4",
-                    "url":"buyingOffice/bestsellers"
-                },
-                {"title": "Cargo",
-                 "count": "22",
-                    "url":"buyingOffice/cargo"
-                }
-            ]
-    },
-    {
-        "title":"Application",
-        "icon":"ai ai-email"
-    }
+  { "title": "buying office",
+    "icon":"ai ai-email",
+    "menu":
+    [
+      {
+        "title": "orders",
+        "url":"buyingOffice/orders"
+      },
+      {
+        "title": "bestsellers",
+        "url":"buyingOffice/bestsellers"
+      },
+      {
+        "title": "cargo",
+        "url":"buyingOffice/cargo"
+      }
+    ]
+  },
+  {
+    "title":"Application"
+  }
 ]
-
-
-
