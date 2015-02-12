@@ -1,3 +1,77 @@
-<ul class="nav navbar nav-pills" ng-repeat="item in Navigation">
-    <li>{{item.title}}</li>
-</ul>
+
+<!-- start: application sidebar (left) -->
+
+<!-- ngInclude:  --><aside class="app-sidebar sidebar-left ng-scope">
+    <!-- start: sidebar header -->
+
+    <div class="sidebar-header ng-scope">
+
+        <!-- brand -->
+
+        <a class="brand" href="">
+
+            <span class="brand-figure"></span>
+
+            <span class="brand-text">Azimuth.</span>
+
+        </a>
+
+        <!--/ brand -->
+
+    </div>
+
+    <!--/ end: sidebar header -->
+
+
+
+    <!-- start: sidebar content -->
+
+    <div class="sidebar-content ng-scope">
+
+        <!-- scroll-content -->
+
+        <div class="scroll-wrapper"><div class="scroll-content">
+
+            <!-- navigation -->
+            <ul class="nav nav-sidebar ng-isolate-scope">
+                <li class="nav-group"  ng-repeat="item in Navigation">
+                    <a class="nav-toggle" href="">
+                         <span class="figure figure-left icon">
+                         <i class="{{item.icon}}"></i>
+                         </span>
+                        <span class="text ellipsis">{{item.title}}</span>
+                         <span class="figure figure-right">
+                         <span class="figure figure-right arrow"></span>
+                         </span>
+                    </a>
+                    <ul id="uielements" class="nav-submenu">
+                        <li data-ui-sref-active="active" ng-repeat="submenu in item.menu">
+                            <a href="" ng-click=module_route(submenu.url)>
+                                <span class="text">{{submenu.title}}</span>
+                                <span class="figure figure-right">
+                                <span class="label label-success ellipsis pos-t-n-1">{{submenu.count}}</span>
+                                    </span>
+                            </a>
+
+                            <!--<a href="" ng-click=module_route(subitem.url)>{{subitem.title}}</a>-->
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!--/ navigation -->
+
+        </div>
+
+            <div class="scroll-bar"></div>
+            <div class="scroll-rail"></div>
+        </div>
+
+        <!--/ scroll-content -->
+
+    </div>
+
+    <!-- start: sidebar content -->
+</aside>
+
+<!--/ end: application sidebar (left) -->
