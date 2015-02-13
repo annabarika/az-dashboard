@@ -36,24 +36,29 @@
     <script src="/app/common/filters.js"></script>
     <base href="/index.html">
 
+    <script src="http://momentjs.com/downloads/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js"></script>
+    <script src="//rawgit.com/angular-ui/ui-calendar/0.8.1/src/calendar.js"></script>
+    <script src="//rawgit.com/arshaw/fullcalendar/v1.6.7/fullcalendar.js"></script>
+
 </head>
 
 <body ng-controller="LayoutController as layout">
-<section id="app-wrapper" data-ui-view="" class="ng-scope">
-    <sidebar class="app-sidebar sidebar-left ng-scope"></sidebar>
+<section id="app-wrapper" data-ui-view="">
+    <sidebar class="app-sidebar sidebar-left"></sidebar>
 
     <header id="app-header" class="navbar"></header>
 
-    <footer id="app-footer" class="ng-scope"></footer>
+    <footer id="app-footer"></footer>
 
-    <section id="app-content" class="clearfix ng-scope">
+    <section id="app-content" class="clearfix">
         <!-- start: indicator -->
         <div class="spinner-wrapper"><div data-indicator=""></div></div>
         <!--/ end: indicator -->
 
         <!-- start: content-body -->
         <!-- uiView  -->
-        <div class="content-body slide-down ng-scope">
+        <div class="content-body slide-down">
             <!-- start box layout -->
             <ng-view></ng-view>
             <!--/ end box layout -->

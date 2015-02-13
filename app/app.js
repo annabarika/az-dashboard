@@ -9,6 +9,8 @@
 			"multi-select",
 			"widgtoolbar",
 			"widgmodal",
+            "mgcrea.ngStrap",
+
 		]);
 
 		app.config(function($routeProvider, $locationProvider, $httpProvider){
@@ -32,7 +34,6 @@
 					}
 				);
 		});
-
 
 
 
