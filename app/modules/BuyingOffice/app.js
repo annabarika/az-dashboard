@@ -1,6 +1,6 @@
 (function(){
 
-    var app = angular.module('BuyingOffice', ['multi-select']);
+    var app = angular.module('BuyingOffice', ['multi-select','mgcrea.ngStrap']);
 
     app.config(function($routeProvider){
 
@@ -108,11 +108,11 @@
                 //    { name: "Factory5 (Colleen Hurst)",      ticked: false }
                 //];
                 //
-                //$scope.Status = [
-                //    { name: "Complete",     ticked: false },
-                //    { name: "In Complete",  ticked: false },
-                //    { name: "On Hold",      ticked: false }
-                //];
+                $scope.test_list = [
+                    { name: "Complete",     ticked: false },
+                    { name: "In Complete",  ticked: false },
+                    { name: "On Hold",      ticked: false }
+                ];
 
 
                 $scope.$watch('orders',function(newVal,oldVal){
@@ -248,6 +248,21 @@
             }]);
 
 
+    app.controller('DatepickerCtrl', function($scope, $http) {
+
+        $scope.selectedDate = new Date();
+        $scope.selectedDateAsNumber = Date.UTC(1986, 1, 22);
+        $scope.fromDate = new Date();
+        $scope.untilDate = new Date();
+        $scope.getType = function(key) {
+            return Object.prototype.toString.call($scope[key]);
+        };
+
+        $scope.clearDates = function() {
+            $scope.selectedDate = null;
+        };
+
+    });
 
     app.controller('CargoController',
 

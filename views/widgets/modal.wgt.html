@@ -70,20 +70,42 @@
                                                     <tbody>
                                                     <tr>
                                                         <td>Norman Harmon</td>
-                                                        <td><select id="mySel2" class="form-control" multiple="multiple">
-                                                            <option >vfvc</option>
-                                                            <option >vfvc</option>
-                                                        </select>
-
+                                                        <td>
+                                                            <label>Filter by order status
+                                                                <multi-select
+                                                                        input-model="test_list"
+                                                                        output-model="resultData"
+                                                                        button-label="icon name"
+                                                                        item-label="icon name maker"
+                                                                        tick-property="ticked"
+                                                                        max-labels="2">
+                                                                </multi-select>
+                                                            </label>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Plato Pickett</td>
-                                                        <td></td>
+                                                        <td>
+                                                            <div class="radio custom">
+                                                                <label>
+                                                                    <input type="radio" name="group1" value=""><span></span> Apr 5, 2015
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio custom">
+                                                                <label>
+                                                                    <input type="radio" name="group1" value=""><span></span> Feb 4, 2013
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio custom disabled">
+                                                                <label>
+                                                                    <input type="radio" value="" disabled><span></span> Option two is disabled
+                                                                </label>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Nathan Paul</td>
-                                                        <td>Feb 4, 2013</td>
+                                                        <td></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Nasim Larson</td>
@@ -138,7 +160,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Save changes</button>
             </div>
+            </div>
         </div>
     </div>
 </div>
-    </div>

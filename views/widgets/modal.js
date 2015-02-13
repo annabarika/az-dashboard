@@ -9,7 +9,8 @@
         return{
 
             restict:'EA',
-            templateUrl:"views/widgets/modal.wgt.html"
+            templateUrl:"views/widgets/modal.wgt.html",
+            scope:true
         };
     });
 
