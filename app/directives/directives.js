@@ -4,7 +4,7 @@
 	app.directive("sidebar", function () {
 		return {
 			restrict: 'E',
-			templateUrl: "/views/pages/Elements/sidebar.html"
+			templateUrl: "/app/views/pages/Elements/sidebar.html"
 		};
 	});
 	app.directive("header", function () {

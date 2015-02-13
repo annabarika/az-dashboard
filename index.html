@@ -5,12 +5,11 @@
 
     <!-- Third-party components -->
     <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/velocity/1.2.1/velocity.min.js"></script>
-    <script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.3.1/less.min.js"></script>
+    <script src="/vendor/velocity.min.js"></script>
+    <script src="/vendor/less.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/angular/angular.min.js"></script>
-    <script src="/vendor/angular/angular-route.min.js"></script>
+    <script src="/vendor/angular/angular-ui-router.min.js"></script>
     <script src="/vendor/angular/multi-select/js/angular-multi-select.js"></script>
     <!--/ Third-party components -->
 
@@ -27,48 +26,49 @@
 
     <!-- Application level JS -->
     <script src="/app/app.js"></script>
-    <script src="/app/common/models/navigation.js"></script>
-    <script src="/app/common/directives.js"></script>
-    <script src="/app/common/filters.js"></script>
+    <script src="/app/models/navigation.js"></script>
+    <script src="/app/directives/directives.js"></script>
+    <script src="/app/filters/filters.js"></script>
     <!--/ Application level JS -->
 
 </head>
 
-<body ng-controller="Controller as layout">
-<section id="app-wrapper" data-ui-view="" class="ng-scope">
-    <sidebar class="app-sidebar sidebar-left ng-scope"></sidebar>
+<body>
+    <section id="app-wrapper" data-ui-view="" class="ng-scope">
+        <sidebar class="app-sidebar sidebar-left ng-scope"></sidebar>
 
-    <header id="app-header" class="navbar"></header>
+        <header id="app-header" class="navbar"></header>
 
-    <footer id="app-footer" class="ng-scope"></footer>
+        <footer id="app-footer" class="ng-scope"></footer>
 
-    <section id="app-content" class="clearfix ng-scope">
-        <!-- start: indicator -->
-        <div class="spinner-wrapper"><div data-indicator=""></div></div>
-        <!--/ end: indicator -->
+        <section id="app-content" class="clearfix ng-scope">
+            <!-- start: indicator -->
+            <div class="spinner-wrapper"><div data-indicator=""></div></div>
+            <!--/ end: indicator -->
 
-        <!-- start: content-body -->
-        <!-- uiView:  -->
-        <div class="content-body slide-down ng-scope">
-            <!-- start: box layout -->
-            <ng-view></ng-view>
-            <!--/ end: box layout -->
-        </div>
-        <!--/ end: content-body -->
+            <!-- start: content-body -->
+            <!-- uiView:  -->
+            <div class="content-body slide-down ng-scope">
+                <!-- start: box layout -->
+                <ng-view></ng-view>
+                <!--/ end: box layout -->
+            </div>
+            <!--/ end: content-body -->
+
+        </section>
+        <!--/ end: application content -->
 
     </section>
-    <!--/ end: application content -->
 
-</section>
+    <!-- Module level JS --
 
-<!-- Module level JS -->
-<script src="/app/modules/buyer/app.js"></script>
-<script src="/app/modules/buyer/controllers/orders.js"></script>
-<script src="/app/modules/buyer/services/orders.js"></script>
-<script src="/app/widgets/table.js"></script>
-<script src="/app/widgets/toolbar.js"></script>
-<script src="/app/widgets/modal.js"></script>
-<!--/ Module level JS -->
+    <script src="/modules/buyer/app.js"></script>
+    <script src="/modules/buyer/controllers/orders.js"></script>
+    <script src="/modules/buyer/services/orders.js"></script>
+    <script src="/app/widgets/table.js"></script>
+    <script src="/app/widgets/toolbar.js"></script>
+    <script src="/app/widgets/modal.js"></script>
+    <!--/ Module level JS -->
 
 </body>
 </html>

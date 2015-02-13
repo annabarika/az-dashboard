@@ -1,6 +1,6 @@
 (function(){
 
-	var app = angular.module('BuyingOffice', ['multi-select']);
+	var app = angular.module('buyer', ['multi-select']);
 
 	app.config(function($routeProvider){
 
