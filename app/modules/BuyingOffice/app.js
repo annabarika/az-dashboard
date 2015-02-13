@@ -126,7 +126,7 @@
                     if(newVal!=undefined){
                      //   $scope.modalContent=newVal;
                         $scope.modalContent="";
-                        $('.modal-body').load("/app/modules/BuyingOffice/views/content.html");
+                        $('.modal-body').load("/app/modules/BuyingOffice/views/order_modal.html");
                     }
                 });
 
