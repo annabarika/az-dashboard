@@ -32,8 +32,12 @@
 
             restict:'EA',
             templateUrl:"views/widgets/table.wgt.html",
+            //require:"",
             scope:{
                     datarows:"="
+                    ,edit:"&"
+                    ,row:"="
+
             },
 
             link:function($scope){
@@ -87,8 +91,9 @@
                     }
                 });
 
-                $scope.edit=function(obj){
-                    console.log(obj);
+                $scope.edit_row=function(row){
+                    $scope.row=row;
+                    $scope.edit();
                 };
 
             }

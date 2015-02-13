@@ -99,12 +99,26 @@
                         $scope.Status=response;
                     });
 
-                $scope.modalContent="Test Content for modal window";
+               // $scope.modalContent="Test Content for modal window";
                 $scope.modalTitle="Some Title";
 
-                $scope.edit=function(obj){
-                    console.log(obj);
-                };
+               /* $scope.edit_row= function(){
+
+                    console.log("qweqe",$scope.row);
+                  //  angular.element(document.body).append("<widgmodal></widgmodal>");
+                };*/
+
+                $scope.$watch("row",function(newVal,oldVal){
+                    console.log(newVal,oldVal);
+                    if(newVal!=undefined){
+                     //   $scope.modalContent=newVal;
+                        $scope.modalContent="";
+                        $('.modal-body').load("/app/modules/BuyingOffice/views/content.html");
+                    }
+                });
+
+
+
 
                 /*get selected items for factory  */
 

@@ -26,27 +26,6 @@
 						controller:"LayoutController"
 					}
 				)
-				/*.when('/buyingOffice/orders',
-					{
-						//templateUrl:"/views/pages/BuyingOffice/orders.html",
-						templateUrl:"/app/modules/BuyingOffice/views/orders.html",
-						controller:"OrdersController"
-					}
-				)
-				.when('/buyingOffice/bestsellers',
-					{
-						//templateUrl:"/views/pages/BuyingOffice/bests.html",
-						templateUrl:"/app/modules/BuyingOffice/views/bests.html",
-						controller:"BestsController"
-					}
-				)
-				.when("/buyingOffice/cargo",
-					{
-						//templateUrl:"/views/pages/BuyingOffice/cargo.html",
-						templateUrl:"/app/modules/BuyingOffice/views/cargo.html",
-						controller:"CargoController"
-					}
-				)*/
 				.otherwise(
 					{
 						redirectTo:'/'
@@ -82,14 +61,6 @@
 
 			$location.path(url);
 		};
-
-			$scope.modernWebBrowsers = [
-				{  name: "Opera",              maker: "(Opera Software)",        ticked: true  },
-				{  name: "Internet Explorer",  maker: "(Microsoft)",             ticked: false },
-				{  name: "Firefox",            maker: "(Mozilla Foundation)",    ticked: true  },
-				{  name: "Safari",             maker: "(Apple)",                 ticked: false },
-				{  name: "Chrome",             maker: "(Google)",                ticked: true  }
-			];
 
 	}]);
 
