@@ -14,6 +14,8 @@
             templateUrl:"views/widgets/modal.wgt.html",
             scope:true
         };
+
+
     });
 
 })();

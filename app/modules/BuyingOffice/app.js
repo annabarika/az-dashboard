@@ -1,6 +1,9 @@
 (function(){
 
-    var app = angular.module('BuyingOffice', ['multi-select','mgcrea.ngStrap']);
+    var app = angular.module('BuyingOffice',
+        [
+
+        ]);
 
     app.config(function($routeProvider){
 
@@ -23,8 +26,11 @@
                 templateUrl:"/app/modules/BuyingOffice/views/cargo.html",
                 controller:"CargoController"
             }
-        )
+        );
+
+
     });
+
 
 
     /** factory for orders
@@ -74,9 +80,11 @@
         [
             '$scope',
             "orderService",
+            "$modal",
+            '$rootScope',
 
 
-            function($scope,orderService){
+            function($scope,orderService,$modal,$rootScope){
 
                 /* get orders */
                 orderService.getData("/mock/order.json")
@@ -99,38 +107,24 @@
                         $scope.Status=response;
                     });
 
-               // $scope.modalContent="Test Content for modal window";
-                $scope.modalTitle="Some Title";
+                // testing
+                $scope.modalTitle="ORDER #";
+                $scope.modalContent="some content";
+                var modalInstance;
+                $scope.edit_row= function(){
+                    console.log($rootScope.row);
+                     modalInstance = $modal.open({
+                        templateUrl: "/app/modules/BuyingOffice/views/order_modal.html",
+                       // templateUrl: "/app/views/widgets/modal.wgt.html",
+                        controller: 'OrdersController'
 
-                //$scope.Factory = [
-                //    { name: "Factory1 (Tiger Nixon)",        ticked: false },
-                //    { name: "Factory2 (Garrett Winters)",    ticked: false },
-                //    { name: "Factory3 (Garrett Winters)",    ticked: false },
-                //    { name: "Factory4 (Airi Satou)",         ticked: false },
-                //    { name: "Factory5 (Colleen Hurst)",      ticked: false }
-                //];
-                //
-                $scope.test_list = [
-                    { name: "Complete",     ticked: false },
-                    { name: "In Complete",  ticked: false },
-                    { name: "On Hold",      ticked: false }
-                ];
-               /* $scope.edit_row= function(){
-
-                    console.log("qweqe",$scope.row);
-                  //  angular.element(document.body).append("<widgmodal></widgmodal>");
-                };*/
-
-                $scope.$watch("row",function(newVal,oldVal){
-                    console.log(newVal,oldVal);
-                    if(newVal!=undefined){
-                     //   $scope.modalContent=newVal;
-                        $scope.modalContent="";
-                        $('.modal-body').load("/app/modules/BuyingOffice/views/order_modal.html");
-                    }
-                });
-
-
+                    });
+                  //  var myOtherModal = $modal({scope: $scope, template: '/app/modules/BuyingOffice/views/order_modal.html', show:true});
+                    // Show when some event occurs (use $promise property to ensure the template has been loaded)
+                    /*$scope.showModal = function() {
+                        myOtherModal.$promise.then(myOtherModal.show);
+                    };*/
+                };
 
 
                 /*get selected items for factory  */

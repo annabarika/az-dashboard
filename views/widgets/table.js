@@ -8,7 +8,7 @@
     /**
      * Factory for
      */
-    app.factory("tableFactory",["$filter",function($filter){
+    app.factory("tableFactory",["$filter","$rootScope",function($filter,$rootScope){
 
         var service={};
 
@@ -20,6 +20,9 @@
             return date;
         };
 
+        service.getRow=function(row){
+            $rootScope.row=row;
+        };
 
         return service;
     }]);
@@ -92,8 +95,9 @@
                 });
 
                 $scope.edit_row=function(row){
-                    $scope.row=row;
-                    $scope.edit();
+
+                    tableFactory.getRow(row);
+                    $scope.edit(row);
                 };
 
             }

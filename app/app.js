@@ -9,6 +9,10 @@
 			"multi-select",
 			"widgtoolbar",
 			"widgmodal",
+			'multi-select',
+			'ui.bootstrap'
+			/*'mgcrea.ngStrap',
+			'ngSanitize'*/
 		]);
 
 		app.config(function($routeProvider, $locationProvider, $httpProvider){
@@ -62,7 +66,7 @@
 			$location.path(url);
 		};
 
-
+			//$scope.test="Test Content for modal window";
 
 	}]);
 
