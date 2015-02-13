@@ -74,9 +74,9 @@
         [
             '$scope',
             "orderService",
-            "$filter",
 
-            function($scope,orderService,$filter){
+
+            function($scope,orderService){
 
                 /* get orders */
                 orderService.getData("/mock/order.json")
@@ -90,15 +90,17 @@
                 orderService.getData("/mock/factory.json")
                     .then(function(response){
 
-                        $scope.FactoryList=response;
+                        $scope.Factory=response;
                     });
                 /*get statuses*/
                 orderService.getData("/mock/orderstatus.json")
                     .then(function(response){
 
-                        $scope.status_list=response;
+                        $scope.Status=response;
                     });
 
+               // $scope.modalContent="Test Content for modal window";
+                $scope.modalTitle="Some Title";
 
                 //$scope.Factory = [
                 //    { name: "Factory1 (Tiger Nixon)",        ticked: false },
@@ -113,45 +115,20 @@
                     { name: "In Complete",  ticked: false },
                     { name: "On Hold",      ticked: false }
                 ];
+               /* $scope.edit_row= function(){
 
+                    console.log("qweqe",$scope.row);
+                  //  angular.element(document.body).append("<widgmodal></widgmodal>");
+                };*/
 
-                $scope.$watch('orders',function(newVal,oldVal){
-
-                    // console.log(oldVal,newVal);
-
+                $scope.$watch("row",function(newVal,oldVal){
+                    console.log(newVal,oldVal);
                     if(newVal!=undefined){
-
-                        var length= newVal.length,
-                            date=/date/i,
-                            num;
-                        // console.log(length);
-                        for(var i=0;i<length;i++){
-
-                            angular.forEach( newVal[i], function(value,key){
-
-                                if(date .exec(key)!=null){
-
-                                    newVal[i][key]=$filter('date')(value,"dd/MM/yyyy");
-
-                                }
-                                else{
-
-                                    num = parseInt(value);
-
-                                    if(num){
-
-                                        newVal[i][key]=num;
-                                        //console.log(newVal[i][key]);
-                                    }
-                                }
-                            });
-                        }
-
-                        // $scope.orders= newVal;
+                     //   $scope.modalContent=newVal;
+                        $scope.modalContent="";
+                        $('.modal-body').load("/app/modules/BuyingOffice/views/content.html");
                     }
                 });
-
-
 
 
 
@@ -181,7 +158,7 @@
                         }
 
                     });
-                    console.log(filter);
+                 /*   console.log(filter);*/
 
                     try{
                         if(newVal.length==0){
