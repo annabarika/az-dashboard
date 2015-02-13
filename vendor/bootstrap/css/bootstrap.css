@@ -268,8 +268,8 @@ th {
 @font-face {
   font-family: 'Glyphicons Halflings';
 
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../../fonts/glyphicons-halflings-regular.eot');
+  src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -2621,6 +2621,10 @@ select[multiple].form-group-lg .form-control {
 .has-warning .form-control-feedback {
   color: #8a6d3b;
 }
+.carousel-control .icon-prev:before {
+    content: '\2039'}
+.carousel-control .icon-next:before {
+    content: '\203a'}
 .has-error .help-block,
 .has-error .control-label,
 .has-error .radio,
@@ -2692,6 +2696,7 @@ select[multiple].form-group-lg .form-control {
   .form-inline .control-label {
     margin-bottom: 0;
     vertical-align: middle;
+    padding-left: 15px;
   }
   .form-inline .radio,
   .form-inline .checkbox {

@@ -1,44 +1,48 @@
 <!-- start page header -->
 <div class="page-header ng-scope">
     <div class="box-layout">
-      <div class="pull-right">
-                        <label>Filter by factory
-                            <multi-select
-                                    input-model="Factory"
-                                    output-model="resultData"
-                                    button-label="icon name"
-                                    item-label="icon name maker"
-                                    tick-property="ticked"
-                                    max-labels="2">
-                            </multi-select>
-                        </label>
-                        <label>Filter by order status
-                             <multi-select
-                                    input-model="Status"
-                                    output-model="resultData"
-                                    button-label="icon name"
-                                    item-label="icon name maker"
-                                    tick-property="ticked"
-                                    max-labels="2">
-                             </multi-select>
-                        </label>
-                </div>
-      <div class="pull-left">
+        <div class="col-sm-6 va-m">
                         <div class="bs-docs-section" ng-controller="DatepickerCtrl">
                             <form name="datepickerForm" class="form-inline" role="form">
                                 <!-- Date range example -->
                                 <div class="form-group">
                                     <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range <small>(choose payment date)</small></label><br>
                                     <div class="form-group col-xs-6">
-                                        <input type="text" class="form-control" ng-model="fromDate"  data-format="dd.MM.yyyy"  datepicker-popup="dd.MM.yyyy"  data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
+                                        <input type="text" class="form-control" ng-model="fromDate"  data-date-format="dd-MM-yyyy"  data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
                                     </div>
                                     <div class="form-group col-xs-6">
-                                        <input type="text" class="form-control" ng-model="untilDate"  data-format="dd.MM.yyyy"  data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker>
+                                        <input type="text" class="form-control" ng-model="untilDate"  data-date-format="dd-MM-yyyy"  data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                </div>
+      </div>
+        <div class="col-sm-6 va-m">
+            <div class="col-sm-6 va-m">
+                <label>Filter by factory
+                    <multi-select
+                            input-model="Factory"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2">
+                    </multi-select>
+                </label>
+            </div>
+            <div class="col-sm-6 va-m">
+                <label>Filter by order status
+                    <multi-select
+                            input-model="Status"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2">
+                    </multi-select>
+                </label>
+            </div>
+        </div>
     </div>
 </div>
 <!--/ end page header -->
