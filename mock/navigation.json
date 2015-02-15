@@ -5,15 +5,15 @@
     [
       {"title": "Orders",
         "count": "2",
-        "url":"buyingOffice/orders"
+        "url":"buyer/orders"
       },
       {"title": "Bestsellers",
         "count": "4",
-        "url":"buyingOffice/bestsellers"
+        "url":"buyer/bestsellers"
       },
       {"title": "Cargo",
         "count": "22",
-        "url":"buyingOffice/cargo"
+        "url":"buyer/cargo"
       }
     ]
   },

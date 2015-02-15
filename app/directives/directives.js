@@ -4,25 +4,26 @@
 	app.directive("sidebar", function () {
 		return {
 			restrict: 'E',
-			templateUrl: "/app/views/pages/Elements/sidebar.html"
+			templateUrl: "/app/views/sidebar.html"
 		};
 	});
 	app.directive("header", function () {
 		return {
 			restrict: 'E',
-			templateUrl: "/views/pages/Elements/header.html"
+			templateUrl: "/app/views/header.html"
 		};
 	});
 	app.directive("footer", function () {
 		return {
 			restrict: 'E',
-			templateUrl: "/views/pages/Elements/footer.html"
+			templateUrl: "/app/views/footer.html"
 		};
 	});
 
 
 //widget sidebar
     app.directive('navSidebar', ['$timeout', function ($timeout) {
+
         return {
             restrict: 'C',//EA
             scope: {},

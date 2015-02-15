@@ -1,7 +1,8 @@
 
 <!-- start: application sidebar (left) -->
 
-<!-- ngInclude:  --><aside class="app-sidebar sidebar-left ng-scope">
+<!-- ngInclude:  -->
+<aside class="app-sidebar sidebar-left ng-scope">
     <!-- start: sidebar header -->
 
     <div class="sidebar-header ng-scope">
@@ -46,7 +47,7 @@
                     </a>
                     <ul id="uielements" class="nav-submenu">
                         <li data-ui-sref-active="active" ng-repeat="submenu in item.menu">
-                            <a href="" ng-click=module_route(submenu.url)>
+                            <a ng-href="/{{submenu.url}}">
                                 <span class="text">{{submenu.title}}</span>
                                 <span class="figure figure-right">
                                 <span class="label label-success ellipsis pos-t-n-1">{{submenu.count}}</span>

@@ -33,9 +33,9 @@
 
 </head>
 
-<body>
+<body ng-controller="MainController">
     <section id="app-wrapper" data-ui-view="" class="ng-scope">
-        <sidebar class="app-sidebar sidebar-left ng-scope"></sidebar>
+        <sidebar class="app-sidebar sidebar-left ng-scope">111</sidebar>
 
         <header id="app-header" class="navbar"></header>
 
@@ -60,11 +60,12 @@
 
     </section>
 
-    <!-- Module level JS --
+    <!-- Module level JS -->
 
     <script src="/modules/buyer/app.js"></script>
     <script src="/modules/buyer/controllers/orders.js"></script>
     <script src="/modules/buyer/services/orders.js"></script>
+    <!--
     <script src="/app/widgets/table.js"></script>
     <script src="/app/widgets/toolbar.js"></script>
     <script src="/app/widgets/modal.js"></script>

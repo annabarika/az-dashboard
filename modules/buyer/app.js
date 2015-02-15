@@ -1,29 +1,14 @@
 (function(){
 
-	var app = angular.module('buyer', ['multi-select']);
+	var app = angular.module('modules.buyer', []);
 
-	app.config(function($routeProvider){
+	app.config(function($stateProvider){
 
-		$routeProvider
-
-			.when('/buyingOffice/orders',
-			{
-				templateUrl:"/app/modules/BuyingOffice/views/orders.html",
-				controller:"OrdersController"
-			}
-		)
-			.when('/buyingOffice/bestsellers',
-			{
-				templateUrl:"/app/modules/BuyingOffice/views/bests.html",
-				controller:"BestsController"
-			}
-		)
-			.when("/buyingOffice/cargo",
-			{
-				templateUrl:"/app/modules/BuyingOffice/views/cargo.html",
-				controller:"CargoController"
-			}
-		)
+		$stateProvider
+			.state('buyer.orders', {
+				url: '/buyer/orders',
+				templateUrl: '/modules/buyer/views/orders/index.html'
+			});
 	});
 
 
