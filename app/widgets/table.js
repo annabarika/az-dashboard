@@ -39,7 +39,7 @@
                 datarows:"="
                 ,edit:"&"
                 ,row:"="
-
+                ,toolbarBattons:"="
             },
 
             link:function($scope){
@@ -99,6 +99,9 @@
                         $scope.edit(row);
                     }
                 };
+                $scope.cancel=function(){
+                    alert("ins work");
+                }
 
             }
 

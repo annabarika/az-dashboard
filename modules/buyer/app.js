@@ -82,7 +82,7 @@ var app = angular.module('modules.buyer', [
 
 				$scope.$route = $route;
 				$scope.$location = $location;
-
+				var modal;
 				/* get orders */
 				orderService.getData("/data/buyer/orders/orders.json")
 					.then(function(response){
@@ -90,7 +90,18 @@ var app = angular.module('modules.buyer', [
 						$scope.dataOrders=response;
 
 						$scope.orders=$scope.dataOrders;
-
+						$scope.buttons=[
+							{
+								class:"btn btn-default",
+								value:"Cancel",
+								event:'cancel()'
+							},
+							{
+								class:"btn btn-default",
+								value:"Send",
+								event:'cancel()'
+							}
+						]
 					});
 				/*get factories*/
 				orderService.getData("/data/factory.json")
@@ -155,6 +166,25 @@ var app = angular.module('modules.buyer', [
 
 					//console.log(newValue, oldValue);
 				});
+
+				/* function Add New Order*/
+				$scope.add_new_order=function(){
+
+					 modal=$modal.open({
+						templateUrl: "/modules/buyer/views/orders/new_order.html",
+						controller: 'OrdersController'
+
+					});
+				};
+				/*$scope.saveOrder=function(obj){
+					console.log(obj);
+					modal=$modal.close();
+				};*/
+
+				$scope.$watch('newOrder',function(newVal,oldVal){
+					console.log(newVal,oldVal);
+				});
+
 
 				/*get selected items for statuses */
 
