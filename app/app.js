@@ -1,25 +1,52 @@
-
 (function(){
 
 	angular.module('Azimuth', [
-		"ui.router",
+		"ngRoute",
 		"directives",
 		"models.navigation",
-		"modules.buyer"
+		"multi-select",
+		"widgets",
+		"ui.bootstrap",
 
+		"modules.buyer"
 	])
-	.config(function ($stateProvider, $urlRouterProvider) {
-			$stateProvider
-				//abstract state serves as a PLACEHOLDER or NAMESPACE for application states
-				.state('azimuth', {
-					url: '',
-					abstract: true
-				})
-			;
-			$urlRouterProvider.otherwise('/');
+		.provider('configProvider', function(){
+			return {
+				config: {
+					API: "http://azimuth/proxy/",
+					URLS: {
+						APP: "/app/",
+						MODULES: "/modules/",
+						WIDGETS: "/app/widgets/"
+					}
+				},
+				$get : function(){
+					return config;
+				}
+			}
 		})
-		.controller("MainController", function($scope, $state, NavigationModel){
-			NavigationModel.getNavigation().then(function(result){ $scope.Navigation = result.data; });
+	.config(function ($routeProvider, $locationProvider) {
+			//$httpProvider.defaults.useXDomain = true;
+			//delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+			$locationProvider.html5Mode(true);
+
+			$routeProvider
+
+				.when("/",
+				{
+					templateUrl: "/app/views/startpage.html",
+					controller:"MainController"
+				}
+			)
+				.otherwise(
+				{
+					redirectTo:'/'
+				}
+			);
+		})
+		.controller("MainController", function($scope, NavigationModel){
+			NavigationModel.get().then(function(result){ $scope.Navigation = result.data; });
 		})
 	;
 })();

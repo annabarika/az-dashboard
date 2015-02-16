@@ -9,8 +9,9 @@
     <script src="/vendor/less.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/angular/angular.min.js"></script>
-    <script src="/vendor/angular/angular-ui-router.min.js"></script>
+    <script src="/vendor/angular/angular-route.min.js"></script>
     <script src="/vendor/angular/multi-select/js/angular-multi-select.js"></script>
+    <script src="/vendor/angular/ui-bootstrap-tpls-0.12.0.min.js"></script>
     <!--/ Third-party components -->
 
     <!-- Style -->
@@ -24,13 +25,8 @@
     <link rel="stylesheet" href="/assets/css/less/mixins.less">
     <!--/ Style -->
 
-    <!-- Application level JS -->
-    <script src="/app/app.js"></script>
-    <script src="/app/models/navigation.js"></script>
-    <script src="/app/directives/directives.js"></script>
-    <script src="/app/filters/filters.js"></script>
     <!--/ Application level JS -->
-
+    <base href="/"/>
 </head>
 
 <body ng-controller="MainController">
@@ -60,15 +56,21 @@
 
     </section>
 
-    <!-- Module level JS -->
+    <!-- Application level JS -->
+    <script src="/app/app.js"></script>
+    <script src="/app/config.js"></script>
+    <script src="/app/models/navigation.js"></script>
+    <script src="/app/directives/directives.js"></script>
+    <script src="/app/filters/filters.js"></script>
 
+    <script src="/app/widgets/widgets.js"></script>
+    <script src="/app/widgets/table.js"></script>
+    <script src="/app/widgets/modal.js"></script>
+    <!-- Module level JS -->
     <script src="/modules/buyer/app.js"></script>
     <script src="/modules/buyer/controllers/orders.js"></script>
     <script src="/modules/buyer/services/orders.js"></script>
     <!--
-    <script src="/app/widgets/table.js"></script>
-    <script src="/app/widgets/toolbar.js"></script>
-    <script src="/app/widgets/modal.js"></script>
     <!--/ Module level JS -->
 
 </body>

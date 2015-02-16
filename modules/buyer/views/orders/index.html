@@ -1,1 +1,43 @@
 <h1>Orders</h1>
+<div class="page-header">
+    <div class="box-layout">
+        <div class="col-md-2">
+            <div class="btn btn-default">New order</div>
+        </div>
+
+        <div class="col-sm-6 va-m">
+            <p>Choose payment date</p>
+            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
+            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
+        </div>
+
+        <div class="col-md-2">
+            <multi-select
+                    default-label="Factory filter"
+                    input-model="Factory"
+                    output-model="resultData"
+                    button-label="icon name"
+                    item-label="icon name maker"
+                    tick-property="ticked"
+                    max-labels="2"
+                    >
+            </multi-select>
+        </div>
+        <div class="col-md-2">
+            <multi-select
+                    default-label="Status filter"
+                    input-model="Status"
+                    output-model="resultData"
+                    button-label="icon name"
+                    item-label="icon name maker"
+                    tick-property="ticked"
+                    max-labels="2"
+                    >
+            </multi-select>
+
+        </div>
+
+    </div>
+</div>
+
+<widget-table datarows="orders" edit="edit()" row="row"></widget-table>

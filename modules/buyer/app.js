@@ -1,14 +1,28 @@
-(function(){
+var app = angular.module('modules.buyer', [
 
-	var app = angular.module('modules.buyer', []);
+]);
 
-	app.config(function($stateProvider){
+	app.config(function($routeProvider){
 
-		$stateProvider
-			.state('buyer.orders', {
-				url: '/buyer/orders',
-				templateUrl: '/modules/buyer/views/orders/index.html'
-			});
+		$routeProvider
+			.when('/buyer/orders',
+				{
+					templateUrl:"/modules/buyer/views/orders/index.html",
+					controller:"OrdersController"
+				}
+			)
+			.when('/buyer/orders/id/:orderId',
+			{
+				templateUrl:"/modules/buyer/views/orders/id.html",
+				controller:"OrdersController"
+			}
+		)
+			.when('/buyer/bestsellers',
+				{
+					templateUrl:"/modules/buyer/views/bestsellers/index.html",
+					controller:"BestsController"
+				}
+			);
 	});
 
 
@@ -17,7 +31,7 @@
 	 * @param:$q
 	 */
 
-	app.factory("orderService",["$http","$q",
+	app.factory("orderService", ["$http","$q",
 			function($http,$q){
 
 				var service={};
@@ -58,10 +72,17 @@
 
 		[
 			'$scope',
+			'$rootScope',
 			"orderService",
+			"$modal",
+			"$location",
+			"$route",
+			"$routeParams",
 
+			function ($scope, $rootScope, orderService, $modal, $location, $route){
 
-			function($scope,orderService){
+				$scope.$route = $route;
+				$scope.$location = $location;
 
 				/* get orders */
 				orderService.getData("/mock/order.json")
@@ -70,6 +91,7 @@
 						$scope.dataOrders=response;
 
 						$scope.orders=$scope.dataOrders;
+
 					});
 				/*get factories*/
 				orderService.getData("/mock/factory.json")
@@ -87,8 +109,9 @@
 				$scope.modalContent="Test Content for modal window";
 				$scope.modalTitle="Some Title";
 
-				$scope.edit=function(obj){
-					console.log(obj);
+				$scope.edit = function(){
+					$location.path( '/buyer/orders/id/'+ $rootScope.row.id );
+					console.log($rootScope.row);
 				};
 
 				/*get selected items for factory  */
@@ -129,7 +152,10 @@
 					}
 
 				});
+				$scope.$watch('row', function(newValue, oldValue){
 
+					//console.log(newValue, oldValue);
+				});
 
 				/*get selected items for statuses */
 
@@ -198,4 +224,4 @@
 			}]);
 
 
-})();
+

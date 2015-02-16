@@ -2,13 +2,13 @@
     /**
      *  table widget
      */
-    var app=angular.module("widgtable",[]);
+    var app=angular.module("widgets.table",[]);
 
 
     /**
      * Factory for
      */
-    app.factory("tableFactory",["$filter",function($filter){
+    app.factory("tableFactory",["$filter","$rootScope",function($filter,$rootScope){
 
         var service={};
 
@@ -20,20 +20,26 @@
             return date;
         };
 
+        service.getRow=function(row){
+            $rootScope.row=row;
+        };
 
         return service;
     }]);
 
 
 
-    app.directive("widgtable", ["tableFactory",function(tableFactory){
-
+    app.directive("widgetTable", ["tableFactory",function(tableFactory){
         return{
 
             restict:'EA',
-            templateUrl:"views/widgets/table.wgt.html",
+            templateUrl:"/app/widgets/table.wgt.html",
+            //require:"",
             scope:{
                 datarows:"="
+                ,edit:"&"
+                ,row:"="
+
             },
 
             link:function($scope){
@@ -87,8 +93,11 @@
                     }
                 });
 
-                $scope.edit=function(obj){
-                    console.log(obj);
+                $scope.edit_row=function(row){
+                    tableFactory.getRow(row);
+                    if($scope.edit) {
+                        $scope.edit(row);
+                    }
                 };
 
             }
