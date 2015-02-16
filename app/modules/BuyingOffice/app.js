@@ -135,7 +135,7 @@
                         title: 'My event title', // The title of the event
                         type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
                         starts_at: new Date(2013,5,1,1), // A javascript date object for when the event starts
-                        ends_at: new Date(2014,8,26,15), // A javascript date object for when the event ends
+                        ends_at: new Date(2015,8,26,15), // A javascript date object for when the event ends
                         editable: false, // If calendar-edit-event-html is set and this field is explicitly set to false then dont make it editable
                         deletable: false // If calendar-delete-event-html is set and this field is explicitly set to false then dont make it deleteable
                     }
@@ -250,6 +250,32 @@
 
     });
 
+    app.controller('BsAlertCtrl', ['$scope', function ($scope) {
+        $scope.alerts = [{
+            type: 'danger',
+            msg: 'Oh snap! Change a few things up and try submitting again.'
+        }, {
+            type: 'success',
+            msg: 'Well done! You successfully read this important alert message.'
+        }, {
+            type: 'info',
+            msg: 'Heads up! This alert needs your attention, but it\'s not super important.'
+        }, {
+            type: 'warning',
+            msg: 'Warning! Better check yourself, you\'re not looking too good.'
+        }];
+
+        $scope.addAlert = function() {
+            $scope.alerts.push({
+                msg: 'Another alert!'
+            });
+        };
+
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        };
+    }]);
+
     app.controller('fullCalendarCtrl', ['$scope', '$http', '$compile', 'uiCalendarConfig', function ($scope, $http, $compile, uiCalendarConfig) {
         var $calendar = jQuery('[ui-calendar]');
         var date = new Date();
@@ -274,7 +300,7 @@
             end: '2014-11-10'
         }, {
             id: 999,
-            title: 'Repeating Event',
+            title: 'Factory 1',
             start: '2014-11-09T16:00:00'
         }, {
             title: 'Conference',
@@ -294,14 +320,14 @@
             start: '2014-11-12T14:30:00',
             className: 'fc-event-warning'
         }, {
-            title: 'Happy Hour',
+            title: 'Factory 2',
             start: '2014-11-12T17:30:00'
         }, {
-            title: 'Dinner',
+            title: 'Factory 3',
             start: '2014-11-12T20:00:00',
             className: 'fc-event-success'
         }, {
-            title: 'Birthday Party',
+            title: 'Factory 4',
             start: '2014-11-13T07:00:00',
             className: 'fc-event-success'
         }, {
@@ -338,7 +364,6 @@
                 sources.push(source);
             }
         };
-
 
         /* add custom event*/
         $scope.addEvent = function() {
@@ -390,6 +415,7 @@
         /* event sources array*/
         $scope.eventSources = [$scope.events, $scope.eventSource];
     }]);
+
 
     app.controller('CargoController',
 
