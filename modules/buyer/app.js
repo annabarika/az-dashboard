@@ -169,6 +169,8 @@ var app = angular.module('modules.buyer', [
 
 				/* function Add New Order*/
 				$scope.add_new_order=function(){
+					$scope.newOrder = {};
+					$scope.newOrder.factory = $scope.Factory[0];
 
 					 modal=$modal.open({
 						templateUrl: "/modules/buyer/views/orders/new_order.html",

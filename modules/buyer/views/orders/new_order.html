@@ -1,11 +1,10 @@
 <!--header-->
 <div class="modal-header">
-    <h3 class="modal-title">I'm a modal!</h3>
+    <h3 class="modal-title">New order</h3>
 </div>
 <!--body-->
 <div class="modal-body">
     <form>
-        <input type="text" ng-model="newOrder.name" placeholder="order name"/>
        <!-- <input type="file" ng-model="newOrder.files" onchange="" multiple/>-->
         <select ng-model="newOrder.factory"
                 ng-options="opt as opt.name for opt in Factory">
