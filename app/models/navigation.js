@@ -5,7 +5,7 @@ angular.module('models.navigation', [
 		var model = this,
 			navigation;
 		model.get = function(){
-			return $http.get('/mock/navigation.json');
+			return $http.get('/data/navigation.json');
 		}
 	})
 ;

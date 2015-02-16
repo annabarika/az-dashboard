@@ -1,0 +1,6 @@
+[
+  {"name":"active"},
+  {"name":"draft"},
+  {"name":"sent to factory"},
+  {"name":"cancelled"}
+]

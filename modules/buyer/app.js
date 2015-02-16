@@ -77,7 +77,6 @@ var app = angular.module('modules.buyer', [
 			"$modal",
 			"$location",
 			"$route",
-			"$routeParams",
 
 			function ($scope, $rootScope, orderService, $modal, $location, $route){
 
@@ -85,7 +84,7 @@ var app = angular.module('modules.buyer', [
 				$scope.$location = $location;
 
 				/* get orders */
-				orderService.getData("/mock/order.json")
+				orderService.getData("/data/buyer/orders/orders.json")
 					.then(function(response){
 
 						$scope.dataOrders=response;
@@ -94,13 +93,13 @@ var app = angular.module('modules.buyer', [
 
 					});
 				/*get factories*/
-				orderService.getData("/mock/factory.json")
+				orderService.getData("/data/factory.json")
 					.then(function(response){
 
 						$scope.Factory=response;
 					});
 				/*get statuses*/
-				orderService.getData("/mock/orderstatus.json")
+				orderService.getData("/data/orderstatus.json")
 					.then(function(response){
 
 						$scope.Status=response;
@@ -126,7 +125,7 @@ var app = angular.module('modules.buyer', [
 
 							filter[value.name]=value;
 
-							orderService.getData("/mock/orderfilter.json?"+value.name)
+							orderService.getData("/data/orderfilter.json?"+value.name)
 
 								.then(function(response){
 
