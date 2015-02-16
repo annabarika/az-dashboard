@@ -2,7 +2,7 @@
 <div class="page-header">
     <div class="box-layout">
         <div class="col-md-2">
-            <div class="btn btn-default">New order</div>
+            <div class="btn btn-default" ng-click="add_new_order()">New order</div>
         </div>
 
         <div class="col-sm-6 va-m">
@@ -40,4 +40,10 @@
     </div>
 </div>
 
-<widget-table datarows="orders" edit="edit()" row="row"></widget-table>
+<widget-table
+        datarows="orders"
+        edit="edit()"
+        row="row"
+        toolbar-battons="buttons"
+        >
+</widget-table>

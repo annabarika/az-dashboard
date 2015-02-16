@@ -22,19 +22,22 @@
                         <thead>
                         <tr>
                             <th class="sorting" ng-repeat="(k,v) in datarows[0]"><a href="" ng-click="column_sorter(k)">{{k}}</a></th>
-                            <th></th>
+                            <th ng-repeat="th in toolbarBattons"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="row in datarows|filter:searchText|orderBy:sortField:reverse" ng-click="edit_row(row)">
-                            <td ng-repeat="v in row">{{v}}</td>
-                            <td>
-                                <div class="toolbar">
+                        <tr ng-repeat="row in datarows|filter:searchText|orderBy:sortField:reverse" >
+                            <td ng-repeat="v in row" ng-click="edit_row(row)">{{v}}</td>
+                            <td ng-repeat="b in toolbarBattons">
+                            <button class={{b.class}}>{{b.value}}</button>
+                            </td>
+                                <!--<div class="toolbar">-->
                                     <!--<a href="" class="btn btn-sm btn-default" ng-click="edit_row(row)" data-toggle="modal" data-target="#Modal" ><span class="fa fa-file-o"></span></a>
                                     <a href="" class="btn btn-sm btn-default" ng-click="edit_row(row)"><span class="fa fa-file-o"></span></a>
                                     <a href="" class="btn btn-sm btn-default"><span class="fa fa-trash-o"></span></a>
                                     -->
-                                </div>
+
+                                <!--</div>-->
                             </td>
                         </tr>
                         </tbody>
