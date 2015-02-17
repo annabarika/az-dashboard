@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>Testing RESTful API</title>
+        <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
+        <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!--/ Third-party components -->
+
+        <!-- Style -->
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css"/>
+    </head>
+<body>
+<div class="container">
+<div class="header well">
+    <h1>Testing RESTFul API</h1>
+    <form class="form-inline">
+        <h3>Choose your API</h3>
+        <select name="API">
+            <option value="compass">compass</option>
+            <option value="arrow.b.compass">arrow</option>
+            <option value="flash.b.compass">flash</option>
+            <option value="joker.b.compass">joker</option>
+            <option value="superman.b.compass">superman</option>
+        </select>
+        <hr/>
+        <div class="form-group">
+            <input type="text" class="form-control" onkeyup="prepareRequest()" name="URL" placeholder="URL">
+        </div>
+        <hr/>
+        <div class="fields">
+        <div class="row">
+        <div class="form-group">
+            <input type="text" class="form-control" onkeyup="prepareRequest()" name="var[]" placeholder="Variable">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" onkeyup="prepareRequest()" name="value[]" placeholder="Value">
+        </div>
+        <button type="button" class="btn btn-default" onclick="row_clone()">+</button>
+        </div>
+            <hr/>
+        </div>
+        <hr/>
+        <pre class="code request-preview">Request example</pre>
+
+        <button type="button" onclick="makeRequest('GET')" class="btn btn-default">GET</button>
+        <button type="button" onclick="makeRequest('POST')" class="btn btn-default">POST</button>
+        <hr/>
+        <pre class="result code">Result</pre>
+    </form>
+</div>
+</div>
+<script>
+
+    $('input[name=KEY]').val('$6$Er.DMHjt$yq75UUF5Msm6L7fI2DPYkW2YOGZD1');
+    function row_clone(){
+        var elem = $('.row').clone().appendTo($('.fields'));
+        elem.find(".form-control").val('');
+    }
+    var postData = {};
+    var URL = ''
+    var getData = '';
+
+    function prepareRequest(){
+        var data = $('form').serializeArray();
+        var requestPreview = '/api/';
+        var api_host, url, params = '';
+        var key = 0;
+
+        for( var i in data){
+            if(data[i].name == 'API'){
+                api_host = data[i].value;
+            }else if(data[i].name == 'URL') {
+                url = data[i].value;
+            } else {
+                if(data[i].name == 'var[]') {
+                    params += '&'+data[i].value+'=';
+                    key = data[i].value;
+                }
+
+                if(data[i].name == 'value[]') {
+                   params += data[i].value;
+                   postData[key] = data[i].value;
+                }
+            }
+        }
+        requestPreview +=  url + '/?host=' + api_host + params;
+        URL = '/api/' + url  + '/?host=' + api_host;
+        getData = params;
+
+        $('.request-preview').html(requestPreview);
+        return requestPreview;
+    }
+
+    function makeRequest(method){
+        prepareRequest();
+        console.log(postData);
+
+        if( method == 'POST'){
+            getData = '';
+        }
+        if( method == 'GET'){
+            postData = '';
+        }
+        $.ajax({
+            type: method,
+            url: URL+getData,
+            data: postData
+        })
+        .done(function( data ) {
+            $('.result').html(data);
+        });
+    }
+</script>
+</body>
+</html>

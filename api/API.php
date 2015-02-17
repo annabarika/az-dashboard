@@ -45,7 +45,7 @@ class API {
 			CURLOPT_TIMEOUT => 2
 		);
 
-		$this->host 	= $host;
+		$this->host 	= 'http://'.$host;
 		$this->url 		= '/';
 		$this->method 	= 'GET';
 	}
@@ -82,7 +82,7 @@ class API {
 	 * @return $this
 	 */
 	public function setParams($params){
-		$this->params = $params;
+		$this->params = http_build_query( $params );
 		return $this;
 	}
 
