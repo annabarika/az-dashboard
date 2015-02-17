@@ -1,17 +1,18 @@
 <h1>Orders</h1>
 <div class="page-header">
     <div class="box-layout">
-        <div class="col-md-2">
+
+        <div class="col-md-4">
             <div class="btn btn-default" ng-click="add_new_order()">New order</div>
         </div>
 
-        <div class="col-sm-6 va-m">
-            <p>Choose payment date</p>
-            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
-            <div class="col-sm-3"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
+        <div class="col-sm-5 va-m">
+            <div class="col-sm-4 text-right">Order date:</div>
+            <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
+            <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-1">
             <multi-select
                     default-label="Factory filter"
                     input-model="Factory"

@@ -86,7 +86,7 @@ app.controller('OrdersController',
 			var modal;
 			$scope.newOrder={};
 			/* get orders */
-			RestFactory.request("/mock/order.json",'get')
+			RestFactory.request("/data/buyer/orders/orders.json")
 				.then(function(response){
 
 					$scope.dataOrders=response;
@@ -104,13 +104,13 @@ app.controller('OrdersController',
 					]
 				});
 			/*get factories*/
-			RestFactory.request("/mock/factory.json",'get')
+			RestFactory.request("/data/factory.json",'get')
 				.then(function(response){
 
 					$scope.Factory=response;
 				});
 			/*get statuses*/
-			RestFactory.request("/mock/orderstatus.json",'get')
+			RestFactory.request("/data/orderstatus.json",'get')
 				.then(function(response){
 
 					$scope.Status=response;
@@ -200,7 +200,7 @@ app.controller('OrdersController',
 			};
 			$scope.saveOrder=function(){
 				console.log($scope.newOrder);
-				var url="http://test.html",
+				var url="http://azimuth.local/api/order/new",
 					type='post',
 					data=$scope.newOrder,
 					header='multipart';
