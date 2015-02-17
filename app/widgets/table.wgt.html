@@ -29,7 +29,7 @@
                         <tr ng-repeat="row in datarows|filter:searchText|orderBy:sortField:reverse" >
                             <td ng-repeat="v in row" ng-click="edit_row(row)">{{v}}</td>
                             <td ng-repeat="b in toolbarBattons">
-                            <button class={{b.class}}>{{b.value}}</button>
+                            <button class={{b.class}} ng-click="buttons(row,b.value)">{{b.value}}</button>
                             </td>
                                 <!--<div class="toolbar">-->
                                     <!--<a href="" class="btn btn-sm btn-default" ng-click="edit_row(row)" data-toggle="modal" data-target="#Modal" ><span class="fa fa-file-o"></span></a>

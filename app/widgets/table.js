@@ -24,6 +24,10 @@
             $rootScope.row=row;
         };
 
+        service.getMethod=function(method){
+            $rootScope.method=method;
+        };
+
         return service;
     }]);
 
@@ -40,6 +44,7 @@
                 ,edit:"&"
                 ,row:"="
                 ,toolbarBattons:"="
+                ,buttonAction:"&"
             },
 
             link:function($scope){
@@ -99,10 +104,15 @@
                         $scope.edit(row);
                     }
                 };
-                $scope.cancel=function(){
-                    alert("ins work");
-                }
 
+                $scope.buttons=function(row,method){
+                    tableFactory.getRow(row);
+                    tableFactory.getMethod(method);
+
+                    if($scope.buttonAction){
+                        $scope.buttonAction();
+                    }
+                }
             }
 
         }

@@ -95,13 +95,11 @@ var app = angular.module('modules.buyer', [
 						$scope.buttons=[
 							{
 								class:"btn btn-default",
-								value:"Cancel",
-								event:'cancel()'
+								value:"Cancel"
 							},
 							{
 								class:"btn btn-default",
-								value:"Send",
-								event:'cancel()'
+								value:"Send"
 							}
 						]
 					});
@@ -121,10 +119,35 @@ var app = angular.module('modules.buyer', [
 				$scope.modalContent="Test Content for modal window";
 				$scope.modalTitle="Some Title";
 
+				/*
+				* Table widget actions
+				* */
+
 				$scope.edit = function(){
 					$location.path( '/buyer/orders/id/'+ $rootScope.row.id );
 					console.log($rootScope.row);
 				};
+
+
+				$scope.buttonAction=function(){
+
+					console.log($rootScope.row,$rootScope.method);
+
+					if($rootScope.method=='Cancel'){
+						console.log($rootScope.method);
+					}
+					else{
+						//alert($rootScope.method);
+						modal=$modal.open({
+							templateUrl: "/modules/buyer/views/orders/send_order.html",
+							controller: 'OrdersController',
+							backdrop:'static'
+
+						});
+					}
+
+				};
+
 
 				/*get selected items for factory  */
 
@@ -164,10 +187,6 @@ var app = angular.module('modules.buyer', [
 					}
 
 				});
-				$scope.$watch('row', function(newValue, oldValue){
-
-					//console.log(newValue, oldValue);
-				});
 
 				/* function Add New Order*/
 				$scope.add_new_order=function(){
@@ -197,7 +216,6 @@ var app = angular.module('modules.buyer', [
 					$scope.$apply();
 					//console.log($scope.newOrder);
 				};
-
 
 
 
