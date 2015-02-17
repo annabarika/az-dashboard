@@ -286,47 +286,47 @@
         /* event source that contains custom events on the scope */
         $scope.events = [{
             title: 'All Day Event',
-            start: '2014-11-01'
+            start: '2015-02-01'
         }, {
             title: 'Long Event',
-            start: '2014-11-07',
-            end: '2014-11-10'
+            start: '2015-02-07',
+            end: '2015-02-10'
         }, {
             id: 999,
             title: 'Factory 1',
-            start: '2014-11-09T16:00:00'
+            start: '2015-02-09T16:00:00'
         }, {
             title: 'Conference',
-            start: '2014-11-11',
-            end: '2014-11-13',
+            start: '2015-02-11',
+            end: '2015-02-13',
             className: 'fc-event-danger'
         }, {
             title: 'Meeting',
-            start: '2014-11-12T10:30:00',
-            end: '2014-11-12T12:30:00'
+            start: '2015-02-12T10:30:00',
+            end: '2015-02-12T12:30:00'
         }, {
             title: 'Lunch',
-            start: '2014-11-12T12:00:00',
+            start: '2015-02-12T12:00:00',
             className: 'fc-event-danger'
         }, {
             title: 'Meeting',
-            start: '2014-11-12T14:30:00',
+            start: '2015-02-12T14:30:00',
             className: 'fc-event-warning'
         }, {
             title: 'Factory 2',
-            start: '2014-11-12T17:30:00'
+            start: '2015-02-12T17:30:00'
         }, {
             title: 'Factory 3',
-            start: '2014-11-12T20:00:00',
+            start: '2015-02-12T20:00:00',
             className: 'fc-event-success'
         }, {
             title: 'Factory 4',
-            start: '2014-11-13T07:00:00',
+            start: '2015-02-13T07:00:00',
             className: 'fc-event-success'
         }, {
             title: 'Click for Google',
             url: 'http://google.com/',
-            start: '2014-11-28'
+            start: '2015-02-28'
         }];
 
         /* alert on eventClick */
@@ -413,6 +413,7 @@
         /* event sources array*/
         $scope.eventSources = [$scope.events, $scope.eventSource];
     }]);
+
 
 
     app.controller('CargoController',
