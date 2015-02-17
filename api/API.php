@@ -125,7 +125,9 @@ class API {
 		if( $this->method == 'POST'){
 			$options[CURLOPT_POSTFIELDS] = $this->data;
 		}
-		curl_setopt_array($this->getHandle(), ($options + $this->options) );
+		$options = $options + $this->options;
+
+		curl_setopt_array($this->getHandle(), $options );
 
 		return json_decode(curl_exec($this->getHandle()), true);
 	}
