@@ -141,8 +141,8 @@ app.controller('OrdersController',
 					modal=$modal.open({
 						templateUrl: "/modules/buyer/views/orders/send_order.html",
 						controller: 'OrdersController',
-						backdrop:'static'
-
+						backdrop:'static',
+                        width:'auto'
 					});
 				}
 
@@ -194,8 +194,8 @@ app.controller('OrdersController',
 				modal=$modal.open({
 					templateUrl: "/modules/buyer/views/orders/new_order.html",
 					controller: 'OrdersController',
-					backdrop:'static'
-
+					backdrop:'static',
+                    width:'auto'
 				});
 			};
 			$scope.saveOrder=function(){
