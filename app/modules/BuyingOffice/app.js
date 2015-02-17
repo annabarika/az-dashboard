@@ -283,13 +283,6 @@
         var m = date.getMonth();
         var y = date.getFullYear();
 
-        /* event source that pulls from google.com */
-        $scope.eventSource = {
-            url: 'http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic',
-            className: 'gcal-event', // an option!
-            currentTimezone: 'America/Chicago' // an option!
-        };
-
         /* event source that contains custom events on the scope */
         $scope.events = [{
             title: 'All Day Event',
@@ -402,10 +395,15 @@
 
         /* config object */
         $scope.options = {
-            header: false,
+            header: {
+                left: "",
+                center: 'title',
+                right: ""
+            },
+            defaultView: 'month',
             editable: true,
             eventLimit: true,
-            defaultDate: '2014-11-12',
+            defaultDate: '2015-02-12',
             eventClick: $scope.alertOnEventClick,
             eventDrop: $scope.alertOnDrop,
             eventResize: $scope.alertOnResize,

@@ -38,9 +38,9 @@ var defaults = {
 
 	weekNumberTitle: 'W',
 	weekNumberCalculation: 'local',
-	
+
 	//editable: false,
-	
+
 	// event ajax
 	lazyFetching: true,
 	startParam: 'start',
@@ -59,6 +59,7 @@ var defaults = {
 		prevYear: "prev year",
 		nextYear: "next year",
 		today: 'today',
+        year: 'year',
 		month: 'month',
 		week: 'week',
 		day: 'day'
@@ -70,7 +71,7 @@ var defaults = {
 		prevYear: 'left-double-arrow',
 		nextYear: 'right-double-arrow'
 	},
-	
+
 	// jquery-ui theming
 	theme: false,
 	themeButtonIcons: {
@@ -83,20 +84,20 @@ var defaults = {
 	dragOpacity: .75,
 	dragRevertDuration: 500,
 	dragScroll: true,
-	
+
 	//selectable: false,
 	unselectAuto: true,
-	
+
 	dropAccept: '*',
 
 	eventLimit: false,
 	eventLimitText: 'more',
 	eventLimitClick: 'popover',
 	dayPopoverFormat: 'LL',
-	
+
 	handleWindowResize: true,
 	windowResizeDelay: 200 // milliseconds before an updateSize happens
-	
+
 };
 
 
@@ -160,7 +161,7 @@ $.fn.fullCalendar = function(options) {
 			calendar.render();
 		}
 	});
-	
+
 	return res;
 };
 
@@ -412,7 +413,7 @@ function enableCursor() {
 
 // Given a total available height to fill, have `els` (essentially child rows) expand to accomodate.
 // By default, all elements that are shorter than the recommended height are expanded uniformly, not considering
-// any other els that are already too tall. if `shouldRedistribute` is on, it considers these tall rows and 
+// any other els that are already too tall. if `shouldRedistribute` is on, it considers these tall rows and
 // reduces the available height.
 function distributeHeight(els, availableHeight, shouldRedistribute) {
 
@@ -4672,7 +4673,7 @@ DayGrid.mixin({
 			'<span class="fc-title">' +
 				(htmlEscape(event.title || '') || '&nbsp;') + // we always want one line of height
 			'</span>';
-		
+
 		return '<a class="' + classes.join(' ') + '"' +
 				(event.url ?
 					' href="' + htmlEscape(event.url) + '"' :
@@ -4795,7 +4796,7 @@ DayGrid.mixin({
 		// Give preference to elements with certain criteria, so they have
 		// a chance to be closer to the top.
 		segs.sort(compareSegs);
-		
+
 		for (i = 0; i < segs.length; i++) {
 			seg = segs[i];
 
@@ -6892,7 +6893,7 @@ var View = fc.View = Class.extend({
 
 ;;
 
- 
+
 function Calendar(element, instanceOptions) {
 	var t = this;
 
@@ -6924,7 +6925,7 @@ function Calendar(element, instanceOptions) {
 	}
 
 
-	
+
 	// Exports
 	// -----------------------------------------------------------------------------------
 
@@ -7104,7 +7105,7 @@ function Calendar(element, instanceOptions) {
 	}
 
 
-	
+
 	// Imports
 	// -----------------------------------------------------------------------------------
 
@@ -7131,9 +7132,9 @@ function Calendar(element, instanceOptions) {
 	var ignoreWindowResize = 0;
 	var date;
 	var events = [];
-	
-	
-	
+
+
+
 	// Main Rendering
 	// -----------------------------------------------------------------------------------
 
@@ -7144,8 +7145,8 @@ function Calendar(element, instanceOptions) {
 	else {
 		date = t.getNow();
 	}
-	
-	
+
+
 	function render(inc) {
 		if (!content) {
 			initialRender();
@@ -7156,8 +7157,8 @@ function Calendar(element, instanceOptions) {
 			renderView(inc);
 		}
 	}
-	
-	
+
+
 	function initialRender() {
 		tm = options.theme ? 'ui' : 'fc';
 		element.addClass('fc');
@@ -7191,8 +7192,8 @@ function Calendar(element, instanceOptions) {
 			$(window).resize(windowResizeProxy);
 		}
 	}
-	
-	
+
+
 	function destroy() {
 
 		if (currentView) {
@@ -7205,13 +7206,13 @@ function Calendar(element, instanceOptions) {
 
 		$(window).unbind('resize', windowResizeProxy);
 	}
-	
-	
+
+
 	function elementVisible() {
 		return element.is(':visible');
 	}
-	
-	
+
+
 
 	// View Rendering
 	// -----------------------------------------------------------------------------------
@@ -7371,8 +7372,8 @@ function Calendar(element, instanceOptions) {
 			return spec.buttonText;
 		}
 	}
-	
-	
+
+
 
 	// Resizing
 	// -----------------------------------------------------------------------------------
@@ -7389,8 +7390,8 @@ function Calendar(element, instanceOptions) {
 	t.isHeightAuto = function() {
 		return options.contentHeight === 'auto' || options.height === 'auto';
 	};
-	
-	
+
+
 	function updateSize(shouldRecalc) {
 		if (elementVisible()) {
 
@@ -7412,8 +7413,8 @@ function Calendar(element, instanceOptions) {
 			_calcSize();
 		}
 	}
-	
-	
+
+
 	function _calcSize() { // assumes elementVisible
 		if (typeof options.contentHeight === 'number') { // exists and not 'auto'
 			suggestedViewHeight = options.contentHeight;
@@ -7425,8 +7426,8 @@ function Calendar(element, instanceOptions) {
 			suggestedViewHeight = Math.round(content.width() / Math.max(options.aspectRatio, .5));
 		}
 	}
-	
-	
+
+
 	function windowResize(ev) {
 		if (
 			!ignoreWindowResize &&
@@ -7438,9 +7439,9 @@ function Calendar(element, instanceOptions) {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/* Event Fetching/Rendering
 	-----------------------------------------------------------------------------*/
 	// TODO: going forward, most of this stuff should be directly handled by the view
@@ -7467,7 +7468,7 @@ function Calendar(element, instanceOptions) {
 		currentView.destroyViewEvents();
 		unfreezeContentHeight();
 	}
-	
+
 
 	function getAndRenderEvents() {
 		if (!options.lazyFetching || isFetchNeeded(currentView.start, currentView.end)) {
@@ -7485,7 +7486,7 @@ function Calendar(element, instanceOptions) {
 			// ... which will call renderEvents
 	}
 
-	
+
 	// called when event data arrives
 	function reportEvents(_events) {
 		events = _events;
@@ -7518,12 +7519,12 @@ function Calendar(element, instanceOptions) {
 			header.enableButton('today');
 		}
 	}
-	
+
 
 
 	/* Selection
 	-----------------------------------------------------------------------------*/
-	
+
 
 	function select(start, end) {
 
@@ -7540,56 +7541,56 @@ function Calendar(element, instanceOptions) {
 
 		currentView.select({ start: start, end: end }); // accepts a range
 	}
-	
+
 
 	function unselect() { // safe to be called before renderView
 		if (currentView) {
 			currentView.unselect();
 		}
 	}
-	
-	
-	
+
+
+
 	/* Date
 	-----------------------------------------------------------------------------*/
-	
-	
+
+
 	function prev() {
 		date = currentView.computePrevDate(date);
 		renderView();
 	}
-	
-	
+
+
 	function next() {
 		date = currentView.computeNextDate(date);
 		renderView();
 	}
-	
-	
+
+
 	function prevYear() {
 		date.add(-1, 'years');
 		renderView();
 	}
-	
-	
+
+
 	function nextYear() {
 		date.add(1, 'years');
 		renderView();
 	}
-	
-	
+
+
 	function today() {
 		date = t.getNow();
 		renderView();
 	}
-	
-	
+
+
 	function gotoDate(dateInput) {
 		date = t.moment(dateInput);
 		renderView();
 	}
-	
-	
+
+
 	function incrementDate(delta) {
 		date.add(moment.duration(delta));
 		renderView();
@@ -7620,8 +7621,8 @@ function Calendar(element, instanceOptions) {
 		date = newDate;
 		renderView(viewType);
 	}
-	
-	
+
+
 	function getDate() {
 		return date.clone();
 	}
@@ -7648,23 +7649,23 @@ function Calendar(element, instanceOptions) {
 			overflow: ''
 		});
 	}
-	
-	
-	
+
+
+
 	/* Misc
 	-----------------------------------------------------------------------------*/
-	
+
 
 	function getCalendar() {
 		return t;
 	}
 
-	
+
 	function getView() {
 		return currentView;
 	}
-	
-	
+
+
 	function option(name, value) {
 		if (value === undefined) {
 			return options[name];
@@ -7674,8 +7675,8 @@ function Calendar(element, instanceOptions) {
 			updateSize(true); // true = allow recalculation of height
 		}
 	}
-	
-	
+
+
 	function trigger(name, thisObj) {
 		if (options[name]) {
 			return options[name].apply(
@@ -7695,7 +7696,7 @@ function Calendar(element, instanceOptions) {
 
 function Header(calendar, options) {
 	var t = this;
-	
+
 	// exports
 	t.render = render;
 	t.destroy = destroy;
@@ -7705,7 +7706,7 @@ function Header(calendar, options) {
 	t.disableButton = disableButton;
 	t.enableButton = enableButton;
 	t.getViewsWithButtons = getViewsWithButtons;
-	
+
 	// locals
 	var el = $();
 	var viewsWithButtons = [];
@@ -7727,13 +7728,13 @@ function Header(calendar, options) {
 			return el;
 		}
 	}
-	
-	
+
+
 	function destroy() {
 		el.remove();
 	}
-	
-	
+
+
 	function renderSection(position) {
 		var sectionEl = $('<div class="fc-' + position + '"/>');
 		var buttonStr = options.header[position];
@@ -7876,32 +7877,32 @@ function Header(calendar, options) {
 
 		return sectionEl;
 	}
-	
-	
+
+
 	function updateTitle(text) {
 		el.find('h2').text(text);
 	}
-	
-	
+
+
 	function activateButton(buttonName) {
 		el.find('.fc-' + buttonName + '-button')
 			.addClass(tm + '-state-active');
 	}
-	
-	
+
+
 	function deactivateButton(buttonName) {
 		el.find('.fc-' + buttonName + '-button')
 			.removeClass(tm + '-state-active');
 	}
-	
-	
+
+
 	function disableButton(buttonName) {
 		el.find('.fc-' + buttonName + '-button')
 			.attr('disabled', 'disabled')
 			.addClass(tm + '-state-disabled');
 	}
-	
-	
+
+
 	function enableButton(buttonName) {
 		el.find('.fc-' + buttonName + '-button')
 			.removeAttr('disabled')
@@ -7930,8 +7931,8 @@ var eventGUID = 1;
 
 function EventManager(options) { // assumed to be a calendar
 	var t = this;
-	
-	
+
+
 	// exports
 	t.isFetchNeeded = isFetchNeeded;
 	t.fetchEvents = fetchEvents;
@@ -7944,14 +7945,14 @@ function EventManager(options) { // assumed to be a calendar
 	t.mutateEvent = mutateEvent;
 	t.normalizeEventDateProps = normalizeEventDateProps;
 	t.ensureVisibleEventRange = ensureVisibleEventRange;
-	
-	
+
+
 	// imports
 	var trigger = t.trigger;
 	var getView = t.getView;
 	var reportEvents = t.reportEvents;
-	
-	
+
+
 	// locals
 	var stickySource = { events: [] };
 	var sources = [ stickySource ];
@@ -7971,21 +7972,21 @@ function EventManager(options) { // assumed to be a calendar
 			}
 		}
 	);
-	
-	
-	
+
+
+
 	/* Fetching
 	-----------------------------------------------------------------------------*/
-	
-	
+
+
 	function isFetchNeeded(start, end) {
 		return !rangeStart || // nothing has been fetched yet?
 			// or, a part of the new range is outside of the old range? (after normalizing)
 			start.clone().stripZone() < rangeStart.clone().stripZone() ||
 			end.clone().stripZone() > rangeEnd.clone().stripZone();
 	}
-	
-	
+
+
 	function fetchEvents(start, end) {
 		rangeStart = start;
 		rangeEnd = end;
@@ -7997,8 +7998,8 @@ function EventManager(options) { // assumed to be a calendar
 			fetchEventSource(sources[i], fetchID);
 		}
 	}
-	
-	
+
+
 	function fetchEventSource(source, fetchID) {
 		_fetchEventSource(source, function(eventInputs) {
 			var isArraySource = $.isArray(source.events);
@@ -8034,8 +8035,8 @@ function EventManager(options) { // assumed to be a calendar
 			}
 		});
 	}
-	
-	
+
+
 	function _fetchEventSource(source, callback) {
 		var i;
 		var fetchers = fc.sourceFetchers;
@@ -8144,12 +8145,12 @@ function EventManager(options) { // assumed to be a calendar
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/* Sources
 	-----------------------------------------------------------------------------*/
-	
+
 
 	function addEventSource(sourceInput) {
 		var source = buildEventSource(sourceInput);
@@ -8231,9 +8232,9 @@ function EventManager(options) { // assumed to be a calendar
 		) ||
 		source; // the given argument *is* the primitive
 	}
-	
-	
-	
+
+
+
 	/* Manipulation
 	-----------------------------------------------------------------------------*/
 
@@ -8275,7 +8276,7 @@ function EventManager(options) { // assumed to be a calendar
 		return !/^_|^(id|allDay|start|end)$/.test(name);
 	}
 
-	
+
 	// returns the expanded events that were created
 	function renderEvent(eventInput, stick) {
 		var abstractEvent = buildEventFromInput(eventInput);
@@ -8304,8 +8305,8 @@ function EventManager(options) { // assumed to be a calendar
 
 		return [];
 	}
-	
-	
+
+
 	function removeEvents(filter) {
 		var eventID;
 		var i;
@@ -8334,8 +8335,8 @@ function EventManager(options) { // assumed to be a calendar
 
 		reportEvents(cache);
 	}
-	
-	
+
+
 	function clientEvents(filter) {
 		if ($.isFunction(filter)) {
 			return $.grep(cache, filter);
@@ -8348,28 +8349,28 @@ function EventManager(options) { // assumed to be a calendar
 		}
 		return cache; // else, return all
 	}
-	
-	
-	
+
+
+
 	/* Loading State
 	-----------------------------------------------------------------------------*/
-	
-	
+
+
 	function pushLoading() {
 		if (!(loadingLevel++)) {
 			trigger('loading', null, true, getView());
 		}
 	}
-	
-	
+
+
 	function popLoading() {
 		if (!(--loadingLevel)) {
 			trigger('loading', null, false, getView());
 		}
 	}
-	
-	
-	
+
+
+
 	/* Event Normalization
 	-----------------------------------------------------------------------------*/
 
@@ -9317,12 +9318,306 @@ var BasicView = fcViews.basic = View.extend({
 
 ;;
 
+
+    /* A year view with day cells running in rows (one-per-week) and columns
+     ----------------------------------------------------------------------------------------------------------------------*/
+
+    setDefaults({
+        fixedYearCount: true
+    });
+
+
+    var YearView = fcViews.years = BasicView.extend({
+
+        // Produces information about what range to display
+        computeRange: function(date) {
+            var range = View.prototype.computeRange.call(this, date); // get value from the super-method
+
+            // year and month views should be aligned with weeks. this is already done for week
+            if (/year|month/.test(range.intervalUnit)) {
+                range.start.startOf('week');
+                range.start = this.skipHiddenDays(range.start);
+
+                // make end-of-week if not already
+                if (range.end.weekday()) {
+                    range.end.add(1, 'week').startOf('week');
+                    range.end = this.skipHiddenDays(range.end, -1, true); // exclusively move backwards
+                }
+            }
+
+            return range;
+        },
+
+// Renders the view into `this.el`, which should already be assigned
+        render: function() {
+
+            this.dayNumbersVisible = this.dayGrid.rowCnt > 1; // TODO: make grid responsible
+            this.weekNumbersVisible = this.opt('weekNumbers');
+            this.dayGrid.numbersVisible = this.dayNumbersVisible || this.weekNumbersVisible;
+
+            this.el.addClass('fc-basic-view').html(this.renderHtml());
+
+            this.headRowEl = this.el.find('thead .fc-row');
+
+            this.scrollerEl = this.el.find('.fc-day-grid-container');
+            this.dayGrid.coordMap.containerEl = this.scrollerEl; // constrain clicks/etc to the dimensions of the scroller
+
+            this.dayGrid.el = this.el.find('.fc-day-grid');
+            this.dayGrid.render(this.hasRigidRows());
+        },
+
+
+        // Make subcomponents ready for cleanup
+        destroy: function() {
+            this.dayGrid.destroy();
+            View.prototype.destroy.call(this); // call the super-method
+        },
+
+
+        // Builds the HTML skeleton for the view.
+        // The day-grid component will render inside of a container defined by this HTML.
+        renderHtml: function() {
+            return '' +
+            '<table>' +
+            '<thead>' +
+            '<tr>' +
+            '<td class="' + this.widgetHeaderClass + '">' +
+            this.dayGrid.headHtml() + // render the day-of-week headers
+            '</td>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '<tr>' +
+            '<td class="' + this.widgetContentClass + '">' +
+            '<div class="fc-day-grid-container">' +
+            '<div class="fc-day-grid"/>' +
+            '</div>' +
+            '</td>' +
+            '</tr>' +
+            '</tbody>' +
+            '</table>';
+        },
+
+
+        // Generates the HTML that will go before the day-of week header cells.
+        // Queried by the DayGrid subcomponent when generating rows. Ordering depends on isRTL.
+        headIntroHtml: function() {
+            if (this.weekNumbersVisible) {
+                return '' +
+                '<th class="fc-week-number ' + this.widgetHeaderClass + '" ' + this.weekNumberStyleAttr() + '>' +
+                '<span>' + // needed for matchCellWidths
+                htmlEscape(this.opt('weekNumberTitle')) +
+                '</span>' +
+                '</th>';
+            }
+        },
+
+
+        // Generates the HTML that will go before content-skeleton cells that display the day/week numbers.
+        // Queried by the DayGrid subcomponent. Ordering depends on isRTL.
+        numberIntroHtml: function(row) {
+            if (this.weekNumbersVisible) {
+                return '' +
+                '<td class="fc-week-number" ' + this.weekNumberStyleAttr() + '>' +
+                '<span>' + // needed for matchCellWidths
+                this.calendar.calculateWeekNumber(this.dayGrid.getCell(row, 0).start) +
+                '</span>' +
+                '</td>';
+            }
+        },
+
+
+        // Generates the HTML that goes before the day bg cells for each day-row.
+        // Queried by the DayGrid subcomponent. Ordering depends on isRTL.
+        dayIntroHtml: function() {
+            if (this.weekNumbersVisible) {
+                return '<td class="fc-week-number ' + this.widgetContentClass + '" ' +
+                this.weekNumberStyleAttr() + '></td>';
+            }
+        },
+
+
+        // Generates the HTML that goes before every other type of row generated by DayGrid. Ordering depends on isRTL.
+        // Affects helper-skeleton and highlight-skeleton rows.
+        introHtml: function() {
+            if (this.weekNumbersVisible) {
+                return '<td class="fc-week-number" ' + this.weekNumberStyleAttr() + '></td>';
+            }
+        },
+
+
+        // Generates the HTML for the <td>s of the "number" row in the DayGrid's content skeleton.
+        // The number row will only exist if either day numbers or week numbers are turned on.
+        numberCellHtml: function(cell) {
+            var date = cell.start;
+            var classes;
+
+            if (!this.dayNumbersVisible) { // if there are week numbers but not day numbers
+                return '<td/>'; //  will create an empty space above events :(
+            }
+
+            classes = this.dayGrid.getDayClasses(date);
+            classes.unshift('fc-day-number');
+
+            return '' +
+            '<td class="' + classes.join(' ') + '" data-date="' + date.format() + '">' +
+            date.date() +
+            '</td>';
+        },
+
+
+        // Generates an HTML attribute string for setting the width of the week number column, if it is known
+        weekNumberStyleAttr: function() {
+            if (this.weekNumberWidth !== null) {
+                return 'style="width:' + this.weekNumberWidth + 'px"';
+            }
+            return '';
+        },
+
+
+        // Determines whether each row should have a constant height
+        hasRigidRows: function() {
+            var eventLimit = this.opt('eventLimit');
+            return eventLimit && typeof eventLimit !== 'number';
+        },
+
+
+        /* Dimensions
+         ------------------------------------------------------------------------------------------------------------------*/
+
+
+        // Refreshes the horizontal dimensions of the view
+        updateWidth: function() {
+            if (this.weekNumbersVisible) {
+                // Make sure all week number cells running down the side have the same width.
+                // Record the width for cells created later.
+                this.weekNumberWidth = matchCellWidths(
+                    this.el.find('.fc-week-number')
+                );
+            }
+        },
+
+
+        // Adjusts the vertical dimensions of the view to the specified values
+        setHeight: function(totalHeight, isAuto) {
+            var eventLimit = this.opt('eventLimit');
+            var scrollerHeight;
+
+            // reset all heights to be natural
+            unsetScroller(this.scrollerEl);
+            uncompensateScroll(this.headRowEl);
+
+            this.dayGrid.destroySegPopover(); // kill the "more" popover if displayed
+
+            // is the event limit a constant level number?
+            if (eventLimit && typeof eventLimit === 'number') {
+                this.dayGrid.limitRows(eventLimit); // limit the levels first so the height can redistribute after
+            }
+
+            scrollerHeight = this.computeScrollerHeight(totalHeight);
+            this.setGridHeight(scrollerHeight, isAuto);
+
+            // is the event limit dynamically calculated?
+            if (eventLimit && typeof eventLimit !== 'number') {
+                this.dayGrid.limitRows(eventLimit); // limit the levels after the grid's row heights have been set
+            }
+
+            if (!isAuto && setPotentialScroller(this.scrollerEl, scrollerHeight)) { // using scrollbars?
+
+                compensateScroll(this.headRowEl, getScrollbarWidths(this.scrollerEl));
+
+                // doing the scrollbar compensation might have created text overflow which created more height. redo
+                scrollerHeight = this.computeScrollerHeight(totalHeight);
+                this.scrollerEl.height(scrollerHeight);
+
+                this.restoreScroll();
+            }
+        },
+
+
+        // Sets the height of just the DayGrid component in this view
+        setGridHeight: function(height, isAuto) {
+            if (isAuto) {
+                undistributeHeight(this.dayGrid.rowEls); // let the rows be their natural height with no expanding
+            }
+            else {
+                distributeHeight(this.dayGrid.rowEls, height, true); // true = compensate for height-hogging rows
+            }
+        },
+
+
+        /* Events
+         ------------------------------------------------------------------------------------------------------------------*/
+
+
+        // Renders the given events onto the view and populates the segments array
+        renderEvents: function(events) {
+            this.dayGrid.renderEvents(events);
+
+            this.updateHeight(); // must compensate for events that overflow the row
+        },
+
+
+        // Retrieves all segment objects that are rendered in the view
+        getEventSegs: function() {
+            return this.dayGrid.getEventSegs();
+        },
+
+
+        // Unrenders all event elements and clears internal segment data
+        destroyEvents: function() {
+            this.recordScroll(); // removing events will reduce height and mess with the scroll, so record beforehand
+            this.dayGrid.destroyEvents();
+
+            // we DON'T need to call updateHeight() because:
+            // A) a renderEvents() call always happens after this, which will eventually call updateHeight()
+            // B) in IE8, this causes a flash whenever events are rerendered
+        },
+
+
+        /* Dragging (for both events and external elements)
+         ------------------------------------------------------------------------------------------------------------------*/
+
+
+        // A returned value of `true` signals that a mock "helper" event has been rendered.
+        renderDrag: function(dropLocation, seg) {
+            return this.dayGrid.renderDrag(dropLocation, seg);
+        },
+
+
+        destroyDrag: function() {
+            this.dayGrid.destroyDrag();
+        },
+
+
+        /* Selection
+         ------------------------------------------------------------------------------------------------------------------*/
+
+
+        // Renders a visual indication of a selection
+        renderSelection: function(range) {
+            this.dayGrid.renderSelection(range);
+        },
+
+
+        // Unrenders a visual indications of a selection
+        destroySelection: function() {
+            this.dayGrid.destroySelection();
+        }
+
+    });
+
+    YearView.duration = { years: 1 };
+
+    ;;
+
 /* A month view with day cells running in rows (one-per-week) and columns
 ----------------------------------------------------------------------------------------------------------------------*/
 
 setDefaults({
 	fixedWeekCount: true
 });
+
 
 var MonthView = fcViews.month = BasicView.extend({
 
