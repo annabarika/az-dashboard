@@ -30,7 +30,7 @@ var app = angular.module('modules.buyer', [
 	 * @Param: $http
 	 * @param:$q
 	 */
-
+/*
 	app.factory("orderService", ["$http","$q",
 			function($http,$q){
 
@@ -65,6 +65,7 @@ var app = angular.module('modules.buyer', [
 				return service;
 			}]
 	);
+	*/
 	/**
 	 * Order controller
 	 */
@@ -73,19 +74,19 @@ var app = angular.module('modules.buyer', [
 		[
 			'$scope',
 			'$rootScope',
-			"orderService",
 			"$modal",
 			"$location",
 			"$route",
-			"$routeParams",
+			"RestFactory",
 
-			function ($scope, $rootScope, orderService, $modal, $location, $route){
+			function ($scope, $rootScope, $modal, $location, $route, RestFactory){
 
 				$scope.$route = $route;
 				$scope.$location = $location;
 				var modal;
+				$scope.newOrder={};
 				/* get orders */
-				orderService.getData("/mock/order.json")
+				RestFactory.request("/mock/order.json",'get')
 					.then(function(response){
 
 						$scope.dataOrders=response;
@@ -105,13 +106,13 @@ var app = angular.module('modules.buyer', [
 						]
 					});
 				/*get factories*/
-				orderService.getData("/mock/factory.json")
+				RestFactory.request("/mock/factory.json",'get')
 					.then(function(response){
 
 						$scope.Factory=response;
 					});
 				/*get statuses*/
-				orderService.getData("/mock/orderstatus.json")
+				RestFactory.request("/mock/orderstatus.json",'get')
 					.then(function(response){
 
 						$scope.Status=response;
@@ -171,20 +172,34 @@ var app = angular.module('modules.buyer', [
 				/* function Add New Order*/
 				$scope.add_new_order=function(){
 
-					 modal=$modal.open({
+					modal=$modal.open({
 						templateUrl: "/modules/buyer/views/orders/new_order.html",
-						controller: 'OrdersController'
+						controller: 'OrdersController',
+						backdrop:'static'
 
 					});
 				};
-				/*$scope.saveOrder=function(obj){
-					console.log(obj);
-					modal=$modal.close();
-				};*/
+				$scope.saveOrder=function(){
+					console.log($scope.newOrder);
+					var url="http://test.html",
+						type='post',
+						data=$scope.newOrder,
+						header='multipart';
 
-				$scope.$watch('newOrder',function(newVal,oldVal){
-					console.log(newVal,oldVal);
-				});
+					RestFactory.request(url,type,data,header)
+						.then(function(response){
+							console.log(response);
+						});
+				};
+
+				$scope.filesChanged = function(elm){
+					$scope.newOrder.files=elm.files;
+					$scope.$apply();
+					//console.log($scope.newOrder);
+				};
+
+
+
 
 
 				/*get selected items for statuses */
