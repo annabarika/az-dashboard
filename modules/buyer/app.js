@@ -142,7 +142,7 @@ app.controller('OrdersController',
 						templateUrl: "/modules/buyer/views/orders/send_order.html",
 						controller: 'OrdersController',
 						backdrop:'static',
-                        width:'auto'
+                        size:'lg'
 					});
 				}
 
@@ -195,7 +195,7 @@ app.controller('OrdersController',
 					templateUrl: "/modules/buyer/views/orders/new_order.html",
 					controller: 'OrdersController',
 					backdrop:'static',
-                    width:'auto'
+                    size:'sm'
 				});
 			};
 			$scope.saveOrder=function(){

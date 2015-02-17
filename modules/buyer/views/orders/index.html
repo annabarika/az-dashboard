@@ -1,45 +1,62 @@
-<h1>Orders</h1>
 <div class="page-header">
     <div class="box-layout">
+        <div class="row mb-xs">
+            <div class="col-sm-1">
+                <div class="btn btn-success" ng-click="add_new_order()"><i class="fa fa-plus"></i> New order</div>
+            </div>
+            <div class="col-sm-5">
+                <div class="col-sm-6 va-m">
+                    <multi-select
+                            default-label="Factory filter"
+                            input-model="Factory"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-6 va-m">
+                    <multi-select
+                            default-label="Status filter"
+                            input-model="Status"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="bs-docs-section">
+                    <form name="datepickerForm" class="form-inline" role="form">
+                        <div class="form-group col-xs-2">
+                            <label class="control-label">Date range:</label>
+                        </div>
+                        <!-- Date range example -->
+                        <div class="form-group">
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control" ng-model="fromDate"  data-date-format="dd-MM-yyyy"  data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
 
-        <div class="col-md-4">
-            <div class="btn btn-default" ng-click="add_new_order()">New order</div>
+                            </div>
+                            <div class="col-xs-2">
+                                <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i></label>
+                            </div>
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control" ng-model="untilDate"  data-date-format="dd-MM-yyyy"  data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
-
-        <div class="col-sm-5 va-m">
-            <div class="col-sm-4 text-right">Order date:</div>
-            <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
-            <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
-        </div>
-
-        <div class="col-md-1">
-            <multi-select
-                    default-label="Factory filter"
-                    input-model="Factory"
-                    output-model="resultData"
-                    button-label="icon name"
-                    item-label="icon name maker"
-                    tick-property="ticked"
-                    max-labels="2"
-                    >
-            </multi-select>
-        </div>
-        <div class="col-md-2">
-            <multi-select
-                    default-label="Status filter"
-                    input-model="Status"
-                    output-model="resultData"
-                    button-label="icon name"
-                    item-label="icon name maker"
-                    tick-property="ticked"
-                    max-labels="2"
-                    >
-            </multi-select>
-
-        </div>
-
     </div>
 </div>
+
 
 <widget-table
         datarows="orders"
