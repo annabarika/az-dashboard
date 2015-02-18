@@ -5,7 +5,8 @@
     "createDate":"2015-01-31 23:00:00",
     "paymentDate":"2015-01-25 23:00:00",
     "factory":"Factory name 1",
-    "status":"active"
+    "status":"active",
+    "payment":"partially"
   },
   {
     "id":"2",
@@ -13,7 +14,8 @@
     "createDate":"2015-01-31 23:00:00",
     "paymentDate":"2015-01-25 23:00:00",
     "factory":"Factory name #2",
-    "status":"draft"
+    "status":"draft",
+    "payment":"fully"
   }
 ]
 

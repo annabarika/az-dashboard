@@ -5,12 +5,31 @@
         <div class="col-md-4">
             <div class="btn btn-default" ng-click="add_new_order()">New order</div>
         </div>
-
+       <!-- <autocomplete
+                input-model="Factory"
+                output-model="selectedFactory"
+                ></autocomplete>-->
+        <autocomplete ng-model="result" attr-placeholder="factory name" click-activation="true" data="Factory" on-type="doSomething" on-select="doSomethingElse"></autocomplete>
         <div class="col-sm-5 va-m">
             <div class="col-sm-4 text-right">Order date:</div>
             <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
             <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
         </div>
+
+        <div class="col-md-1">
+            <multi-select
+                    default-label="Payment filter"
+                    input-model="Payment"
+                    output-model="resultData"
+                    button-label="icon name"
+                    item-label="icon name maker"
+                    tick-property="ticked"
+                    max-labels="2"
+                    >
+            </multi-select>
+        </div>
+
+
 
         <div class="col-md-1">
             <multi-select

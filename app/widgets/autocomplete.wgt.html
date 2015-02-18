@@ -1,0 +1,6 @@
+<div>
+    <input type="text" placeholder="write here" ng-model="outputModel"/>
+    <ul>
+        <li ng-repeat="row in inputModel|filter:outputModel" ng-click="addToSelected    Tags($index)">{{row.name}}</li>
+    </ul>
+</div>

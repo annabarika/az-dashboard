@@ -25,47 +25,6 @@ app.config(function($routeProvider){
 	);
 });
 
-
-/** factory for orders
- * @Param: $http
- * @param:$q
- */
-/*
- app.factory("orderService", ["$http","$q",
- function($http,$q){
-
- var service={};
-
- service.getData=function(url){
-
- var deferred = $q.defer();
-
- $http.get(url)
- .success(function (response) {
- if(response)
- {
- deferred.resolve(response);
- }
- else
- {
- deferred.resolve(response);
- }
-
- })
- .error(function (error) {
- deferred.reject(error);
- });
-
- return deferred.promise;
- };
-
-
-
-
- return service;
- }]
- );
- */
 /**
  * Order controller
  */
@@ -83,8 +42,21 @@ app.controller('OrdersController',
 
 			$scope.$route = $route;
 			$scope.$location = $location;
-			var modal;
+			var modalWindow,
+				url,
+				method,
+				data,
+				header;
+			$scope.msk=[
+				{
+					name:"type1"
+				},
+				{
+					name:"type2"
+				}
+			];
 			$scope.newOrder={};
+
 			/* get orders */
 			RestFactory.request("/data/buyer/orders/orders.json")
 				.then(function(response){
@@ -104,16 +76,22 @@ app.controller('OrdersController',
 					]
 				});
 			/*get factories*/
-			RestFactory.request("/data/factory.json",'get')
+			RestFactory.request("/data/factory.json")
 				.then(function(response){
 
 					$scope.Factory=response;
 				});
 			/*get statuses*/
-			RestFactory.request("/data/orderstatus.json",'get')
+			RestFactory.request("/data/orderstatus.json")
 				.then(function(response){
 
 					$scope.Status=response;
+				});
+			/*get payment*/
+			RestFactory.request("/data/payment.json")
+				.then(function(response){
+
+					$scope.Payment=response;
 				});
 
 			$scope.modalContent="Test Content for modal window";
@@ -131,14 +109,36 @@ app.controller('OrdersController',
 
 			$scope.buttonAction=function(){
 
-				console.log($rootScope.row,$rootScope.method);
+				//console.log($rootScope.row,$rootScope.method);
 
 				if($rootScope.method=='Cancel'){
-					console.log($rootScope.method);
+
+					modalWindow=$modal.open({
+						templateUrl: "/app/views/ask.html",
+						controller: 'OrdersController',
+						backdrop:'static'
+					});
+					modalWindow.result.then(function(answer){
+						if(answer){
+							//console.log('del');
+							url="",//url
+							method='post',
+							data=$rootScope.row;
+							RestFactory.request(url,method,data)
+								.then(function(response){
+									console.log(response);
+									$rootScope.changeAlert=1;
+									//update $scope.orders: $http?,$scope.$apply($digest) or array.splice
+								},
+								function(error){
+									console.log(error);
+									$rootScope.changeAlert=0;
+								});
+						}
+					});
 				}
 				else{
-					//alert($rootScope.method);
-					modal=$modal.open({
+					modalWindow=$modal.open({
 						templateUrl: "/modules/buyer/views/orders/send_order.html",
 						controller: 'OrdersController',
 						backdrop:'static'
@@ -161,7 +161,7 @@ app.controller('OrdersController',
 
 						filter[value.name]=value;
 
-						orderService.getData("/mock/orderfilter.json?"+value.name)
+						/*RestFactory.request("/mock/orderfilter.json?"+value.name)
 
 							.then(function(response){
 
@@ -169,7 +169,7 @@ app.controller('OrdersController',
 									arr.push(response[value.name][i]);
 								}
 								$scope.orders=arr;
-							});
+							});*/
 
 					}
 
@@ -187,73 +187,52 @@ app.controller('OrdersController',
 				}
 
 			});
-
 			/* function Add New Order*/
 			$scope.add_new_order=function(){
 
-				modal=$modal.open({
+
+				modalWindow=$modal.open({
 					templateUrl: "/modules/buyer/views/orders/new_order.html",
 					controller: 'OrdersController',
 					backdrop:'static'
 
 				});
-			};
-			$scope.saveOrder=function(){
-				console.log($scope.newOrder);
-				var url="http://azimuth.local/api/order/new",
-					type='post',
-					data=$scope.newOrder,
-					header='multipart';
+				modalWindow.result.then(function(obj){
 
-				RestFactory.request(url,type,data,header)
-					.then(function(response){
-						console.log(response);
-					});
+						url="http://azimuth.local/api/order/new",
+						method='post',
+						data=obj,
+						header='multipart';
+
+					RestFactory.request(url,method,data,header)
+						.then(function(response){
+							console.log(response);
+							$rootScope.changeAlert=1;
+						},
+						function(error) {
+							console.log(error);
+							$rootScope.changeAlert=0;
+						});
+				});
+
+			};
+
+			/*function add new factory*/
+			$scope.new_factory=function(){
+				modalWindow=$modal.open({
+					templateUrl: "/modules/buyer/views/orders/new_factory.html",
+					controller: 'OrdersController',
+					backdrop:'static'
+				});
+				modalWindow.result.then(function(obj){
+					console.log(obj);
+				})
 			};
 
 			$scope.filesChanged = function(elm){
 				$scope.newOrder.files=elm.files;
 				$scope.$apply();
-				//console.log($scope.newOrder);
 			};
-
-
-
-
-			/*get selected items for statuses */
-
-			/* $scope.$watch('resultDataStatus',function(newVal){
-			 var arr=[];
-			 angular.forEach( newVal, function( value, key ) {
-
-			 if ( value.ticked === true ) {
-
-			 orderService.filterData("/mock/orderfilter.json", value.name)
-
-			 .then(function(response){
-
-			 for(var i=0; i<response[value.name].length;i++){
-			 arr.push(response[value.name][i]);
-			 }
-			 $scope.orders=arr;
-			 });
-
-			 }
-			 });
-
-			 try{
-			 if(newVal.length==0){
-
-			 $scope.orders=$scope.dataOrders;
-			 }
-			 }
-			 catch(e){
-
-			 }
-
-			 });*/
-
-
 		}]);
 
 

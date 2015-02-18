@@ -45,10 +45,10 @@
                             deferred.resolve(response);
                         }
                     })
-                    .error(function (error) {
-                        console.log("You can not send Cross Domain AJAX requests: " + error);
+                    .error(function (data, status, headers, config) {
+                        //console.log("You can not send Cross Domain AJAX requests:"+data, status, headers, config);
 
-                        deferred.reject(error);
+                        deferred.reject(status);
                     });
 
                 return deferred.promise;
