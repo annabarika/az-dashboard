@@ -1,64 +1,83 @@
-<h1>Orders</h1>
-<div class="page-header">
+<div class="page-header" ng-controller="DatepickerDemoCtrl">
     <div class="box-layout">
+        <div class="row mb-xs">
+            <div class="col-sm-1">
+                <div class="btn btn-info" ng-click="add_new_order()"><i class="fa fa-plus"></i> New order</div>
+            </div>
+            <div class="col-sm-5">
+                <div class="col-sm-3 va-m">
+                    <multi-select
+                            default-label="Status filter"
+                            input-model="Status"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-3 va-m">
+                    <multi-select
+                            default-label="Payment filter"
+                            input-model="Payment"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-6 va-m">
+                    <multi-select
+                            default-label="Factory filter"
+                            input-model="Factory"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="bs-docs-section">
+                    <form name="datepickerForm" class="form-inline" role="form">
 
-        <div class="col-md-4">
-            <div class="btn btn-default" ng-click="add_new_order()">New order</div>
+                        <!-- Date range example -->
+                        <div class="form-group">
+                            <div class="col-xs-2">
+                                <label class="control-label">Date dange:</label>
+                            </div>
+                            <div class="col-xs-4">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                                </p>
+                            </div>
+                            <div class="col-xs-1 text-center">
+                                <label class="control-label"><i class="fa fa-arrows-h"></i></label>
+                            </div>
+                            <div class="col-xs-4">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-       <!-- <autocomplete
-                input-model="Factory"
-                output-model="selectedFactory"
-                ></autocomplete>-->
-        <autocomplete ng-model="result" attr-placeholder="factory name" click-activation="true" data="Factory" on-type="doSomething" on-select="doSomethingElse"></autocomplete>
-        <div class="col-sm-5 va-m">
-            <div class="col-sm-4 text-right">Order date:</div>
-            <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="min" placeholder="from"></div>
-            <div class="col-sm-4"><input class="form-control" type="date" data-ng-model="max" placeholder="from"></div>
-        </div>
-
-        <div class="col-md-1">
-            <multi-select
-                    default-label="Payment filter"
-                    input-model="Payment"
-                    output-model="resultData"
-                    button-label="icon name"
-                    item-label="icon name maker"
-                    tick-property="ticked"
-                    max-labels="2"
-                    >
-            </multi-select>
-        </div>
-
-
-
-        <div class="col-md-1">
-            <multi-select
-                    default-label="Factory filter"
-                    input-model="Factory"
-                    output-model="resultData"
-                    button-label="icon name"
-                    item-label="icon name maker"
-                    tick-property="ticked"
-                    max-labels="2"
-                    >
-            </multi-select>
-        </div>
-        <div class="col-md-2">
-            <multi-select
-                    default-label="Status filter"
-                    input-model="Status"
-                    output-model="resultData"
-                    button-label="icon name"
-                    item-label="icon name maker"
-                    tick-property="ticked"
-                    max-labels="2"
-                    >
-            </multi-select>
-
-        </div>
-
     </div>
 </div>
+
 
 <widget-table
         datarows="orders"
