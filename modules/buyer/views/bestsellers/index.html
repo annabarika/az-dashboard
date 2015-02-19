@@ -1,7 +1,191 @@
 <!-- start: box-layout -->
 <div class="box-layout" ng-controller="DatepickerCtrl">
-    <div class="col-md-9 bg-white height-auto">
+    <div  class="col-md-9 bg-white height-auto">
+        <div style="max-height: 900px;overflow-y: scroll;">
         <!-- start: page header -->
+        <div class="page-header clearfix">
+            <div class="row">
+                <div class="col-md-10">
+                    <span class="fc-header-title"><h2>2013</h2></span>
+                </div>
+                <div class="col-md-2">
+                    <p class="input-group">
+                        <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <!--/ end: page header -->
+
+        <!-- start: panel -->
+        <div class="panel fullcalendar">
+
+
+            <div class="ng-pristine ng-untouched ng-valid ng-isolate-scope fc fc-ltr fc-unthemed">
+
+
+
+                <div class="fc-view fc-month-view fc-basic-view">
+                    <table>
+                        <thead>
+                        <tr>
+                            <td class="fc-widget-header">
+
+                                <div class="fc-row fc-widget-header">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th class="fc-day-header fc-widget-header fc-sun">January
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-mon">February
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-tue">March
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-wed">April
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-thu">May
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-fri">June
+                                            </th>
+                                        </tr></thead>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="fc-widget-content">
+
+                                <div class="fc-day-grid-container">
+
+                                    <div class="fc-day-grid">
+
+                                        <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 143px;">
+
+                                            <div class="fc-bg">
+                                                <table><tbody>
+                                                <tr>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">6</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-warning fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">56</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-success fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">543</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">234</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-danger fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">765</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">422</span></div></a>
+                                                    </td>
+                                                </tr></tbody>
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                        <tr>
+                            <td class="fc-widget-header">
+
+                                <div class="fc-row fc-widget-header">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th class="fc-day-header fc-widget-header fc-sun">July
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-mon">August
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-tue">September
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-wed">October
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-thu">November
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-fri">December
+                                            </th>
+                                        </tr></thead>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="fc-widget-content">
+
+                                <div class="fc-day-grid-container">
+
+                                    <div class="fc-day-grid">
+
+                                        <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 143px;">
+
+                                            <div class="fc-bg">
+                                                <table><tbody>
+                                                <tr>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">6</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-warning fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">56</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-success fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">543</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">234</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-danger fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">765</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">422</span></div></a>
+                                                    </td>
+                                                </tr></tbody>
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
         <div class="page-header clearfix">
             <div class="row">
                 <div class="col-md-10">
@@ -185,10 +369,194 @@
 
             </div>
         </div>
+        <div class="page-header clearfix">
+            <div class="row">
+                <div class="col-md-10">
+                    <span class="fc-header-title"><h2>2015</h2></span>
+                </div>
+                <div class="col-md-2">
+                    <p class="input-group">
+                        <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <!--/ end: page header -->
+
+        <!-- start: panel -->
+        <div class="panel fullcalendar">
+
+
+            <div class="ng-pristine ng-untouched ng-valid ng-isolate-scope fc fc-ltr fc-unthemed">
+
+
+
+                <div class="fc-view fc-month-view fc-basic-view">
+                    <table>
+                        <thead>
+                        <tr>
+                            <td class="fc-widget-header">
+
+                                <div class="fc-row fc-widget-header">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th class="fc-day-header fc-widget-header fc-sun">January
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-mon">February
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-tue">March
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-wed">April
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-thu">May
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-fri">June
+                                            </th>
+                                        </tr></thead>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="fc-widget-content">
+
+                                <div class="fc-day-grid-container">
+
+                                    <div class="fc-day-grid">
+
+                                        <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 143px;">
+
+                                            <div class="fc-bg">
+                                                <table><tbody>
+                                                <tr>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">6</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-warning fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">56</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-success fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">543</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">234</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-danger fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">765</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">422</span></div></a>
+                                                    </td>
+                                                </tr></tbody>
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                        <tr>
+                            <td class="fc-widget-header">
+
+                                <div class="fc-row fc-widget-header">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th class="fc-day-header fc-widget-header fc-sun">July
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-mon">August
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-tue">September
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-wed">October
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-thu">November
+                                            </th>
+                                            <th class="fc-day-header fc-widget-header fc-fri">December
+                                            </th>
+                                        </tr></thead>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="fc-widget-content">
+
+                                <div class="fc-day-grid-container">
+
+                                    <div class="fc-day-grid">
+
+                                        <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 143px;">
+
+                                            <div class="fc-bg">
+                                                <table><tbody>
+                                                <tr>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">6</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-warning fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">56</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-success fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">543</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">234</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-event-danger fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">765</span></div></a>
+                                                    </td>
+                                                    <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
+                                                        <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
+                                                            <div class="fc-content"><span class="fc-title">422</span></div></a>
+                                                    </td>
+                                                </tr></tbody>
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
         <!--/ end: padder -->
+        </div>
     </div>
-    <div class="col-md-3 bg-auto height-auto bdr-l-md bdr-b-sm bdr-b-xs">
-        <div class="pa-md">
+    <div  class="col-md-3 bg-auto height-auto bdr-l-md bdr-b-sm bdr-b-xs">
+        <div class="pa-md" style="max-height: 900px;overflow-y: scroll;">
             <h3 class="mb-sm">April 2014</h3>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -258,6 +626,141 @@
                         <h5 class="fw-sb">Total</h5>
                     </div>
                 </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+
+                        <label class="pull-right">
+                            32342 Signal - 234
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            233232 Earphone - 8764
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            344344 Location - 799
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            341555 Ghost mode - 548
+                        </label>
+                    </li>
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+
+                        <label class="pull-right">
+                            32342 Signal - 234
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            233232 Earphone - 8764
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            344344 Location - 799
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            341555 Ghost mode - 548
+                        </label>
+                    </li>
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+
+                        <label class="pull-right">
+                            32342 Signal - 234
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            233232 Earphone - 8764
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            344344 Location - 799
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            341555 Ghost mode - 548
+                        </label>
+                    </li>
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+
+                        <label class="pull-right">
+                            32342 Signal - 234
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            233232 Earphone - 8764
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            344344 Location - 799
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            341555 Ghost mode - 548
+                        </label>
+                    </li>
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+
+                        <label class="pull-right">
+                            32342 Signal - 234
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            233232 Earphone - 8764
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            344344 Location - 799
+                        </label>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
+                        <label class="pull-right">
+                            341555 Ghost mode - 548
+                        </label>
+                    </li>
+                </ul>
                 <ul class="list-group">
                     <li class="list-group-item">
                         <span class="img-wrapper img-rounded disp-ib" style="width:36px"><img src="/assets/images/avatar/avatar4.jpg" alt=""></span>
