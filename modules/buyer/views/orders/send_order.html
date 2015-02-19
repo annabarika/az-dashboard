@@ -3,146 +3,137 @@
     <h4 class="modal-title" id="myModalLabel">Send order</h4>
 </div>
 <div class="modal-body">
-    <div class="tabbable tabs-below">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#A" data-toggle="tab">Info</a></li>
-            <li><a href="#B" data-toggle="tab">Products</a></li>
-            <li><a href="#C" data-toggle="tab">Cargo</a></li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="A">
-                <div class="row">
-                    <div class="col-md-6">
-                        <!-- start: panel -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-title">Row hover</div>
-                            </div>
-                            <!-- start: table responsive -->
-                            <div class="table-responsive">
-                                <table class="table table-hover table-bordered">
-                                    <tbody>
-                                    <tr>
-                                        <td>Viverra Company</td>
-                                        <td>In Complete</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sem Elit Ltd <span class="label label-success">Complete</span></td>
-                                        <td>In Complete <a href="" class="btn btn-sm btn-default"><span class="fa fa-check"></span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Eget Nisi LLP</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dictum Nunc Ltd</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sagittis Institute</td>
-                                        <td></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!--/ end: table responsive -->
+    <tabset Info="true">
+        <tab heading="Info">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- start: panel -->
+                    <div class="panel panel-default border-n">
+                        <div class="panel-heading">
+                            <div class="panel-title">Row hover</div>
                         </div>
-                        <!--/ end: panel -->
-                    </div>
-
-                    <div class="col-md-6">
-                        <!-- start: panel -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-title">Striped Row</div>
-                            </div>
-                            <!-- start: table responsive -->
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered">
-                                    <tbody>
-                                    <tr>
-                                        <td>Norman Harmon</td>
-                                        <td>
-                                            <label>
-                                                <multi-select
-                                                        input-model="test_list"
-                                                        output-model="resultData"
-                                                        button-label="icon name"
-                                                        item-label="icon name maker"
-                                                        tick-property="ticked"
-                                                        max-labels="2">
-                                                </multi-select>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Plato Pickett</td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nathan Paul</td>
-                                        <td><div class="radio custom">
-                                            <label>
-                                                <input type="radio" name="group2" value=""><span></span> Apr 5, 2015
-                                            </label>
-                                        </div>
-                                            <div class="radio custom">
-                                                <label>
-                                                    <input type="radio" name="group2" value=""><span></span> Feb 4, 2013
-                                                </label>
-                                            </div>
-                                            <div class="radio custom disabled">
-                                                <label>
-                                                    <input type="radio" value="" disabled><span></span> Option two is disabled
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nasim Larson</td>
-                                        <td>
-                                            <div class="checkbox custom-info">
-                                                <label>
-                                                    <input type="checkbox">
-                                                    <span></span>$11.28
-                                                </label>
-                                            </div>
-                                            <div class="checkbox custom-info">
-                                                <label>
-                                                    <input type="checkbox">
-                                                    <span></span>$60.18
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" readonly="">
-                                                <span class="btn btn-default btn-file" data-flow-btn=""><i class="fa fa-folder-open"></i>
-                                                    <input type="file" name="files[]" id="js-upload-files" multiple>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!--/ end: table responsive -->
+                        <!-- start: table responsive -->
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>Viverra Company</td>
+                                    <td>In Complete</td>
+                                </tr>
+                                <tr>
+                                    <td>Sem Elit Ltd <span class="label label-success">Complete</span></td>
+                                    <td>In Complete <a href="" class="btn btn-sm btn-default"><span class="fa fa-check"></span></a></td>
+                                </tr>
+                                <tr>
+                                    <td>Eget Nisi LLP</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Dictum Nunc Ltd</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Sagittis Institute</td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <!--/ end: panel -->
+                        <!--/ end: table responsive -->
                     </div>
+                    <!--/ end: panel -->
                 </div>
+
+                <!--<div class="col-md-6">-->
+                <!--&lt;!&ndash; start: panel &ndash;&gt;-->
+                <!--<div class="panel panel-default">-->
+                <!--<div class="panel-heading">-->
+                <!--<div class="panel-title">Striped Row</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash; start: table responsive &ndash;&gt;-->
+                <!--<div class="table-responsive">-->
+                <!--<table class="table table-striped table-bordered">-->
+                <!--<tbody>-->
+                <!--<tr>-->
+                <!--<td>Norman Harmon</td>-->
+                <!--<td>-->
+                <!--<label>-->
+                <!--<multi-select-->
+                <!--default-label="Payment filter"-->
+                <!--input-model="Payment"-->
+                <!--output-model="resultData"-->
+                <!--button-label="icon name"-->
+                <!--item-label="icon name maker"-->
+                <!--tick-property="ticked"-->
+                <!--max-labels="2"-->
+                <!-->
+                <!--</multi-select>-->
+                <!--</label>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>Plato Pickett</td>-->
+                <!--<td>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>Nathan Paul</td>-->
+                <!--<td><div class="radio custom">-->
+                <!--<label>-->
+                <!--<input type="radio" name="group2" value=""><span></span> Apr 5, 2015-->
+                <!--</label>-->
+                <!--</div>-->
+                <!--<div class="radio custom">-->
+                <!--<label>-->
+                <!--<input type="radio" name="group2" value=""><span></span> Feb 4, 2013-->
+                <!--</label>-->
+                <!--</div>-->
+                <!--<div class="radio custom disabled">-->
+                <!--<label>-->
+                <!--<input type="radio" value="" disabled><span></span> Option two is disabled-->
+                <!--</label>-->
+                <!--</div>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td>Nasim Larson</td>-->
+                <!--<td>-->
+                <!--<div class="checkbox custom-info">-->
+                <!--<label>-->
+                <!--<input type="checkbox">-->
+                <!--<span></span>$11.28-->
+                <!--</label>-->
+                <!--</div>-->
+                <!--<div class="checkbox custom-info">-->
+                <!--<label>-->
+                <!--<input type="checkbox">-->
+                <!--<span></span>$60.18-->
+                <!--</label>-->
+                <!--</div>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td colspan="2">-->
+                <!--<div class="input-group">-->
+                <!--<input type="text" class="form-control" readonly="">-->
+                <!--<span class="btn btn-default btn-file" data-flow-btn=""><i class="fa fa-folder-open"></i>-->
+                <!--<input type="file" name="files[]" id="js-upload-files" multiple>-->
+                <!--</span>-->
+                <!--</div>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+                <!--</table>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;/ end: table responsive &ndash;&gt;-->
+                <!--</div>-->
+                <!--&lt;!&ndash;/ end: panel &ndash;&gt;-->
+                <!--</div>-->
             </div>
-            <div class="tab-pane" id="B">
-                <p>Custom</p>
-            </div>
-            <div class="tab-pane" id="C">
-                <p>Text</p>
-            </div>
-        </div>
-    </div>
+        </tab>
+        <tab heading="Products">Short Labeled Justified content</tab>
+        <tab heading="Cargo">Long Labeled Justified content</tab>
+    </tabset>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="$dismiss(reason)">Close</button>

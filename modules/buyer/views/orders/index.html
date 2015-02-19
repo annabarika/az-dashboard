@@ -1,4 +1,4 @@
-<div class="page-header" ng-controller="DatepickerDemoCtrl">
+<div class="page-header">
     <div class="box-layout">
         <div class="row mb-xs">
             <div class="col-sm-1">
@@ -42,7 +42,7 @@
                     </multi-select>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6"  ng-controller="DatepickerCtrl">
                 <div class="bs-docs-section">
                     <form name="datepickerForm" class="form-inline" role="form">
 
@@ -53,9 +53,9 @@
                             </div>
                             <div class="col-xs-4">
                                 <p class="input-group">
-                                    <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                    <input type="text" class="form-control" ng-click="openMin($event)" datepicker-popup="{{format}}" ng-model="dtMin" is-open="openedMin" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="min date"/>
                               <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default" ng-click="openMin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                               </span>
                                 </p>
                             </div>
@@ -64,9 +64,9 @@
                             </div>
                             <div class="col-xs-4">
                                 <p class="input-group">
-                                    <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                    <input type="text" class="form-control" ng-click="openMax($event)" datepicker-popup="{{format}}" ng-model="dtMax" is-open="openedMax"  datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="max date"/>
                               <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default" ng-click="openMax($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                               </span>
                                 </p>
                             </div>
