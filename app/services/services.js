@@ -1,4 +1,5 @@
 angular.module("services",
 [
-    "services.rest"
+    "services.rest",
+    "services.errors"
 ]);

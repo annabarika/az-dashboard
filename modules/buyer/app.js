@@ -14,7 +14,7 @@ app.config(function($routeProvider){
 		.when('/buyer/orders/id/:orderId',
 		{
 			templateUrl:"/modules/buyer/views/orders/id.html",
-			controller:"OrdersController"
+			controller:"CurrentOrderController"
 		}
 	)
 		.when('/buyer/bestsellers',
@@ -24,6 +24,18 @@ app.config(function($routeProvider){
 		}
 	);
 });
+
+app.run( function($rootScope, $location) {
+
+	$rootScope.$on( "$routeChangeStart", function() {
+		if ( $rootScope.row == null ) {
+
+				$location.path('/buyer/orders');
+
+		}})
+	});
+
+
 
 /**
  * Order controller
@@ -38,6 +50,7 @@ app.controller('OrdersController',
 		"$route",
 		"RestFactory",
 
+
 		function ($scope, $rootScope, $modal, $location, $route, RestFactory){
 
 			$scope.$route = $route;
@@ -47,7 +60,7 @@ app.controller('OrdersController',
 				method,
 				data,
 				header;
-			$scope.msk=[
+			$rootScope.msk=[
 				{
 					name:"type1"
 				},
@@ -103,7 +116,7 @@ app.controller('OrdersController',
 
 			$scope.edit = function(){
 				$location.path( '/buyer/orders/id/'+ $rootScope.row.id );
-				console.log($rootScope.row);
+				//console.log($rootScope.row);
 			};
 
 
@@ -151,9 +164,10 @@ app.controller('OrdersController',
 
 			/*get selected items for factory  */
 
-			var filter={};
+
 			$scope.$watch('resultData',function(newVal){
-				var arr=[];
+				var filter={},
+					arr=[];
 
 				angular.forEach( newVal, function( value, key ) {
 
@@ -174,7 +188,7 @@ app.controller('OrdersController',
 					}
 
 				});
-				/*   console.log(filter);*/
+				   console.log(filter);
 
 				try{
 					if(newVal.length==0){
@@ -233,9 +247,40 @@ app.controller('OrdersController',
 				$scope.newOrder.files=elm.files;
 				$scope.$apply();
 			};
+
+
+
+
+
 		}]);
 
+app.controller("CurrentOrderController",
+	[
+		"$scope",
+		"$rootScope",
+		"$location",
 
+	function($scope,$rootScope,$location){
+
+	$scope.back=function(){
+		$location.path('/buyer/orders');
+	};
+
+	$scope.$watch('order',function(val,old){
+		console.log(val.type,old.type);
+	});
+
+	$scope.order={
+		factory:$rootScope.row.factory,
+		ordered_total:300,
+		paid_total:200,
+		createDate:$rootScope.row.createDate
+	}
+
+
+
+
+	}]);
 app.controller('BestsController',
 
 	[
