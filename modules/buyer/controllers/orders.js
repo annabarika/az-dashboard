@@ -25,12 +25,12 @@ app.controller('OrderListController',
                 data,
                 header;
 
-            $rootScope.msk=[
+            $rootScope.type=[
                 {
-                    name:"type1"
+                    name:"Moscow"
                 },
                 {
-                    name:"type2"
+                    name:"Hong Kong"
                 }
             ];
             $scope.newOrder={};
@@ -75,9 +75,6 @@ app.controller('OrderListController',
                     $scope.Payment=response;
                 });
 
-            $scope.modalContent="Test Content for modal window";
-            $scope.modalTitle="Some Title";
-
             /*
              * Table widget actions
              * */
@@ -96,7 +93,7 @@ app.controller('OrderListController',
 
                     modalWindow=$modal.open({
                         templateUrl: "/app/views/ask.html",
-                        controller: 'OrdersController',
+                        controller: 'OrdersListController',
                         backdrop:'static'
                     });
                     modalWindow.result.then(function(answer){
@@ -156,7 +153,7 @@ app.controller('OrderListController',
                     }
 
                 });
-                console.log(filter);
+                //console.log(filter);
 
                 try{
                     if(newVal.length==0){
@@ -169,17 +166,37 @@ app.controller('OrderListController',
                 }
 
             });
-            /* function Add New Order*/
-            $scope.add_new_order=function(){
+            $scope.addNewOrder = function () {
+                $scope.items = ['item1', 'item2', 'item3'];
 
+                var modalInstance = $modal.open({
+                    templateUrl: '/modules/buyer/views/orders/new_order.html',
+                    controller: 'OrderEditController',
+                    size: 'lg',
+                    resolve: {
+                        items: function () {
+                            return $scope.items;
+                        }
+                    }
+                });
 
-                modalWindow=$modal.open({
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.selected = selectedItem;
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+            /* function Add New Order
+            $scope.addNewOrder = function(){
+
+                var modalInstance = $modal.open({
                     templateUrl: "/modules/buyer/views/orders/new_order.html",
-                    controller: 'OrdersController',
+                    controller: 'OrderEditController',
                     backdrop:'static'
 
                 });
-                modalWindow.result.then(function(obj){
+                console.log(modalWindow);
+                modalInstance.result.then(function(obj){
                     console.log(obj);
                     url="http://azimuth.local/api/order/new",
                         method='post',
@@ -198,12 +215,12 @@ app.controller('OrderListController',
                 });
 
             };
-
+            */
             /*function add new factory*/
             $scope.new_factory=function(){
                 modalWindow=$modal.open({
                     templateUrl: "/modules/buyer/views/orders/new_factory.html",
-                    controller: 'OrdersController',
+                    controller: 'OrderListController',
                     backdrop:'static'
                 });
                 modalWindow.result.then(function(obj){
@@ -221,6 +238,21 @@ app.controller('OrderListController',
 
 
 }]);
+
+app.controller("OrderEditController", function($scope, $modalInstance, items){
+    $scope.items = items;
+    $scope.selected = {
+        item: $scope.items[0]
+    };
+
+    $scope.ok = function () {
+        //$modalInstance.close($scope.selected.item);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+});
 
 app.controller("OrderController",
     [

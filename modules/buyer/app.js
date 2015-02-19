@@ -58,10 +58,18 @@ app.controller('DatepickerCtrl', function ($scope) {
 		return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
 	};
 
-	$scope.toggleMin = function() {
-		$scope.minDate = $scope.minDate ? null : new Date();
-	};
-	$scope.toggleMin();
+
+	$scope.$watch('dtMin',function(newVal){
+		console.log(newVal);
+	});
+
+	$scope.$watch('dtMax',function(newVal){
+		console.log(newVal);
+	});
+
+	$scope.$watch('dt',function(newVal){
+		console.log(newVal);
+	});
 
 	$scope.open = function($event) {
 		$event.preventDefault();
@@ -69,6 +77,22 @@ app.controller('DatepickerCtrl', function ($scope) {
 
 		$scope.opened = true;
 	};
+
+
+	$scope.openMin = function($event) {
+		$event.preventDefault();
+		$event.stopPropagation();
+
+		$scope.openedMin = true;
+	};
+
+	$scope.openMax = function($event) {
+		$event.preventDefault();
+		$event.stopPropagation();
+
+		$scope.openedMax = true;
+	};
+
 
 	$scope.dateOptions = {
 		formatYear: 'yy',
