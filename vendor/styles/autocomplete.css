@@ -1,44 +1,19 @@
-/* AUTOCOMPLETE */
-
-.autocomplete{
-    width: 100%;
-    position: relative;
+.autocomplete_widget{
+    width:173px;
 }
-
-.autocomplete input{
-    font-size: 1.2em;
-    width: 100%;
-    padding:0.4em;
-}
-
-.autocomplete ul{
-    position: absolute;
-    left: 0;
-    width: 100%;
-    border-left: 1px solid #888;
-    border-right: 1px solid #888;
-    border-bottom: 1px solid #888;
-    z-index: 1;
-}
-
-.autocomplete li{
-    text-align: left;
+.autocomplete_widget ul{
     list-style:none;
-    width: 100%;
-    padding:0.4em;
-    background-color: #fff;
+    margin:0px;
+    padding:0px;
+    position:absolute;
+   /* z-index: 1;*/
+    background-color: #7F8992;
 }
+.autocomplete_widget ul li{
+    border:1px solid gray;
 
-.autocomplete li.active{
-    width: 100%;
-    background-color: #4bf;
 }
-
-.autocomplete .highlight {
-    background-color: #E2E2E2;
-}
-
-.autocomplete li.active .highlight {
-    background: #666;
-    color: #fff;
+.autocomplete_widget ul li:hover{
+    border:1px solid gray;
+    background-color:#cccccc;
 }

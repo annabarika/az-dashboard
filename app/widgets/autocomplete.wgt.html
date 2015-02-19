@@ -1,6 +1,8 @@
-<div>
-    <input type="text" placeholder="write here" ng-model="outputModel"/>
-    <ul>
-        <li ng-repeat="row in inputModel|filter:outputModel" ng-click="addToSelected    Tags($index)">{{row.name}}</li>
+<div class='autocomplete_widget'>
+    <input type='text' placeholder='search' ng-model='search'/>
+    <ul ng-hide="flag">
+        <li ng-repeat='row in inputModel|filter:search' ng-click='getRow(row)'>
+            {{row.name}}
+        </li>
     </ul>
 </div>

@@ -19,9 +19,7 @@
                     Change factory
                 </td>
                 <td>
-                    <select ng-model="newOrder.factory"
-                            ng-options="opt as opt.name for opt in Factory">
-                    </select>
+                    <autocomplete input-model="Factory" output-model="newOrder.factory"></autocomplete>
                 </td>
                 <td><button class="btn-default" ng-click="new_factory()">+</button></td>
             </tr>

@@ -198,7 +198,7 @@ app.controller('OrdersController',
 
 				});
 				modalWindow.result.then(function(obj){
-
+						console.log(obj);
 						url="http://azimuth.local/api/order/new",
 						method='post',
 						data=obj,
