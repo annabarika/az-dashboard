@@ -20,25 +20,23 @@
                     </div>
                     <table class="table table-bordered table-striped dataTable no-footer" id="DataTable">
                         <thead>
-                        <tr>
-                            <th class="sorting" ng-repeat="(k,v) in datarows[0]" ng-click="column_sorter(k)"><a href="">{{k}}</a></th>
-                            <th ng-repeat="th in toolbarBattons"></th>
+                        <tr ng-show="dataheader">
+                            <th class="sorting" ng-repeat="headerRow in dataheader"
+                                ng-click="sortReorder(headerRow.name, $event)"
+                                ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
+                            </th>
+                            <th ng-repeat="th in toolbarButtons"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="row in datarows|filter:searchText|orderBy:sortField:reverse" >
-                            <td ng-repeat="v in row track by $index" ng-click="edit_row(row)">{{v}}</td>
-                            <td ng-repeat="b in toolbarBattons">
-                            <button class={{b.class}} ng-click="buttons(row,b.value)">{{b.value}}</button>
+                        <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy ">
+                            <td ng-repeat="v in row" ng-click="edit_row(row)">
+                                {{v}}
                             </td>
-                                <!--<div class="toolbar">-->
-                                    <!--<a href="" class="btn btn-sm btn-default" ng-click="edit_row(row)" data-toggle="modal" data-target="#Modal" ><span class="fa fa-file-o"></span></a>
-                                    <a href="" class="btn btn-sm btn-default" ng-click="edit_row(row)"><span class="fa fa-file-o"></span></a>
-                                    <a href="" class="btn btn-sm btn-default"><span class="fa fa-trash-o"></span></a>
-                                    -->
+                            <td ng-repeat="b in toolbarButtons">
+                                <button class={{b.class}} ng-click="buttons(row,b.value)">{{b.value}}</button>
+                            </td>
 
-                                <!--</div>-->
-                            </td>
                         </tr>
                         </tbody>
                     </table>
