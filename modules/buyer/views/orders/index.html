@@ -5,7 +5,7 @@
                 <div class="btn btn-info" ng-click="add_new_order()"><i class="fa fa-plus"></i> New order</div>
             </div>
             <div class="col-sm-5">
-                <div class="col-sm-4 va-m">
+                <div class="col-sm-3 va-m">
                     <multi-select
                             default-label="Status filter"
                             input-model="Status"
@@ -17,7 +17,19 @@
                             >
                     </multi-select>
                 </div>
-                <div class="col-sm-8 va-m">
+                <div class="col-sm-3 va-m">
+                    <multi-select
+                            default-label="Payment filter"
+                            input-model="Payment"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-6 va-m">
                     <multi-select
                             default-label="Factory filter"
                             input-model="Factory"
