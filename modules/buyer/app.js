@@ -38,10 +38,10 @@ app.run( function($rootScope, $location) {
 	$rootScope.$on( "$routeChangeStart", function() {
 		if ( $rootScope.row == null ) {
 
-				//$location.path('/buyer/orders');
+			//$location.path('/buyer/orders');
 
 		}})
-	});
+});
 
 app.controller('DatepickerCtrl', function ($scope) {
 	$scope.today = function() {
