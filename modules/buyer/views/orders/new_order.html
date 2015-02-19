@@ -1,26 +1,61 @@
 <!--header-->
 <div class="modal-header">
-    <h3 class="modal-title">I'm a modal!</h3>
+    <div class="col-sm-11">
+        <h3>New Order</h3>
+    </div>
+    <div class="col-sm-1">
+        <a href=""ng-click="$close()">X</a>
+    </div>
+
+
+
 </div>
 <!--body-->
 <div class="modal-body">
     <form>
-        <input type="text" ng-model="newOrder.name" placeholder="order name"/>
+        <table>
+            <tr>
+                <td>
+                    Change factory
+                </td>
+                <td>
+                    <autocomplete input-model="Factory" output-model="newOrder.factory"></autocomplete>
+                </td>
+                <td><button class="btn-default" ng-click="new_factory()">+</button></td>
+            </tr>
+            <tr>
+                <td>Amount</td>
+                <td><input type="number" ng-model="newOrder.amount"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Add files</td>
+                <td><input type="file" onchange="angular.element(this).scope().filesChanged(this)" multiple/></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Msk</td>
+                <td><select data-ng-model="newOrder.msk"
+                    ng-options="opt as opt.name for opt in msk">
+                    <option value="">-- chose type --</option>
+                </select></td>
+                <td></td>
+            </tr>
+        </table>
 
-        <select ng-model="newOrder.factory"
-                ng-options="opt as opt.name for opt in Factory">
-        </select>
 
-        <input type="file" onchange="angular.element(this).scope().filesChanged(this)" multiple/>
 
-        <button ng-click="saveOrder()">Upload</button>
-        <li ng-repeat="file in newOrder.files">{{file.name}}</li>
+
+        <ul>
+            <li ng-repeat="file in newOrder.files">{{file.name}}</li>
+        </ul>
+
 
     </form>
 </div>
 <!--footer-->
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="$close()">OK</button>
+    <button class="btn btn-primary" ng-click="$close(newOrder)">OK</button>
     <!--<button class="btn btn-primary" ng-click="saveOrder(result)">OK</button>-->
-    <button class="btn btn-warning" ng-click="$dismiss(reason)">Cancel</button>
+    <button class="btn btn-warning" ng-click="$dismiss()">Cancel</button>
 </div>
