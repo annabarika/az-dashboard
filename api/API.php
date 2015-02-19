@@ -126,7 +126,6 @@ class API {
 			$options[CURLOPT_POSTFIELDS] = $this->data;
 		}
 		$options = $options + $this->options;
-
 		curl_setopt_array($this->getHandle(), $options );
 
 		return json_decode(curl_exec($this->getHandle()), true);

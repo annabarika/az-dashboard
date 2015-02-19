@@ -43,12 +43,13 @@
                 datarows:"="
                 ,edit:"&"
                 ,row:"="
-                ,toolbarBattons:"="
+                ,toolbarButtons:"="
                 ,buttonAction:"&"
+                ,caption:"@"
             },
 
             link:function($scope){
-
+console.log($scope.caption);
                 $scope.column_sorter=function(key){
                     console.log(key);
                     $scope.sortField=key;

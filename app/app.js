@@ -1,3 +1,10 @@
+var config = {
+	API: {
+		host: 'http://azimuth.local/api/',
+		key: 'test'
+	}
+};
+
 (function(){
 
 	angular.module('Azimuth', [
@@ -8,7 +15,7 @@
 		"widgets",
 		"ui.bootstrap",
 		"services",
-		"modules.buyer"
+		"modules.buyer",
 	])
 
 	.config(function ($routeProvider, $locationProvider) {

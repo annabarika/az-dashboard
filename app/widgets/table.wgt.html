@@ -5,8 +5,8 @@
         <div class="col-md-12">
             <!-- start panel -->
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h5 class="panel-title">Order list</h5>
+                <div class="panel-heading" ng-show="caption">
+                    <h5 class="panel-title">{{caption}}</h5>
                 </div>
                 <div class="dataTables_wrapper form-inline no-footer">
                     <div class="row">
@@ -27,7 +27,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="row in datarows|filter:searchText|orderBy:sortField:reverse" >
-                            <td ng-repeat="v in row" ng-click="edit_row(row)">{{v}}</td>
+                            <td ng-repeat="v in row track by $index" ng-click="edit_row(row)">{{v}}</td>
                             <td ng-repeat="b in toolbarBattons">
                             <button class={{b.class}} ng-click="buttons(row,b.value)">{{b.value}}</button>
                             </td>

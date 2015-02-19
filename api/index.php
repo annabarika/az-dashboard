@@ -37,9 +37,8 @@ try {
 		$APIService->setMethod('DELETE');
 		$APIService->setData($params);
 	}
-
 	$response = $APIService->setURL($request)->call();
-	print_r($response);
+	echo json_encode($response);
 
 }catch( \Exception $e ){
 	echo $e->getMessage();
