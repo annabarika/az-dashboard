@@ -2,13 +2,13 @@
 
 	angular.module('Azimuth', [
 		"ngRoute",
-		"directives",
-		"models.navigation",
-		"multi-select",
-		"widgets",
-		"ui.bootstrap",
-		"services",
-		"modules.buyer"
+        "directives",
+        "models.navigation",
+        "multi-select",
+        "widgets",
+        "ui.bootstrap",
+        "services",
+        "modules.buyer"
 	])
 
 	.config(function ($routeProvider, $locationProvider) {

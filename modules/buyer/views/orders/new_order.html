@@ -1,68 +1,40 @@
 <!--header-->
 <div class="modal-header">
-    <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title" id="myModalLabel">New order</h4>
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New order</h4>
 </div>
-<!--body-->
 <div class="modal-body">
     <form>
+        <p class="input-group">
+                <label class="control-label">Change factory</label>
+                <autocomplete input-model="Factory" output-model="newOrder.factory"></autocomplete>
+                <span class="input-group-btn autocomplete_btn">
+                 <button type="button" class="btn btn-default"  ng-click="new_factory()">+</button>
+                </span>
+        </p>
         <div class="form-group">
-        <input class="form-control" type="text" ng-model="newOrder.name" placeholder="order name"/>
+            <label class="control-label">Amount</label>
+            <input class="form-control" type="number" ng-model="newOrder.amount">
         </div>
         <div class="form-group">
-        <select class="form-control" ng-model="newOrder.factory"
-                ng-options="opt as opt.name for opt in Factory">
-        </select>
-        </div>
-        <div class="form-group">
-        <input class="form-control" type="file" onchange="angular.element(this).scope().filesChanged(this)" multiple/>
-        </div>
-        <table>
-            <tr>
-                <td>
-                    Change factory
-                </td>
-                <td>
-                    <autocomplete input-model="Factory" output-model="newOrder.factory"></autocomplete>
-                </td>
-                <td><button class="btn-default" ng-click="new_factory()">+</button></td>
-            </tr>
-            <tr>
-                <td>Amount</td>
-                <td><input type="number" ng-model="newOrder.amount"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Add files</td>
-                <td><input type="file" onchange="angular.element(this).scope().filesChanged(this)" multiple/></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Msk</td>
-                <td><select data-ng-model="newOrder.msk"
+            <label class="control-label">Msk</label>
+            <select class="form-control" data-ng-model="newOrder.msk"
                     ng-options="opt as opt.name for opt in msk">
-                </select></td>
-                <td></td>
-            </tr>
-        </table>
-
-
+                <option value="">Choose type</option>
+            </select>
+        </div>
         <div class="form-group">
-            <button type="button" class="btn btn-success" ng-click="saveOrder()"><span class="fa fa-upload"></span>Upload</button>
-            <li ng-repeat="file in newOrder.files">{{file.name}}</li>
+            <input class="form-control" type="file" onchange="angular.element(this).scope().filesChanged(this)" multiple/>
         </div>
 
-
-        <ul>
+        <div class="form-group">
             <li ng-repeat="file in newOrder.files">{{file.name}}</li>
-        </ul>
-
-
+        </div>
     </form>
     <p class="text-muted">Accept only *.jpg and *.png files</p>
 </div>
 <!--footer-->
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
-    <button type="button" class="btn btn-primary" ng-click="$close(newOrder)">Save changes</button>
+    <button type="button" class="btn btn-primary" ng-click="$close(newOrder)">OK</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
 </div>
