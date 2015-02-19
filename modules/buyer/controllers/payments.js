@@ -28,7 +28,7 @@ app.controller('PaymentListController',
 			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 
-			RestFactory.request(config.API.host + "payment/loadAll")
+			RestFactory.request(config.API.host + "payment/load")
 				.then(function(response){
 					$scope.data = response;
 				});

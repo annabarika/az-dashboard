@@ -17,6 +17,7 @@ app.controller('OrderListController',
 
             $scope.$route = $route;
             $scope.$location = $location;
+            $rootScope.documentTitle = "Orders";
 
             var modalWindow,
                 url,

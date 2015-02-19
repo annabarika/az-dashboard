@@ -1,4 +1,4 @@
 <?php
 $API = array(
-	'host' => 'compass-buyer.local',
+	'host' => 'superman.b.compass',
 );
