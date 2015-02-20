@@ -208,40 +208,6 @@ app.controller('OrderListController',
                 });*/
             };
 
-            $scope.makeOrder=function(order){
-                console.log(order);
-            };
-
-            /* function Add New Order
-            $scope.addNewOrder = function(){
-
-                var modalInstance = $modal.open({
-                    templateUrl: "/modules/buyer/views/orders/new_order.html",
-                    controller: 'OrderEditController',
-                    backdrop:'static'
-
-                });
-                console.log(modalWindow);
-                modalInstance.result.then(function(obj){
-                    console.log(obj);
-                    url="http://azimuth.local/api/order/new",
-                        method='post',
-                        data=obj,
-                        header='multipart';
-
-                    RestFactory.request(url,method,data,header)
-                        .then(function(response){
-                            console.log(response);
-                            $rootScope.changeAlert=1;
-                        },
-                        function(error) {
-                            console.log(error);
-                            $rootScope.changeAlert=0;
-                        });
-                });
-
-            };
-            */
             /*function add new factory*/
             $scope.new_factory=function(){
                 modalWindow=$modal.open({
@@ -253,8 +219,8 @@ app.controller('OrderListController',
                     console.log(obj);
                 })
             };
-
             $scope.filesChanged = function(elm){
+				//console.log(elm.files);
                 $scope.newOrder.files=elm.files;
                 $scope.$apply();
             };
@@ -268,20 +234,24 @@ app.controller('OrderListController',
 app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal){
 
     $scope.saveOrder = function ( data ) {
+			var fd = new FormData();
+			angular.forEach(data.files, function(file){
+				console.log(file);
+				fd.append('file', file);
+			});
 
-        console.log("we are here", data);
             var order = {
 				type: data.type.id,
 				buyerid: 328,
 				factoryid: data.factory.id
 			};
 
-            url = config.API.host + "order/create",
+            var url = config.API.host + "order/create",
                 method='post',
-                data=order
-                ;
+                data=order,
+				contentType='multipart';
 
-            RestFactory.request(url,method,data)
+            RestFactory.request(url,method,data, contentType)
                 .then(function(response){
 					console.log(response);
                     if(response=='null'){
