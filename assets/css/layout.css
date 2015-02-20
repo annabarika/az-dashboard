@@ -622,3 +622,9 @@ body > #app-wrapper {
 footer .alert{
     line-height: 1.14!important;
 }
+.scroll {
+    max-height: 790px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+

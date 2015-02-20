@@ -340,6 +340,9 @@ hr {
     border: 0;
     border-top: 1px solid #eee;
 }
+hr.top {
+    border-top: 1px solid #eee;
+}
 .sr-only {
     position: absolute;
     width: 1px;
@@ -4769,7 +4772,7 @@ a.list-group-item-danger.active:focus {
     border:none;
 }
 .panel-default.border-n > .panel-heading{
-    background: #fff;
+    background-color: #fff;
 }
 .panel-heading {
     padding: 10px 15px;
