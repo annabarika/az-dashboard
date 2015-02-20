@@ -25,6 +25,7 @@ app.config(function($routeProvider){
 	);
 });
 
+/*
 app.run( function($rootScope, $location) {
 
 	$rootScope.$on( "$routeChangeStart", function() {
@@ -34,6 +35,7 @@ app.run( function($rootScope, $location) {
 
 		}})
 	});
+*/
 
 
 
@@ -49,9 +51,9 @@ app.controller('OrdersController',
 		"$location",
 		"$route",
 		"RestFactory",
+		"$http",
 
-
-		function ($scope, $rootScope, $modal, $location, $route, RestFactory){
+		function ($scope, $rootScope, $modal, $location, $route, RestFactory,$http){
 
 			$scope.$route = $route;
 			$scope.$location = $location;
@@ -188,7 +190,7 @@ app.controller('OrdersController',
 					}
 
 				});
-				   console.log(filter);
+				 //  console.log(filter);
 
 				try{
 					if(newVal.length==0){
@@ -212,13 +214,27 @@ app.controller('OrdersController',
 
 				});
 				modalWindow.result.then(function(obj){
-						console.log(obj);
-						url="http://azimuth.local/api/order/new",
-						method='post',
-						data=obj,
+						console.log("test",obj);
+						//url="http://lex.b.compass/order/loadfiles/",
+						url="http://localhost:7888/api/order/loadfiles",
+						method='POST',
+						data=obj;
 						header='multipart';
 
-					RestFactory.request(url,method,data,header)
+
+					/*$.get(url, {}, function(response) {
+						console.log(response);
+					});*/
+
+					/*	$http.get(url)
+							.success(function(data){
+								console.log(data)
+							})
+							.error(function(data,status){
+								console.log(data,status);
+							});*/
+
+					RestFactory.request(url,method,data)
 						.then(function(response){
 							console.log(response);
 							$rootScope.changeAlert=1;

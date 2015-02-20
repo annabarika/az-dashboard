@@ -30,9 +30,22 @@
 			);
 		})
 
-	.controller("MainController", function($scope, NavigationModel){
-		NavigationModel.get().then(function(result){ $scope.Navigation = result.data; });
-	})
+	.controller("MainController",[
+
+		"$scope",
+		"$rootScope",
+		"$timeout",
+		"RestFactory"
+		, function($scope,$rootScope,$timeout, RestFactory){
+
+				RestFactory.request("/data/navigation.json")
+					.then(function(response){
+						$rootScope.Navigation=response;
+					},function(error){
+						console.log(error);
+					});
+
+	}])
 
 	.controller('BsAlertCtrl', ["$rootScope","$scope", function ($rootScope,$scope) {
 		var alerts = [
