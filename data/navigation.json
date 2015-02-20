@@ -14,6 +14,10 @@
       {"title": "Bestsellers",
         "count": "0",
         "url":"buyer/bestsellers"
+      },
+      {"title": "New collection",
+        "count": "2",
+        "url":"buyer/collection"
       }
     ]
   },
