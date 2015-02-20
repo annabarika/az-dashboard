@@ -31,7 +31,7 @@ app.controller('PaymentListController',
 
 			RestFactory.request(config.API.host + "payment/load")
 				.then(function(response){
-					console.log($scope.tableHeader);
+					//console.log(response);
 					//console.log(response);
 					var data = [];
 					//data.header = $scope.paymentsHeader;
@@ -40,24 +40,26 @@ app.controller('PaymentListController',
 						data[i] = {};
 						for( var n in $scope.tableHeader ) {
 							//console.log(response[i]);
+
 							var key = $scope.tableHeader[n].name;
 
 							if( response[i][key]  ) {
-								data[i][n] = response[i][key];
+								data[i][key] = response[i][key]
 							}else{
-								data[i][n] = '';
+								data[i][key] = '';
 
 								if(key == 'paymentAmount'){
 									if(response[i].paymentType == 'payment'){
-										data[i][n] = response[i].amount;
+										data[i][key] = response[i].amount;
 									}
 								}
 								if(key == 'refundAmount'){
 									if(response[i].paymentType == 'refund'){
-										data[i][n] = response[i].amount;
+										data[i][key] = response[i].amount;
 									}
 								}
 							}
+							data[i][key]._id = n;
 						}
 					}
 					console.log(data);

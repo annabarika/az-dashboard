@@ -29,9 +29,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy ">
-                            <td ng-repeat="v in row" ng-click="edit_row(row)">
-                                {{v}}
+                        <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() ">
+                            <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
+                                {{row[headerRow.name]}}
                             </td>
                             <td ng-repeat="b in toolbarButtons">
                                 <button class={{b.class}} ng-click="buttons(row,b.value)">{{b.value}}</button>

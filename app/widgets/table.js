@@ -34,13 +34,16 @@
         return service;
     }]);
 
-app.filter('orderByEx', orderByExFilter);
-
+    app.filter('orderByEx', orderByExFilter);
 
     function orderByExFilter($parse){ // modified version of native Angular orderBy filter
-        return function(array, tablehead, sortPredicate, reverseOrder) {
+
+        return function(array, dataheader, sortPredicate, reverseOrder) {
+            console.log('Start');
+
             if (!(array instanceof Array)) return array;
             if (!sortPredicate) return array;
+
             sortPredicate = angular.isArray(sortPredicate) ? sortPredicate: [sortPredicate];
             sortPredicate = map(sortPredicate, function(predicate){
                 var descending = false, list, get = predicate || identity;
@@ -52,7 +55,7 @@ app.filter('orderByEx', orderByExFilter);
                     get = $parse(predicate);
                 }
                 // if list of values specified
-                if (list = find(tablehead,predicate)) {
+                if (list = find(dataheader,predicate)) {
                     return reverseComparator(function(a,b){ // return list-based comparator
                         return compare(list[get(a)],list[get(b)]);
                     }, descending);
@@ -61,8 +64,12 @@ app.filter('orderByEx', orderByExFilter);
                     return compare(get(a),get(b));
                 }, descending);
             });
+
+            console.log(sortPredicate);
+
             var arrayCopy = [];
             for ( var i = 0; i < array.length; i++) { arrayCopy.push(array[i]); }
+            //console.log(sortPredicate);
             return arrayCopy.sort(reverseComparator(comparator, reverseOrder));
 
             function comparator(o1, o2){
@@ -142,10 +149,11 @@ app.filter('orderByEx', orderByExFilter);
                         });
                     } else {
                         angular.forEach($scope.dataheader, function(el) {
-                            if (el.name==col) el.sort = el.sort>0?-1:1; else el.sort = null;
+                            if (el.name == col) el.sort = el.sort>0?-1:1; else el.sort = null;
                         });
                     }
                 };
+
                 $scope.column_sorter=function(key){
                     console.log(key);
                     $scope.sortField = key;
