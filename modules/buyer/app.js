@@ -1,7 +1,8 @@
 var app = angular.module('modules.buyer', [
 	"modules.buyer.orders",
 	"modules.buyer.payments",
-	"modules.buyer.bestsellers"
+	"modules.buyer.bestsellers",
+    "modules.buyer.collection"
 ]);
 
 app.config(function($routeProvider){
@@ -108,3 +109,4 @@ app.controller('DatepickerCtrl', function ($scope) {
 	$scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
 	$scope.format = $scope.formats[0];
 });
+
