@@ -20,13 +20,13 @@ app.controller('PaymentListController',
 			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				{ _id:1, name: "id", title: 'ID' },
-				{ _id:2, name: "orderId", title: 'Order' },
-				{ _id:3, name: "factory", title: 'Factory' },
-				{ _id:4, name: "paymentDate", title: 'Payment date' },
-				{ _id:5, name: "paymentMethod", title: 'Payment method' },
-				{ _id:6, name: "paymentAmount", title: 'Payment' },
-				{ _id:7, name: "refundAmount", title: 'Refund' }
+				{ name: "id", title: 'ID' },
+				{ name: "orderId", title: 'Order' },
+				{ name: "factory", title: 'Factory' },
+				{ name: "paymentDate", title: 'Payment date' },
+				{ name: "paymentMethod", title: 'Payment method' },
+				{ name: "paymentAmount", title: 'Payment' },
+				{ name: "refundAmount", title: 'Refund' }
 			];
 
 			RestFactory.request(config.API.host + "payment/load")
