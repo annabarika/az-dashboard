@@ -65,7 +65,7 @@ app.controller('DatepickerCtrl', function ($scope) {
 	};
 
 
-	$scope.$watch('dtMin',function(newVal){
+	/*$scope.$watch('dtMin',function(newVal){
 		console.log(newVal);
 	});
 
@@ -75,7 +75,7 @@ app.controller('DatepickerCtrl', function ($scope) {
 
 	$scope.$watch('dt',function(newVal){
 		console.log(newVal);
-	});
+	});*/
 
 	$scope.open = function($event) {
 		$event.preventDefault();

@@ -25,12 +25,15 @@ app.controller('OrderListController',
 
             $rootScope.type=[
                 {
-                    name:"Moscow"
+                    name:"Moscow",
+                    id:1
                 },
                 {
-                    name:"Hong Kong"
+                    name:"Hong Kong",
+                    id:2
                 }
             ];
+
             $scope.newOrder={};
 
             /* Loading orders */
@@ -183,20 +186,32 @@ app.controller('OrderListController',
                 var modalInstance = $modal.open({
                     templateUrl: '/modules/buyer/views/orders/new_order.html',
                     controller: 'OrderEditController',
-                    size: 'sm',
-                    resolve: {
-                        items: function () {
-                            return $scope.items;
-                        }
-                    }
+                    size: 'sm'
                 });
 
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.selected = selectedItem;
-                }, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
+               /* modalInstance.result.then(function (obj) {
+                    console.log(obj);
+                        url="http://azimuth.local/api/order/new",
+                        method='post',
+                        data=obj,
+                        header='multipart';
+
+                    RestFactory.request(url,method,data,header)
+                        .then(function(response){
+                            console.log(response);
+                            $rootScope.changeAlert=1;
+                        },
+                        function(error) {
+                            console.log(error);
+                            $rootScope.changeAlert=0;
+                        });
+                });*/
             };
+
+            $scope.makeOrder=function(order){
+                console.log(order);
+            };
+
             /* function Add New Order
             $scope.addNewOrder = function(){
 
@@ -250,14 +265,56 @@ app.controller('OrderListController',
 
 }]);
 
-app.controller("OrderEditController", function($scope, $modalInstance, items){
-    $scope.items = items;
-    $scope.selected = {
-        item: $scope.items[0]
-    };
+app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal){
 
-    $scope.ok = function () {
-        //$modalInstance.close($scope.selected.item);
+    $scope.saveOrder = function (order) {
+
+        console.log("we are here",order);
+            var order={
+                type:order.type.id,
+                buyerId:328,
+                factoryId:1
+
+
+
+
+            };
+            url="http://localhost:7888/api/order/create",
+                method='post',
+                data=order,
+                header='multipart';
+
+            RestFactory.request(url,method,data,header)
+                .then(function(response){
+                    if(response=='null'){
+                        $modal.open({
+                            templateUrl: '/app/views/error.html',
+                            controller: 'BsAlertCtrl',
+                            size: 'lg'
+                        });
+                    }
+                    else{
+                        console.log(response);
+                        $rootScope.changeAlert=1;
+                        $rootScope.row.id=response;
+                        $location.path( '/buyer/orders/id/'+ $rootScope.row.id );
+                        $modalInstance.close(order);
+                    }
+
+                },
+                function(error) {
+                    console.log(error);
+                    $rootScope.changeAlert = 2;
+
+                    $modal.open({
+                        templateUrl: '/app/views/error.html',
+                        controller: 'BsAlertCtrl',
+                        size: 'lg'
+                    });
+
+                });
+
+
     };
 
     $scope.cancel = function () {
