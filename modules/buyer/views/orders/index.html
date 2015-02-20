@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-sm-3 va-m">
                     <multi-select
-                            default-label="Payment filter"
+                            default-label="Payment status"
                             input-model="Payment"
                             output-model="resultData"
                             button-label="icon name"
@@ -81,6 +81,7 @@
 
 <widget-table
         datarows="orders"
+        dataheader="tableHeader"
         edit="edit()"
         row="row"
         toolbar-battons="buttons"
