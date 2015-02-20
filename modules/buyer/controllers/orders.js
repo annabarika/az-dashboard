@@ -33,35 +33,32 @@ app.controller('OrderListController',
             ];
             $scope.newOrder={};
 
-            /* get orders */
+            /* Loading orders */
 			$rootScope.documentTitle = "Orders";
 			$scope.tableHeader = [
-				{ _id:1, name: "id", title: 'ID' },
-				{ _id:2, name: "type", title: 'Type' },
-				{ _id:3, name: "status", title: 'Status' },
-				{ _id:4, name: "orderedTotal", title: 'Ordered total' },
-				{ _id:5, name: "paymentStatus", title: 'Payment status' },
-				{ _id:6, name: "createDate", title: 'Create date' },
-				{ _id:7, name: "deliveryDate", title: 'Production date' }
+				{ name: "id", title: 'ID' },
+				{ name: "type", title: 'Type' },
+				{ name: "status", title: 'Status' },
+				{ name: "orderedTotal", title: 'Ordered total' },
+				{ name: "paymentStatus", title: 'Payment status' },
+				{ name: "createDate", title: 'Create date' },
+				{ name: "deliveryDate", title: 'Production date' }
 			];
             RestFactory.request(config.API.host + "order/load")
                 .then(function(response){
 					var data = [];
+
 					//data.header = $scope.paymentsHeader;
 
 					for( var i in response ){
 						data[i] = {};
 						for( var n in $scope.tableHeader ) {
-							//console.log(response[i]);
-
 							var key = $scope.tableHeader[n].name;
-
 							if( response[i][key]  ) {
 								data[i][key] = response[i][key]
 							}else{
 								data[i][key] = '';
 							}
-							data[i][key]._id = n;
 						}
 					}
 					$scope.data = data;
@@ -79,7 +76,7 @@ app.controller('OrderListController',
                     ]
                 });
 
-            /*get factories*/
+            /* Loading factories */
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
 					var factory = [];
@@ -89,18 +86,16 @@ app.controller('OrderListController',
                     $scope.Factory=factory;
                 });
 
-            /*get statuses*/
-            RestFactory.request("/data/orderstatus.json")
+            /* Loading statuses */
+            RestFactory.request(config.API.host + "status/load")
                 .then(function(response){
-
-                    $scope.Status=response;
-                });
-
-            /*get payment*/
-            RestFactory.request("/data/payment.json")
-                .then(function(response){
-
-                    $scope.Payment=response;
+					var statusByType = [];
+					for( var i in response ){
+						if( ! statusByType[response[i].type]) statusByType[response[i].type] = [];
+						statusByType[response[i].type].push({ statusId: response[i].statusId, name: response[i].name });
+					}
+                    $scope.orderStatus = statusByType['order'];
+					$scope.orderPaymentStatus = statusByType['orderPayment'];
                 });
 
             /*
@@ -167,16 +162,6 @@ app.controller('OrderListController',
 
                         filter[value.name]=value;
 
-                        /*RestFactory.request("/mock/orderfilter.json?"+value.name)
-
-                         .then(function(response){
-
-                         for(var i=0; i<response[value.name].length;i++){
-                         arr.push(response[value.name][i]);
-                         }
-                         $scope.orders=arr;
-                         });*/
-
                     }
 
                 });
@@ -185,7 +170,7 @@ app.controller('OrderListController',
                 try{
                     if(newVal.length==0){
 
-                        $scope.orders=$scope.dataOrders;
+                        //$scope.orders = $scope.dataOrders;
                     }
                 }
                 catch(e){
@@ -287,26 +272,23 @@ app.controller("OrderController",
         "$rootScope",
         "$location",
         "$route",
+		"RestFactory",
 
-        function($scope,$rootScope,$location, $route){
+        function($scope,$rootScope,$location, $route, RestFactory){
+
             $scope.$route = $route;
+			var id = $route.current.params.orderId;
+
+			$rootScope.documentTitle = 'Order #'+ id;
 
             $scope.back=function(){
                 $location.path('/buyer/orders');
             };
 
-            $scope.$watch('order',function(val,old){
-                console.log(val.type,old.type);
-            });
-
-            $scope.order={
-                factory: {  },
-                ordered_total:300,
-                paid_total:200,
-                createDate: { }
-            }
-
-
-
+			RestFactory.request(config.API.host + "order/get/id/"+id)
+				.then(function(response){
+					$scope.order = response;
+					console.log( $scope.order );
+				});
 
 }]);
