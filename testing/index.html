@@ -19,7 +19,9 @@
             <option value="arrow.b.compass">arrow</option>
             <option value="flash.b.compass">flash</option>
             <option value="joker.b.compass">joker</option>
+            <option value="lex.b.compass">lex</option>
             <option value="superman.b.compass">superman</option>
+            <option value="uml.maggadda.dev95.ru">uml.maggadda.dev95.ru</option>
         </select>
         <hr/>
         <div class="form-group">
@@ -43,6 +45,8 @@
 
         <button type="button" onclick="makeRequest('GET')" class="btn btn-default">GET</button>
         <button type="button" onclick="makeRequest('POST')" class="btn btn-default">POST</button>
+        <button type="button" onclick="makeRequest('PUT')" class="btn btn-default">PUT</button>
+        <button type="button" onclick="makeRequest('DELETE')" class="btn btn-default">DELETE</button>
         <hr/>
         <pre class="result code">Result</pre>
     </form>
@@ -58,51 +62,65 @@
     var postData = {};
     var URL = ''
     var getData = '';
+    var API_HOST = '';
 
     function prepareRequest(){
         var data = $('form').serializeArray();
         var requestPreview = '/api/';
         var api_host, url, params = '';
-        var key = 0;
 
         for( var i in data){
             if(data[i].name == 'API'){
-                api_host = data[i].value;
+                api_host = API_HOST = data[i].value;
             }else if(data[i].name == 'URL') {
                 url = data[i].value;
             } else {
                 if(data[i].name == 'var[]') {
-                    params += '&'+data[i].value+'=';
-                    key = data[i].value;
+                    params += '/' + data[i].value;
                 }
 
                 if(data[i].name == 'value[]') {
-                   params += data[i].value;
-                   postData[key] = data[i].value;
+                   params += '/' + data[i].value;
                 }
             }
         }
-        requestPreview +=  url + '/?host=' + api_host + params;
-        URL = '/api/' + url  + '/?host=' + api_host;
+        requestPreview +=  url + params + '/?host=' + api_host;
+        URL = '/api/' + url ;
         getData = params;
 
         $('.request-preview').html(requestPreview);
         return requestPreview;
     }
+    function getPostData(){
+        var data = $('form').serializeArray();
+        var key = 0;
+        console.log(data);
+        for( var i in data){
+            if(data[i].name == 'var[]') {
+                key = data[i].value;
+            }
 
+            if(data[i].name == 'value[]') {
+                postData[key] = data[i].value;
+            }
+
+        }
+        return postData;
+    }
     function makeRequest(method){
         prepareRequest();
-        console.log(postData);
 
-        if( method == 'POST'){
+
+        if( method == 'POST' || method == 'PUT'){
             getData = '';
-        }
-        if( method == 'GET'){
+            postData = getPostData();
+            console.log(postData);
+        }else{
             postData = '';
         }
         $.ajax({
             type: method,
-            url: URL+getData,
+            url: URL + getData + '/?host='+API_HOST,
             data: postData
         })
         .done(function( data ) {

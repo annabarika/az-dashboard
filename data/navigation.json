@@ -7,13 +7,17 @@
         "count": "2",
         "url":"buyer/orders"
       },
+      {"title": "Payments",
+        "count": "0",
+        "url":"buyer/payments"
+      },
       {"title": "Bestsellers",
-        "count": "4",
+        "count": "0",
         "url":"buyer/bestsellers"
       },
-      {"title": "Cargo",
-        "count": "22",
-        "url":"buyer/cargo"
+      {"title": "New collection",
+        "count": "2",
+        "url":"buyer/collection"
       }
     ]
   },

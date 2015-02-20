@@ -1,3 +1,10 @@
+var config = {
+	API: {
+		host: 'http://azimuth.local/api/',
+		key: 'test'
+	}
+};
+
 (function(){
 
 	angular.module('Azimuth', [
@@ -11,7 +18,7 @@
 		"modules.buyer"
 	])
 
-	.config(function ($routeProvider, $locationProvider) {
+		.config(function ($routeProvider, $locationProvider) {
 
 			$locationProvider.html5Mode(true);
 
@@ -30,53 +37,44 @@
 			);
 		})
 
-	.controller("MainController",[
+		.controller("MainController", function($scope, NavigationModel, RestFactory){
+			RestFactory.request("/data/navigation.json")
+				.then(function(response){
+					$rootScope.Navigation=response;
+				},function(error){
+					console.log(error);
+				});		})
 
-		"$scope",
-		"$rootScope",
-		"$timeout",
-		"RestFactory"
-		, function($scope,$rootScope,$timeout, RestFactory){
+		.controller('BsAlertCtrl', ["$rootScope","$scope", function ($rootScope,$scope) {
+			var alerts = [
+				{
+					type: 'danger',
+					msg: 'Oh snap! Change a few things up and try submitting again.'
+				},
+				{
+					type: 'success',
+					msg: 'Well done! You successfully read this important alert message.'
+				},
+				{
+					type: 'info',
+					msg: 'Heads up! This alert needs your attention, but it\'s not super important.'
+				},
+				{
+					type: 'warning',
+					msg: 'Warning! Better check yourself, you\'re not looking too good.'
+				}];
 
-				RestFactory.request("/data/navigation.json")
-					.then(function(response){
-						$rootScope.Navigation=response;
-					},function(error){
-						console.log(error);
-					});
-
-	}])
-
-	.controller('BsAlertCtrl', ["$rootScope","$scope", function ($rootScope,$scope) {
-		var alerts = [
-			{
-				type: 'danger',
-				msg: 'Oh snap! Change a few things up and try submitting again.'
-			},
-			{
-				type: 'success',
-				msg: 'Well done! You successfully read this important alert message.'
-			},
-			{
-				type: 'info',
-				msg: 'Heads up! This alert needs your attention, but it\'s not super important.'
-			},
-			{
-				type: 'warning',
-				msg: 'Warning! Better check yourself, you\'re not looking too good.'
-			}];
-
-		/*$rootScope.addAlert = function() {
-			$rootScope.alerts.push({
-				msg: 'Another alert!'
-			});
-		};*/
+			/*$rootScope.addAlert = function() {
+			 $rootScope.alerts.push({
+			 msg: 'Another alert!'
+			 });
+			 };*/
 			$rootScope.changeAlert=2;
 
 			$scope.$watch('changeAlert',function(newVal){
 
-					$scope.alert=alerts[newVal];
-					$scope.alertFlag=false;
+				$scope.alert=alerts[newVal];
+				$scope.alertFlag=false;
 			});
 
 			$scope.alertFlag=false;
@@ -84,8 +82,8 @@
 			$scope.alert=alerts[$rootScope.changeAlert];
 
 			/*$rootScope.closeAlert = function(index) {
-				$scope.alert=null;
-			};*/
-	}]);
+			 $scope.alert=null;
+			 };*/
+		}]);
 
 })();

@@ -6,12 +6,11 @@
      */
     var app=angular.module("widgets.modal",[]);
 
-    app.directive("widget-modal",function(){
-
+    app.directive("widgetModal",function(){
+        console.log("Here!");
         return{
-
             restict:'EA',
-            templateUrl:"/app/views/widgets/modal.wgt.html"
+            templateUrl:"/app/widgets/modal.wgt.html"
         };
     });
 

@@ -1,4 +1,4 @@
 <?php
 $API = array(
-	'host' => 'http://compass',
+	'host' => 'superman.b.compass',
 );

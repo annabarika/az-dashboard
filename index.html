@@ -2,6 +2,7 @@
 <html ng-app="Azimuth">
 <head>
     <title>Azimuth: Compass front-end app</title>
+    <link rel="shortcut icon" href="/assets/images/logo/logo-figure.png"/>
 
     <!-- Third-party components -->
     <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
@@ -24,6 +25,7 @@
     <link rel="stylesheet" href="/assets/css/datatable.css">
     <link rel="stylesheet" href="/assets/css/less/component.less">
     <link rel="stylesheet" href="/assets/css/less/mixins.less">
+    <link rel="stylesheet" href="/assets/css/fullcalendar.css">
     <!--/ Style -->
 
     <!--/ Application level JS -->
@@ -46,6 +48,19 @@
             <!-- start: content-body -->
             <!-- uiView:  -->
             <div class="content-body slide-down ng-scope">
+                <div class="page-header ng-scope">
+                    <div class="box-layout">
+                        <div class="col-sm-6 va-m">
+                            <h1>{{documentTitle}}</h1>
+                        </div>
+                        <div class="col-sm-6 va-m">
+                            <ol class="breadcrumb pull-right-sm mb-0">
+                                <li><a href="#">Buying office</a></li>
+                                <li class="active">Orders</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
                 <!-- start: box layout -->
                 <ng-view></ng-view>
                 <!--/ end: box layout -->
@@ -76,6 +91,9 @@
     <!-- Module level JS -->
     <script src="/modules/buyer/app.js"></script>
     <script src="/modules/buyer/controllers/orders.js"></script>
+    <script src="/modules/buyer/controllers/payments.js"></script>
+    <script src="/modules/buyer/controllers/bestsellers.js"></script>
+
     <script src="/modules/buyer/services/orders.js"></script>
     <!--
     <!--/ Module level JS -->
