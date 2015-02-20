@@ -30,7 +30,13 @@ app.config(function($routeProvider){
 			templateUrl:"/modules/buyer/views/payments/index.html",
 			controller:"PaymentListController"
 		}
-	);
+	)
+        .when('/buyer/collection',
+        {
+            templateUrl:"/modules/buyer/views/collection/index.html",
+            controller:"NewCollectionController"
+        }
+    );
 });
 
 app.run( function($rootScope, $location) {

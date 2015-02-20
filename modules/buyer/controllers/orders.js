@@ -120,7 +120,6 @@ app.controller('OrderListController',
                         templateUrl: "/modules/buyer/views/orders/send_order.html",
                         controller: 'OrdersController',
                         backdrop:'static'
-
                     });
                 }
 
@@ -172,7 +171,7 @@ app.controller('OrderListController',
                 var modalInstance = $modal.open({
                     templateUrl: '/modules/buyer/views/orders/new_order.html',
                     controller: 'OrderEditController',
-                    size: 'lg',
+                    size: 'sm',
                     resolve: {
                         items: function () {
                             return $scope.items;

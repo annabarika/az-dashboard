@@ -627,4 +627,40 @@ footer .alert{
     overflow-y: scroll;
     overflow-x: hidden;
 }
+.nav-tabs {
+    float: left;
+    border-bottom: 0;
+}
+
+.nav-tabs li {
+    float: none;
+    margin: 0;
+}
+
+/*.nav-tabs li a {*/
+    /*margin-right: 0;*/
+    /*border: 0;*/
+    /*background-color: #c0392b;*/
+/*}*/
+
+/*.nav-tabs li a:hover { background-color: #e74c3c; }*/
+
+/*.nav-tabs .glyphicon { color: #fff; }*/
+
+/*.nav-tabs .active .glyphicon { color: #333; }*/
+
+/*.nav-tabs > li.active > a,*/
+/*.nav-tabs > li.active > a:hover,*/
+/*.nav-tabs > li.active > a:focus { border: 0; }*/
+
+/*.tab-content { margin-left: 45px; }*/
+
+/*.tab-content .tab-pane {*/
+    /*display: none;*/
+    /*background-color: #fff;*/
+    /*padding: 1.6rem;*/
+    /*overflow-y: auto;*/
+/*}*/
+
+/*.tab-content .active { display: block; }*/
 

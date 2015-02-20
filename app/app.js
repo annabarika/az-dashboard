@@ -15,7 +15,7 @@ var config = {
 		"widgets",
 		"ui.bootstrap",
 		"services",
-		"modules.buyer",
+		"modules.buyer"
 	])
 
 		.config(function ($routeProvider, $locationProvider) {
