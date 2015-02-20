@@ -1,6 +1,6 @@
 var config = {
 	API: {
-		host: 'http://localhost:7888/api/',
+		host: 'http://azimuth.local/api/',
 		key: 'test'
 	}
 };

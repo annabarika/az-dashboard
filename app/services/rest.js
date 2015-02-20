@@ -14,29 +14,28 @@
 
             var service={};
 
-            service.request=function(url,method,data,header) {
+            service.request=function(url,method,data,contentType) {
                // console.log("Rest",url,method,data,header);
-
-                var headers ={
+				var headers = {};
+                var contentTypes ={
                     default: "application/x-www-form-urlencoded; charset=utf-8",
                     multipart: "multipart/form-data"
                 };
-
-                if(!header) header = 'default';
-                header = headers[header];
-
-                if(method==undefined) method='get';
+				if( contentType ) {
+					var contentType = (contentType) ? contentTypes[contentType] : contentTypes.default;
+					headers = {'Content-Type': contentType};
+				}
+                if( method==undefined) method = 'get';
 
                 var deferred = $q.defer();
-
-                $http(
-                    {
-                        method: method,
-                        url: url,
-                        data: data,
-                        headers: header
-                    }
-                )
+				var req =                     {
+					method: method,
+					url: url,
+					headers: headers,
+					data: data
+				};
+				//console.log(req);
+				$http(req)
                     .success(function (response) {
                         if (response) {
                             deferred.resolve(response)

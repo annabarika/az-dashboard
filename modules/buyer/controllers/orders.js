@@ -50,7 +50,7 @@ app.controller('OrderListController',
             RestFactory.request(config.API.host + "order/load")
                 .then(function(response){
 					var data = [];
-
+					//console.log(response);
 					//data.header = $scope.paymentsHeader;
 
 					for( var i in response ){
@@ -84,7 +84,7 @@ app.controller('OrderListController',
                 .then(function(response){
 					var factory = [];
 					for( var i in response ){
-						factory.push( { name: response[i].factory.name } );
+						factory.push( { id: response[i].factory.id, name: response[i].factory.name } );
 					}
                     $scope.Factory=factory;
                 });
@@ -267,25 +267,23 @@ app.controller('OrderListController',
 
 app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal){
 
-    $scope.saveOrder = function (order) {
+    $scope.saveOrder = function ( data ) {
 
-        console.log("we are here",order);
-            var order={
-                type:order.type.id,
-                buyerId:328,
-                factoryId:1
+        console.log("we are here", data);
+            var order = {
+				type: data.type.id,
+				buyerid: 328,
+				factoryid: data.factory.id
+			};
 
-
-
-
-            };
-            url="http://localhost:7888/api/order/create",
+            url = config.API.host + "order/create",
                 method='post',
-                data=order,
-                header='multipart';
+                data=order
+                ;
 
-            RestFactory.request(url,method,data,header)
+            RestFactory.request(url,method,data)
                 .then(function(response){
+					console.log(response);
                     if(response=='null'){
                         $modal.open({
                             templateUrl: '/app/views/error.html',
@@ -296,8 +294,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                     else{
                         console.log(response);
                         $rootScope.changeAlert=1;
-                        $rootScope.row.id=response;
-                        $location.path( '/buyer/orders/id/'+ $rootScope.row.id );
+                        $location.path( '/buyer/orders/id/'+ response.id );
                         $modalInstance.close(order);
                     }
 

@@ -101,6 +101,4 @@
     }]);
 //widget sidebar
 
-
-
 })();
