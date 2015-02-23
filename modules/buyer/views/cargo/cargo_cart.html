@@ -1,0 +1,57 @@
+<div class="page-header">
+    <div class="box-layout">
+        <div class="row mb-xs">
+            <div class="col-sm-1">
+                <div class="btn btn-info" ng-click="addNewItems()"><i class="fa fa-plus"></i> New cargo</div>
+            </div>
+            <div class="col-sm-5">
+                <div class="col-sm-3 va-m">
+                    <multi-select
+                            default-label="Status filter"
+                            input-model="orderStatus"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-4 va-m">
+                    <multi-select
+                            default-label="Payment status"
+                            input-model="orderPaymentStatus"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-5 va-m">
+                    <multi-select
+                            default-label="Factory filter"
+                            input-model="Factory"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<widget-table
+        datarows="cargo_cart"
+        dataheader="tableHeader"
+        edit="edit()"
+        row="row"
+        toolbar-battons="buttons"
+        button-action="buttonAction()"
+        >
+</widget-table>

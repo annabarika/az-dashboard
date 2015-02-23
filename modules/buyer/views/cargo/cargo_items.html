@@ -1,0 +1,98 @@
+<!-- start box layout -->
+<div class="box-layout">
+        <div class="col-md-8 bdr-r bg-auto height-auto">
+        <!-- start page header -->
+        <div class="page-header">
+            <!-- basic info heading -->
+            <div class="box-layout">
+                <div class="col-sm-6 va-m">
+                    <h4>Add items to document</h4>
+                </div>
+                <button type="submit" class="btn btn-info pull-right"><span class="fa fa-check"> Save</span></button>
+            </div>
+            <!--/ basic info heading -->
+        </div>
+        <!--/ end page header -->
+
+
+            <widget-table
+                    datarows="cargo_items"
+                    dataheader="tableHeader"
+                    edit="edit()"
+                    row="row"
+                    toolbar-battons="buttons"
+                    button-action="buttonAction()"
+                    >
+            </widget-table>
+    </div>
+    <!-- start right side -->
+
+    <!--/ end right side -->
+    <div class="col-md-4 height-auto">
+        <!--/ end page header -->
+        <div class="pa-md clearfix">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title text-center">
+                        <h5 class="fw-sb">Summary</h5>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="text-center">
+                            <div class="media np">
+                                <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <img src="/assets/images/avatar/avatar18.jpg">
+                                      </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            S
+                        </td>
+                        <td class="text-center">
+                            3x
+                        </td>
+                        <td class="text-center">
+                            100
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <div class="media np">
+                                <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <img src="/assets/images/avatar/avatar9.jpg">
+                                      </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            M
+                        </td>
+                        <td class="text-center">
+                            2x
+                        </td>
+                        <td class="text-center">
+                            300
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ end box layout -->

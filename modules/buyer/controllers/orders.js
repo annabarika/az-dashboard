@@ -73,7 +73,7 @@ app.controller('OrderListController',
                             value:"Cancel"
                         },
                         {
-                            class:"btn btn-default",
+                            class:"btn btn-info",
                             value:"Send"
                         }
                     ]
