@@ -243,7 +243,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             var order = {
 				type: data.type.id,
 				buyerid: 328,
-				factoryid: data.factory.idgit 
+				factoryid: data.factory.idgit
 			};
 
             var url = config.API.host + "order/create",
