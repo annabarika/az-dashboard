@@ -5,8 +5,8 @@
     <form>
         <table>
             <tr>
-                <td>Factory name</td>
-                <td><input type="text" data-ng-model="newFactory.name"></td>
+                <td>Please enter factory name&nbsp;</td>
+                <td><input class="form-control" type="text" data-ng-model="newFactory.name"></td>
             </tr>
         </table>
     </form>
@@ -14,6 +14,6 @@
 
 <!--footer-->
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="$close(newFactory)">save</button>
-    <button class="btn btn-primary" ng-click="$close()">return</button>
+    <button type="button" class="btn btn-primary" ng-click="$close(newFactory)">save</button>
+    <button type="button" class="btn btn-default" ng-click="$close()">return</button>
 </div>
