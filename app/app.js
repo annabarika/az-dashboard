@@ -73,7 +73,7 @@ var config = {
 				$scope.alertFlag=false;
 			});
 
-			$scope.alertFlag=false;
+			$scope.alertFlag=true;
 
 			$scope.alert=alerts[$rootScope.changeAlert];
 

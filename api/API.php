@@ -127,7 +127,7 @@ class API {
 		}
 		$options = $options + $this->options;
 		curl_setopt_array($this->getHandle(), $options );
-
+		#print_r($options);
 		return json_decode(curl_exec($this->getHandle()), true);
 	}
 

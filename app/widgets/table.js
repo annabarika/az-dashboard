@@ -39,7 +39,7 @@
     function orderByExFilter($parse){ // modified version of native Angular orderBy filter
 
         return function(array, dataheader, sortPredicate, reverseOrder) {
-            console.log('Start');
+
 
             if (!(array instanceof Array)) return array;
             if (!sortPredicate) return array;
@@ -64,8 +64,6 @@
                     return compare(get(a),get(b));
                 }, descending);
             });
-
-            console.log(sortPredicate);
 
             var arrayCopy = [];
             for ( var i = 0; i < array.length; i++) { arrayCopy.push(array[i]); }

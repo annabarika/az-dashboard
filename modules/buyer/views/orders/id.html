@@ -2,7 +2,6 @@
     <div class="box-layout">
         <div class="row mb-xs">
             <div class="col-sm-3">
-                <h2>Order {{$route.current.params.orderId}}</h2>
                 <span class="label label-success">Complete</span>
                 <span class="label label-warning">In process</span>
                 <span class="label label-danger">In Complete</span>
@@ -14,7 +13,7 @@
                     <div class="btn btn-warning"><i class="fa fa-check"></i> Send to Factory</div>
                     <div class="btn btn-info"><i class="fa fa-plus"></i> Make Payment</div>
                     <div class="btn btn-default" ng-click="back()"><i class="fa fa-ban"></i> Cancel</div>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -28,16 +27,12 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="panel panel-default border-n mt-20">
-                                    <div class="panel-heading">
-                                        <div class="panel-title">Order {{$route.current.params.orderId}}</div>
-                                    </div>
                                     <div class="table-responsive">
                                         <table class="table table-hover table-bordered">
                                             <tbody>
                                             <tr>
                                                 <td>Factory</td>
-                                                <td>{{order.factory}}</td>
-                                                <td></td>
+                                                <td>{{order.factory.name}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Type</td>
@@ -46,34 +41,26 @@
                                                         <option value="">-- Choose type --</option>
                                                     </select>
                                                 </td>
-                                                <td></td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     Orderred total
                                                 </td>
                                                 <td>
-                                                    <!--300 &yen;-->
-                                                    {{order.ordered_total}} &yen
+                                                    {{order.order.orderedTotal}} {{order.currency.ISOCode}}
                                                 </td>
-                                                <td></td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     Paid total
                                                 </td>
                                                 <td>
-                                                    <!--200 &yen;-->
-                                                    {{order.paid_total}} &yen
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-info"><span class="fa fa-arrows-alt"></span> Payment status</button>
+                                                    {{order.order.paidTotal}} {{order.currency.ISOCode}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Create date</td>
-                                                <td>{{order.createDate|date:'medium'}}</td>
-                                                <td></td>
+                                                <td>{{order.order.createDate|date:'medium'}}</td>
                                             </tr>
                                             </tbody>
                                         </table>

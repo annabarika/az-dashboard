@@ -25,8 +25,8 @@ angular.module('widgets.autocomplete', [])
                 });
 
                 $scope.getRow=function(obj){
-                    $scope.search=obj.name;
-                    $scope.outputModel=obj.name;
+                    $scope.search = obj.name;
+                    $scope.outputModel = obj;
                 };
 
                 $scope.$watch('outputModel',function(newVal){

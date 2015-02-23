@@ -21,6 +21,7 @@
                     <table class="table table-bordered table-striped dataTable no-footer" id="DataTable">
                         <thead>
                         <tr ng-show="dataheader">
+                            <th> # </th>
                             <th class="sorting" ng-repeat="headerRow in dataheader"
                                 ng-click="sortReorder(headerRow.name, $event)"
                                 ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
@@ -30,6 +31,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() ">
+                            <td>{{$index+1}}</td>
                             <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
                                 {{row[headerRow.name]}}
                             </td>

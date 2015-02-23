@@ -21,6 +21,7 @@ try {
 
 	else if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$APIService->setMethod('POST');
+		$_POST = json_decode(file_get_contents("php://input"), true);
 		$APIService->setData($_POST);
 	}
 	else if($_SERVER['REQUEST_METHOD'] == 'PUT') {
