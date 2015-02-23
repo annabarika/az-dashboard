@@ -24,12 +24,16 @@
                 <option value="">Choose type</option>
             </select>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <input class="form-control" type="file" onchange="angular.element(this).scope().filesChanged(this)" multiple/>
+        </div>-->
+        <div class="form-group">
+            <input class="form-control" type="file" file-input="files" multiple/>
         </div>
 
         <div class="form-group">
-            <li ng-repeat="file in newOrder.files">{{file.name}}</li>
+            <!--<li ng-repeat="file in newOrder.files">{{file.name}}</li>-->
+            <li ng-repeat="file in files">{{file.name}}</li>
         </div>
     </form>
     <p class="text-muted">Accept only *.jpg and *.png files</p>

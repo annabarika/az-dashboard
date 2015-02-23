@@ -21,7 +21,8 @@ app.controller('OrderListController',
             var modalWindow,
                 url,
                 method,
-                data;
+                data,
+                filter={};
 
             $rootScope.type=[
                 {
@@ -35,7 +36,7 @@ app.controller('OrderListController',
             ];
 
             $scope.newOrder={};
-
+            $scope.FilterData = {};
             /* Loading orders */
 			$rootScope.documentTitle = "Orders";
 			$scope.tableHeader = [
@@ -84,7 +85,7 @@ app.controller('OrderListController',
                 .then(function(response){
 					var factory = [];
 					for( var i in response ){
-						factory.push( { id: response[i].factory.id, name: response[i].factory.name } );
+						factory.push( { type:"factory", id: response[i].factory.id, name: response[i].factory.name } );
 					}
                     $scope.Factory=factory;
                 });
@@ -95,7 +96,7 @@ app.controller('OrderListController',
 					var statusByType = [];
 					for( var i in response ){
 						if( ! statusByType[response[i].type]) statusByType[response[i].type] = [];
-						statusByType[response[i].type].push({ statusId: response[i].statusId, name: response[i].name });
+						statusByType[response[i].type].push({ type: response[i].type, id: response[i].statusId, name: response[i].name });
 					}
                     $scope.orderStatus = statusByType['order'];
 					$scope.orderPaymentStatus = statusByType['orderPayment'];
@@ -152,60 +153,94 @@ app.controller('OrderListController',
 
 
             /*get selected items for factory  */
+            /*  status:[],
+                factoryId:[],
+                paymentStatus:[]
+            */
 
-
-            $scope.$watch('resultData',function(newVal){
-                var filter={},
-                    arr=[];
-
-                angular.forEach( newVal, function( value, key ) {
-
-                    if ( value.ticked === true ) {
-
-                        filter[value.name]=value;
-
+            /*$scope.$watch('resultData',function(newVal){
+                console.log($scope.resultData);
+                if($scope.resultData) {
+                    if (!$scope.FilterData[$scope.resultData.type]) {
+                        $scope.FilterData[$scope.resultData.type] = [];
+                    }
+                    if ($scope.resultData.ticked) {
+                        $scope.FilterData[$scope.resultData.type].push($scope.resultData.value);
                     }
 
-                });
-                //console.log(filter);
+                    console.log($scope.FilterData);
 
+
+                }
+            });*/
+
+            $scope.$watchCollection('resultData',function(newVal){
+             var arr=[];
+                //console.log(newVal);
+
+                    angular.forEach( newVal, function( value, key ) {
+                            console.log(value.type);
+
+                            if(value.ticked ===true){
+                                filter[value.type]=[];
+
+                                arr.push(value.id);
+                                filter[value.type]=arr;
+                            }
+
+                    });
+
+
+                console.log(filter);
+
+                    if(!$.isEmptyObject(filter)){
+
+                        url=config.API.host+"/order/load/";
+
+                        if(filter.order){
+
+                            url+="status/"+filter.order.join()+"/";
+                        }
+                        if(filter.orderPayment){
+
+                            url+="paymentStatus/"+filter.orderPayment.join()+"/";
+                        }
+                        if(filter.factory){
+
+                            url+="factoryId/"+filter.factory.join();
+                        }
+
+                        console.log(url);
+
+
+                        RestFactory.request(url)
+                            .then(
+                            function(response){
+                                $scope.orders=response;
+                            },
+                            function(error){
+                                console.log(error);
+                            });
+                    }
                 try{
                     if(newVal.length==0){
+                        console.log( $scope.data);
+                        $scope.orders = $scope.data;
 
-                        //$scope.orders = $scope.dataOrders;
                     }
                 }
                 catch(e){
 
                 }
-
             });
+
             $scope.addNewOrder = function () {
-                $scope.items = ['item1', 'item2', 'item3'];
 
                 var modalInstance = $modal.open({
                     templateUrl: '/modules/buyer/views/orders/new_order.html',
                     controller: 'OrderEditController',
                     size: 'sm'
                 });
-
-               /* modalInstance.result.then(function (obj) {
-                    console.log(obj);
-                        url="http://azimuth.local/api/order/new",
-                        method='post',
-                        data=obj,
-                        header='multipart';
-
-                    RestFactory.request(url,method,data,header)
-                        .then(function(response){
-                            console.log(response);
-                            $rootScope.changeAlert=1;
-                        },
-                        function(error) {
-                            console.log(error);
-                            $rootScope.changeAlert=0;
-                        });
-                });*/
             };
 
             /*function add new factory*/
@@ -219,26 +254,57 @@ app.controller('OrderListController',
                     console.log(obj);
                 })
             };
-            $scope.filesChanged = function(elm){
-				//console.log(elm.files);
+           /* $scope.filesChanged = function(elm){
+				console.log(elm.files);
                 $scope.newOrder.files=elm.files;
                 $scope.$apply();
-            };
+            };*/
 
-
+            $scope.$watch('files',function(){
+                $rootScope.files=$scope.files;
+            });
 
 
 
 }]);
 
-app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal){
+app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http){
+
+    $scope.$watch('files',function(){
+        console.log($rootScope.files);
+
+        var url = config.API.host + "order/loadfiles",
+            data={
+                id:5
+            },
+            method="POST";
+        var fd = new FormData();
+        angular.forEach($rootScope.files, function(file){
+        	fd.append('file', file);
+        });
+      /*  RestFactory.request(url,method,data,"multipart")
+            .then(function(response){
+                console.log(response);
+            },
+            function(error){
+                console.log(error);
+            })*/
+      /*  $http.post(url,data,
+            {
+                headers:{"Content-type":"multipart/form-data"}})
+            .success(function(data){
+                console.log(data);
+            });*/
+        $http.get(url);
+    });
 
     $scope.saveOrder = function ( data ) {
-			var fd = new FormData();
-			angular.forEach(data.files, function(file){
-				console.log(file);
-				fd.append('file', file);
-			});
+        console.log(data);
+			//var fd = new FormData();
+			//angular.forEach(data.files, function(file){
+			//	console.log("this",file);
+			//	fd.append('file', file);
+			//});
 
             var order = {
 				type: data.type.id,
@@ -251,7 +317,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                 data=order,
 				contentType='multipart';
 
-            RestFactory.request(url,method,data, contentType)
+           /* RestFactory.request(url,method,data, contentType)
                 .then(function(response){
 					console.log(response);
                     if(response=='null'){
@@ -279,7 +345,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                         size: 'lg'
                     });
 
-                });
+                });*/
 
 
     };
