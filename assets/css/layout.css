@@ -646,3 +646,15 @@ ul.sortable{
 li.upload{
     list-style: none;
 }
+tr.complete{
+    border-left: solid 5px #5cb85c;
+}
+tr.in_complete{
+    border-left: solid 5px #f44336;
+}
+tr.process{
+    border-left: solid 5px #f0ad4e;
+}
+tr.hold{
+    border-left: solid 5px #00bcd4;
+}

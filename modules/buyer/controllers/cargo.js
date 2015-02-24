@@ -21,7 +21,6 @@ app.controller('CargoController',
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo";
             $scope.tableHeader = [
-                { name: "photo", title: 'Photo' },
                 { name: "article", title: 'Article/Name' },
                 { name: "size", title: 'Size' },
                 { name: "count", title: 'Count' },
@@ -31,63 +30,71 @@ app.controller('CargoController',
 
             $scope.cargo = [
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar18.jpg",
                     "article":"3234555",
                     "size":"M",
                     "count":"2323",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'complete'
                 },
 
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar17.jpg",
                     "article":"8676",
                     "size":"S",
                     "count":"134",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'in_complete'
                 },
 
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar18.jpg",
                     "article":"4435",
                     "size":"L",
                     "count":"87875",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'inactive'
                 },
 
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar3.jpg",
                     "article":"35356",
                     "size":"M",
                     "count":"989",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'hold'
                 },
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar8.jpg",
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'inactive'
                 },
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar1.jpg",
                     "article":"344657",
                     "size":"M",
                     "count":"343",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'inactive'
                 },
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar16.jpg",
                     "article":"233567",
                     "size":"M",
                     "count":"23",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'inactive'
                 },
                 {
-                    "photo":"product.jpg",
+                    "photo":"/assets/images/avatar/avatar18.jpg",
                     "article":"9799898",
                     "size":"M",
                     "count":"3253",
-                    "factory":"factory #1"
+                    "factory":"factory #1",
+                    "active":'process'
                 }
             ];
             $scope.addNewItems = function(){
@@ -194,7 +201,7 @@ app.controller('CargoItemsController',
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo cart";
             $scope.tableHeader = [
-                { name: "photo", title: 'Photo' },
+                { name: "photo", title: 'photo' },
                 { name: "article", title: 'Articul/name' },
                 { name: "size", title: 'Size' },
                 { name: "count", title: 'Count' },
@@ -202,27 +209,49 @@ app.controller('CargoItemsController',
             ];
             $scope.cargo_items = [
                 {
-                    "photo":"product.jpg",
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":""
+                    "add":"",
+                    "photo":"/assets/images/avatar/avatar18.jpg",
+                    "active":'complete'
                 },
 
                 {
-                    "photo":"product.jpg",
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":""
+                    "add":"",
+                    "photo":"/assets/images/avatar/avatar8.jpg",
+                    "active":'process'
                 },
 
                 {
-                    "photo":"product.jpg",
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":""
+                    "add":"",
+                    "photo":'/assets/images/avatar/avatar7.jpg',
+                    "active":'inactive'
+                },
+
+                {
+                    "article":"995453",
+                    "size":"M",
+                    "count":"783",
+                    "add":"",
+                    "photo":"/assets/images/avatar/avatar15.jpg",
+                    "active":'hold'
+                },
+
+                {
+                    "article":"995453",
+                    "size":"M",
+                    "count":"783",
+                    "add":"",
+                    "photo":"/assets/images/avatar/avatar18.jpg",
+                    "active":'in_complete'
                 }
             ];
+
         }]);
