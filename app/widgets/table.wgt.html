@@ -33,12 +33,12 @@
                         <tbody>
                         <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() " ng-class="row.active">
                             <td>{{$index+1}}</td>
-                            <!--<td ng-if="row.photo"><img src="{{row.photo}}"/></td>-->
+                            <td ng-if="row.photo"><img src="{{row.photo}}"/></td>
                             <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
                                 {{row[headerRow.name]}}
                             </td>
                             <td ng-repeat="b in toolbarButtons">
-                                <button class={{b.class}} ng-click="buttons(row,b.value)">{{b.value}}</button>
+                                <button class={{b.class}} ng-click="buttons(row,b.value)"><i class="{{b.icon}}"></i> {{b.value}}</button>
                             </td>
                         </tr>
                         </tbody>

@@ -208,11 +208,6 @@
                     }
                 };
 
-                $scope.photo = function(dataheader) {
-                    $scope.srcNotEmpty = ($scope.photo.length > 0);
-                    console.log($scope.srcNotEmpty);
-                };
-
                 $scope.buttons=function(row,method){
                     tableFactory.getRow(row);
                     tableFactory.getMethod(method);
