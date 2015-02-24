@@ -48,43 +48,45 @@ app.controller('OrderListController',
 				{ name: "createDate", title: 'Create date' },
 				{ name: "deliveryDate", title: 'Production date' }
 			];
-            RestFactory.request(config.API.host + "order/load")
-                .then(function(response){
-					var data = [];
-					//console.log(response);
-					//data.header = $scope.paymentsHeader;
+            $scope.getOrders=function(){
+                RestFactory.request(config.API.host + "order/load")
+                    .then(function(response){
+                        var data = [];
 
-					for( var i in response ){
-						data[i] = {};
-						for( var n in $scope.tableHeader ) {
-							var key = $scope.tableHeader[n].name;
-							if( response[i][key]  ) {
-								data[i][key] = response[i][key]
-							}else{
-								data[i][key] = '';
-							}
-						}
-					}
-					$scope.data = data;
-                    $scope.orders = $scope.data;
-
-                    $scope.buttons = [
-                        {
-                            class:"btn btn-default",
-                            value:"Cancel"
-                        },
-                        {
-                            class:"btn btn-default",
-                            value:"Send"
+                        for( var i in response ){
+                            data[i] = {};
+                            for( var n in $scope.tableHeader ) {
+                                var key = $scope.tableHeader[n].name;
+                                if( response[i][key]  ) {
+                                    data[i][key] = response[i][key]
+                                }else{
+                                    data[i][key] = '';
+                                }
+                            }
                         }
-                    ]
-                });
+                        $scope.data = data;
+                        $scope.orders = $scope.data;
+
+                        $scope.buttons = [
+                            {
+                                class:"btn btn-default",
+                                value:"Cancel"
+                            },
+                            {
+                                class:"btn btn-default",
+                                value:"Send"
+                            }
+                        ]
+                    });
+            };
+
 
             /* Loading factories */
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
 					var factory = [];
 					for( var i in response ){
+
 						factory.push( { type:"factory", id: response[i].factory.id, name: response[i].factory.name } );
 					}
                     $scope.Factory=factory;
@@ -151,63 +153,45 @@ app.controller('OrderListController',
 
             };
 
-
-            /*get selected items for factory  */
-            /*  status:[],
-                factoryId:[],
-                paymentStatus:[]
-            */
-
-            /*$scope.$watch('resultData',function(newVal){
-                console.log($scope.resultData);
-                if($scope.resultData) {
-                    if (!$scope.FilterData[$scope.resultData.type]) {
-                        $scope.FilterData[$scope.resultData.type] = [];
-                    }
-                    if ($scope.resultData.ticked) {
-                        $scope.FilterData[$scope.resultData.type].push($scope.resultData.value);
-                    }
-
-                    console.log($scope.FilterData);
-
-
-                }
-            });*/
-
             $scope.$watchCollection('resultData',function(newVal){
-             var arr=[];
-                //console.log(newVal);
 
-                    angular.forEach( newVal, function( value, key ) {
-                            console.log(value.type);
+                    for(item in newVal){
+                        var arr=[];
 
-                            if(value.ticked ===true){
-                                filter[value.type]=[];
+                        if($.isEmptyObject(newVal[item])){
 
-                                arr.push(value.id);
-                                filter[value.type]=arr;
-                            }
-
-                    });
+                            delete filter[item];
+                        }
+                        else{
+                            angular.forEach(newVal[item],function(value,key){
 
 
-                console.log(filter);
+                                if(value.ticked ===true){
 
+                                    arr.push(value.id);
+                                    filter[item]=arr;
+                                }
+
+                            });
+                        }
+                    }
+                    console.log(filter);
                     if(!$.isEmptyObject(filter)){
 
-                        url=config.API.host+"/order/load/";
+                        url=config.API.host+"order/load/";
 
                         if(filter.order){
 
                             url+="status/"+filter.order.join()+"/";
                         }
+
                         if(filter.orderPayment){
 
                             url+="paymentStatus/"+filter.orderPayment.join()+"/";
                         }
                         if(filter.factory){
 
-                            url+="factoryId/"+filter.factory.join();
+                            url+="factoryId/"+filter.factory.join()+"/";
                         }
 
                         console.log(url);
@@ -222,16 +206,9 @@ app.controller('OrderListController',
                                 console.log(error);
                             });
                     }
-                try{
-                    if(newVal.length==0){
-                        console.log( $scope.data);
-                        $scope.orders = $scope.data;
-
+                    else{
+                        $scope.getOrders();
                     }
-                }
-                catch(e){
-
-                }
             });
 
             $scope.addNewOrder = function () {
@@ -268,34 +245,74 @@ app.controller('OrderListController',
 
 }]);
 
-app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http){
+app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http,$q){
 
     $scope.$watch('files',function(){
         console.log($rootScope.files);
 
-        var url = config.API.host + "order/loadfiles",
-            data={
-                id:5
-            },
-            method="POST";
         var fd = new FormData();
         angular.forEach($rootScope.files, function(file){
-        	fd.append('file', file);
+            fd.append('file', file);
+
         });
-      /*  RestFactory.request(url,method,data,"multipart")
+
+        console.log(fd);
+
+        //var url = config.API.host + "order/loadfiles",
+        var url = "http://lex.b.compass/order/loadfiles",
+            data={
+                id:5,
+                files:fd
+            },
+            method="POST";
+
+       /* RestFactory.request(url,method,data,"multipart")
             .then(function(response){
                 console.log(response);
             },
             function(error){
                 console.log(error);
-            })*/
-      /*  $http.post(url,data,
-            {
-                headers:{"Content-type":"multipart/form-data"}})
+            });*/
+       /* $http.post(url,data,
+                {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': 'multipart/form-data'}
+                })
             .success(function(data){
                 console.log(data);
             });*/
-        $http.get(url);
+
+
+            var deferred = $q.defer();
+
+            $  .ajax({
+                url:url,
+                type:method,
+                data:data,
+                dataType:"json",
+                contentType:"application/x-www-form-urlencoded; charset=utf-8",
+                success:function(response)
+                {
+                    if(response)
+                    {
+                        deferred.resolve(response);
+                    }
+                    else
+                    {
+                        deferred.resolve(response);
+                    }
+                },
+                error:function(jqXHR,textStatus,errorThrown, error)
+                {
+                    console.log("You can not send Cross Domain AJAX requests: "+errorThrown);
+
+                    deferred.reject(error);
+                }
+            });
+
+            return deferred.promise;
+
+
     });
 
     $scope.saveOrder = function ( data ) {
