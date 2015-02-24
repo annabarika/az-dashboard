@@ -23,10 +23,7 @@ app.controller('NewCollectionController',
             $('#sort1, #sort2, #sort3, #sort4').sortable({
                 connectWith: ".sort",
                 opacity: 0.5,
-                delay: 100,
-                distance: 10,
-                dropOnEmpty: true,
-                revert: true
+                dropOnEmpty: true
             }).disableSelection();
 
         }]);

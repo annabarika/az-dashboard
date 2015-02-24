@@ -21,6 +21,7 @@ app.controller('CargoController',
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo";
             $scope.tableHeader = [
+                { name: "photo", title: 'Photo' },
                 { name: "article", title: 'Article/Name' },
                 { name: "size", title: 'Size' },
                 { name: "count", title: 'Count' },
@@ -201,7 +202,7 @@ app.controller('CargoItemsController',
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo cart";
             $scope.tableHeader = [
-                { name: "photo", title: 'photo' },
+                { name: "photo", title: 'Photo' },
                 { name: "article", title: 'Articul/name' },
                 { name: "size", title: 'Size' },
                 { name: "count", title: 'Count' },
