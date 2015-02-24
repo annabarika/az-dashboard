@@ -205,14 +205,20 @@ app.controller('CargoItemsController',
                 { name: "article", title: 'Articul/name' },
                 { name: "size", title: 'Size' },
                 { name: "count", title: 'Count' },
-                { name: "add", title: '' }
             ];
+            $scope.buttons=[{
+                 class:"btn btn-success",
+                 value:"add",
+                 icon:"fa fa-plus"
+            }];
+            $scope.buttonAction=function(){
+                alert("work");
+            };
             $scope.cargo_items = [
                 {
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":"",
                     "photo":"/assets/images/avatar/avatar18.jpg",
                     "active":'complete'
                 },
@@ -221,7 +227,6 @@ app.controller('CargoItemsController',
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":"",
                     "photo":"/assets/images/avatar/avatar8.jpg",
                     "active":'process'
                 },
@@ -230,7 +235,6 @@ app.controller('CargoItemsController',
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":"",
                     "photo":'/assets/images/avatar/avatar7.jpg',
                     "active":'inactive'
                 },
@@ -239,7 +243,6 @@ app.controller('CargoItemsController',
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":"",
                     "photo":"/assets/images/avatar/avatar15.jpg",
                     "active":'hold'
                 },
@@ -248,7 +251,6 @@ app.controller('CargoItemsController',
                     "article":"995453",
                     "size":"M",
                     "count":"783",
-                    "add":"",
                     "photo":"/assets/images/avatar/avatar18.jpg",
                     "active":'in_complete'
                 }
