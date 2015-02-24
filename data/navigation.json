@@ -18,6 +18,10 @@
       {"title": "New collection",
         "count": "2",
         "url":"buyer/collection"
+      },
+      {"title": "Cargo",
+        "count": "3",
+        "url":"buyer/cargo"
       }
     ]
   },

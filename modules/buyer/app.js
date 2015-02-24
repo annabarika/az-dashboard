@@ -2,7 +2,8 @@ var app = angular.module('modules.buyer', [
 	"modules.buyer.orders",
 	"modules.buyer.payments",
 	"modules.buyer.bestsellers",
-    "modules.buyer.collection"
+    "modules.buyer.collection",
+    "modules.buyer.cargo"
 ]);
 
 app.config(function($routeProvider){
@@ -36,6 +37,24 @@ app.config(function($routeProvider){
         {
             templateUrl:"/modules/buyer/views/collection/index.html",
             controller:"NewCollectionController"
+        }
+    )
+        .when('/buyer/cargo',
+        {
+            templateUrl:"/modules/buyer/views/cargo/index.html",
+            controller:"CargoController"
+        }
+    )
+        .when('/buyer/cargo/cargo_cart',
+        {
+            templateUrl:"/modules/buyer/views/cargo/cargo_cart.html",
+            controller:"CargoCartController"
+        }
+    )
+        .when('/buyer/cargo/cargo_items',
+        {
+            templateUrl:"/modules/buyer/views/cargo/cargo_items.html",
+            controller:"CargoItemsController"
         }
     );
 });

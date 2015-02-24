@@ -36,7 +36,7 @@ app.controller('OrderListController',
             ];
 
             $scope.newOrder={};
-            $scope.FilterData = {};
+
             /* Loading orders */
 			$rootScope.documentTitle = "Orders";
 			$scope.tableHeader = [

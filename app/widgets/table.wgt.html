@@ -22,6 +22,7 @@
                         <thead>
                         <tr ng-show="dataheader">
                             <th> # </th>
+                            <!--<th ng-if="srcNotEmpty"> 1</th>-->
                             <th class="sorting" ng-repeat="headerRow in dataheader"
                                 ng-click="sortReorder(headerRow.name, $event)"
                                 ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
@@ -30,15 +31,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() ">
+                        <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() " ng-class="row.active">
                             <td>{{$index+1}}</td>
+                            <!--<td ng-if="row.photo"><img src="{{row.photo}}"/></td>-->
                             <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
                                 {{row[headerRow.name]}}
                             </td>
                             <td ng-repeat="b in toolbarButtons">
                                 <button class={{b.class}} ng-click="buttons(row,b.value)">{{b.value}}</button>
                             </td>
-
                         </tr>
                         </tbody>
                     </table>
