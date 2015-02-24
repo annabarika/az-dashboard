@@ -644,6 +644,10 @@ ul.sortable{
     width: 100px;
     height: 100px;
 }
+.img-sm{
+    width: 42px;
+    height: 42px;
+}
 .sort { list-style-type: none; margin: 20px 0; padding: 0; width: 100%; float: left;cursor: pointer }
 .sort li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 4em; text-align: center; cursor: pointer}
 li.upload{

@@ -1,0 +1,37 @@
+<div>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Send Shipment</h4>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <td>Cargo shipped</td>
+                    <td>
+                        <p class="form-inline">
+                            <input class="form-control" type="text">&nbsp;kg
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Cargo places</td>
+                    <td>
+                        <p class="form-inline">
+                            <input class="form-control" type="text">
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info">Print document</button>
+        <button type="button" class="btn btn-primary">Send cargo</button>
+        <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
+    </div>
+</div>

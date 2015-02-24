@@ -180,7 +180,7 @@
             <!-- end: panel -->
         </div>
     </div>
-    <div  class="col-md-3 bg-auto height-auto bdr-l-md bdr-b-sm bdr-b-xs">
+    <div  class="col-md-3 bg-auto height-auto bdr-l-md bdr-b-sm bdr-b-xs" ng-controller="BestsellerCartController">
         <div class="scroll">
             <!-- start page header -->
             <div class="page-header clearfix">
@@ -206,7 +206,14 @@
                     </div>
                     <table class="table table-bordered">
                         <tbody>
-                        <tr>
+                        <tr ng-repeat="row in summaryCart" ng-click="edit(row)">
+
+                            <td ng-repeat="(k,v) in row">
+                                <img src="{{row.a_photo}}" class="img-sm" ng-if="k=='a_photo'">
+                                <div ng-if="k!='a_photo'">{{v}}</div>
+                            </td>
+                        </tr>
+                        <!--<tr>
                             <td class="text-center">
                                 <div class="media np">
                                     <div class="media-left">
@@ -255,7 +262,7 @@
                             <td class="text-center">
                                 300
                             </td>
-                        </tr>
+                        </tr>-->
                         </tbody>
                     </table>
                 </div>
@@ -269,14 +276,8 @@
                     <table class="table table-bordered">
                         <tbody>
                         <tr>
-                            <td class="text-center">
-                                <div class="media np">
-                                    <div class="media-left">
-                                      <span class="img-wrapper img-rounded">
-                                        <img src="/assets/images/avatar/avatar9.jpg">
-                                      </span>
-                                    </div>
-                                </div>
+                            <td>
+                                <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">
@@ -291,14 +292,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-center">
-                                <div class="media np">
-                                    <div class="media-left">
-                                      <span class="img-wrapper img-rounded">
-                                        <img src="/assets/images/avatar/avatar9.jpg">
-                                      </span>
-                                    </div>
-                                </div>
+                            <td>
+                                <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">
@@ -313,14 +308,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-center">
-                                <div class="media np">
-                                    <div class="media-left">
-                                      <span class="img-wrapper img-rounded">
-                                        <img src="/assets/images/avatar/avatar9.jpg">
-                                      </span>
-                                    </div>
-                                </div>
+                            <td>
+                                <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">

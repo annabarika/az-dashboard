@@ -102,6 +102,14 @@ app.controller('CargoController',
                 $location.path( '/buyer/cargo/cargo_items');
             };
 
+            $scope.sendShipment = function(){
+                modalWindow=$modal.open({
+                    templateUrl: "/modules/buyer/views/cargo/send_shipment.html",
+                    controller: 'CargoController',
+                    backdrop:'static'
+                });
+            };
+
             $scope.edit = function () {
                $location.path( '/buyer/cargo/cargo_cart');
             };
@@ -205,7 +213,7 @@ app.controller('CargoItemsController',
                 { name: "photo", title: 'Photo' },
                 { name: "article", title: 'Articul/name' },
                 { name: "size", title: 'Size' },
-                { name: "count", title: 'Count' },
+                { name: "count", title: 'Count' }
             ];
             $scope.buttons=[{
                  class:"btn btn-success",

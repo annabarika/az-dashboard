@@ -119,10 +119,12 @@
                 ,toolbarButtons:"="
                 ,buttonAction:"&"
                 ,caption:"@"
+                ,searching:"@"
             },
 
             link:function($scope){
-
+              //  console.log(searching);
+                $scope.searchFlag=searching;
                 $scope.sortBy = function() {
 
                     //console.log($scope.dataheader);

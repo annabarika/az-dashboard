@@ -5791,5 +5791,11 @@ button.close {
     .hidden-print {
         display: none !important;
     }
+    #app-footer{
+        display: none;
+    }
+    table { page-break-inside:auto }
+    tr    { page-break-inside:avoid; page-break-after:auto }
+
 }
 /*# sourceMappingURL=bootstrap.css.map */
