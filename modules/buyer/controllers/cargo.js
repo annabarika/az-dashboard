@@ -21,6 +21,7 @@ app.controller('CargoController',
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo";
             $scope.tableHeader = [
+                { name: "photo", title: 'photo' },
                 { name: "article", title: 'Article/Name' },
                 { name: "size", title: 'Size' },
                 { name: "count", title: 'Count' },
