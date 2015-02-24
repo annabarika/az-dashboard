@@ -20,8 +20,12 @@ app.controller('NewCollectionController',
 
             /* Getting payments */
             $rootScope.documentTitle = "Collection";
-            $('#sort1, #sort2,#sort3, #sort4').sortable({
-                connectWith: ".sort"
+            $('#sort1, #sort2, #sort3, #sort4').sortable({
+                connectWith: ".sort",
+                opacity: 0.5,
+                delay: 100,
+                distance: 10,
+                revert: true
             }).disableSelection();
 
         }]);
