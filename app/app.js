@@ -15,10 +15,13 @@ var config = {
 		"widgets",
 		"ui.bootstrap",
 		"services",
-		"modules.buyer"
+		"modules.buyer",
+		"angularFileUpload"
 	])
 
-		.config(function ($routeProvider, $locationProvider) {
+		.config(function ($routeProvider, $locationProvider, $httpProvider) {
+
+			//$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 
 			$locationProvider.html5Mode(true);
 
@@ -60,6 +63,9 @@ var config = {
 					msg: 'Warning! Better check yourself, you\'re not looking too good.'
 				}];
 
+		/*	$scope.$watch('message',function(value){
+				$scope.msg=value;
+			});*/
 			/*$rootScope.addAlert = function() {
 			 $rootScope.alerts.push({
 			 msg: 'Another alert!'

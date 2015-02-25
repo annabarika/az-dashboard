@@ -27,12 +27,18 @@
         <!--<div class="form-group">
             <input class="form-control" type="file" onchange="angular.element(this).scope().filesChanged(this)" multiple/>
         </div>-->
-        <div class="form-group">
+
+        <!--<div class="form-group">
             <input class="form-control" type="file" file-input="files" multiple/>
-        </div>
+        </div>-->
+
+
+
+        <div ng-file-drop ng-file-select ng-model="files" class="form-group"
+             drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+             accept="image/*,application/pdf">Drop files here or click to upload</div>
 
         <div class="form-group">
-            <!--<li ng-repeat="file in newOrder.files">{{file.name}}</li>-->
             <li ng-repeat="file in files">{{file.name}}</li>
         </div>
     </form>

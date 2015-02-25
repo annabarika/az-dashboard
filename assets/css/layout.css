@@ -633,6 +633,9 @@ footer .alert{
     border-radius: 2px;
     border: 2px dashed #dbdfe3;
 }
+input.sm{
+    width: 15%!important;
+}
 ul.sortable{
     list-style: none;
     padding-left: 0;

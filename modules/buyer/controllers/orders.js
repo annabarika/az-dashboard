@@ -77,6 +77,9 @@ app.controller('OrderListController',
                                 value:"Send"
                             }
                         ]
+                    },
+                    function(error){
+                        console.log(error);
                     });
             };
 
@@ -90,6 +93,9 @@ app.controller('OrderListController',
 						factory.push( { type:"factory", id: response[i].factory.id, name: response[i].factory.name } );
 					}
                     $scope.Factory=factory;
+                },
+                function(error){
+                    console.log(error);
                 });
 
             /* Loading statuses */
@@ -102,6 +108,9 @@ app.controller('OrderListController',
 					}
                     $scope.orderStatus = statusByType['order'];
 					$scope.orderPaymentStatus = statusByType['orderPayment'];
+                },
+                function(error){
+                    console.log(error);
                 });
 
             /*
@@ -175,7 +184,7 @@ app.controller('OrderListController',
                             });
                         }
                     }
-                    console.log(filter);
+                    //console.log(filter);
                     if(!$.isEmptyObject(filter)){
 
                         url=config.API.host+"order/load/";
@@ -245,7 +254,7 @@ app.controller('OrderListController',
 
 }]);
 
-app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http,$q){
+app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http,$q,$upload){
 
     $scope.$watch('files',function(){
         console.log($rootScope.files);
@@ -258,22 +267,23 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
 
         console.log(fd);
 
-        //var url = config.API.host + "order/loadfiles",
-        var url = "http://lex.b.compass/order/loadfiles",
+        var url = config.API.host + "order/loadfiles",
+       // var url = "http://lex.b.compass/order/loadfiles",
+            id= 5,
             data={
-                id:5,
+                id:id,
                 files:fd
             },
             method="POST";
 
-       /* RestFactory.request(url,method,data,"multipart")
+        RestFactory.request(url,method,fd,"multipart")
             .then(function(response){
                 console.log(response);
             },
             function(error){
                 console.log(error);
-            });*/
-       /* $http.post(url,data,
+            });
+        /*$http.post(url,fd,
                 {
                     transformRequest: angular.identity,
                     headers: {'Content-Type': 'multipart/form-data'}
@@ -283,7 +293,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             });*/
 
 
-            var deferred = $q.defer();
+            /*var deferred = $q.defer();
 
             $  .ajax({
                 url:url,
@@ -310,10 +320,48 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                 }
             });
 
-            return deferred.promise;
+            return deferred.promise;*/
 
+       // $scope.upload($rootScope.files);
 
     });
+
+    $scope.upload = function (files) {
+        var url = config.API.host + "order/loadfiles";
+        /*if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                $upload.upload({
+                    url: url,
+                    fields: {
+                        'id': 5
+                    },
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' +
+                    evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                    JSON.stringify(data));
+                });
+            }
+        }*/
+        $upload.upload({
+            url: url,
+            fields: {
+                id: 5
+            },
+            file: files
+        })
+            .success(function (data, status, headers, config) {
+            console.log(data);
+        });
+    };
+
+
+
+
 
     $scope.saveOrder = function ( data ) {
         console.log(data);

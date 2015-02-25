@@ -31,7 +31,7 @@ app.controller('PaymentListController',
 
 			RestFactory.request(config.API.host + "payment/load")
 				.then(function(response){
-					//console.log(response);
+					console.log(response);
 					//console.log(response);
 					var data = [];
 					//data.header = $scope.paymentsHeader;
