@@ -33,7 +33,6 @@
         };
         return service;
     }]);
-
     app.filter('orderByEx', orderByExFilter);
 
     function orderByExFilter($parse){ // modified version of native Angular orderBy filter
@@ -119,12 +118,10 @@
                 ,toolbarButtons:"="
                 ,buttonAction:"&"
                 ,caption:"@"
-                ,searching:"@"
             },
 
             link:function($scope){
-              //  console.log(searching);
-                $scope.searchFlag=searching;
+
                 $scope.sortBy = function() {
 
                     //console.log($scope.dataheader);
