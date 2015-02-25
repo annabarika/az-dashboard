@@ -27,6 +27,7 @@
                                 ng-click="sortReorder(headerRow.name, $event)"
                                 ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
                             </th>
+                            <!--<th ng-repeat="th in toolbarInputs"></th>-->
                             <th ng-repeat="th in toolbarButtons"></th>
                         </tr>
                         </thead>
@@ -38,9 +39,21 @@
 
                                 <img src="{{row.photo}}" class="thumbnail sm" ng-if="headerRow.name=='photo'">
 
-                                <div ng-if="headerRow.name!='photo'">{{row[headerRow.name]}}</div>
+                                <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">{{row[headerRow.name]}}</div>
 
+                                <ul class="media-list mb-sm" ng-if="headerRow.name=='size_list'">
+                                    <li class="media" ng-repeat="item in row.size_list">
+                                        <p class="mt-5">{{item.value}}</p>
+                                    </li>
+                                </ul>
+
+                                <ul class="media-list mb-sm" ng-if="headerRow.name=='count_list'">
+                                    <li class="media" ng-repeat="item in row.count_list">
+                                        <input ng-model="item.value" type="text" class="form-control"/>
+                                    </li>
+                                </ul>
                             </td>
+
                             <td ng-repeat="b in toolbarButtons">
                                 <button class={{b.class}} ng-click="buttons(row,b.value)"><i class="{{b.icon}}"></i> {{b.value}}</button>
                             </td>

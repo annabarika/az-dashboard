@@ -212,9 +212,10 @@ app.controller('CargoItemsController',
             $scope.tableHeader = [
                 { name: "photo", title: 'Photo' },
                 { name: "article", title: 'Articul/name' },
-                { name: "size", title: 'Size' },
-                { name: "count", title: 'Count' }
+                { name: "size_list", title: 'Size' },
+                { name: "count_list", title: 'Count' }
             ];
+
             $scope.buttons=[{
                  class:"btn btn-success",
                  value:"add",
@@ -226,40 +227,72 @@ app.controller('CargoItemsController',
             $scope.cargo_items = [
                 {
                     "article":"995453",
-                    "size":"M",
-                    "count":"783",
+                    "size_list":[
+                        { value: 'S' },
+                        { value: 'M' },
+                        { value: 'L' }
+                    ],
+                    "count_list":[
+                        { value: '231' },
+                        { value: '12' },
+                        { value: '24' }
+                    ],
                     "photo":"/assets/images/avatar/avatar18.jpg",
                     "active":'complete'
                 },
 
                 {
                     "article":"995453",
-                    "size":"M",
-                    "count":"783",
+                    "size_list":[
+                        { value: 'S' }
+                    ],
+                    "count_list":[
+                        { value: '14' }
+                    ],
                     "photo":"/assets/images/avatar/avatar8.jpg",
                     "active":'process'
                 },
 
                 {
                     "article":"995453",
-                    "size":"M",
-                    "count":"783",
+                    "size_list":[
+                        { value: 'M' },
+                        { value: 'L' }
+                    ],
+                    "count_list":[
+                        { value: '12' },
+                        { value: '24' }
+                    ],
                     "photo":'/assets/images/avatar/avatar7.jpg',
                     "active":'inactive'
                 },
 
                 {
                     "article":"995453",
-                    "size":"M",
-                    "count":"783",
+                    "size_list":[
+                        { value: 'S' },
+                        { value: 'L' }
+                    ],
+                    "count_list":[
+                        { value: '2' },
+                        { value: '43' }
+                    ],
                     "photo":"/assets/images/avatar/avatar15.jpg",
                     "active":'hold'
                 },
 
                 {
                     "article":"995453",
-                    "size":"M",
-                    "count":"783",
+                    "size_list":[
+                        { value: 'S' },
+                        { value: 'M' },
+                        { value: 'L' }
+                    ],
+                    "count_list":[
+                        { value: '11' },
+                        { value: '6' },
+                        { value: '2' }
+                    ],
                     "photo":"/assets/images/avatar/avatar18.jpg",
                     "active":'in_complete'
                 }
