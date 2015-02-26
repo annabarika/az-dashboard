@@ -18,6 +18,84 @@ app.controller('CargoController',
             $scope.$route = $route;
             $scope.$location = $location;
 
+            /* Loading factories */
+            RestFactory.request(config.API.host + "factory/load")
+                .then(function(response){
+                    var factory = [];
+                    for( var i in response ){
+                        factory.push( { id: response[i].factory.id, name: response[i].factory.name } );
+                    }
+                    $scope.Factory=factory;
+                });
+
+            /* Loading statuses */
+            RestFactory.request(config.API.host + "status/load")
+                .then(function(response){
+                    var statusByType = [];
+                    for( var i in response ){
+                        if( ! statusByType[response[i].type]) statusByType[response[i].type] = [];
+                        statusByType[response[i].type].push({ statusId: response[i].statusId, name: response[i].name });
+                    }
+                    $scope.orderStatus = statusByType['order'];
+                    $scope.orderPaymentStatus = statusByType['orderPayment'];
+                });
+
+            /* Getting cargo */
+            $rootScope.documentTitle = "Cargo cart";
+            $scope.tableHeader = [
+                { name: "document", title: 'Document' },
+                { name: "cargoDoc", title: 'Cargo Document' },
+                { name: "createDate", title: 'Create date' },
+                { name: "paymentStatus", title: 'Status' },
+                { name: "factory", title: 'Factory' }
+            ];
+            $scope.cargo = [
+                {
+                    "document":"",
+                    "cargoDoc":"",
+                    "createDate":"22.01.2015",
+                    "paymentStatus":"Complete",
+                    "factory":"factory #1"
+                },
+
+                {
+                    "document":"",
+                    "cargoDoc":"",
+                    "createDate":"22.01.2015",
+                    "paymentStatus":"In complete",
+                    "factory":"factory #1"
+                },
+
+                {
+                    "document":"",
+                    "cargoDoc":"",
+                    "createDate":"22.01.2015",
+                    "paymentStatus":"Hold",
+                    "factory":"factory #1"
+                }
+            ];
+
+            $scope.edit = function () {
+                $location.path( '/buyer/cargo/cargo_cart');
+            };
+        }]);
+
+app.controller('CargoCartController',
+
+    [
+        '$scope',
+        '$rootScope',
+        "$modal",
+        "$location",
+        "$route",
+        "RestFactory",
+
+
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory){
+
+            $scope.$route = $route;
+            $scope.$location = $location;
+
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo";
             $scope.tableHeader = [
@@ -29,7 +107,7 @@ app.controller('CargoController',
             ];
             
 
-            $scope.cargo = [
+            $scope.cargo_cart = [
                 {
                     "photo":"/assets/images/avatar/avatar18.jpg",
                     "article":"3234555",
@@ -110,84 +188,8 @@ app.controller('CargoController',
                 });
             };
 
-            $scope.edit = function () {
-               $location.path( '/buyer/cargo/cargo_cart');
-            };
-
-        }]);
-
-app.controller('CargoCartController',
-
-    [
-        '$scope',
-        '$rootScope',
-        "$modal",
-        "$location",
-        "$route",
-        "RestFactory",
 
 
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory){
-
-            $scope.$route = $route;
-            $scope.$location = $location;
-
-            /* Loading factories */
-            RestFactory.request(config.API.host + "factory/load")
-                .then(function(response){
-                    var factory = [];
-                    for( var i in response ){
-                        factory.push( { id: response[i].factory.id, name: response[i].factory.name } );
-                    }
-                    $scope.Factory=factory;
-                });
-
-            /* Loading statuses */
-            RestFactory.request(config.API.host + "status/load")
-                .then(function(response){
-                    var statusByType = [];
-                    for( var i in response ){
-                        if( ! statusByType[response[i].type]) statusByType[response[i].type] = [];
-                        statusByType[response[i].type].push({ statusId: response[i].statusId, name: response[i].name });
-                    }
-                    $scope.orderStatus = statusByType['order'];
-                    $scope.orderPaymentStatus = statusByType['orderPayment'];
-                });
-
-            /* Getting cargo */
-            $rootScope.documentTitle = "Cargo cart";
-            $scope.tableHeader = [
-                { name: "document", title: 'Document' },
-                { name: "cargoDoc", title: 'Cargo Document' },
-                { name: "createDate", title: 'Create date' },
-                { name: "paymentStatus", title: 'Status' },
-                { name: "factory", title: 'Factory' }
-            ];
-            $scope.cargo_cart = [
-                {
-                    "document":"",
-                    "cargoDoc":"",
-                    "createDate":"22.01.2015",
-                    "paymentStatus":"Complete",
-                    "factory":"factory #1"
-                },
-
-                {
-                    "document":"",
-                    "cargoDoc":"",
-                    "createDate":"22.01.2015",
-                    "paymentStatus":"In complete",
-                    "factory":"factory #1"
-                },
-
-                {
-                    "document":"",
-                    "cargoDoc":"",
-                    "createDate":"22.01.2015",
-                    "paymentStatus":"Hold",
-                    "factory":"factory #1"
-                }
-            ];
         }]);
 
 app.controller('CargoItemsController',
