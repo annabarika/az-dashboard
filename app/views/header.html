@@ -4,9 +4,9 @@
 
     <ul class="nav navbar-nav navbar-left">
 
-        <li class="visible-xs">
+        <li class="visible-xs" ng-init="index=0; classes=['app-sidebar', 'sidebar-open-ltr app-sidebar sidebar-left']" ng-click="index = index + 1">
 
-            <a href="" data-ng-click="core.settings.sidebarLeftOpen = !core.settings.sidebarLeftOpen">
+            <a href="">
 
                 <i class="ai ai-menu fs-24 pos-t-5"></i>
 
@@ -14,11 +14,11 @@
 
         </li>
 
-        <li class="hidden-xs">
+        <li class="hidden-xs" ng-click="collapsed = !collapsed">
 
-            <a href="" data-ng-click="core.settings.sidebarLeftCollapse = !core.settings.sidebarLeftCollapse">
+            <a href="" ng-init="index=0; classes=['no-csstransforms3d sidebar-open-ltr app-sidebar sidebar-left', 'csstransforms3d sidebar-open-ltr app-sidebar sidebar-left-collapse sidebar-left']" ng-click="index = index + 1">
 
-                <i class="ai fs-24 pos-t-5 ai-arrow-back" ng-class="{'ai-arrow-forward':core.settings.sidebarLeftCollapse || core.screen.sm, 'ai-arrow-back':!core.settings.sidebarLeftCollapse || !core.screen.sm}"></i>
+                <i class="ai fs-24 pos-t-5 ai-arrow-back" ng-class="{'ai-arrow-forward':collapsed, 'ai-arrow-back':!collapsed}"></i>
 
             </a>
 
@@ -32,7 +32,7 @@
 
     <!-- start: navbar form -->
 
-    <form class="navbar-form navbar-left ng-pristine ng-valid" name="form-search" data-ng-class="{'open':core.settings.headerSearchForm}">
+    <form class="navbar-form navbar-left ng-pristine ng-valid" name="form-search">
 
         <div class="form-group">
 
@@ -40,9 +40,9 @@
 
                 <input type="search" class="form-control" placeholder="Search application...">
 
-                <span class="the-icon ai ai-search fs-18" data-ng-hide="core.screen.xs"></span>
+                <span class="the-icon ai ai-search fs-18"></span>
 
-                <a href="" class="the-icon ai ai-cancel fs-18 ng-hide" data-ng-show="core.screen.xs" data-ng-click="core.settings.headerSearchForm = !core.settings.headerSearchForm"></a>
+                <a href="" class="the-icon ai ai-cancel fs-18 ng-hide"></a>
 
             </div>
 

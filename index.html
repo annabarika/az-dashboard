@@ -10,7 +10,7 @@
     <script src="/vendor/jquery/jquery-ui.js"></script>
     <script src="/vendor/velocity.min.js"></script>
     <script src="/vendor/less.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.js"></script>
     <script src="/vendor/angular/angular.min.js"></script>
     <script src="/vendor/angular/angular-route.min.js"></script>
     <script src="/vendor/angular/multi-select/js/angular-multi-select.js"></script>
@@ -36,7 +36,7 @@
 
 <body ng-controller="MainController">
     <section id="app-wrapper" data-ui-view="" class="ng-scope">
-        <sidebar class="app-sidebar sidebar-left ng-scope">111</sidebar>
+        <sidebar ng-class="classes[index % classes.length]">111</sidebar>
 
         <header id="app-header" class="navbar"></header>
 
