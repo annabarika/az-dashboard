@@ -1,6 +1,7 @@
+
 <!-- start box layout -->
 <div class="box-layout">
-        <div class="col-md-8 bdr-r bg-auto height-auto">
+    <div class="col-md-8 bdr-r bg-auto height-auto">
         <!-- start page header -->
         <div class="page-header">
             <!-- basic info heading -->
@@ -15,15 +16,16 @@
         <!--/ end page header -->
 
 
-            <widget-table
-                    datarows="cargo_items"
-                    dataheader="tableHeader"
-                    edit="edit()"
-                    row="row"
-                    toolbar-buttons="buttons"
-                    button-action="buttonAction()"
-                    >
-            </widget-table>
+        <widget-table
+                datarows="cargo_items"
+                dataheader="tableHeader"
+                edit="edit()"
+                row="row"
+                toolbar-inputs="inputs"
+                toolbar-buttons="buttons"
+                button-action="buttonAction()"
+                >
+        </widget-table>
     </div>
     <!-- start right side -->
 
@@ -63,6 +65,9 @@
                         <td class="text-center">
                             100
                         </td>
+                        <td class="text-center">
+                            <button type="submit" class="btn btn-default"><span class="fa fa-trash-o"></span></button>
+                        </td>
                     </tr>
                     <tr>
                         <td class="text-center">
@@ -86,7 +91,10 @@
                             2x
                         </td>
                         <td class="text-center">
-                            300
+                            100
+                        </td>
+                        <td class="text-center">
+                            <button type="submit" class="btn btn-default"><span class="fa fa-trash-o"></span></button>
                         </td>
                     </tr>
                     </tbody>

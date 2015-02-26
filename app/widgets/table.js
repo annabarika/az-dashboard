@@ -115,6 +115,7 @@
                 ,dataheader:"="
                 ,edit:"&"
                 ,row:"="
+                ,toolbarInputs:"="
                 ,toolbarButtons:"="
                 ,buttonAction:"&"
                 ,caption:"@"
