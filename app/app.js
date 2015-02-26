@@ -1,6 +1,6 @@
 var config = {
 	API: {
-		host: 'http://localhost:7888/api/',
+		host: 'http://green.f.compass/api/',
 		key: 'test'
 	}
 };
@@ -34,9 +34,6 @@ var config = {
 					}
 					return result.join("&");
 				});*/
-
-
-
 
 			$locationProvider.html5Mode(true);
 

@@ -1,6 +1,6 @@
 <?php
 //error_reporting(2047);
-
+#phpinfo();
 require __DIR__.'/config.php';
 require __DIR__.'/API.php';
 //'uml.maggadda.dev95.ru'
@@ -22,17 +22,39 @@ try {
 	else if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (!empty($_FILES)){
 
-			$files = [];
+			foreach($_FILES as $key=>$file) {
+				$exec = "curl -i -X POST -H \"Content-Type: multipart/form-data\" -F \"file=@{$file['tmp_name']};filename={$file['name']}\" http://lex.b.compass/order/loadfiles";
+				echo $exec;
+				echo system($exec);
+
+/*				$request = curl_init('http://lex.b.compass/order/loadfiles/');
+				curl_setopt($request, CURLOPT_POST, true);
+				curl_setopt($request, CURLOPT_SAFE_UPLOAD, true);
+
+				curl_setopt(
+					$request,
+					CURLOPT_POSTFIELDS,
+					array(
+						'file' => '@' . $file['tmp_name']
+					));
+				curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+				print_r(curl_exec($request));
+				curl_close($request);*/
+			}
+die();
+			/*$files = [];
 			require __DIR__.'/CURLBot.php';
 
 			$bot = new CurlBot();
 			foreach($_FILES as $key=>$file) {
+				print_r($file);
 				$file['name'] = $file['tmp_name'];
 				$bot->submitForm('http://lex.b.compass/order/loadfiles', array(), $file);
 				print_r($bot->getPageHeader());
 				print_r($bot->getPageBody());
 			}
-			die();
+
+			die();*/
 		}else {
 
 			$APIService->setMethod('POST');

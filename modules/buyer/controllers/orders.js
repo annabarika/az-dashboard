@@ -12,7 +12,6 @@ app.controller('OrderListController',
         "$route",
         "RestFactory",
 
-
         function ($scope, $rootScope, $modal, $location, $route, RestFactory){
 
             $scope.$route = $route;
@@ -83,8 +82,7 @@ app.controller('OrderListController',
                     });
             };
 
-
-            /* Loading factories */
+             //Loading factories
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
 					var factory = [];
@@ -98,7 +96,7 @@ app.controller('OrderListController',
                     console.log(error);
                 });
 
-            /* Loading statuses */
+             //Loading statuses
             RestFactory.request(config.API.host + "status/load")
                 .then(function(response){
 					var statusByType = [];

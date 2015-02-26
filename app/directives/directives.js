@@ -165,20 +165,4 @@
         }
     }]);
 
-    /* drag and drop directive*/
-    app.directive("draggable",[function(){
-
-        return{
-            restrict:"A",
-            link:function($scope,elm,attrs){
-
-                /*$(elm).on('click',function(){
-                    console.log(elm);
-                })*/
-                elm.on('dragstart',function(e){
-                    console.log(elm);
-                })
-            }
-        }
-    }]);
 })();
