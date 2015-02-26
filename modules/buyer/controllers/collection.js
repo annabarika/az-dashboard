@@ -16,13 +16,26 @@ app.controller('NewCollectionController',
         function ($scope, $rootScope, $modal, $location, $route, RestFactory){
             var fileinput;
 
-            $scope.collectionTemplates = {
-                1: "modules/buyer/views/collection/upload.html",
-                2: "modules/buyer/views/collection/prepare.html",
-                3: "modules/buyer/views/collection/finish.html"
-            };
+            $scope.collectionTemplates = [
+                 "modules/buyer/views/collection/upload.html",
+                 "modules/buyer/views/collection/prepare.html",
+                 "modules/buyer/views/collection/finish.html"
+            ];
 
-            $scope.step=1;
+            $scope.step=0;
+
+            $scope.stepIcons=document.getElementsByClassName('steps');
+
+            $scope.$watch('step',function(newVal,oldVal){
+                console.log(newVal,oldVal);
+               // $scope.stepIcons[oldVal].classList.remove('active');
+                $scope.stepIcons[newVal].classList.add('active');
+            });
+
+
+
+
+
 
             /* Getting collection */
             $rootScope.documentTitle = "Collection";
@@ -54,12 +67,14 @@ app.controller('NewCollectionController',
 
             $scope.back=function(){
 
-                if($scope.step==3){
-                    $scope.step=1;
+                if($scope.step==2){
+                    console.log("finish",$scope.step);
+                    $scope.step=0;
+                    $scope.stepIcons[oldVal].classList.remove('active');
                 }
 
                 else{
-                    if($scope.step>1) {
+                    if($scope.step>0) {
                         console.log($scope.step);
                         $scope.step--;
                     }

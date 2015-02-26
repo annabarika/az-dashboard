@@ -7,7 +7,7 @@
             <p class="text-muted mb-lg">Please upload photos of new collection</p>
             <ul class="step">
                 <li>
-                    <div class="steps active">
+                    <div class="steps">
                         <span class="steps-figure">1</span>
                         <span class="steps-text">Upload photos</span>
                     </div>
@@ -51,16 +51,16 @@
                 <!-- start upload -->
                 <div ng-include="collectionTemplates[step]"></div>
 
-                <div class="clearfix" ng-hide="step==3">
+                <div class="clearfix" ng-hide="step==2">
                     <a class="btn btn-primary" ng-click="back()"><span class="fa fa-long-arrow-left" ></span> Back</a>
                     <button type="submit" class="btn btn-primary pull-right" ng-click="nextStep()">
-                        <span ng-show="step==1">Next step</span>
-                        <span ng-show="step==2">Finish</span>
+                        <span ng-show="step==0">Next step</span>
+                        <span ng-show="step==1">Finish</span>
                         <span class="fa fa-long-arrow-right"></span>
                     </button>
                 </div>
 
-                <div class="row mt-lg" ng-show="step==3">
+                <div class="row mt-lg" ng-show="step==2">
                     <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
                         <a class="btn btn-block btn-primary" ng-click="back()">Go Back</a>
                     </div>

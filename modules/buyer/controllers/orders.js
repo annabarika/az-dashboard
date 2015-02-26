@@ -258,13 +258,13 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
 
     $scope.$watch('files',function(){
         console.log($rootScope.files);
-
+        var i=1;
         var fd = new FormData();
         angular.forEach($rootScope.files, function(file){
-            fd.append('file', file);
-
+            fd.append('file'+i, file);
+            i++;
         });
-
+        fd.append('id',5);
         console.log(fd);
 
         var url = config.API.host + "order/loadfiles",
@@ -272,17 +272,18 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             id= 5,
             data={
                 id:id,
-                files:fd
+                jpg:fd[0],
+                pdf:fd[1]
             },
             method="POST";
 
-        RestFactory.request(url,method,fd,"multipart")
+        /*RestFactory.request(url,method,fd,"multipart")
             .then(function(response){
                 console.log(response);
             },
             function(error){
                 console.log(error);
-            });
+            });*/
         /*$http.post(url,fd,
                 {
                     transformRequest: angular.identity,
@@ -321,14 +322,24 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             });
 
             return deferred.promise;*/
+        if($rootScope.files){
+           // $scope.upload($rootScope.files);
+            $http.post(url,fd,
+                {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                })
+                .success(function(data){
+                    console.log(data);
+                });
+        }
 
-       // $scope.upload($rootScope.files);
 
     });
 
     $scope.upload = function (files) {
         var url = config.API.host + "order/loadfiles";
-        /*if (files && files.length) {
+        if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 $upload.upload({
@@ -346,8 +357,8 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                     JSON.stringify(data));
                 });
             }
-        }*/
-        $upload.upload({
+        }
+       /* $upload.upload({
             url: url,
             fields: {
                 id: 5
@@ -356,7 +367,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
         })
             .success(function (data, status, headers, config) {
             console.log(data);
-        });
+        });*/
     };
 
 

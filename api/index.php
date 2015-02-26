@@ -20,9 +20,25 @@ try {
 	}
 
 	else if($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$APIService->setMethod('POST');
-		$_POST = json_decode(file_get_contents("php://input"), true);
-		$APIService->setData($_POST);
+		if (!empty($_FILES)){
+
+			$files = [];
+			require __DIR__.'/CURLBot.php';
+
+			$bot = new CurlBot();
+			foreach($_FILES as $key=>$file) {
+				$file['name'] = $file['tmp_name'];
+				$bot->submitForm('http://lex.b.compass/order/loadfiles', array(), $file);
+				print_r($bot->getPageHeader());
+				print_r($bot->getPageBody());
+			}
+			die();
+		}else {
+
+			$APIService->setMethod('POST');
+			$_POST = json_decode(file_get_contents("php://input"), true);
+			$APIService->setData($_POST);
+		}
 	}
 	else if($_SERVER['REQUEST_METHOD'] == 'PUT') {
 		$input = file_get_contents('php://input');
@@ -38,6 +54,7 @@ try {
 		$APIService->setMethod('DELETE');
 		$APIService->setData($params);
 	}
+
 	$response = $APIService->setURL($request)->call();
 	echo json_encode($response);
 
