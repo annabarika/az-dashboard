@@ -23,7 +23,7 @@ try {
 		if (!empty($_FILES)){
 
 			foreach($_FILES as $key=>$file) {
-				$exec = "curl -i -X POST -H \"Content-Type: multipart/form-data\" -F \"file=@{$file['tmp_name']};filename={$file['name']}\" http://lex.b.compass/order/loadfiles";
+				$exec = "curl -i -X POST -H \"Content-Type: multipart/form-data\" -F \"file=@{$file['tmp_name']};filename={$file['name']};id=4\" http://lex.b.compass/order/loadfiles";
 				echo $exec;
 				echo system($exec);
 

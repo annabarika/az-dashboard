@@ -47,7 +47,7 @@ app.controller('OrderListController',
 				{ name: "createDate", title: 'Create date' },
 				{ name: "deliveryDate", title: 'Production date' }
 			];
-            $scope.getOrders=function(){
+
                 RestFactory.request(config.API.host + "order/load")
                     .then(function(response){
                         var data = [];
@@ -65,6 +65,7 @@ app.controller('OrderListController',
                         }
                         $scope.data = data;
                         $scope.orders = $scope.data;
+                        console.log($scope.orders);
 
                         $scope.buttons = [
                             {
@@ -80,7 +81,7 @@ app.controller('OrderListController',
                     function(error){
                         console.log(error);
                     });
-            };
+
 
              //Loading factories
             RestFactory.request(config.API.host + "factory/load")
@@ -214,7 +215,7 @@ app.controller('OrderListController',
                             });
                     }
                     else{
-                        $scope.getOrders();
+                        $scope.orders=$scope.data;
                     }
             });
 
@@ -244,98 +245,70 @@ app.controller('OrderListController',
                 $scope.$apply();
             };*/
 
-            $scope.$watch('files',function(){
-                $rootScope.files=$scope.files;
+            $scope.$watch('files',function(newVal){
+                console.log(newVal);
+                if(newVal){
+                    $rootScope.uploadFiles=$scope.files;
+                }
             });
-
 
 
 }]);
 
-app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http,$q,$upload){
+app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http){
 
-    $scope.$watch('files',function(){
-        console.log($rootScope.files);
-        var i=1;
-        var fd = new FormData();
-        angular.forEach($rootScope.files, function(file){
-            fd.append('file'+i, file);
-            i++;
-        });
-        fd.append('id',5);
-        console.log(fd);
+    $scope.upload=function(){
+        fileinput = document.getElementById("FilesNewOrder");
+        fileinput.click();
+    };
 
-        var url = config.API.host + "order/loadfiles",
-       // var url = "http://lex.b.compass/order/loadfiles",
-            id= 5,
-            data={
-                id:id,
-                jpg:fd[0],
-                pdf:fd[1]
-            },
-            method="POST";
+    $scope.$watch('uploadFiles',function(){
+        //console.log("this",newVal,oldVal);
+         if($rootScope.uploadFiles){
 
-        /*RestFactory.request(url,method,fd,"multipart")
-            .then(function(response){
-                console.log(response);
-            },
-            function(error){
-                console.log(error);
-            });*/
-        /*$http.post(url,fd,
-                {
-                    transformRequest: angular.identity,
-                    headers: {'Content-Type': 'multipart/form-data'}
-                })
-            .success(function(data){
-                console.log(data);
-            });*/
-
-
-            /*var deferred = $q.defer();
-
-            $  .ajax({
-                url:url,
-                type:method,
-                data:data,
-                dataType:"json",
-                contentType:"application/x-www-form-urlencoded; charset=utf-8",
-                success:function(response)
-                {
-                    if(response)
-                    {
-                        deferred.resolve(response);
-                    }
-                    else
-                    {
-                        deferred.resolve(response);
-                    }
-                },
-                error:function(jqXHR,textStatus,errorThrown, error)
-                {
-                    console.log("You can not send Cross Domain AJAX requests: "+errorThrown);
-
-                    deferred.reject(error);
-                }
+            var i=1;
+            var fd = new FormData();
+            angular.forEach($rootScope.uploadFiles, function(file){
+                fd.append('file'+i, file);
+                i++;
             });
+            fd.append('id',5);
+            console.log(fd);
 
-            return deferred.promise;*/
-        if($rootScope.files){
-           // $scope.upload($rootScope.files);
-            $http.post(url,fd,
-                {
-                    transformRequest: angular.identity,
-                    headers: {'Content-Type': undefined}
-                })
-                .success(function(data){
-                    console.log(data);
+            var url = config.API.host + "order/loadfiles",
+           // var url = "http://lex.b.compass/order/loadfiles",
+                id= 5,
+                data={
+                    id:id,
+                    jpg:fd[0],
+                    pdf:fd[1]
+                },
+                method="POST";
+
+            RestFactory.request(url,method,fd,"multipart")
+                .then(function(response){
+                    console.log(response);
+                },
+                function(error){
+                    console.log(error);
                 });
+
+
+               // $scope.upload($rootScope.files);
+               /* $http.post(url,fd,
+                    {
+                        transformRequest: angular.identity,
+                        headers: {'Content-Type': undefined}
+                    })
+                    .success(function(data){
+                        console.log(data);
+                    });*/
         }
 
 
     });
 
-    $scope.upload = function (files) {
+   /* $scope.upload = function (files) {
         var url = config.API.host + "order/loadfiles";
         if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
@@ -356,17 +329,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                 });
             }
         }
-       /* $upload.upload({
-            url: url,
-            fields: {
-                id: 5
-            },
-            file: files
-        })
-            .success(function (data, status, headers, config) {
-            console.log(data);
-        });*/
-    };
+    };*/
 
 
 

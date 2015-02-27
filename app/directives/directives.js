@@ -159,7 +159,6 @@
                     $parse(attrs.fileInput)
                         .assign(scope,elm[0].files);
                         scope.$apply();
-                    //console.log(elm);
                 });
             }
         }

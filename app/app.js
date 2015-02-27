@@ -15,8 +15,7 @@ var config = {
 		"widgets",
 		"ui.bootstrap",
 		"services",
-		"modules.buyer",
-		"angularFileUpload"
+		"modules.buyer"
 	])
 
 		.config(function ($routeProvider, $locationProvider, $httpProvider) {

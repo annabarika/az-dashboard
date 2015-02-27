@@ -27,8 +27,6 @@ app.controller('NewCollectionController',
             $scope.stepIcons=document.getElementsByClassName('steps');
 
             $scope.$watch('step',function(newVal,oldVal){
-                console.log(newVal,oldVal);
-               // $scope.stepIcons[oldVal].classList.remove('active');
                 $scope.stepIcons[newVal].classList.add('active');
             });
 
@@ -46,10 +44,8 @@ app.controller('NewCollectionController',
             }).disableSelection();*/
 
             $scope.upload=function(){
-                //console.log('test');
                 fileinput = document.getElementById("fileUpload");
                 fileinput.click();
-
             };
 
             $scope.count=321;
@@ -70,7 +66,9 @@ app.controller('NewCollectionController',
                 if($scope.step==2){
                     console.log("finish",$scope.step);
                     $scope.step=0;
-                    $scope.stepIcons[oldVal].classList.remove('active');
+                    for(i=0;i<$scope.stepIcons.length;i++){
+                        $scope.stepIcons[i].classList.remove('active');
+                    }
                 }
 
                 else{

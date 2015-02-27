@@ -13,23 +13,6 @@ app.config(function($routeProvider){
 		{
 			templateUrl:"/modules/buyer/views/orders/index.html",
 			controller:"OrderListController"
-			/*,resolve:{
-				getFactory:function(RestFactory){
-					RestFactory.request(config.API.host+"factory/load")
-						.then(function(response){
-							var factory = [];
-							for( var i in response ){
-
-								factory.push( { type:"factory", id: response[i].factory.id, name: response[i].factory.name } );
-							}
-							//console.log(factory);
-							return factory;
-						},
-						function(error){
-							console.log(error);
-						});
-				}
-			}*/
 		}
 	)
 		.when('/buyer/orders/id/:orderId',

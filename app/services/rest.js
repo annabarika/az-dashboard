@@ -31,7 +31,6 @@
 				var req =                     {
 					method: method,
 					url: url,
-					headers: headers,
 					data: data
 				};
 				//console.log(req);
