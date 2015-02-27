@@ -99,7 +99,7 @@ app.controller('CargoCartController',
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo";
             $scope.tableHeader = [
-                { name: "photo", title: 'Photo' },
+                { name: "photo", title: 'photo' },
                 { name: "article", title: 'Article/Name' },
                 { name: "size", title: 'Size' },
                 { name: "count", title: 'Count' },

@@ -23,6 +23,7 @@
                         <thead>
                         <tr ng-show="dataheader">
                             <th> # </th>
+
                             <th class="sorting" ng-repeat="headerRow in dataheader"
                                 ng-click="sortReorder(headerRow.name, $event)"
                                 ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
@@ -37,7 +38,7 @@
 
                             <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
 
-                                <img src="{{row.photo}}" class="thumbnail sm" ng-if="headerRow.name=='photo'">
+                                <img src="{{row.photo}}" ng-if="headerRow.name=='photo'">
 
                                 <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">{{row[headerRow.name]}}</div>
 

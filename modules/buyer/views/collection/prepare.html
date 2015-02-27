@@ -1,4 +1,4 @@
-<div class="pa-md">
+<div class="pa-md" ng-controler="NewCollectionController">
     <table class="table">
         <thead>
         <tr>
@@ -9,17 +9,16 @@
             <th></th>
         </tr>
         </thead>
+
         <tbody>
-        <tr>
+        <tr ng-repeat="item in collection">
             <td>
-                <ul id="sort1" class="sort">
-                    <li>
-                        <img class="thumbnail sm" src="/assets/images/avatar/avatar8.jpg">
-                    </li>
-                    <li>
-                        <img class="thumbnail sm" src="/assets/images/avatar/avatar7.jpg">
-                    </li>
-                </ul>
+                <!--<ul id="sort1" class="sort" ng-repeat="photo in item.photo track by $index">-->
+                <!--<li>-->
+                <!--<img class="thumbnail sm" src={{photo}} draggable>-->
+                <!--</li>-->
+                <!--</ul>-->
+                {{item.name}}
             </td>
             <td>
                 <input class="form-control" type="text">
@@ -29,81 +28,6 @@
             </td>
             <td>
                 <input class="form-control" type="number">
-            </td>
-            <td align="center">
-                <div class="toolbar">
-                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul id="sort2" class="sort">
-                    <li>
-                        <img class="thumbnail sm" src="/assets/images/avatar/avatar15.jpg">
-                    </li>
-                    <li>
-                        <img class="thumbnail sm" src="/assets/images/avatar/avatar16.jpg">
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <input class="form-control" type="text">
-            </td>
-            <td>
-                <input class="form-control" type="text">
-            </td>
-            <td>
-                <input class="form-control" type="number">
-            </td>
-            <td align="center">
-                <div class="toolbar">
-                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul id="sort3" class="sort">
-                    <li>
-                        <img class="thumbnail sm" src="/assets/images/avatar/avatar11.jpg">
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <input class="form-control" type="text">
-            </td>
-            <td>
-                <input class="form-control" type="text">
-            </td>
-            <td>
-                <input class="form-control" type="number">
-            </td>
-            <td align="center">
-                <div class="toolbar">
-                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul id="sort4" class="sort">
-                    <li>
-                        <img class="thumbnail sm" src="/assets/images/avatar/avatar18.jpg">
-                    </li>
-                    <li>
-                        <img class="thumbnail sm" src="/assets/images/avatar/avatar17.jpg">
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <input class="form-control" type="text"/>
-            </td>
-            <td>
-                <input class="form-control" type="text"/>
-            </td>
-            <td>
-                <input class="form-control" type="number"/>
             </td>
             <td align="center">
                 <div class="toolbar">
@@ -113,11 +37,4 @@
         </tr>
         </tbody>
     </table>
-    <!-- Buttons -->
-    <hr>
-    <div class="clearfix">
-        <a class="btn btn-primary"><span class="fa fa-long-arrow-left"></span> Back</a>
-        <button type="submit" class="btn btn-success pull-right">Finish <span class="fa fa-check"></span></button>
-    </div>
-    <!--/ Buttons -->
 </div>

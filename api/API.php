@@ -1,11 +1,9 @@
 <?php
-
 /**
  * Class API (RESTful API)
  *
  */
 class API {
-
 	/**
 	 * @var array
 	 */
@@ -34,7 +32,6 @@ class API {
 	 * @var
 	 */
 	private $data;
-
 	/**
 	 * @param $host
 	 */
@@ -44,12 +41,10 @@ class API {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_TIMEOUT => 2
 		);
-
 		$this->host 	= 'http://'.$host;
 		$this->url 		= '/';
 		$this->method 	= 'GET';
 	}
-
 	/**
 	 * @param $url
 	 * @return $this
@@ -58,7 +53,6 @@ class API {
 		$this->url = $url;
 		return $this;
 	}
-
 	/**
 	 * @param $host
 	 * @return $this
@@ -67,7 +61,6 @@ class API {
 		$this->host = $host;
 		return $this;
 	}
-
 	/**
 	 * @param $method
 	 * @return $this
@@ -76,7 +69,6 @@ class API {
 		$this->method = $method;
 		return $this;
 	}
-
 	/**
 	 * @param $params
 	 * @return $this
@@ -85,7 +77,6 @@ class API {
 		$this->params = http_build_query( $params );
 		return $this;
 	}
-
 	/**
 	 * @param $data
 	 * @return $this
@@ -94,7 +85,6 @@ class API {
 		$this->data = $data;
 		return $this;
 	}
-
 	/**
 	 * @return resource
 	 */
@@ -102,7 +92,6 @@ class API {
 		$this->handle = curl_init();
 		return  $this->handle;
 	}
-
 	/**
 	 * @return resource
 	 */
@@ -113,7 +102,6 @@ class API {
 			return $this->setHandle();
 		}
 	}
-
 	/**
 	 * @return mixed
 	 */
@@ -130,5 +118,4 @@ class API {
 		#print_r($options);
 		return json_decode(curl_exec($this->getHandle()), true);
 	}
-
 }

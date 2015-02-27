@@ -7,7 +7,7 @@
             <p class="text-muted mb-lg">Please upload photos of new collection</p>
             <ul class="step">
                 <li>
-                    <div class="steps active">
+                    <div class="steps">
                         <span class="steps-figure">1</span>
                         <span class="steps-text">Upload photos</span>
                     </div>
@@ -47,135 +47,28 @@
 
 
         <div class="container-fluid pt-md pb-md">
-            <div class="slide-down" data-ui-view>
-
+            <div class="slide-down">
                 <!-- start upload -->
-                <div class="pa-md">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Photo</th>
-                            <th>Article</th>
-                            <th>Size</th>
-                            <th>Price</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <ul id="sort1" class="sort">
-                                    <li>
-                                        <img class="thumbnail sm" src="/assets/images/avatar/avatar8.jpg">
-                                    </li>
-                                    <li>
-                                        <img class="thumbnail sm" src="/assets/images/avatar/avatar7.jpg">
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                <input class="form-control" type="text">
-                            </td>
-                            <td>
-                                <input class="form-control" type="text">
-                            </td>
-                            <td>
-                                <input class="form-control" type="number">
-                            </td>
-                            <td align="center">
-                                <div class="toolbar">
-                                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ul id="sort2" class="sort">
-                                    <li>
-                                        <img class="thumbnail sm" src="/assets/images/avatar/avatar15.jpg">
-                                    </li>
-                                    <li>
-                                        <img class="thumbnail sm" src="/assets/images/avatar/avatar16.jpg">
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                <input class="form-control" type="text">
-                            </td>
-                            <td>
-                                <input class="form-control" type="text">
-                            </td>
-                            <td>
-                                <input class="form-control" type="number">
-                            </td>
-                            <td align="center">
-                                <div class="toolbar">
-                                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ul id="sort3" class="sort">
-                                    <li>
-                                        <img class="thumbnail sm" src="/assets/images/avatar/avatar11.jpg">
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                <input class="form-control" type="text">
-                            </td>
-                            <td>
-                                <input class="form-control" type="text">
-                            </td>
-                            <td>
-                                <input class="form-control" type="number">
-                            </td>
-                            <td align="center">
-                                <div class="toolbar">
-                                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ul id="sort4" class="sort">
-                                    <li>
-                                        <img class="thumbnail sm" src="/assets/images/avatar/avatar18.jpg">
-                                    </li>
-                                    <li>
-                                        <img class="thumbnail sm" src="/assets/images/avatar/avatar17.jpg">
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                <input class="form-control" type="text"/>
-                            </td>
-                            <td>
-                                <input class="form-control" type="text"/>
-                            </td>
-                            <td>
-                                <input class="form-control" type="number"/>
-                            </td>
-                            <td align="center">
-                                <div class="toolbar">
-                                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <!-- Buttons -->
-                    <hr>
-                    <div class="clearfix">
-                        <a class="btn btn-primary"><span class="fa fa-long-arrow-left"></span> Back</a>
-                        <button type="submit" class="btn btn-success pull-right">Finish <span class="fa fa-check"></span></button>
-                    </div>
-                    <!--/ Buttons -->
-                </div>
-                <!--/ end upload -->
+                <div ng-include="collectionTemplates[step]"></div>
 
-            </div>
+                <div class="clearfix" ng-hide="step==2">
+                    <a class="btn btn-primary" ng-click="back()"><span class="fa fa-long-arrow-left" ></span> Back</a>
+                    <button type="submit" class="btn btn-primary pull-right" ng-click="nextStep()">
+                        <span ng-show="step==0">Next step</span>
+                        <span ng-show="step==1">Finish</span>
+                        <span class="fa fa-long-arrow-right"></span>
+                    </button>
+                </div>
+
+                <div class="row mt-lg" ng-show="step==2">
+                    <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
+                        <a class="btn btn-block btn-primary" ng-click="back()">Go Back</a>
+                    </div>
+                </div>
+
+
+
+
         </div>
     </div>
 </div>
