@@ -233,7 +233,7 @@ body > #app-wrapper {
     color: rgba(0, 0, 0, 0.75);
 }
 #app-header.navbar .navbar-nocollapse .navbar-left {
-    float: right !important;
+    float: left !important;
 }
 #app-header.navbar .navbar-nocollapse .navbar-left .open .dropdown-menu {
     left: 0;
@@ -285,6 +285,9 @@ body > #app-wrapper {
     }
 }
 @media (max-width: 767px) {
+    #app-header.navbar .navbar-nocollapse .navbar-left {
+        float: right !important;
+    }
     .csstransforms3d.sidebar-open-ltr.app-sidebar.sidebar-left {
         -webkit-transform: translate3d(250px, 0, 0);
         transform: translate3d(250px, 0, 0);
@@ -643,8 +646,11 @@ footer .alert{
     border-radius: 2px;
     border: 2px dashed #dbdfe3;
 }
+td ul.sm{
+    width: 90px;
+}
 input.sm{
-    width: 15%!important;
+    width: 70px!important;
 }
 ul.sortable{
     list-style: none;

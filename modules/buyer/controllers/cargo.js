@@ -184,7 +184,8 @@ app.controller('CargoCartController',
                 modalWindow=$modal.open({
                     templateUrl: "/modules/buyer/views/cargo/send_shipment.html",
                     controller: 'CargoController',
-                    backdrop:'static'
+                    backdrop:'static',
+                    size:'sm'
                 });
             };
 
