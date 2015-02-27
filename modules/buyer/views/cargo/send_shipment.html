@@ -9,18 +9,18 @@
             <table class="table table-hover">
                 <tbody>
                 <tr>
-                    <td>Cargo shipped</td>
                     <td>
                         <p class="form-inline">
-                            <input class="form-control" type="text">&nbsp;kg
+                            <label class="control-label">Cargo shipped (kg)</label>
+                            <input class="sm form-control pull-right" type="text">
                         </p>
                     </td>
                 </tr>
                 <tr>
-                    <td>Cargo places</td>
                     <td>
                         <p class="form-inline">
-                            <input class="form-control" type="text">
+                            <label class="control-label">Cargo places</label>
+                            <input class="sm form-control pull-right" type="text">
                         </p>
                     </td>
                 </tr>
@@ -32,6 +32,6 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-info"><span class="fa fa-file-o"> Print document</span></button>
         <button type="button" class="btn btn-primary"><span class="fa fa-check"> Send cargo</span></button>
-        <button type="button" class="btn btn-default" ng-click="$close()"><span class="fa fa-times"> Cancel</span></button>
+        <button type="button" class="btn btn-danger pull-right mt-10" ng-click="$close()"><span class="fa fa-times"> Cancel</span></button>
     </div>
 </div>
