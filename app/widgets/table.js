@@ -33,7 +33,6 @@
         };
         return service;
     }]);
-
     app.filter('orderByEx', orderByExFilter);
 
     function orderByExFilter($parse){ // modified version of native Angular orderBy filter
@@ -116,6 +115,7 @@
                 ,dataheader:"="
                 ,edit:"&"
                 ,row:"="
+                ,toolbarInputs:"="
                 ,toolbarButtons:"="
                 ,buttonAction:"&"
                 ,caption:"@"

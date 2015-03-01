@@ -1,92 +1,49 @@
 <div class="page-header">
-        <button type="submit" class="btn btn-info"><span class="fa fa-check"> Save</span></button>
-        <button type="submit" class="btn btn-success" ng-click="addNewItems()"><span class="fa fa-plus"> Add products</span></button>
-        <button type="submit" class="btn btn-success"><span class="fa fa-check"> Send cargo</span></button>
-        <button type="submit" class="btn btn-danger"><span class="fa fa-check"> Cancel</span></button>
-        <button type="submit" class="btn btn-primary"><span class="fa fa-check"> Print</span></button>
-</div>
-
-<div class="container-fluid pt-md pb-md">
-    <div class="row">
-    <div class="col-md-6">
-        <!-- start: panel -->
-        <div class="panel panel-default border-n mt-20">
-            <!-- start: table responsive -->
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered">
-                    <tbody>
-                    <tr>
-                        <td>Factory</td>
-                        <td>Viverra Company</td>
-                    </tr>
-                    <tr>
-                        <td>Total amount</td>
-                        <td>3200 &yen;</td>
-                    </tr>
-                    <tr>
-                        <td>Cargo company</td>
-                        <td><p class="form-inline">
-                            <select class="form-control">
-                            <option value="">Choose cargo</option>
-                            </select>
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Cargo doc</td>
-                        <td><p class="form-inline"><input class="form-control sm" type="text"></p></td>
-                    </tr>
-                    <tr>
-                        <td>Сurrency</td>
-                        <td><p class="form-inline"><input class="form-control sm" type="text"></p></td>
-                    </tr>
-                    </tbody>
-                </table>
+    <div class="box-layout">
+        <div class="row mb-xs">
+            <div class="col-sm-1">
+                <div class="btn btn-info" ng-click="addNewItems()"><i class="fa fa-plus"></i> New cargo</div>
             </div>
-            <!--/ end: table responsive -->
-        </div>
-        <!--/ end: panel -->
-    </div>
-
-    <div class="col-md-6">
-        <!-- start: panel -->
-        <div class="panel panel-default border-n mt-20">
-            <!-- start: table responsive -->
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered">
-                    <tbody>
-                    <tr>
-                        <td>Weight shipped</td>
-                        <td>
-                            <p class="form-inline">
-                            <input class="form-control sm" type="text">&nbsp;kg
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Places shipped</td>
-                        <td>
-                            <p class="form-inline">
-                            <input class="form-control sm" type="text">
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Weight income</td>
-                        <td>319 kg</td>
-                    </tr>
-                    <tr>
-                        <td>Places income</td>
-                        <td>12</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="col-sm-5">
+                <div class="col-sm-3 va-m">
+                    <multi-select
+                            default-label="Status filter"
+                            input-model="orderStatus"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-4 va-m">
+                    <multi-select
+                            default-label="Payment status"
+                            input-model="orderPaymentStatus"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-5 va-m">
+                    <multi-select
+                            default-label="Factory filter"
+                            input-model="Factory"
+                            output-model="resultData"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="2"
+                            >
+                    </multi-select>
+                </div>
             </div>
-            <!--/ end: table responsive -->
         </div>
-        <!--/ end: panel -->
     </div>
-</div>
 </div>
 
 <widget-table

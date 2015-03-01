@@ -27,6 +27,12 @@ app.config(function($routeProvider){
 			controller:"BestCalendarController"
 		}
 	)
+        .when('/buyer/bestsellers/bestseller_cart',
+        {
+            templateUrl:"/modules/buyer/views/bestsellers/bestseller_cart.html",
+            controller:"BestsellerCartController"
+        }
+    )
 		.when('/buyer/payments',
 		{
 			templateUrl:"/modules/buyer/views/payments/index.html",
