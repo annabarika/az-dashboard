@@ -12,16 +12,13 @@ app.controller('BestCalendarController',
 		"$route",
 		"RestFactory",
 
-
 		function ($scope, $rootScope, $modal, $location, $route, RestFactory){
 
 			$scope.$route = $route;
 			$scope.$location = $location;
-			var url,data,method,header,length,array,year,month;
+			var url,data,method,header,length,array,year,month,monthBegin,monthEnd;
 			/* Getting payments */
 			$rootScope.documentTitle = "Bestsellers";
-
-			url=config.API.host+"bestseller/load/status/1";
 
 			$scope.months=
 			{
@@ -38,28 +35,17 @@ app.controller('BestCalendarController',
 				'11':'November',
 				'12':'December'
 			};
-			/*$scope.months=[
-				{'01':'January'},
-				{'02':'Fabruary'},
-				{'03':'March'},
-				{'04':'April'},
-				{'05':'May'},
-				{'06':'June'},
-				{'07':'July'},
-				{'08':'August'},
-				{'09':'September'},
-				{'10':'October'},
-				{'11':'November'},
-				{'12':'December'}
-			];*/
-			$scope.years=
-			[
-				"2013",
-				"2014",
-				"2015"
-			];
+
+			$scope.current_year=new Date().getFullYear();
+
+			$scope.changeYear=function(step){
+				$scope.current_year=$scope.current_year+step;
+			};
 
 			$scope.bestsellers={};
+
+			url=config.API.host+"bestseller/load/status/1";
+
 			RestFactory.request(url)
 				.then(function(response){
 
@@ -77,13 +63,11 @@ app.controller('BestCalendarController',
 								}
 							})
 						}
-						//console.log(tempArr);
 						array=[];
 						angular.forEach(tempArr,function(value,key){
 
 							if($scope.bestsellers[value.year]==undefined){
-								//$scope.bestsellers[value.year]={};
-								//$scope.bestsellers[value.year]=[];
+
 								$scope.bestsellers[value.year]={
 									'01':[],
 									'02':[],
@@ -106,8 +90,36 @@ app.controller('BestCalendarController',
 							});
 
 						});
-						console.log($scope.bestsellers);
+						console.log($scope.bestsellers,$scope.current_year);
 					}
 				});
+
+
+
+
+
+			$scope.currentMonth=function(monthName){
+				$scope.current_month=monthName;
+
+				angular.forEach($scope.months,function(value,key){
+					if(value==monthName){
+						month=key;
+
+					}
+				});
+				monthBegin=$scope.current_year+"-"+month+"-01";
+				monthEnd=$scope.current_year+"-"+month+"-31";
+				url=config.API.host+"bestseller/load-detailed/status/1/orderDate/"+monthBegin+","+monthEnd;
+				console.log(url);
+				RestFactory.request(url)
+					.then(function(response){
+						$scope.bests_orders=response;
+						console.log($scope.bests_orders);
+
+					},function(error){
+						console.log(error)
+					});
+			};
+
 
 		}]);
