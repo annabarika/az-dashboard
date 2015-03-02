@@ -41,7 +41,7 @@ app.controller('CargoController',
                 });
 
             /* Getting cargo */
-            $rootScope.documentTitle = "Cargo cart";
+            $rootScope.documentTitle = "Cargo";
             $scope.tableHeader = [
                 { name: "document", title: 'Document' },
                 { name: "cargoDoc", title: 'Cargo Document' },
@@ -97,7 +97,7 @@ app.controller('CargoCartController',
             $scope.$location = $location;
 
             /* Getting cargo */
-            $rootScope.documentTitle = "Cargo";
+            $rootScope.documentTitle = "Cargo cart";
             $scope.tableHeader = [
                 { name: "photo", title: 'Photo' },
                 { name: "article", title: 'Article/Name' },

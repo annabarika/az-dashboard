@@ -1,11 +1,11 @@
 <div class="page-header">
     <div class="box-layout">
         <div class="row mb-xs">
-            <div class="col-sm-1">
+            <div class="col-md-2 col-sm-2 mb-5">
                 <div class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> New order</div>
             </div>
-            <div class="col-sm-5">
-                <div class="col-sm-3 va-m">
+            <div class="col-md-5 col-sm-12 mb-5">
+                <div class="col-md-3 col-sm-3 va-m">
                     <multi-select
                             default-label="Status filter"
                             input-model="orderStatus"
@@ -17,7 +17,7 @@
                             >
                     </multi-select>
                 </div>
-                <div class="col-sm-4 va-m">
+                <div class="col-md-4 col-sm-4 va-m">
                     <multi-select
                             default-label="Payment status"
                             input-model="orderPaymentStatus"
@@ -29,7 +29,7 @@
                             >
                     </multi-select>
                 </div>
-                <div class="col-sm-5 va-m">
+                <div class="col-md-5 col-sm-5 va-m">
                     <multi-select
                             default-label="Factory filter"
                             input-model="Factory"
@@ -42,16 +42,16 @@
                     </multi-select>
                 </div>
             </div>
-            <div class="col-sm-6"  ng-controller="DatepickerCtrl">
+            <div class="col-md-5 col-sm-12"  ng-controller="DatepickerCtrl">
                 <div class="bs-docs-section">
                     <form name="datepickerForm" class="form-inline" role="form">
 
                         <!-- Date range example -->
                         <div class="form-group">
-                            <div class="col-xs-2">
+                            <div class="col-md-2 col-sm-2">
                                 <label class="control-label">Date dange:</label>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-md-4 col-sm-4">
                                 <p class="input-group">
                                     <input type="text" class="form-control" ng-click="openMin($event)" datepicker-popup="{{format}}" ng-model="dtMin" is-open="openedMin" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="min date"/>
                               <span class="input-group-btn">
@@ -59,10 +59,10 @@
                               </span>
                                 </p>
                             </div>
-                            <div class="col-xs-1 text-center">
+                            <div class="col-md-1 col-sm-1 text-center">
                                 <label class="control-label"><i class="fa fa-arrows-h"></i></label>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-md-4 col-sm-4">
                                 <p class="input-group">
                                     <input type="text" class="form-control" ng-click="openMax($event)" datepicker-popup="{{format}}" ng-model="dtMax" is-open="openedMax"  datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="max date"/>
                               <span class="input-group-btn">

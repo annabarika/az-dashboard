@@ -5689,7 +5689,7 @@ button.close {
 .visible-lg {
     display: none !important;
 }
-@media (max-width: 767px) {
+@media (min-width: 767px) and (max-width: 1024px)  {
     .visible-xs {
         display: block !important;
     }
@@ -5704,7 +5704,7 @@ button.close {
         display: table-cell !important;
     }
 }
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 767px) and (max-width: 1024px) {
     .visible-sm {
         display: block !important;
     }
@@ -5749,7 +5749,7 @@ button.close {
         display: table-cell !important;
     }
 }
-@media (max-width: 767px) {
+@media (min-width: 767px) and (max-width: 1024px)  {
     .hidden-xs {
         display: none !important;
     }
