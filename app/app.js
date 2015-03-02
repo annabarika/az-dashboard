@@ -1,6 +1,7 @@
 var config = {
 	API: {
-		host:"http://catwoman.f.compass/api/",
+		//host:"http://catwoman.f.compass/api/",
+		host:"http://localhost:7888/api/",
 		key: 'test'
 	}
 };
