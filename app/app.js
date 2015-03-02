@@ -1,6 +1,6 @@
 var config = {
 	API: {
-		host:"http://azimuth.local/api/",
+		host:"http://green.f.compass/api/",
 		key: 'test'
 	}
 };

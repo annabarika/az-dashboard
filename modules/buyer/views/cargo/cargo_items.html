@@ -10,6 +10,7 @@
                     <h4>Add items to document</h4>
                 </div>
                 <button type="submit" class="btn btn-info pull-right"><span class="fa fa-check"> Save</span></button>
+                <button class="btn-default" ng-click="addNewProducts()"><span class="fa fa-check"> Add products</span></button>
             </div>
             <!--/ basic info heading -->
         </div>
@@ -24,6 +25,7 @@
                 toolbar-inputs="inputs"
                 toolbar-buttons="buttons"
                 button-action="buttonAction()"
+                cellsButton="newSize()"
                 >
         </widget-table>
     </div>

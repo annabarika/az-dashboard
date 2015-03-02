@@ -57,7 +57,7 @@ app.controller('NewCollectionController',
             };*/
 
             $scope.$watch("photo",function(value){
-                console.log(value);
+               // console.log(value);
                 $rootScope.collection=value;
             });
 
