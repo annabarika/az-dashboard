@@ -1,4 +1,4 @@
 <?php
 $API = array(
-	'host' => 'lex.b.compass',
+	'host' => 'arrow.b.compass',
 );

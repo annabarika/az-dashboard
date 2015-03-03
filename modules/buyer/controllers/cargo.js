@@ -20,7 +20,8 @@ app.controller('CargoController',
             var length,row,
                 data,
                 url,
-                filter={};
+                filter={},
+                array;
             $scope.data=[];
             $scope.date=[];
             /* Loading factories */
@@ -58,48 +59,55 @@ app.controller('CargoController',
 
              RestFactory.request(config.API.host + "cargo/load")
                  .then(function(response){
-                      //console.log(response);
+                     // console.log(response);
                      if(response){
                          $scope.allCargo=response;
-                         length=response.length;
-                         for(var i=0;i<length;i++){
-                             data={};
-                             angular.forEach(response[i],function(item,k){
-                                 if(k=='cargo'){
-                                     angular.forEach(item,function(value,key){
-                                         if(key=='createDate'||key=='document'){
-                                             data[key]=value;
-                                            // $scope.date.push(item['createDate']);
-                                         }
-                                         if(key=='status'){
-
-                                             if($scope.orderPaymentStatus){
-                                                 data[key]=$scope.orderPaymentStatus[value].name;
-                                             }
-                                             else{
-                                                data[key]=value;
-                                             }
-
-                                         }
-                                     })
-                                 }
-                                 if(k=='factory'){
-                                     angular.forEach(item,function(value,key){
-                                         if(key=='name'){
-                                             data[k]=value;
-                                         }
-                                     })
-                                 }
-                             });
-                             $scope.data.push(data);
-                         }
-                        // console.log($scope.date);
+                         $scope.data=composeCargo(response);
                          $scope.cargo=$scope.data;
                      }
                  },function(error){
                      console.log(error);
                  });
 
+            function composeCargo(response){
+                length=response.length;
+                //console.log(length);
+                array=[];
+
+                for(var i=0;i<length;i++){
+                    data={};
+                    angular.forEach(response[i],function(item,k){
+                        if(k=='cargo'){
+                            angular.forEach(item,function(value,key){
+                                if(key=='createDate'||key=='document'){
+                                    data[key]=value;
+                                    // $scope.date.push(item['createDate']);
+                                }
+                                if(key=='status'){
+
+                                    if($scope.orderPaymentStatus){
+                                        data[key]=$scope.orderPaymentStatus[value].name;
+                                    }
+                                    else{
+                                        data[key]=value;
+                                    }
+
+                                }
+                            })
+                        }
+                        if(k=='factory'){
+                            angular.forEach(item,function(value,key){
+                                if(key=='name'){
+                                    data[k]=value;
+                                }
+                            })
+                        }
+                    });
+                    array.push(data);
+                }
+                //$scope.cargo=$scope.data;
+                return array;
+            }
              /*
              * filters*/
            $scope.$watchCollection('resultData',function(newVal){
@@ -138,7 +146,7 @@ app.controller('CargoController',
 
                     if(filter.orderPayment){
 
-                        url+="paymentStatus/"+filter.orderPayment.join()+"/";
+                        url+="status/"+filter.orderPayment.join()+"/";
                     }
                     if(filter.factory){
 
@@ -151,14 +159,15 @@ app.controller('CargoController',
                     RestFactory.request(url)
                         .then(
                         function(response){
-                            $scope.orders=response;
+                            $scope.cargo=composeCargo(response);
+                            //console.log(response);
                         },
                         function(error){
                             console.log(error);
                         });
                 }
                 else{
-                    $scope.orders=$scope.data;
+                    $scope.cargo=$scope.data;
                 }
             });
 
@@ -204,27 +213,114 @@ app.controller('CargoController',
                     }
                 });
             };
-           /* $scope.$watch('newCargo.factory',function(value){
-                console.log(value);
-            })*/
+
         }]);
 
 app.controller('NewCargoController',
 
-        function($scope, $modalInstance, Factory){
-            console.log($modalInstance);
-            $scope.Factory= Factory;
+        function($scope, $rootScope, $modalInstance, Factory, RestFactory, $modal){
 
+            $scope.Factory= Factory;
+            var url;
             $scope.saveFactory=function(obj){
-                console.log(obj);
+                console.log(obj.id);
+                $rootScope.selectedFactory=obj;
                 $modalInstance.close();
+
+               url=config.API.host+"cargo/create";
+                var data= {
+                    'parentId' : 0,
+                    'factoryId': obj.id,
+                    'document': 0,
+                    'status':0,
+                    'logisticCompanyId':0,
+                    'employeeId': 1,
+                    'shippingDate': '2015-04-01',
+                    'incomeWeight': 0,
+                    'incomePlaces': 0,
+                    'arriveWeight': 0,
+                    'arrivePlaces': 0
+                };
+                var method='POST';
+                RestFactory.request(url,method,data)
+                    .then(function(response){
+                        //console.log(response);
+                        if(typeof(response)=='object'){
+
+                            var id=response.cargo.id;
+                            console.log("id",id);
+                            url=config.API.host+"cargo/getorders/cargoId/"+id+"/factoryId/"+obj.id;
+                            /*get factory orders for new Cargo*/
+                            RestFactory.request(url)
+                                .then(function(response){
+                                    console.log(url);
+                                    console.log(response);
+                                    $rootScope.factoryOrders=response;
+                                    factoryOrders();
+                                });
+                        }
+                        else{
+                            console.log(response);
+                        }
+                    },function(error){
+                            console.log(error);
+                    });
             };
+
+            function factoryOrders(){
+                var modalInstance =$modal.open({
+                    templateUrl: "/modules/buyer/views/cargo/factory_orders.html",
+                    controller: "CargoOrdersController",
+                    backdrop:'static'
+
+                });
+            }
+
             $scope.cancel = function () {
                 $modalInstance.dismiss();
             };
         }
 );
+app.controller("CargoOrdersController",function($scope,$rootScope,RestFactory,$location,$modalInstance){
 
+    $scope.factory=$rootScope.selectedFactory;
+    /*console.log($rootScope.factoryOrders);
+    console.log($rootScope.selectedFactory);*/
+    $scope.orders=$rootScope.factoryOrders;
+    $scope.products=[];
+    var length=$scope.orders.length;
+    var url;
+    for(var i=0;i<length;i++){
+
+        url=config.API.host+"order/get-rows/id/"+$scope.orders[i].id;
+        console.log(url);
+        RestFactory.request(url)
+            .then(function(response){
+               // console.log(response);
+                $scope.products.push(response);
+            });
+    }
+    $scope.$watchCollection('products',function(value){
+        console.log(value);
+
+    });
+
+    $scope.choose=function(obj){
+        //console.log(obj);
+        $rootScope.newcargo_items=obj;
+        $modalInstance.close();
+        $location.path("/buyer/cargo/cargo_items");
+
+    };
+
+    $scope.ok = function () {
+        $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+});
 
 app.controller('CargoCartController',
 
@@ -292,75 +388,7 @@ app.controller('CargoCartController',
 
 
 
-            /*$scope.cargo_cart = [
-                {
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"3234555",
-                    "size":"M",
-                    "count":"2323",
-                    "factory":"factory #1",
-                    "active":'complete'
-                },
 
-                {
-                    "photo":"/assets/images/avatar/avatar17.jpg",
-                    "article":"8676",
-                    "size":"S",
-                    "count":"134",
-                    "factory":"factory #1",
-                    "active":'in_complete'
-                },
-
-                {
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"4435",
-                    "size":"L",
-                    "count":"87875",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-
-                {
-                    "photo":"/assets/images/avatar/avatar3.jpg",
-                    "article":"35356",
-                    "size":"M",
-                    "count":"989",
-                    "factory":"factory #1",
-                    "active":'hold'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar8.jpg",
-                    "article":"995453",
-                    "size":"M",
-                    "count":"783",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar1.jpg",
-                    "article":"344657",
-                    "size":"M",
-                    "count":"343",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar16.jpg",
-                    "article":"233567",
-                    "size":"M",
-                    "count":"23",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"9799898",
-                    "size":"M",
-                    "count":"3253",
-                    "factory":"factory #1",
-                    "active":'process'
-                }
-            ];*/
             $scope.addNewItems = function(){
                 $rootScope.items=$scope.cargo_cart;
                 $location.path( '/buyer/cargo/cargo_items');
@@ -392,26 +420,42 @@ app.controller('CargoItemsController',
 
         function ($scope, $rootScope, $modal, $location, RestFactory){
 
-            var items=[],length, item_length,item_index=0;
+            var items=[],length, item_length;
 
 
-            if($rootScope.items==undefined){
+            if($rootScope.items==undefined&&$rootScope.newcargo_items==undefined){
                 $location.path("/buyer/cargo");
             }
             else{
-                console.log($rootScope.items);
-                //$scope.cargo_items=$rootScope.items;
-                test($rootScope.items);
+                if($rootScope.items){
+                    composeItems($rootScope.items);
+                }
+
+                if($rootScope.newcargo_items){
+                    console.log($rootScope.newcargo_items);
+                    composeNewCargo($rootScope.newcargo_items);
+                }
             }
 
-            function test(items_array,articul){
-                var tmp=[];
+
+            //compose items
+            function composeItems(items_array,articul){
+                var tmp=[],item_index;
+
                 var article=articul||items_array[0].article;
-                //console.log(article);
+
                 length=items_array.length;
                 item_length=items.length;
-                //console.log(length);
-                if(item_length==0){
+
+                if(item_length!=0){
+                    for(var i=0;i<item_length;i++){
+                       if(items[i].article==article){
+                            console.log(items[i].article,article,"true");
+                            item_index=i;
+                       }
+                    }
+                }
+                if(item_index==undefined){
                     items.push(
                         {
                             "article":article,
@@ -421,29 +465,9 @@ app.controller('CargoItemsController',
                             "active":''
                         }
                     );
-                    console.log(items);
+                    item_length=items.length;
+                    item_index=item_length-1;
                 }
-                else{
-                    for(var i=0;i<item_length;i++){
-                        if(items[i].article==article){
-                            item_index=i;
-                        }
-                        else{
-                            items.push(
-                                {
-                                    "article":article,
-                                    "size_list":[],
-                                    "count_list":[],
-                                    "photo":"",
-                                    "active":''
-                                }
-                            );
-                            item_index=item_length-1;
-                        }
-                        console.log(item_index);
-                    }
-                }
-
                 for(var j=0;j<length;j++){
 
                     if(items[item_index].article==items_array[j].article){
@@ -461,16 +485,68 @@ app.controller('CargoItemsController',
                         tmp.push(items_array[j]);
                     }
                 }
-
-                console.log(items,tmp.length);
                 if(tmp.length!=0) {
-                    test(tmp);
+                    composeItems(tmp);
                 }
                 else{
                     $scope.cargo_items=items;
                 }
             }
+            //compose new cargo items
+            function composeNewCargo(items_array,articul){
+                var tmp=[],item_index;
 
+                var article=articul||items_array[0].article;
+
+                length=items_array.length;
+                item_length=items.length;
+
+                if(item_length!=0){
+                    for(var i=0;i<item_length;i++){
+                        if(items[i].article==article){
+                            console.log(items[i].article,article,"true");
+                            item_index=i;
+                        }
+                    }
+                }
+                if(item_index==undefined){
+                    items.push(
+                        {
+                            "article":article,
+                            "size_list":[],
+                            "count_list":[],
+                            "photo":"",
+                            "active":''
+                        }
+                    );
+                    item_length=items.length;
+                    item_index=item_length-1;
+                }
+                for(var j=0;j<length;j++){
+
+                    if(items[item_index].article==items_array[j].article){
+
+                        items[item_index].size_list.push(
+                            {"value":items_array[j].size}
+                        );
+                        items[item_index].count_list.push(
+                            {"value":items_array[j].count}
+                        );
+                        items[item_index].photo=items_array[j].photo;
+                        items[item_index].active='';
+
+                    }else{
+                        tmp.push(items_array[j]);
+                    }
+                }
+                //console.log(items,tmp.length);
+                if(tmp.length!=0) {
+                    composeItems(tmp);
+                }
+                else{
+                    $scope.cargo_items=items;
+                }
+            }
 
             $scope.$watch('cargo_items',function(value){
                 console.log(value);

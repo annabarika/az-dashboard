@@ -28,7 +28,7 @@
                 if( method==undefined) method = 'get';
 
                 var deferred = $q.defer();
-				var req =                     {
+				var req ={
 					method: method,
 					url: url,
 					data: data
