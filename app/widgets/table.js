@@ -218,8 +218,7 @@
                     }
                 }
 
-                $scope.addSize=function(){
-                    console.log("this");
+                $scope.addItem=function(){
                     $scope.cellsButton();
                 }
             }

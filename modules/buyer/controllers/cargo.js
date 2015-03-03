@@ -43,7 +43,7 @@ app.controller('CargoController',
                     }
                     $scope.orderStatus = statusByType['order'];
                     $scope.orderPaymentStatus = statusByType['orderPayment'];
-                    console.log($scope.orderPaymentStatus);
+                    //console.log($scope.orderPaymentStatus);
                 });
 
             /* Getting cargo */
@@ -245,7 +245,7 @@ app.controller('CargoCartController',
                 $location.path("/buyer/cargo");
             }
             else{
-                console.log($rootScope.cart);
+               // console.log($rootScope.cart);
                 $scope.cargo_cart=[];
 
                 angular.forEach($rootScope.cart,function(value,key){
@@ -362,6 +362,7 @@ app.controller('CargoCartController',
                 }
             ];*/
             $scope.addNewItems = function(){
+                $rootScope.items=$scope.cargo_cart;
                 $location.path( '/buyer/cargo/cargo_items');
             };
 
@@ -389,20 +390,104 @@ app.controller('CargoItemsController',
         "RestFactory",
 
 
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory){
+        function ($scope, $rootScope, $modal, $location, RestFactory){
 
-            $scope.$route = $route;
-            $scope.$location = $location;
+            var items=[],length, item_length,item_index=0;
 
-           /* var tables=document.getElementsByTagName('table');
-            console.log(tables);
 
-            angular.forEach(tables,function(v,k){
-                console.log(v,k);
-            });*/
+            if($rootScope.items==undefined){
+                $location.path("/buyer/cargo");
+            }
+            else{
+                console.log($rootScope.items);
+                //$scope.cargo_items=$rootScope.items;
+                test($rootScope.items);
+            }
+
+            function test(items_array,articul){
+                var tmp=[];
+                var article=articul||items_array[0].article;
+                //console.log(article);
+                length=items_array.length;
+                item_length=items.length;
+                //console.log(length);
+                if(item_length==0){
+                    items.push(
+                        {
+                            "article":article,
+                            "size_list":[],
+                            "count_list":[],
+                            "photo":"",
+                            "active":''
+                        }
+                    );
+                    console.log(items);
+                }
+                else{
+                    for(var i=0;i<item_length;i++){
+                        if(items[i].article==article){
+                            item_index=i;
+                        }
+                        else{
+                            items.push(
+                                {
+                                    "article":article,
+                                    "size_list":[],
+                                    "count_list":[],
+                                    "photo":"",
+                                    "active":''
+                                }
+                            );
+                            item_index=item_length-1;
+                        }
+                        console.log(item_index);
+                    }
+                }
+
+                for(var j=0;j<length;j++){
+
+                    if(items[item_index].article==items_array[j].article){
+
+                        items[item_index].size_list.push(
+                            {"value":items_array[j].size}
+                        );
+                        items[item_index].count_list.push(
+                            {"value":items_array[j].count}
+                        );
+                        items[item_index].photo=items_array[j].photo;
+                        items[item_index].active='';
+
+                    }else{
+                        tmp.push(items_array[j]);
+                    }
+                }
+
+                console.log(items,tmp.length);
+                if(tmp.length!=0) {
+                    test(tmp);
+                }
+                else{
+                    $scope.cargo_items=items;
+                }
+            }
+
+
+            $scope.$watch('cargo_items',function(value){
+                console.log(value);
+            });
+
+
 
             $scope.newSize=function(){
-                alert("new size!");
+                console.log("new size!");
+                var modalInstance=$modal.open(
+                    {
+                        templateUrl:"/modules/buyer/views/cargo/size.html",
+                        controller:'NewSizeController',
+                        backdrop:'static'
+                    }
+                );
+
             };
 
             /* Getting cargo */
@@ -430,9 +515,9 @@ app.controller('CargoItemsController',
                  icon:"fa fa-plus"
             }];
             $scope.buttonAction=function(){
-                alert("work");
+                console.log("work");
             };
-            $scope.cargo_items = [
+            /*$scope.cargo_items = [
                 {
                     "article":"995453",
                     "size_list":[
@@ -504,11 +589,35 @@ app.controller('CargoItemsController',
                     "photo":"/assets/images/avatar/avatar18.jpg",
                     "active":'in_complete'
                 }
-            ];
+            ];*/
 
         }]);
 
-app.controller('NewProductController',function($scope,$modalInstance){
+app.controller('NewProductController',function($scope,$modalInstance, RestFactory,$modal){
 
+    /*RestFactory.request()
+        .then(function(response){
+            $scope.all_products=response;
+        });*/
 
+    $scope.save=function(obj){
+        console.log(obj);
+        $modalInstance.close();
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
 });
+app.controller('NewSizeController',
+
+    function($scope, $modalInstance, RestFactory){
+
+
+        $scope.save=function(obj){
+            console.log(obj);
+            $modalInstance.close();
+        };
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
+    });
