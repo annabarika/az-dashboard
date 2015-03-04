@@ -106,12 +106,13 @@ class API {
 	 * @return mixed
 	 */
 	public function call(){
+
 		$options = array(
 			CURLOPT_URL => $this->host.$this->url."?".$this->params,
 			CURLOPT_CUSTOMREQUEST => $this->method, // GET POST PUT PATCH DELETE HEAD OPTIONS
 		);
-		if( $this->method == 'POST'){
-			$options[CURLOPT_POSTFIELDS] = $this->data;
+		if( $this->method == 'POST' || $this->method == 'PUT'){
+			$options[CURLOPT_POSTFIELDS] = http_build_query($this->data);
 		}
 		$options = $options + $this->options;
 		curl_setopt_array($this->getHandle(), $options );

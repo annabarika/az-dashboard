@@ -26,7 +26,6 @@ app.controller('CargoController',
                 filter={},
                 array;
             $scope.data=[];
-            $scope.date=[];
             /* Loading factories */
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
@@ -63,7 +62,7 @@ app.controller('CargoController',
              RestFactory.request(config.API.host + "cargo/load")
 
                  .then(function(response){
-                     // console.log(response);
+                      //console.log(response);
                      if(response){
                          $scope.allCargo=response;
                          $scope.data=composeCargo(response);
@@ -174,13 +173,13 @@ app.controller('CargoController',
                         url+="createDate/"+filter.createDate.join(',')+"/";
                     }
 
-                    console.log('URL:', url);
+                    //console.log('URL:', url);
 
                     RestFactory.request(url)
                         .then(
                         function(response){
                             $scope.cargo=composeCargo(response);
-                            //console.log(response);
+                            console.log(response);
                         },
                         function(error){
                             console.log(error);
@@ -345,19 +344,39 @@ app.controller('CargoCartController',
         "$location",
         "$route",
         "RestFactory",
-
-
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory){
+        "CargoCalculator",
+        '$http',
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory, CargoCalculator, $http){
 
             var length,factory;
 
             if($rootScope.cart==undefined){
                 $location.path("/buyer/cargo");
             }
-            else{
-               // console.log($rootScope.cart);
+            else
+            {
                 $scope.cargo_cart=[];
+                $scope.logistic_companies = [];
 
+                /**
+                 * Global cargo object
+                 * @type {{object}} to save cargo
+                 */
+                $rootScope.cargo = {};
+
+                // Calc total amount
+                $rootScope.cargo.totalAmount = CargoCalculator.calcTotalAmount($rootScope.cart.products);
+
+                RestFactory.request(config.API.host + "logistic_company/load")
+                    .then(function(response){
+                        angular.forEach(response, function(value){
+
+                            $scope.logistic_companies.push({
+                                'value' : value.id,
+                                'label' : value.name
+                            });
+                        });
+                    });
                 angular.forEach($rootScope.cart,function(value,key){
 
                     if(key=='factory'){
@@ -376,14 +395,47 @@ app.controller('CargoCartController',
                                 "factory":factory
                             });
                         }
-
                     }
+                    if(key=='cargo'){
+                        // Присваиваем по умолчанию для формы сохранения cargo
+                        $rootScope.cargo.document = value.document;
+                        $rootScope.cargo.id          = value.id;
+                        $rootScope.cargo.arriveWeight = value.arriveWeight;
+                        $rootScope.cargo.arrivePlaces = value.arrivePlaces;
+                        $rootScope.cargo.incomeWeight = value.incomeWeight;
+                        $rootScope.cargo.incomePlaces = value.incomePlaces;
 
-
+                        if($rootScope.cargo.hasOwnProperty('insurance') === false) {
+                            $rootScope.cargo.insurance = 0;
+                        }
+                    }
                 });
-               // console.log($scope.cargo_cart);
             }
 
+            /**
+             * Save cargo
+             */
+            $scope.saveCargo = function() {
+
+                var params = {
+                    'id' : $rootScope.cargo.id,
+                    'document' : $rootScope.cargo.document,
+                    'factoryId' : $rootScope.cargo.factoryId,
+                    'employeeId' : $rootScope.cargo.employeeId,
+                    'arrivePlaces' :  $rootScope.cargo.arrivePlaces,
+                    'arriveWeight' :  $rootScope.cargo.arriveWeight,
+                    'incomePlaces' :  $rootScope.cargo.incomePlaces,
+                    'incomeWeight' :  $rootScope.cargo.incomeWeight,
+                    'logisticCompanyId' :  $rootScope.cargo.logisticCompanyId
+                    //'totalAmount'       :   $rootScope.cargo.totalAmount,
+                    //'insurance'       :   $rootScope.cargo.insurance
+                };
+
+                RestFactory.request(config.API.host + "cargo/update", 'PUT', $.param(params), 'default')
+                    .then(function(response){
+                        console.log(response);
+                    });
+            };
 
 
             /* Getting cargo */
@@ -395,13 +447,6 @@ app.controller('CargoCartController',
                 { name: "count", title: 'Count' },
                 { name: "factory", title: 'Factory' }
             ];
-
-
-
-
-
-
-
 
             $scope.addNewItems = function(){
                 $rootScope.items=$scope.cargo_cart;
@@ -416,8 +461,6 @@ app.controller('CargoCartController',
                     size:'sm'
                 });
             };
-
-
 
         }]);
 
@@ -696,6 +739,7 @@ app.controller('NewProductController',function($scope,$modalInstance, RestFactor
         $modalInstance.dismiss();
     };
 });
+
 app.controller('NewSizeController',
 
     function($scope, $modalInstance, RestFactory){
