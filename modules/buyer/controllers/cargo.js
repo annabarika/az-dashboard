@@ -1,6 +1,4 @@
-var app = angular.module("modules.buyer.cargo", [
-
-]);
+var app = angular.module("modules.buyer.cargo", []);
 
 app.controller('CargoController',
 
@@ -17,6 +15,8 @@ app.controller('CargoController',
 
             $scope.$route = $route;
             $scope.$location = $location;
+
+            $scope.date = {startDate: null, endDate: null}
 
             /* Loading factories */
             RestFactory.request(config.API.host + "factory/load")

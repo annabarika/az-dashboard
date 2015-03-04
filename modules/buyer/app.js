@@ -3,7 +3,7 @@ var app = angular.module('modules.buyer', [
 	"modules.buyer.payments",
 	"modules.buyer.bestsellers",
     "modules.buyer.collection",
-    "modules.buyer.cargo"
+    "modules.buyer.cargo",
 ]);
 
 app.config(function($routeProvider){
