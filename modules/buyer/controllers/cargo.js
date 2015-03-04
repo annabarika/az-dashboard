@@ -223,7 +223,7 @@ app.controller('NewCargoController',
             $scope.Factory= Factory;
             var url;
             $scope.saveFactory=function(obj){
-                console.log(obj.id);
+                //console.log(obj.id);
                 $rootScope.selectedFactory=obj;
                 $modalInstance.close();
 
@@ -248,13 +248,13 @@ app.controller('NewCargoController',
                         if(typeof(response)=='object'){
 
                             var id=response.cargo.id;
-                            console.log("id",id);
+                            //console.log("id",id);
                             url=config.API.host+"cargo/getorders/cargoId/"+id+"/factoryId/"+obj.id;
                             /*get factory orders for new Cargo*/
                             RestFactory.request(url)
                                 .then(function(response){
-                                    console.log(url);
-                                    console.log(response);
+                                   // console.log(url);
+                                    //console.log(response);
                                     $rootScope.factoryOrders=response;
                                     factoryOrders();
                                 });
@@ -284,8 +284,6 @@ app.controller('NewCargoController',
 app.controller("CargoOrdersController",function($scope,$rootScope,RestFactory,$location,$modalInstance){
 
     $scope.factory=$rootScope.selectedFactory;
-    /*console.log($rootScope.factoryOrders);
-    console.log($rootScope.selectedFactory);*/
     $scope.orders=$rootScope.factoryOrders;
     $scope.products=[];
     var length=$scope.orders.length;
@@ -293,17 +291,13 @@ app.controller("CargoOrdersController",function($scope,$rootScope,RestFactory,$l
     for(var i=0;i<length;i++){
 
         url=config.API.host+"order/get-rows/id/"+$scope.orders[i].id;
-        console.log(url);
+        //console.log(url);
         RestFactory.request(url)
             .then(function(response){
                // console.log(response);
                 $scope.products.push(response);
             });
     }
-    $scope.$watchCollection('products',function(value){
-        console.log(value);
-
-    });
 
     $scope.choose=function(obj){
         //console.log(obj);
@@ -432,7 +426,6 @@ app.controller('CargoItemsController',
                 }
 
                 if($rootScope.newcargo_items){
-                    console.log($rootScope.newcargo_items);
                     composeNewCargo($rootScope.newcargo_items);
                 }
             }
@@ -441,7 +434,6 @@ app.controller('CargoItemsController',
             //compose items
             function composeItems(items_array,articul){
                 var tmp=[],item_index;
-
                 var article=articul||items_array[0].article;
 
                 length=items_array.length;
@@ -495,9 +487,9 @@ app.controller('CargoItemsController',
             //compose new cargo items
             function composeNewCargo(items_array,articul){
                 var tmp=[],item_index;
-
-                var article=articul||items_array[0].article;
-
+                console.log(items_array);
+                var article=articul||items_array[0].product.articul;
+                console.log(article);
                 length=items_array.length;
                 item_length=items.length;
 
@@ -524,7 +516,7 @@ app.controller('CargoItemsController',
                 }
                 for(var j=0;j<length;j++){
 
-                    if(items[item_index].article==items_array[j].article){
+                    if(items[item_index].article==items_array[j].product.articul){
 
                         items[item_index].size_list.push(
                             {"value":items_array[j].size}
@@ -532,7 +524,7 @@ app.controller('CargoItemsController',
                         items[item_index].count_list.push(
                             {"value":items_array[j].count}
                         );
-                        items[item_index].photo=items_array[j].photo;
+                        items[item_index].photo=items_array[j].product.photos[0];
                         items[item_index].active='';
 
                     }else{
@@ -555,7 +547,7 @@ app.controller('CargoItemsController',
 
 
             $scope.newSize=function(){
-                console.log("new size!");
+                //console.log("new size!");
                 var modalInstance=$modal.open(
                     {
                         templateUrl:"/modules/buyer/views/cargo/size.html",
