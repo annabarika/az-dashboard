@@ -1,6 +1,6 @@
 var config = {
 	API: {
-		host:"http://green.f.compass/api/",
+		host:"http://arrow.f.compass/api/",
 		key: 'test'
 	}
 };

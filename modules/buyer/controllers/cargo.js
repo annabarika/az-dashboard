@@ -245,7 +245,8 @@ app.controller('CargoCartController',
             if($rootScope.cart==undefined){
                 $location.path("/buyer/cargo");
             }
-            else{
+            else
+            {
                 $rootScope.cart.logisticCompanies = [];
                 $scope.cargo_cart=[];
                 $scope.logistic_companies = [];
