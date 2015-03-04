@@ -17,6 +17,10 @@ app.controller('CargoController',
 
             $scope.$route = $route;
             $scope.$location = $location;
+
+            // add date range to daterangepicker
+            $scope.date = {startDate: null, endDate: null};
+
             var length,row,
                 data,
                 url,

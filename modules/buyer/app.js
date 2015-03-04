@@ -4,6 +4,7 @@ var app = angular.module('modules.buyer', [
 	"modules.buyer.bestsellers",
     "modules.buyer.collection",
     "modules.buyer.cargo",
+    "daterangepicker"
 ]);
 
 app.config(function($routeProvider){
