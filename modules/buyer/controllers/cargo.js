@@ -58,8 +58,9 @@ app.controller('CargoController',
 
              RestFactory.request(config.API.host + "cargo/load")
                  .then(function(response){
-                      //console.log(response);
+                      //console.log(config.API.host);
                      if(response){
+                         //console.log(response);
                          $scope.allCargo=response;
                          length=response.length;
                          for(var i=0;i<length;i++){
@@ -245,9 +246,16 @@ app.controller('CargoCartController',
                 $location.path("/buyer/cargo");
             }
             else{
-               // console.log($rootScope.cart);
+                $rootScope.cart.logisticCompanies = [];
                 $scope.cargo_cart=[];
+                $scope.logistic_companies = [];
 
+                RestFactory.request(config.API.host + "logistic_company/load")
+                    .then(function(response){
+                        angular.forEach(response, function(value){
+                            $scope.logistic_companies.push(value);
+                        });
+                    });
                 angular.forEach($rootScope.cart,function(value,key){
 
                     if(key=='factory'){
@@ -266,15 +274,9 @@ app.controller('CargoCartController',
                                 "factory":factory
                             });
                         }
-
                     }
-
-
                 });
-               // console.log($scope.cargo_cart);
             }
-
-
 
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo";
@@ -286,81 +288,6 @@ app.controller('CargoCartController',
                 { name: "factory", title: 'Factory' }
             ];
 
-
-
-
-
-
-
-            /*$scope.cargo_cart = [
-                {
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"3234555",
-                    "size":"M",
-                    "count":"2323",
-                    "factory":"factory #1",
-                    "active":'complete'
-                },
-
-                {
-                    "photo":"/assets/images/avatar/avatar17.jpg",
-                    "article":"8676",
-                    "size":"S",
-                    "count":"134",
-                    "factory":"factory #1",
-                    "active":'in_complete'
-                },
-
-                {
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"4435",
-                    "size":"L",
-                    "count":"87875",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-
-                {
-                    "photo":"/assets/images/avatar/avatar3.jpg",
-                    "article":"35356",
-                    "size":"M",
-                    "count":"989",
-                    "factory":"factory #1",
-                    "active":'hold'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar8.jpg",
-                    "article":"995453",
-                    "size":"M",
-                    "count":"783",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar1.jpg",
-                    "article":"344657",
-                    "size":"M",
-                    "count":"343",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar16.jpg",
-                    "article":"233567",
-                    "size":"M",
-                    "count":"23",
-                    "factory":"factory #1",
-                    "active":'inactive'
-                },
-                {
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"9799898",
-                    "size":"M",
-                    "count":"3253",
-                    "factory":"factory #1",
-                    "active":'process'
-                }
-            ];*/
             $scope.addNewItems = function(){
                 $rootScope.items=$scope.cargo_cart;
                 $location.path( '/buyer/cargo/cargo_items');
@@ -374,8 +301,6 @@ app.controller('CargoCartController',
                     size:'sm'
                 });
             };
-
-
 
         }]);
 
@@ -608,6 +533,7 @@ app.controller('NewProductController',function($scope,$modalInstance, RestFactor
         $modalInstance.dismiss();
     };
 });
+
 app.controller('NewSizeController',
 
     function($scope, $modalInstance, RestFactory){

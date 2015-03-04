@@ -30,7 +30,7 @@
                         <tbody>
                         <tr>
                             <td>Factory</td>
-                            <td>Viverra Company</td>
+                            <td>{{ cart.factory.name }}</td>
                         </tr>
                         <tr>
                             <td>Total amount</td>
@@ -39,8 +39,9 @@
                         <tr>
                             <td>Cargo company</td>
                             <td><p class="form-inline">
-                                <select class="form-control">
-                                    <option value="">Choose cargo</option>
+                                <select class="form-control" ng-model="cargo_companies"
+                                        ng-options="opt as opt.name for opt in logistic_companies">
+                                    <option value="">Choose company</option>
                                 </select>
                             </p>
                             </td>
@@ -50,7 +51,7 @@
                             <td><p class="form-inline"><input class="form-control sm" type="text"></p></td>
                         </tr>
                         <tr>
-                            <td>Сurrency</td>
+                            <td>Insurance</td>
                             <td><p class="form-inline"><input class="form-control sm" type="text"></p></td>
                         </tr>
                         </tbody>
