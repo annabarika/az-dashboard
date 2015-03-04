@@ -33,7 +33,14 @@ app.controller('CargoController',
                     }
                     $scope.Factory=factory;
                 });
-
+            /**
+             * get all sizes
+             */
+            RestFactory.request(config.API.host+'size/load').then(
+                function(response){
+                    $rootScope.all_sizes=response;
+                }
+            );
             /* Loading statuses */
             RestFactory.request(config.API.host + "status/load")
                 .then(function(response){
@@ -50,7 +57,7 @@ app.controller('CargoController',
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo cart";
             $scope.tableHeader = [
-                { name: "document", title: 'Document' },
+                { name: "id", title: 'Document' },
                 { name: "cargoDoc", title: 'Cargo Document' },
                 { name: "createDate", title: 'Create date' },
                 { name: "status", title: 'Status' },
@@ -59,7 +66,7 @@ app.controller('CargoController',
 
              RestFactory.request(config.API.host + "cargo/load")
                  .then(function(response){
-                     // console.log(response);
+                      //console.log(response);
                      if(response){
                          $scope.allCargo=response;
                          $scope.data=composeCargo(response);
@@ -79,7 +86,7 @@ app.controller('CargoController',
                     angular.forEach(response[i],function(item,k){
                         if(k=='cargo'){
                             angular.forEach(item,function(value,key){
-                                if(key=='createDate'||key=='document'){
+                                if(key=='createDate'||key=='id'){
                                     data[key]=value;
                                     // $scope.date.push(item['createDate']);
                                 }
@@ -246,7 +253,7 @@ app.controller('NewCargoController',
                     .then(function(response){
                         //console.log(response);
                         if(typeof(response)=='object'){
-
+                            $rootScope.new_cargo=response;
                             var id=response.cargo.id;
                             //console.log("id",id);
                             url=config.API.host+"cargo/getorders/cargoId/"+id+"/factoryId/"+obj.id;
@@ -408,24 +415,26 @@ app.controller('CargoItemsController',
         '$rootScope',
         "$modal",
         "$location",
-        "$route",
         "RestFactory",
-
 
         function ($scope, $rootScope, $modal, $location, RestFactory){
 
-            var items=[],length, item_length;
+            var items=[],length, item_length,url,data;
 
+
+
+            $scope.cargo_order_row=[];
 
             if($rootScope.items==undefined&&$rootScope.newcargo_items==undefined){
                 $location.path("/buyer/cargo");
             }
             else{
-                if($rootScope.items){
+                if($rootScope.items!=null){
                     composeItems($rootScope.items);
                 }
 
-                if($rootScope.newcargo_items){
+                if($rootScope.newcargo_items!=null){
+                    console.log($rootScope.newcargo_items);
                     composeNewCargo($rootScope.newcargo_items);
                 }
             }
@@ -454,7 +463,7 @@ app.controller('CargoItemsController',
                             "size_list":[],
                             "count_list":[],
                             "photo":"",
-                            "active":''
+                            "active":'inactive'
                         }
                     );
                     item_length=items.length;
@@ -463,9 +472,19 @@ app.controller('CargoItemsController',
                 for(var j=0;j<length;j++){
 
                     if(items[item_index].article==items_array[j].article){
+                        var size_id;
+                        for(var k=0;k<$rootScope.all_sizes.length;k++){
+
+                            if($rootScope.all_sizes[k].name==items_array[j].size){
+                                size_id=$rootScope.all_sizes[k].id;
+                            }
+                        }
 
                         items[item_index].size_list.push(
-                            {"value":items_array[j].size}
+                            {
+                                "value":items_array[j].size,
+                                "id":size_id
+                            }
                         );
                         items[item_index].count_list.push(
                             {"value":items_array[j].count}
@@ -487,16 +506,14 @@ app.controller('CargoItemsController',
             //compose new cargo items
             function composeNewCargo(items_array,articul){
                 var tmp=[],item_index;
-                console.log(items_array);
                 var article=articul||items_array[0].product.articul;
-                console.log(article);
+
                 length=items_array.length;
                 item_length=items.length;
 
                 if(item_length!=0){
                     for(var i=0;i<item_length;i++){
                         if(items[i].article==article){
-                            console.log(items[i].article,article,"true");
                             item_index=i;
                         }
                     }
@@ -515,47 +532,74 @@ app.controller('CargoItemsController',
                     item_index=item_length-1;
                 }
                 for(var j=0;j<length;j++){
+                    var size_id;
+                    for(var k=0;k<$rootScope.all_sizes.length;k++){
+
+                        if($rootScope.all_sizes[k].name==items_array[j].size){
+                            size_id=$rootScope.all_sizes[k].id;
+                        }
+                    }
 
                     if(items[item_index].article==items_array[j].product.articul){
 
                         items[item_index].size_list.push(
-                            {"value":items_array[j].size}
+                            {
+                                "value":items_array[j].size,
+                                "id":size_id
+                            }
                         );
+
                         items[item_index].count_list.push(
                             {"value":items_array[j].count}
                         );
-                        items[item_index].photo=items_array[j].product.photos[0];
+                        items[item_index].photo="http://back95.ru/f/catalogue/"+items_array[j].product.id+"/"+items_array[j].product.photos[0];
                         items[item_index].active='';
 
                     }else{
                         tmp.push(items_array[j]);
                     }
                 }
-                //console.log(items,tmp.length);
                 if(tmp.length!=0) {
-                    composeItems(tmp);
+                    composeNewCargo(tmp);
                 }
                 else{
                     $scope.cargo_items=items;
                 }
             }
 
-            $scope.$watch('cargo_items',function(value){
-                console.log(value);
-            });
 
-
-
+            /**
+             * add new size and count in product
+             */
             $scope.newSize=function(){
-                //console.log("new size!");
+
+            //console.log($rootScope.row);
                 var modalInstance=$modal.open(
                     {
-                        templateUrl:"/modules/buyer/views/cargo/size.html",
+                        templateUrl:"/modules/buyer/views/cargo/add_size.html",
                         controller:'NewSizeController',
                         backdrop:'static'
                     }
                 );
-
+                modalInstance.result.then(function (obj) {
+                    if(obj.size==undefined||obj.count==undefined){
+                        return;
+                    }
+                    length=$scope.cargo_items.length;
+                    for(var i=0;i<length;i++){
+                        if($scope.cargo_items[i].article==$rootScope.row.article){
+                            $scope.cargo_items[i].size_list.push({
+                               "value": obj.size.name,
+                                "id":obj.size.id
+                            });
+                            $scope.cargo_items[i].count_list.push({
+                                "value":obj.count
+                            });
+                        }
+                    }
+                }, function (error) {
+                   console.log(error);
+                });
             };
 
             /* Getting cargo */
@@ -566,14 +610,25 @@ app.controller('CargoItemsController',
                 { name: "size_list", title: 'Size' },
                 { name: "count_list", title: 'Count' }
             ];
-
+            /**
+             * Get all products and add product in cargo
+             */
             $scope.addNewProducts=function(){
+                url="http://b.dr.dev95.ru/legacy/jsonrpc/?method=catalogue.getProducts&params%5Btokien_id%5D=5f77e685beaa564fd3585738d65108c4";
 
-                var modalInstance =$modal.open({
+                RestFactory.request(url).then(
+                    function(response){
+                        console.log(response);
+                    },
+                    function(error){
+                        console.log(error);
+                    }
+                );
+               /* var modalInstance =$modal.open({
                     templateUrl: "/modules/buyer/views/cargo/new_product.html",
                     controller: 'NewProductController',
                     backdrop:'static'
-                });
+                });*/
             };
 
 
@@ -582,83 +637,83 @@ app.controller('CargoItemsController',
                  value:"add",
                  icon:"fa fa-plus"
             }];
+
+            /**
+             * Add to cargo
+             */
             $scope.buttonAction=function(){
-                console.log("work");
-            };
-            /*$scope.cargo_items = [
-                {
-                    "article":"995453",
-                    "size_list":[
-                        { value: 'S' },
-                        { value: 'M' },
-                        { value: 'L' },
-                    ],
-                    "count_list":[
-                        { value: '231' },
-                        { value: '12' },
-                        { value: '24' }
-                    ],
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "active":'complete'
-                },
+                var number=0;
+                length=$scope.cargo_items.length;
+                if(length>1){
+                    for(var i=0;i<length;i++){
+                        if($rootScope.row.article==$rootScope.newcargo_items[i].product.articul){
+                            number=i;
+                            break;
 
-                {
-                    "article":"995453",
-                    "size_list":[
-                        { value: 'S' }
-                    ],
-                    "count_list":[
-                        { value: '14' }
-                    ],
-                    "photo":"/assets/images/avatar/avatar8.jpg",
-                    "active":'process'
-                },
+                        }
+                    }
 
-                {
-                    "article":"995453",
-                    "size_list":[
-                        { value: 'M' },
-                        { value: 'L' }
-                    ],
-                    "count_list":[
-                        { value: '12' },
-                        { value: '24' }
-                    ],
-                    "photo":'/assets/images/avatar/avatar7.jpg',
-                    "active":'inactive'
-                },
-
-                {
-                    "article":"995453",
-                    "size_list":[
-                        { value: 'S' },
-                        { value: 'L' }
-                    ],
-                    "count_list":[
-                        { value: '2' },
-                        { value: '43' }
-                    ],
-                    "photo":"/assets/images/avatar/avatar15.jpg",
-                    "active":'hold'
-                },
-
-                {
-                    "article":"995453",
-                    "size_list":[
-                        { value: 'S' },
-                        { value: 'M' },
-                        { value: 'L' }
-                    ],
-                    "count_list":[
-                        { value: '11' },
-                        { value: '6' },
-                        { value: '2' }
-                    ],
-                    "photo":"/assets/images/avatar/avatar18.jpg",
-                    "active":'in_complete'
                 }
-            ];*/
+                /*console.log($rootScope.newcargo_items);
+                console.log($rootScope.row);
+                console.log($rootScope.new_cargo);*/
+                url=config.API.host+"/cargo/addtocargo";
+                length=$rootScope.row.size_list.length;
+                if(length>1){
+                    for(var i=0;i<length;i++){
 
+                        data={
+                            'cargoId': $rootScope.new_cargo.cargo.id,
+                            'docId': $rootScope.newcargo_items[number].id,//orderid
+                            'sizeId' : $rootScope.row.size_list[i].id,
+                            'id' : $rootScope.newcargo_items[number].product.id,//id prod
+                            'articul' : $rootScope.newcargo_items[number].product.articul,
+                            'factoryArticul' : $rootScope.newcargo_items[number].product.factoryArticul,
+                            'count' :$rootScope.row.count_list[i].value,
+                            'price' : $rootScope.newcargo_items[number].price
+                        };
+
+                        RestFactory.request(url,'POST',data).then(
+                            function(response){
+                                //console.log(response);
+                                if(response){
+                                    $scope.cargo_order_row.push({
+                                        "article":$rootScope.row.article,
+                                        "size_list":$rootScope.row.size_list[i],
+                                        "count_list":$rootScope.row.count_list[i],
+                                        "photo":$rootScope.row.photo,
+                                        "active":''
+                                    });
+                                }
+                            }
+                        )
+                    }
+                    $scope.cargo_items.splice(number,1);
+
+                }
+                else{
+
+                    data={
+                        'cargoId': $rootScope.new_cargo.cargo.id,
+                        'docId': $rootScope.newcargo_items[number].id,//orderid
+                        'sizeId' : $rootScope.row.size_list[0].id,
+                        'id' : $rootScope.newcargo_items[number].product.id,//id prod
+                        'articul' : $rootScope.newcargo_items[number].product.articul,
+                        'factoryArticul' : $rootScope.newcargo_items[number].product.factoryArticul,
+                        'count' :$rootScope.row.count_list[0].value,
+                        'price' : $rootScope.newcargo_items[number].price
+                    };
+                    RestFactory.request(url,'POST',data).then(
+                        function(response){
+
+                            if(response){
+                                $scope.cargo_order_row.push($rootScope.row);
+                                $scope.cargo_items.splice(number,1);
+                            }
+                        }
+                    )
+                }
+            };
         }]);
 
 app.controller('NewProductController',function($scope,$modalInstance, RestFactory,$modal){
@@ -681,9 +736,13 @@ app.controller('NewSizeController',
     function($scope, $modalInstance, RestFactory){
 
 
-        $scope.save=function(obj){
-            console.log(obj);
-            $modalInstance.close();
+        $scope.save=function(size,count){
+            //console.log(size,count);
+            $scope.newsize={
+                size:size,
+                count:count
+            };
+            $modalInstance.close($scope.newsize);
         };
         $scope.cancel = function () {
             $modalInstance.dismiss();

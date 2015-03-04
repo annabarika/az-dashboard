@@ -16,18 +16,19 @@
         </div>
         <!--/ end page header -->
 
+    <widget-table
+            datarows="cargo_items"
+            dataheader="tableHeader"
+            edit="edit()"
+            row="row"
+            toolbar-inputs="inputs"
+            toolbar-buttons="buttons"
+            button-action="buttonAction()"
+            cells-button="newSize()"
+            >
+    </widget-table>
 
-        <widget-table
-                datarows="cargo_items"
-                dataheader="tableHeader"
-                edit="edit()"
-                row="row"
-                toolbar-inputs="inputs"
-                toolbar-buttons="buttons"
-                button-action="buttonAction()"
-                cells-button="newSize()"
-                >
-        </widget-table>
+
     </div>
     <!-- start right side -->
 
@@ -43,7 +44,35 @@
                 </div>
                 <table class="table table-bordered">
                     <tbody>
-                    <tr>
+                    <tr class="text-center" ng-repeat="row in cargo_order_row track by $index">
+                        <td class="text-center">
+                            <div class="media np">
+                                <div class="media-left">
+                                          <span class="img-wrapper img-rounded">
+                                            <img src={{row.photo}}>
+                                          </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading mb-0 fw-sb"><a href="">{{row.article}}</a></h5>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            {{row.size_list[0].value}}
+                        </td>
+                        <td class="text-center">
+                            3x
+                        </td>
+                        <td class="text-center">
+                            {{row.count_list[0].value}}
+                        </td>
+                        <td class="text-center">
+                            <button type="submit" class="btn btn-default"><span class="fa fa-trash-o"></span></button>
+                        </td>
+                    </tr>
+                    <!--<tr>
                         <td class="text-center">
                             <div class="media np">
                                 <div class="media-left">
@@ -98,7 +127,7 @@
                         <td class="text-center">
                             <button type="submit" class="btn btn-default"><span class="fa fa-trash-o"></span></button>
                         </td>
-                    </tr>
+                    </tr>-->
                     </tbody>
                 </table>
             </div>
