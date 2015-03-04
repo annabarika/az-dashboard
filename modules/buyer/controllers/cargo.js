@@ -12,7 +12,6 @@ app.controller('CargoController',
         "$route",
         "RestFactory",
 
-
         function ($scope, $rootScope, $modal, $location, $route, RestFactory){
 
             $scope.$route = $route;
@@ -62,6 +61,7 @@ app.controller('CargoController',
             ];
 
              RestFactory.request(config.API.host + "cargo/load")
+
                  .then(function(response){
                      // console.log(response);
                      if(response){
@@ -112,38 +112,51 @@ app.controller('CargoController',
                 //$scope.cargo=$scope.data;
                 return array;
             }
+
              /*
-             * filters*/
-           $scope.$watchCollection('resultData',function(newVal){
+             * filters
+             * */
+           $scope.$watchCollection('resultData', function(newVal) {
 
-                //console.log(newVal);
-                for(item in newVal){
-                    var arr=[];
+               // Filter dateRange
 
-                    if($.isEmptyObject(newVal[item])){
+               if(typeof newVal !== "undefined")
+               {
+                   if(newVal.hasOwnProperty('createDate')) {
 
-                        delete filter[item];
-                    }
-                    else{
-                        angular.forEach(newVal[item],function(value,key){
+                       var dateRange = newVal.createDate;
+                       var arr = [];
+                       for(item in dateRange) {
+                           arr.push(moment(dateRange[item]).format('YYYY-MM-DD'));
+                       }
+                       filter.createDate = arr;
+                   }
+               }
 
+                   for(item in newVal) {
+                       var arr=[];
 
-                            if(value.ticked ===true){
-                                //console.log(value);
-                                if(value.id){
-                                    arr.push(value.id);
-                                }
-                                else{
-                                    arr.push(value.statusId);
-                                }
-                                filter[item]=arr;
-                                //console.log(value[0]);
-                            }
+                       if($.isEmptyObject(newVal[item])){
 
-                        });
-                    }
-                }
-                //console.log(filter);
+                           delete filter[item];
+                       }
+                       else{
+                           angular.forEach(newVal[item],function(value, key) {
+
+                               if(value.ticked ===true){
+
+                                   if(value.id){
+                                       arr.push(value.id);
+                                   }
+                                   else{
+                                       arr.push(value.statusId);
+                                   }
+                                   filter[item]=arr;
+                               }
+                           });
+                       }
+                   }
+
                 if(!$.isEmptyObject(filter)){
 
                     url=config.API.host+"cargo/load/";
@@ -156,9 +169,12 @@ app.controller('CargoController',
 
                         url+="factoryId/"+filter.factory.join()+"/";
                     }
+                    if(filter.createDate) {
 
-                    console.log(url);
+                        url+="createDate/"+filter.createDate.join(',')+"/";
+                    }
 
+                    console.log('URL:', url);
 
                     RestFactory.request(url)
                         .then(
