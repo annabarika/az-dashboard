@@ -119,6 +119,7 @@
                 ,toolbarButtons:"="
                 ,buttonAction:"&"
                 ,caption:"@"
+                ,cellsButton:"&"
             },
 
             link:function($scope){
@@ -215,6 +216,10 @@
                     if($scope.buttonAction){
                         $scope.buttonAction();
                     }
+                }
+
+                $scope.addItem=function(){
+                    $scope.cellsButton();
                 }
             }
 

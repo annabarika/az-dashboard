@@ -1,0 +1,15 @@
+<div ng-controller='CargoItemsController'>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New size</h4>
+    </div>
+    <div class="modal-body">
+        <input type="text" placeholder="size" class="form-control" ng-model="new_size"/>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="save(new_size)">Ok</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

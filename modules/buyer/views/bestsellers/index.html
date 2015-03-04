@@ -4,189 +4,41 @@
         <div class="scroll">
             <!-- start page header -->
             <div class="page-header clearfix">
-                <div class="row">
+                <div class="row ">
                     <div class="col-md-12">
-                        <span class="fc-header-title"><h2>2013</h2></span>
+                        <!--<span class="fc-header-title"><h2>2013</h2></span>-->
+                        <span class="fc-header-title">
+                           <h2> <a href="" ng-click="changeYear(-1)">&#9668;</a>
+                                {{current_year}}
+                            <a href="" ng-click="changeYear(1)">&#9658;</a></h2>
+                        </span>
+                        <div class="panel fullcalendar">
+
+                        <div style="border:1px solid grey; width:200px;height:200px;float:left;border-radius:3px;" class="fc fc-ltr fc-unthemed" ng-repeat="(key,value) in bestsellers[current_year]">
+                                <h3 class="fc-day-header fc-widget-header fc-sun" style="text-align:center">
+                                    {{months[key]}}
+                                </h3>
+                                <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable" ng-click="currentMonth(months[key])">
+                                    <div class="fc-content">
+                                        <span class="fc-title">{{value.length}}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-            </div>
-            <!--/ end page header -->
-
-            <!-- start panel -->
-            <div class="panel fullcalendar">
-
-
-                <div class="ng-pristine ng-untouched ng-valid ng-isolate-scope fc fc-ltr fc-unthemed">
-
-
-
-                    <div class="fc-view fc-month-view fc-basic-view">
-                        <table>
-                            <thead>
-                            <tr>
-                                <td class="fc-widget-header">
-
-                                    <div class="fc-row fc-widget-header">
-                                        <table>
-                                            <thead>
-                                            <tr>
-                                                <th class="fc-day-header fc-widget-header fc-sun">January
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-mon">February
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-tue">March
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-wed">April
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-thu">May
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-fri">June
-                                                </th>
-                                            </tr></thead>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="fc-widget-content">
-
-                                    <div class="fc-day-grid-container">
-
-                                        <div class="fc-day-grid">
-
-                                            <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 143px;">
-
-                                                <div class="fc-bg">
-                                                    <table><tbody>
-                                                    <tr>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">6</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-event-warning fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">56</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-event-success fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">543</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">234</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-event-danger fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">765</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">422</span></div></a>
-                                                        </td>
-                                                    </tr></tbody>
-                                                    </table>
-                                                </div>
-
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr></tbody>
-                        </table>
-                        <table>
-                            <thead>
-                            <tr>
-                                <td class="fc-widget-header">
-
-                                    <div class="fc-row fc-widget-header">
-                                        <table>
-                                            <thead>
-                                            <tr>
-                                                <th class="fc-day-header fc-widget-header fc-sun">July
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-mon">August
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-tue">September
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-wed">October
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-thu">November
-                                                </th>
-                                                <th class="fc-day-header fc-widget-header fc-fri">December
-                                                </th>
-                                            </tr></thead>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="fc-widget-content">
-
-                                    <div class="fc-day-grid-container">
-
-                                        <div class="fc-day-grid">
-
-                                            <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 143px;">
-
-                                                <div class="fc-bg">
-                                                    <table><tbody>
-                                                    <tr>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">6</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-event-warning fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">56</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-event-success fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">543</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">234</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-event-danger fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">765</span></div></a>
-                                                        </td>
-                                                        <td class="fc-day fc-day-number fc-widget-content fc-wed fc-past">
-                                                            <a class="fc-day-grid-event fc-event fc-start fc-end fc-draggable">
-                                                                <div class="fc-content"><span class="fc-title">422</span></div></a>
-                                                        </td>
-                                                    </tr></tbody>
-                                                    </table>
-                                                </div>
-
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr></tbody>
-                        </table>
-                    </div>
-
                 </div>
             </div>
             <!-- end: panel -->
         </div>
     </div>
-    <div  class="col-md-3 bg-auto height-auto bdr-l-md bdr-b-sm bdr-b-xs" ng-controller="BestsellerCartController">
+    <div  class="col-md-3 bg-auto height-auto bdr-l-md bdr-b-sm bdr-b-xs">
         <div class="scroll">
             <!-- start page header -->
             <div class="page-header clearfix">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="mb-sm">April 2014</h3>
+                        <h3 class="mb-sm">{{current_month}} {{current_year}}</h3>
                     </div>
                 </div>
                 <p class="input-group">
@@ -206,11 +58,31 @@
                     </div>
                     <table class="table table-bordered">
                         <tbody>
-                        <tr ng-repeat="row in summaryCart" ng-click="edit(row)">
+                        <tr ng-repeat="order in bests_orders">
+                            <td class="text-center">
+                                <div class="media np">
+                                    <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <!--<img src={{img}}>-->
+                                          <img ng-src="http://back95.ru/f/catalogue/{{order.id}}/{{order.photos[0]}}"/>
 
-                            <td ng-repeat="(k,v) in row">
-                                <img src="{{row.a_photo}}" class="img-sm" ng-if="k=='a_photo'">
-                                <div ng-if="k!='a_photo'">{{v}}</div>
+                                      </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="media-body media-middle">
+                                    <h5 class="media-heading mb-0 fw-sb"><a href=""> {{order.articul}}</a></h5>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <p ng-repeat="size in order.sizeInfo">{{size}}</p>
+                            </td>
+                            <td class="text-center">
+                                {{order.saleSpeed}}
+                            </td>
+                            <td class="text-center">
+                                {{order.inStorage}}
                             </td>
                         </tr>
                         </tbody>
@@ -225,9 +97,37 @@
                     </div>
                     <table class="table table-bordered">
                         <tbody>
-                        <tr>
-                            <td>
-                                <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
+                        <tr ng-repeat="order in bests_orders">
+                            <td class="text-center">
+                                <div class="media np">
+                                    <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <img ng-src="http://back95.ru/f/catalogue/{{order.id}}/{{order.photos[0]}}"/>
+                                      </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="media-body media-middle">
+                                    <h5 class="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                Signal
+                            </td>
+                            <td class="text-center">
+                                234
+                            </td>
+                        </tr>
+                       <!-- <tr>
+                            <td class="text-center">
+                                <div class="media np">
+                                    <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <img src="/assets/images/avatar/avatar9.jpg">
+                                      </span>
+                                    </div>
+                                </div>
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">
@@ -242,8 +142,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
+                            <td class="text-center">
+                                <div class="media np">
+                                    <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <img src="/assets/images/avatar/avatar9.jpg">
+                                      </span>
+                                    </div>
+                                </div>
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">
@@ -258,8 +164,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
+                            <td class="text-center">
+                                <div class="media np">
+                                    <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <img src="/assets/images/avatar/avatar9.jpg">
+                                      </span>
+                                    </div>
+                                </div>
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">
@@ -272,7 +184,7 @@
                             <td class="text-center">
                                 234
                             </td>
-                        </tr>
+                        </tr>-->
                         </tbody>
                     </table>
                 </div>
