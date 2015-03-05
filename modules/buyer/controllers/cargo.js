@@ -416,18 +416,6 @@ app.controller('CargoCartController',
                 });
             }
 
-            /**
-             * Save cargo
-             */
-            $scope.saveCargo = function() {
-
-                RestFactory.request(config.API.host + "cargo/update", 'PUT', $.param($rootScope.cargo), 'default')
-                    .then(function(response){
-                        console.log(response);
-                    });
-            };
-
-
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo";
             $scope.tableHeader = [
@@ -443,34 +431,51 @@ app.controller('CargoCartController',
                 $location.path( '/buyer/cargo/cargo_items');
             };
 
-            $scope.sendShipment = function(){
-                modalWindow=$modal.open({
-                    templateUrl: "/modules/buyer/views/cargo/send_shipment.html",
-                    controller: 'CargoController',
-                    backdrop:'static',
-                    size:'sm'
-                });
+            /**
+             * Save cargo
+             */
+            $scope.saveCargo = function() {
+
+                RestFactory.request(config.API.host + "cargo/update", 'PUT', $.param($rootScope.cargo), 'default')
+                    .then(function(response){
+
+                        if(response) {
+                            messageCenterService.add('success', 'The cargo has been successfully saved', { timeout: 3000 });
+
+                            modalWindow.close();
+                        }
+                        else {
+                            messageCenterService.add('danger', 'Failed to save order', { timeout: 3000 });
+                        }
+                    }, function() {
+                        messageCenterService.add('danger', 'Undefined error', { timeout: 3000 });
+                    });
             };
 
             /**
-             * Cancel cargo action
+             * Ship cargo
              */
-            $scope.cargoCancel = function(){
+            $scope.sendShipment = function(){
 
-                if (typeof $scope.id != 'undefined' && typeof $scope.message != 'undefined') {
+                if (typeof $scope.id != 'undefined'
+                    && typeof $scope.arriveWeight != 'undefined'
+                    && typeof $scope.arrivePlaces != 'undefined') {
 
                     // send mail
 
                     var params = {
-                        'id' : $scope.id,
-                        'message' : $scope.message
+                        'id'        : $scope.id,
+                        'arriveWeight'   : $scope.arriveWeight,
+                        'arrivePlaces'   : $scope.arrivePlaces
                     };
 
-                    RestFactory.request(config.API.host + "cargo/cancel", 'PUT', $.param(params), 'default')
+                    RestFactory.request(config.API.host + "cargo/ship", 'PUT', $.param(params), 'default')
                         .then(function(response){
 
-                            if(response.status  > 0) {
+                            if(response.status === true) {
                                 messageCenterService.add('success', response.message, { timeout: 3000 });
+
+                                modalWindow.close();
                             }
                             else {
                                 messageCenterService.add('danger', response.message, { timeout: 3000 });
@@ -479,7 +484,50 @@ app.controller('CargoCartController',
                         }, function() {
                             messageCenterService.add('danger', 'Undefined error', { timeout: 3000 });
                         });
-                    modalWindow.close();
+                }
+                else {
+
+                    //show modal
+                    modalWindow=$modal.open({
+                        templateUrl: "/modules/buyer/views/cargo/send_shipment.html",
+                        controller: 'CargoController',
+                        backdrop:'static',
+                        size:'md'
+                    });
+                }
+            };
+
+            /**
+             * Cancel cargo action
+             */
+            $scope.cargoCancel = function(){
+
+                if (typeof $scope.id != 'undefined'
+                    && typeof $scope.message != 'undefined') {
+
+                    // send mail
+
+                    var params = {
+                        'id'        : $scope.id,
+                        'message'   : $scope.message
+                    };
+
+                    RestFactory.request(config.API.host + "cargo/cancel", 'PUT', $.param(params), 'default')
+                        .then(function(response){
+
+                            if(response.status  > 0) {
+                                messageCenterService.add('success', response.message, { timeout: 3000 });
+
+                                modalWindow.close();
+                            }
+                            else {
+                                messageCenterService.add('danger', response.message, { timeout: 3000 });
+                            }
+
+                        }, function() {
+                            messageCenterService.add('danger', 'Undefined error', { timeout: 3000 });
+                        });
+
                 }
                 else {
                     //show modal
@@ -490,7 +538,6 @@ app.controller('CargoCartController',
                         size:'sm'
                     });
                 }
-
             };
 
         }]);
