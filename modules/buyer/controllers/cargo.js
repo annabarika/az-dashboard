@@ -63,6 +63,7 @@ app.controller('CargoController',
 
                  .then(function(response){
                       //console.log(response);
+
                      if(response){
                          $scope.allCargo=response;
                          $scope.data=composeCargo(response);
@@ -89,7 +90,10 @@ app.controller('CargoController',
                                 if(key=='status'){
 
                                     if($scope.orderPaymentStatus){
-                                        data[key]=$scope.orderPaymentStatus[value].name;
+
+                                        if($scope.orderPaymentStatus[value]) {
+                                            data[key]=$scope.orderPaymentStatus[value].name;
+                                        }
                                     }
                                     else{
                                         data[key]=value;
@@ -345,8 +349,8 @@ app.controller('CargoCartController',
         "$route",
         "RestFactory",
         "CargoCalculator",
-        '$http',
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory, CargoCalculator, $http){
+        'messageCenterService',
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory, CargoCalculator, messageCenterService){
 
             var length,factory;
 
@@ -365,7 +369,7 @@ app.controller('CargoCartController',
                 $rootScope.cargo = {};
 
                 // Calc total amount
-                $rootScope.cargo.totalAmount = CargoCalculator.calcTotalAmount($rootScope.cart.products);
+                $rootScope.totalAmount = CargoCalculator.calcTotalAmount($rootScope.cart.products);
 
                 RestFactory.request(config.API.host + "logistic_company/load")
                     .then(function(response){
@@ -417,21 +421,7 @@ app.controller('CargoCartController',
              */
             $scope.saveCargo = function() {
 
-                var params = {
-                    'id' : $rootScope.cargo.id,
-                    'document' : $rootScope.cargo.document,
-                    'factoryId' : $rootScope.cargo.factoryId,
-                    'employeeId' : $rootScope.cargo.employeeId,
-                    'arrivePlaces' :  $rootScope.cargo.arrivePlaces,
-                    'arriveWeight' :  $rootScope.cargo.arriveWeight,
-                    'incomePlaces' :  $rootScope.cargo.incomePlaces,
-                    'incomeWeight' :  $rootScope.cargo.incomeWeight,
-                    'logisticCompanyId' :  $rootScope.cargo.logisticCompanyId
-                    //'totalAmount'       :   $rootScope.cargo.totalAmount,
-                    //'insurance'       :   $rootScope.cargo.insurance
-                };
-
-                RestFactory.request(config.API.host + "cargo/update", 'PUT', $.param(params), 'default')
+                RestFactory.request(config.API.host + "cargo/update", 'PUT', $.param($rootScope.cargo), 'default')
                     .then(function(response){
                         console.log(response);
                     });
@@ -460,6 +450,47 @@ app.controller('CargoCartController',
                     backdrop:'static',
                     size:'sm'
                 });
+            };
+
+            /**
+             * Cancel cargo action
+             */
+            $scope.cargoCancel = function(){
+
+                if (typeof $scope.id != 'undefined' && typeof $scope.message != 'undefined') {
+
+                    // send mail
+
+                    var params = {
+                        'id' : $scope.id,
+                        'message' : $scope.message
+                    };
+
+                    RestFactory.request(config.API.host + "cargo/cancel", 'PUT', $.param(params), 'default')
+                        .then(function(response){
+
+                            if(response.status  > 0) {
+                                messageCenterService.add('success', response.message, { timeout: 3000 });
+                            }
+                            else {
+                                messageCenterService.add('danger', response.message, { timeout: 3000 });
+                            }
+
+                        }, function() {
+                            messageCenterService.add('danger', 'Undefined error', { timeout: 3000 });
+                        });
+                    modalWindow.close();
+                }
+                else {
+                    //show modal
+                    modalWindow = $modal.open({
+                        templateUrl: "/modules/buyer/views/cargo/cancel_cargo.html",
+                        controller: 'CargoController',
+                        backdrop:'static',
+                        size:'sm'
+                    });
+                }
+
             };
 
         }]);

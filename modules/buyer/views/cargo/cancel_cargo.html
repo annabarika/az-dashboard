@@ -1,0 +1,27 @@
+<div>
+    <!-- Scopes: id, message -->
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Cancel cargo</h4>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <input type="hidden" ng-init="id = cargo.id">
+                <tbody>
+                <tr>
+                    <td>
+                      <textarea ng-model="message" placeholder="Enter reason for cancellation" class="ng-pristine ng-valid ng-touched" rows="7" cols="30">{{cargo.id}}</textarea>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-controller="CargoCartController" ng-click="cargoCancel()"><span class="fa fa-check">Send</span></button>
+        <button type="button" class="btn btn-danger" ng-click="$close()"><span class="fa fa-times"> Cancel</span></button>
+    </div>
+</div>

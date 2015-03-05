@@ -15,7 +15,8 @@ var config = {
 		"widgets",
 		"ui.bootstrap",
 		"services",
-		"modules.buyer"
+		"modules.buyer",
+        'MessageCenterModule',
 	])
 
 		.config(function ($routeProvider, $locationProvider, $httpProvider) {
