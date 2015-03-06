@@ -469,12 +469,11 @@ app.controller('CargoCartController',
                         'arrivePlaces'   : $scope.arrivePlaces
                     };
 
-                    RestFactory.request(config.API.host + "cargo/ship", 'PUT', $.param(params), 'default')
+                    RestFactory.request(config.API.host + "cargo/ship", 'PUT', $.param(params))
                         .then(function(response){
 
                             if(response.status === true) {
                                 messageCenterService.add('success', response.message, { timeout: 3000 });
-
                                 modalWindow.close();
                             }
                             else {
@@ -512,7 +511,7 @@ app.controller('CargoCartController',
                         'message'   : $scope.message
                     };
 
-                    RestFactory.request(config.API.host + "cargo/cancel", 'PUT', $.param(params), 'default')
+                    RestFactory.request(config.API.host + "cargo/cancel", 'PUT', $.param(params))
                         .then(function(response){
 
                             if(response.status  > 0) {
