@@ -1,6 +1,6 @@
 .idea
 npm-debug.log
 
-vendor
+#vendor
 vendor-dist
 api/config.php
