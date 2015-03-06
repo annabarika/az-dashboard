@@ -39,7 +39,7 @@ class API {
 		$this->options = array(
 			CURLOPT_HEADER => false,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT => 2
+			CURLOPT_TIMEOUT => 10
 		);
 		$this->host 	= 'http://'.$host;
 		$this->url 		= '/';
@@ -116,7 +116,6 @@ class API {
 		}
 		$options = $options + $this->options;
 		curl_setopt_array($this->getHandle(), $options );
-		#print_r($options);
 		return json_decode(curl_exec($this->getHandle()), true);
 	}
 }

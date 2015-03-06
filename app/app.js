@@ -1,6 +1,6 @@
 var config = {
 	API: {
-		host:"http://lex.f.azimuth/api/",
+		host:"http://arrow.f.compass/api/",
 		key: 'test'
 	}
 };
@@ -15,7 +15,8 @@ var config = {
 		"widgets",
 		"ui.bootstrap",
 		"services",
-		"modules.buyer"
+		"modules.buyer",
+        'MessageCenterModule',
 	])
 
 		.config(function ($routeProvider, $locationProvider, $httpProvider) {

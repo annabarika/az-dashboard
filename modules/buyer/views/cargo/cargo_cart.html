@@ -1,8 +1,8 @@
 <div class="page-header">
-    <button type="submit" ng-controller="CargoCartController" ng-click="saveCargo()" class="btn btn-info"><span class="fa fa-check"> Save</span></button>
+    <button type="submit" ng-click="saveCargo()" class="btn btn-info"><span class="fa fa-check"> Save</span></button>
     <button type="submit" class="btn btn-success" ng-click="addNewItems()"><span class="fa fa-plus"> Add products</span></button>
-    <button type="submit" class="btn btn-success" ng-click="sendShipment()"><span class="fa fa-check"> Send cargo</span></button>
-    <button type="submit" class="btn btn-danger"><span class="fa fa-times"> Cancel</span></button>
+    <button type="submit" ng-disabled="cargo.arrivePlaces < 1 || cargo.arriveWeight < 1" class="btn btn-success" ng-click="sendShipment()"><span class="fa fa-check"> Send cargo</span></button>
+    <button type="submit" class="btn btn-danger" ng-click="cargoCancel()"><span class="fa fa-times"> Cancel</span></button>
     <div class="btn-group" dropdown>
         <button type="button" class="btn btn-primary"><span class="fa fa-file-o">Print</span></button>
         <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle>
@@ -37,8 +37,7 @@
                         <tr>
                             <td>Total amount</td>
                             <td>
-                                <p class="form-inline">
-                                <input class="form-control sm" type="text" numbers-only ng-model="cargo.totalAmount">&nbsp;&yen;</p>
+                                {{totalAmount}} &nbsp;&yen;
                             </td>
                         </tr>
                         <tr>
