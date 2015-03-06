@@ -687,7 +687,7 @@ app.controller('CargoItemsController',
                         items[item_index].count_list.push(
                             {"value":items_array[j].count}
                         );
-                        items[item_index].photo="http://back95.ru/f/catalogue/"+items_array[j].product.id+"/"+items_array[j].product.photos[0];
+                        items[item_index].photo="http://back95.ru/f/p/g/60x60/catalogue/"+items_array[j].product.id+"/"+items_array[j].product.photos[0];
                         items[item_index].active='';
 
                     }else{
