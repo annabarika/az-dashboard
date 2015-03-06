@@ -51,14 +51,14 @@ app.controller('CargoController',
                     }
                     $scope.orderStatus = statusByType['order'];
                     $scope.orderPaymentStatus = statusByType['orderPayment'];
-                    //console.log($scope.orderPaymentStatus);
+                   // console.log($scope.orderPaymentStatus);
                 });
 
             /* Getting cargo */
             $rootScope.documentTitle = "Cargo cart";
             $scope.tableHeader = [
                 { name: "id", title: 'Document' },
-                { name: "cargoDoc", title: 'Cargo Document' },
+                { name: "document", title: 'Cargo Document' },
                 { name: "createDate", title: 'Create date' },
                 { name: "status", title: 'Status' },
                 { name: "factory", title: 'Factory' }
@@ -66,7 +66,7 @@ app.controller('CargoController',
 
              RestFactory.request(config.API.host + "cargo/load")
                  .then(function(response){
-                      //console.log(response);
+                      console.log(response);
                      if(response){
                          $scope.allCargo=response;
                          $scope.data=composeCargo(response);
@@ -86,13 +86,14 @@ app.controller('CargoController',
                     angular.forEach(response[i],function(item,k){
                         if(k=='cargo'){
                             angular.forEach(item,function(value,key){
-                                if(key=='createDate'||key=='id'){
+                                if(key=='createDate'||key=='id'||key=='document'){
                                     data[key]=value;
                                     // $scope.date.push(item['createDate']);
                                 }
                                 if(key=='status'){
 
                                     if($scope.orderPaymentStatus){
+                                        //console.log(item);
                                         data[key]=$scope.orderPaymentStatus[value].name;
                                     }
                                     else{
@@ -181,27 +182,27 @@ app.controller('CargoController',
 
 
            $scope.edit = function () {
-                //console.log($rootScope.row);
+                console.log($rootScope.row);
                 length=$scope.allCargo.length;
                 row=undefined;
                 for(var i=0;i<length;i++){
 
                     if(row!=undefined){
                         break;
-
                     }
 
                     angular.forEach($scope.allCargo[i],function(value,key){
                         if(key=='cargo'){
-                            if(value.createDate==$rootScope.row.createDate&&value.document==$rootScope.row.document){
-                                //console.log($scope.allCargo[i]);
+                            //console.log($scope.allCargo[i]);
+                            if(value.createDate==$rootScope.row.createDate&&value.id==$rootScope.row.id){
+                               // console.log($scope.allCargo[i]);
                                 row=$scope.allCargo[i];
                                 $rootScope.cart=row;
                             }
                         }
                     })
                 }
-
+                console.log($rootScope.cart);
                 $location.path( '/buyer/cargo/cargo_cart');
            };
 
@@ -614,7 +615,7 @@ app.controller('CargoItemsController',
              * Get all products and add product in cargo
              */
             $scope.addNewProducts=function(){
-                url="http://b.dr.dev95.ru/legacy/jsonrpc/?method=catalogue.getProducts&params%5Btokien_id%5D=5f77e685beaa564fd3585738d65108c4";
+               /* url="http://b.dr.dev95.ru/legacy/jsonrpc/?method=catalogue.getProducts&params%5Btokien_id%5D=5f77e685beaa564fd3585738d65108c4";
 
                 RestFactory.request(url).then(
                     function(response){
@@ -623,12 +624,12 @@ app.controller('CargoItemsController',
                     function(error){
                         console.log(error);
                     }
-                );
-               /* var modalInstance =$modal.open({
+                );*/
+                var modalInstance =$modal.open({
                     templateUrl: "/modules/buyer/views/cargo/new_product.html",
                     controller: 'NewProductController',
                     backdrop:'static'
-                });*/
+                });
             };
 
 
