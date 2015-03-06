@@ -1,6 +1,6 @@
 var config = {
 	API: {
-		host:"http://arrow.f.compass/api/",
+		host:"http://green.f.compass/api/",
 		key: 'test'
 	}
 };
@@ -16,7 +16,7 @@ var config = {
 		"ui.bootstrap",
 		"services",
 		"modules.buyer",
-        'MessageCenterModule',
+        'MessageCenterModule'
 	])
 
 		.config(function ($routeProvider, $locationProvider, $httpProvider) {
