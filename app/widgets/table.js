@@ -218,7 +218,8 @@
                     }
                 }
 
-                $scope.addItem=function(){
+                $scope.addItem=function(row){
+                    tableFactory.getRow(row);
                     $scope.cellsButton();
                 }
             }
