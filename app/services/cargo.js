@@ -107,6 +107,7 @@
                     var cargoId,orderId,sizeId,articul,productId,factoryArticul,count,price;
                     console.log("we here");
                     console.log( "newcargo_items",$rootScope.newcargo_items);
+                    console.log( "cargo_items",$rootScope.cargo_items);
                     console.log("items",$rootScope.items);
                     console.log("cart",$rootScope.cart);
                     console.log("row",$rootScope.order_id);
@@ -124,20 +125,38 @@
                             }
                         }
                     }
+                    var result=[];
+                    if($rootScope.row.size_list.length>1){
 
+                        var size_length=$rootScope.row.size_list.length;
+                        for(var i=0;i<size_length;i++){
 
-
-
-                    var result={
-                        'cargoId': ($rootScope.cart.cargo) ? $rootScope.cart.cargo.id: "",
-                        'orderId':($rootScope.order_id)?$rootScope.order_id:"",
-                        'sizeId': $rootScope.row.size_list[0].id,
-                        'articul': $rootScope.row.article,
-                        'productId':productId,
-                        'factoryArticul':factoryArticul,
-                        'price':price,
-                        'count':$rootScope.row.count_list[0].value
-                    };
+                            var obj={
+                                'cargoId': ($rootScope.cart.cargo) ? $rootScope.cart.cargo.id: "",
+                                'orderId':($rootScope.order_id)?$rootScope.order_id:"",
+                                'sizeId': $rootScope.row.size_list[i].id,
+                                'articul': $rootScope.row.article,
+                                'productId':(productId) ? productId : "",
+                                'factoryArticul':(factoryArticul) ? factoryArticul: "",
+                                'price':(price) ? price : "",
+                                'count':$rootScope.row.count_list[i].value
+                            };
+                            result.push(obj);
+                        }
+                    }
+                    else{
+                        var obj={
+                            'cargoId': ($rootScope.cart.cargo) ? $rootScope.cart.cargo.id: "",
+                            'orderId':($rootScope.order_id)?$rootScope.order_id:"",
+                            'sizeId': $rootScope.row.size_list[0].id,
+                            'articul': $rootScope.row.article,
+                            'productId':productId,
+                            'factoryArticul':factoryArticul,
+                            'price':price,
+                            'count':$rootScope.row.count_list[0].value
+                        };
+                        result.push(obj);
+                    }
 
                     return result;
                 }
