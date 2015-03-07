@@ -1,6 +1,7 @@
 var config = {
 	API: {
 		host:"http://green.f.compass/api/",
+		jsonp:"http://green.f.compass/api/jsonp.php",
 		key: 'test'
 	}
 };

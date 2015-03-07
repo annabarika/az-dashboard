@@ -8,7 +8,7 @@
                 <div class="col-sm-6 va-m">
                     <h4>Add items to document</h4>
                 </div>
-                <button type="submit" class="btn btn-info pull-right"><span class="fa fa-check"> Save</span></button>
+                <button type="submit" class="btn btn-info pull-right" ng-click="saveItems()"><span class="fa fa-check"> Save</span></button>
                 <button class="btn-default" ng-click="addNewProducts()"><span class="fa fa-check"> Add products</span></button>
             </div>
             <!--/ basic info heading -->
@@ -62,13 +62,13 @@
                             {{row.size_list[0].value}}
                         </td>
                         <td class="text-center">
-                            3x
+                            x
                         </td>
                         <td class="text-center">
                             {{row.count_list[0].value}}
                         </td>
                         <td class="text-center">
-                            <button type="submit" class="btn btn-default"><span class="fa fa-trash-o"></span></button>
+                            <button type="submit" class="btn btn-default" ng-click="delete(row)"><span class="fa fa-trash-o"></span></button>
                         </td>
                     </tr>
                     <!--<tr>

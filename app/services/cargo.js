@@ -30,113 +30,70 @@
                  * @param object products
                  */
                 resolveResponse: function (response) {
-                    var length=response.length;
-                    if(length) {
+                   /* var length=response.length;
+                    if(length) {*/
 
                         var rules = [];
 
-                        console.log('Response', response);
-                        //return;
-                        var counter = 0;
-                        for(var i=0; i<length; i++) {
-
-
-                            console.log(counter);
-                            if(response[counter].articul) {
-
-                                var pushObj = {
-                                    "article": response[counter].articul,
-                                    "size_list": function () {
-                                        console.log("size",counter);
+                        angular.forEach(response, function(value, key) {
+                            var pushObj = {
+                                "article":  value.articul,
+                                "size_list": (function() {
                                         var sizes = [];
 
-                                        //console.log('Res', response[counter]);
-                                        if (typeof response[counter].sizeInfo != 'undefined' || typeof response[counter].sizeInfo != null) {
+                                        for (var k = 0; k < $rootScope.all_sizes.length; k++) {
 
-                                            if (response[counter].sizeInfo.length > 1) {
-
-                                                angular.forEach(response[counter].sizeInfo, function (value, key) {
-
-                                                    for (var k = 0; k < $rootScope.all_sizes.length; k++) {
-                                                        if (key === $rootScope.all_sizes[k].name) {
-                                                            sizes.push({
-                                                                "value": key,
-                                                                "id": $rootScope.all_sizes[k].id
-                                                            });
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                            else if (response[counter].sizeInfo.length === 1) {
-                                                for (var k = 0; k < $rootScope.all_sizes.length; k++) {
-
-                                                    angular.forEach(response[counter].sizeInfo, function (value, key) {
-                                                        if (key == $rootScope.all_sizes[k].name) {
-
-                                                            sizes.push({
-                                                                "value": key,
-                                                                "id": $rootScope.all_sizes[k].id
-                                                            });
-                                                        }
+                                            for(var v = 0; v < value.sizes.length; v++) {
+                                                if (value.sizes[v] === $rootScope.all_sizes[k].id) {
+                                                    sizes.push({
+                                                        "value":  $rootScope.all_sizes[k].name,
+                                                        "id": $rootScope.all_sizes[k].id
                                                     });
                                                 }
                                             }
-
                                         }
-                                        return sizes;
-                                    },
-                                    "count_list":function(){
-                                        console.log("count",counter);
-                                        var counts=[];
-                                        if (response[counter].sizeInfo.length > 1) {
+                                    return sizes;
+                                })(),
 
-                                           for(var i=0;i<response[counter].sizeInfo.length;i++){
-                                               counts.push({
-                                                   "value":0
-                                               });
-                                           }
-                                        }else{
+                                "count_list": (function() {
+
+                                    var counts=[];
+                                    if (value.sizes.length > 1) {
+
+                                        for(var i=0; i<value.sizes.length;i++){
                                             counts.push({
                                                 "value":0
                                             });
                                         }
-                                        return counts;
-                                    },
-                                    "photo": function(){
-                                        var photo='';
-                                        console.log(response[counter].photos,counter);
-                                        if(angular.isUndefined(response[counter].photos) === false) {
+                                    }else{
+                                        counts.push({
+                                            "value":0
+                                        });
+                                    }
+                                    return counts;
+                                })(),
+                                "photo" : "http://back95.ru/f/p/g/60x60/catalogue/"+value.id+"/"+value.photos[0],
+                                "active": '',
+                                "id"    : value.id
+                            };
+                            rules.push(pushObj);
+                        });
 
-                                            if(response[counter].photos != null) {
-                                                if(response[counter].photos.length > 0){
-                                                    photo="http://back95.ru/f/p/g/60x60/catalogue/" + response[counter].id + "/" + response[counter].photos[0];
-                                                }
-                                            }
-                                        }
-                                        return photo;
-                                    },
-                                    "active": ''
-                                };
-                                rules.push(pushObj);
-                                counter++;
-                            }
+                            //var result =[];
+                            //for(var j= 0; j < rules.length; j++) {
+                            //
+                            //    result.push({
+                            //        'article'       : rules[j].article,
+                            //        'size_list'     : rules[j].size_list(),
+                            //        'count_list'    : rules[j].count_list(),
+                            //        'photo'         : rules[j].photo(),
+                            //        'active'        : rules[j].active
+                            //    })
+                            //}
 
-                        }
-                            var result =[];
-                            for(var j= 0; j < rules.length; j++) {
-
-                                result.push({
-                                    'article'       : rules[j].article,
-                                    'size_list'     : rules[j].size_list(),
-                                    'count_list'    : rules[j].count_list(),
-                                    'photo'         : rules[j].photo(),
-                                    'active'        : rules[j].active
-                                })
-                            }
-
-                        return result;
+                        return rules;
                     }
-                }
-            };
+                };
+            //};
         }]);
 })();

@@ -553,7 +553,9 @@ app.controller('CargoItemsController',
         "RestFactory",
         "$http",
         'CargoCalculator',
-        function ($scope, $rootScope, $modal, $location, RestFactory,$http, CargoCalculator){
+        "messageCenterService",
+        "$q",
+        function ($scope, $rootScope, $modal, $location, RestFactory,$http, CargoCalculator,messageCenterService, $q){
 
             var items=[],length, item_length,url,data;
 
@@ -862,26 +864,52 @@ app.controller('CargoItemsController',
                  controller: 'NewProductController',
                  backdrop:'static'
                  });
-                 modalInstance.result.then(function (articul) {
+                 modalInstance.result.then(function (articul){
                     console.log(articul);
                     if(articul){
-                        url=config.API.host+'/product/load/articul/'+articul;
+
+
+                        url=config.API.jsonp+'?params[articul]='+articul;
+
                         RestFactory.request(url).then(
                             function (response) {
-                            /*    var resolveData = CargoCalculator.resolveResponse(response);
-                console.log(resolveData);
-                                $scope.cargo_items=resolveData;*/
-                                if(response){
-                                    console.log(response);
+                                console.log(response);
+                                if(response.result){
+                                    console.log(JSON.parse(response.result));
+                                    var result=JSON.parse(response.result).products;
+                                    var resolveData = CargoCalculator.resolveResponse(result);
+                                    //console.log(resolveData);
+                                    $scope.cargo_items=resolveData;
+
                                     if($rootScope.newcargo_items){
                                         for(var i;i<response.length;i++){
-                                            $rootScope.newcargo_items.push(response[i]);
+                                            $rootScope.newcargo_items.push(result);
                                         }
                                     }
                                     else{
-                                        $rootScope.newcargo_items=response;
+                                        //$rootScope.newcargo_items=result;
+                                        angular.forEach(result,function(value,key){
+                                            $rootScope.newcargo_items=[];
+                                            $rootScope.newcargo_items.push(value);
+                                        })
                                     }
-                                    composeNewProduct(response);
+                                    //composeNewProduct(result);
+                                }
+                                else{
+
+                                    var modal =$modal.open({
+                                        templateUrl: "/modules/buyer/views/cargo/ask.html",
+                                        controller: 'NewProductController',
+                                        backdrop:'static'
+                                    });
+                                    modal.result.then(function(){
+                                        var modalInstance=$modal.open({
+                                         templateUrl: "/modules/buyer/views/cargo/create_product_item.html",
+                                         controller: 'AddProductController',
+                                         backdrop:'static',
+                                         size:'md'
+                                         });
+                                    });
                                 }
                             }
                         )
@@ -917,13 +945,15 @@ app.controller('CargoItemsController',
                         }
 
                     }
-                    url = config.API.host + "/cargo/addtocargo";
+                    //url = config.API.host + "/cargo/addtocargo";
+                    url = config.API.host + "/cargo/addproduct";
                     length = $rootScope.row.size_list.length;
                     console.log("new_cargo",$rootScope.new_cargo);
                     console.log( "newcargo_items",$rootScope.newcargo_items);
                     console.log("items",$rootScope.items);
                     console.log("cart",$rootScope.cart);
                     console.log("row",$rootScope.row);
+
                     if(typeof $rootScope.new_cargo == "undefined" && typeof $rootScope.newcargo_items.product=='undefined'){
                         cargoId=$rootScope.cart.cargo.id;
 
@@ -933,27 +963,33 @@ app.controller('CargoItemsController',
 
                                 data = {
                                     'cargoId': $rootScope.cart.cargo.id,
-                                    'docId': $rootScope.newcargo_items[number].id,//orderid
+                                    'orderId': $rootScope.newcargo_items[number].id,//orderid
                                     'sizeId': $rootScope.row.size_list[i].id,
-                                    'id': $rootScope.newcargo_items[number].id,//id prod
+                                    //'id': $rootScope.newcargo_items[number].id,//id prod
                                     'articul': $rootScope.newcargo_items[number].articul,
-                                    'factoryArticul': $rootScope.newcargo_items[number].factoryArticul,
+                                    'factoryArticul': $rootScope.newcargo_items[number].vendor_articul,
                                     'count': $rootScope.row.count_list[i].value,
-                                    'price': $rootScope.newcargo_items[number].price
+                                    'price': $rootScope.newcargo_items[number].price_cn
                                 };
 
                                 RestFactory.request(url, 'POST', data).then(
                                     function (response) {
-                                        //console.log(response);
-                                        if (response) {
+                                        //console.log("response",response);
+                                        if (typeof response[0]=='object') {
                                             $scope.cargo_order_row.push({
                                                 "article": $rootScope.row.article,
                                                 "size_list": $rootScope.row.size_list[i],
                                                 "count_list": $rootScope.row.count_list[i],
                                                 "photo": $rootScope.row.photo,
-                                                "active": ''
+                                                "active": '',
+                                                "id":$rootScope.newcargo_items[number].id
                                             });
                                         }
+                                        else{
+                                            console.log("string",response);
+                                            messageCenterService.add('danger', response[0], { timeout: 3000 });
+                                        }
+
                                     }
                                 )
                             }
@@ -964,19 +1000,33 @@ app.controller('CargoItemsController',
 
                             data = {
                                 'cargoId': $rootScope.cart.cargo.id,
-                                'docId': $rootScope.newcargo_items[number].id,//orderid
+                                'orderId': $rootScope.newcargo_items[number].id,//orderid
                                 'sizeId': $rootScope.row.size_list[0].id,
-                                'id': $rootScope.newcargo_items[number].id,//id prod
+                                //'id': $rootScope.newcargo_items[number].id,//id prod
                                 'articul': $rootScope.newcargo_items[number].articul,
-                                'factoryArticul': $rootScope.newcargo_items[number].factoryArticul,
+                                'factoryArticul': $rootScope.newcargo_items[number].vendor_articul,
                                 'count': $rootScope.row.count_list[0].value,
-                                'price': $rootScope.newcargo_items[number].price
+                                'price': $rootScope.newcargo_items[number].price_cn
                             };
+                            console.log(data);
                             RestFactory.request(url, 'POST', data).then(
                                 function (response) {
-
+                                    console.log(response);
                                     if (response) {
-                                        $scope.cargo_order_row.push($rootScope.row);
+                                       // $scope.cargo_order_row.push($rootScope.row);
+                                        $scope.cargo_order_row.push({
+                                            "article": $rootScope.row.article,
+                                            "size_list": $rootScope.row.size_list[i],
+                                            "count_list": $rootScope.row.count_list[i],
+                                            "photo": $rootScope.row.photo,
+                                            "active": '',
+                                            "id":$rootScope.newcargo_items[number].id
+                                        });
+
+
+
+
+
                                         $scope.cargo_items.splice(number, 1);
                                     }
                                 }
@@ -990,9 +1040,9 @@ app.controller('CargoItemsController',
 
                                 data = {
                                     'cargoId': $rootScope.new_cargo.cargo.id,
-                                    'docId': $rootScope.newcargo_items[number].id,//orderid
+                                    'orderId': $rootScope.newcargo_items[number].id,//orderid
                                     'sizeId': $rootScope.row.size_list[i].id,
-                                    'id': $rootScope.newcargo_items[number].product.id,//id prod
+                                    //'id': $rootScope.newcargo_items[number].product.id,//id prod
                                     'articul': $rootScope.newcargo_items[number].product.articul,
                                     'factoryArticul': $rootScope.newcargo_items[number].product.factoryArticul,
                                     'count': $rootScope.row.count_list[i].value,
@@ -1008,7 +1058,8 @@ app.controller('CargoItemsController',
                                                 "size_list": $rootScope.row.size_list[i],
                                                 "count_list": $rootScope.row.count_list[i],
                                                 "photo": $rootScope.row.photo,
-                                                "active": ''
+                                                "active": '',
+                                                'id': $rootScope.newcargo_items[number].product.id
                                             });
                                         }
                                     }
@@ -1021,9 +1072,9 @@ app.controller('CargoItemsController',
 
                             data = {
                                 'cargoId': $rootScope.new_cargo.cargo.id,
-                                'docId': $rootScope.newcargo_items[number].id,//orderid
+                                'orderId': $rootScope.newcargo_items[number].id,//orderid
                                 'sizeId': $rootScope.row.size_list[0].id,
-                                'id': $rootScope.newcargo_items[number].product.id,//id prod
+                                //'id': $rootScope.newcargo_items[number].product.id,//id prod
                                 'articul': $rootScope.newcargo_items[number].product.articul,
                                 'factoryArticul': $rootScope.newcargo_items[number].product.factoryArticul,
                                 'count': $rootScope.row.count_list[0].value,
@@ -1031,9 +1082,20 @@ app.controller('CargoItemsController',
                             };
                             RestFactory.request(url, 'POST', data).then(
                                 function (response) {
-
                                     if (response) {
-                                        $scope.cargo_order_row.push($rootScope.row);
+                                        console.log("response",response);
+                                       // $scope.cargo_order_row.push($rootScope.row);
+
+                                        $scope.cargo_order_row.push({
+                                            "article": $rootScope.row.article,
+                                            "size_list": $rootScope.row.size_list[i],
+                                            "count_list": $rootScope.row.count_list[i],
+                                            "photo": $rootScope.row.photo,
+                                            "active": '',
+                                            'id': $rootScope.newcargo_items[number].product.id
+                                        });
+
+
                                         $scope.cargo_items.splice(number, 1);
                                     }
                                 }
@@ -1041,7 +1103,54 @@ app.controller('CargoItemsController',
                         }
                     }
                 };
+            /**
+             * save
+             */
+            $scope.saveItems=function(){
 
+                console.log("new_cargo",$rootScope.new_cargo);
+                console.log( "newcargo_items",$rootScope.newcargo_items);
+                console.log("items",$rootScope.items);
+                console.log("cart",$rootScope.cart);
+                console.log("row",$rootScope.row);
+
+                    /*RestFactory.request(config.API.host + "cargo/update", 'POST', $.param($rootScope.cargo), 'default')
+                        .then(function(response){
+
+                            if(response) {
+                                messageCenterService.add('success', 'The cargo has been successfully saved', { timeout: 3000 });
+
+                                //modalWindow.close();
+                            }
+                            else {
+                                messageCenterService.add('danger', 'Failed to save order', { timeout: 3000 });
+                            }
+                        }, function() {
+                            messageCenterService.add('danger', 'Undefined error', { timeout: 3000 });
+                        });*/
+
+            };
+            /**
+             * delete
+             */
+            $scope.delete=function(row){
+               // $scope.cargo_order_row;
+                    console.log(row);
+               /* RestFactory.request(config.API.host + "cargo/delete-product", 'DELETE', $.param($rootScope.cargo), 'default')
+                    .then(function(response){
+
+                        if(response) {
+                            messageCenterService.add('success', 'The cargo has been successfully saved', { timeout: 3000 });
+
+                            //modalWindow.close();
+                        }
+                        else {
+                            messageCenterService.add('danger', 'Failed to save order', { timeout: 3000 });
+                        }
+                    }, function() {
+                        messageCenterService.add('danger', 'Undefined error', { timeout: 3000 });
+                    });*/
+            }
             }]);
 
 app.controller('NewProductController',function($scope,$modalInstance, RestFactory,$modal){
@@ -1052,7 +1161,30 @@ app.controller('NewProductController',function($scope,$modalInstance, RestFactor
     $scope.cancel = function () {
         $modalInstance.dismiss();
     };
+    $scope.yes=function(){
+        $modalInstance.close();
+    };
+
+
 });
+
+app.controller('AddProductController',function($scope,$modalInstance, RestFactory){
+
+    $scope.create=function(obj){
+        console.log('create',obj);
+        var url=config.API.host+"cargo/addtocargo";
+        var cargoId,docId,sizeId,id,articul,factoryArticul,count,price;
+        RestFactory.request()
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+});
+
+
+
 
 app.controller('NewSizeController',
 

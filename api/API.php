@@ -75,6 +75,7 @@ class API {
 	 */
 	public function setParams($params){
 		$this->params = http_build_query( $params );
+
 		return $this;
 	}
 	/**
@@ -108,7 +109,7 @@ class API {
 	public function call(){
 
 		$options = array(
-			CURLOPT_URL => $this->host.$this->url."?".$this->params,
+			CURLOPT_URL => $this->host.$this->url,
 			CURLOPT_CUSTOMREQUEST => $this->method, // GET POST PUT PATCH DELETE HEAD OPTIONS
 		);
 		if( $this->method == 'POST' || $this->method == 'PUT'){
@@ -116,6 +117,13 @@ class API {
 		}
 		$options = $options + $this->options;
 		curl_setopt_array($this->getHandle(), $options );
-		return json_decode(curl_exec($this->getHandle()), true);
+
+		$result = curl_exec($this->getHandle());
+
+		if(curl_errno($this->getHandle())){
+			throw new \Exception(curl_error($this->getHandle()));
+		}
+		return json_decode($result, true);
+
 	}
 }
