@@ -98,22 +98,26 @@
 
                         return rules;
                     },
-
+                /**
+                 *
+                 * @returns {{cargoId: *, orderId: ($rootScope.order_id|*), sizeId: *, articul: (*|$scope.summaryCart.article|article), productId: *, factoryArticul: *, price: *, count: *}}
+                 */
                 parseData:function(){
 
                     var cargoId,orderId,sizeId,articul,productId,factoryArticul,count,price;
-                    /*console.log("we here");
+                    console.log("we here");
                     console.log( "newcargo_items",$rootScope.newcargo_items);
                     console.log("items",$rootScope.items);
                     console.log("cart",$rootScope.cart);
                     console.log("row",$rootScope.order_id);
                     console.log("factoryOrders",$rootScope.factoryOrders);
-                    console.log("row",$rootScope.row);*/
+                    console.log("row",$rootScope.row);
                     parser_one();
                     function parser_one(){
                         var length=$rootScope.cart.products.length;
                         for(var i=0;i<length;i++){
                             if($rootScope.cart.products[i].articul==$rootScope.row.article){
+                                $rootScope.row_number=i;
                                 productId=$rootScope.cart.products[i].productId;
                                 factoryArticul=$rootScope.cart.products[i].factoryArticul;
                                 price=$rootScope.cart.products[i].price;
@@ -131,7 +135,8 @@
                         'articul': $rootScope.row.article,
                         'productId':productId,
                         'factoryArticul':factoryArticul,
-                        'price':price
+                        'price':price,
+                        'count':$rootScope.row.count_list[0].value
                     };
 
                     return result;

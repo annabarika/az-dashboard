@@ -988,29 +988,38 @@ app.controller('CargoItemsController',
                                      function(id){
                                         $rootScope.order_id=id;
                                          console.log($rootScope.order_id);
-                                         //$scope.buttonAction_two();
+
                                          var data=CargoCalculator.parseData();
+
+                                         /*for(prop in data){
+                                             if(angular.isUndefined(prop))
+                                         }*/
+                                         angular.forEach(data,function(value,key){
+                                             if(angular.isUndefined(value)){
+                                                 $scope.buttonAction_two();
+                                                 return;
+                                             }
+                                         });
+
+
+
                                          console.log(data);
                                          url=config.API.host + "cargo/addproduct";
                                          RestFactory.request(url, 'POST', data).then(
                                              function (response) {
                                                  console.log(response);
                                                  if (response!='null') {
-                                                     // $scope.cargo_order_row.push($rootScope.row);
-                                                    /* $scope.cargo_order_row.push({
-                                                         "article": $rootScope.row.article,
-                                                         "size_list": $rootScope.row.size_list[i],
-                                                         "count_list": $rootScope.row.count_list[i],
+
+                                                     $scope.cargo_order_row.push({
+                                                         "article": response.article,
+                                                         "size_list": response.size,
+                                                         "count_list": response.count,
                                                          "photo": $rootScope.row.photo,
                                                          "active": '',
-                                                         "id":$rootScope.newcargo_items[number].id
-                                                     });*/
+                                                         "id":response.id
+                                                     });
 
-
-
-
-
-                                                     //$scope.cargo_items.splice(number, 1);
+                                                     $scope.cargo_items.splice($rootScope.row_number, 1);
                                                  }
                                                  else{
 
