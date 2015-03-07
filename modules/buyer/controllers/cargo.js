@@ -34,6 +34,7 @@ app.controller('CargoController',
                         factory.push( { id: response[i].factory.id, name: response[i].factory.name } );
                     }
                     $scope.Factory=factory;
+                    $rootScope.all_factories=factory;
                 });
             /**
              * get all sizes
@@ -268,7 +269,7 @@ app.controller('NewCargoController',
                 var method='POST';
                 RestFactory.request(url,method,data)
                     .then(function(response){
-                        //console.log(response);
+                        //console.log("new cargo",response);
                         if(typeof(response)=='object'){
                             $rootScope.new_cargo=response;
                             var id=response.cargo.id;
@@ -277,10 +278,13 @@ app.controller('NewCargoController',
                             /*get factory orders for new Cargo*/
                             RestFactory.request(url)
                                 .then(function(response){
-                                   // console.log(url);
-                                    //console.log(response);
-                                    $rootScope.factoryOrders=response;
-                                    factoryOrders();
+                                    console.log(url);
+                                    console.log(response);
+                                    if(response){
+                                        $rootScope.factoryOrders=response;
+                                        factoryOrders();
+                                    }
+
                                 });
                         }
                         else{
@@ -324,7 +328,17 @@ app.controller("CargoOrdersController",function($scope,$rootScope,RestFactory,$l
     }
 
     $scope.choose=function(obj){
-        //console.log(obj);
+       /* console.log("order",obj[0].id);
+        console.log("this",$scope.orders[0].oneProduct[0].id);*/
+            for(var i=0;i<$scope.orders.length;i++){
+                if(obj[0].id==$scope.orders[i].oneProduct[0].id){
+                    $rootScope.order_id=$scope.orders[i].id;
+                    //return;
+                }
+            }
+            console.log("this",$rootScope.order_id);
+
+
         $rootScope.newcargo_items=obj;
         $modalInstance.close();
         $location.path("/buyer/cargo/cargo_items");
@@ -809,8 +823,8 @@ app.controller('CargoItemsController',
              */
             $scope.newSize=function(){
 
-            console.log($rootScope.row);
-            console.log($rootScope.all_sizes);
+            /*console.log($rootScope.row);
+            console.log($rootScope.all_sizes);*/
 
                 var modalInstance=$modal.open(
                     {
@@ -823,6 +837,7 @@ app.controller('CargoItemsController',
                     if(obj.size==undefined||obj.count==undefined){
                         return;
                     }
+                    console.log($scope.cargo_items);
                     length=$scope.cargo_items.length;
                     for(var i=0;i<length;i++){
                         if($scope.cargo_items[i].article==$rootScope.row.article){
@@ -867,19 +882,23 @@ app.controller('CargoItemsController',
                  modalInstance.result.then(function (articul){
                     console.log(articul);
                     if(articul){
-
-
                         url=config.API.jsonp+'?params[articul]='+articul;
-
+                        console.log(config.API.jsonp);
                         RestFactory.request(url).then(
                             function (response) {
-                                console.log(response);
+
                                 if(response.result){
-                                    console.log(JSON.parse(response.result));
+
                                     var result=JSON.parse(response.result).products;
                                     var resolveData = CargoCalculator.resolveResponse(result);
-                                    //console.log(resolveData);
-                                    $scope.cargo_items=resolveData;
+                                    console.log(resolveData);
+                                    if($scope.cargo_items!=undefined){
+                                        $scope.cargo_items.push(resolveData[0]);
+                                    }
+                                    else{
+                                        $scope.cargo_items=resolveData;
+                                    }
+
 
                                     if($rootScope.newcargo_items){
                                         for(var i;i<response.length;i++){
@@ -909,7 +928,11 @@ app.controller('CargoItemsController',
                                          backdrop:'static',
                                          size:'md'
                                          });
+                                        /*modal.result.then(function(obj){
+                                            console.log("this",obj);
+                                        });*/
                                     });
+
                                 }
                             }
                         )
@@ -918,43 +941,153 @@ app.controller('CargoItemsController',
                  })
             };
 
+            $scope.$watch('tmp',function(value){
+                console.log("tmp",$scope.cargo_items,value);
+                if(value!=undefined){
+                    if($scope.cargo_items!=undefined){
+
+                        $scope.cargo_items.push(value[0]);
+                    }
+                    else{
+                        $scope.cargo_items=value;
+                    }
+
+                }
+            });
+
+
+                $scope.buttonAction=function(){
+
+                    var modalInstance=$modal.open({
+                        templateUrl: "/modules/buyer/views/cargo/change_factory.html",
+                        controller: 'ChangeFactoryController',
+                        backdrop:'static',
+                        size:'md'
+                    });
+                    modalInstance.result.then(
+                        function(changed_factory){
+                            //console.log("this",changed_factory);
+                           // $rootScope.new_cargo=response;
+                             var id=$rootScope.cart.cargo.id;
+                             //console.log("id",id);
+                             url=config.API.host+"cargo/getorders/cargoId/"+id+"/factoryId/"+changed_factory.id;
+                             //get factory orders for new Cargo
+                             RestFactory.request(url)
+                             .then(function(response){
+                             console.log(url);
+                             console.log("this",response);
+                            if(typeof response !='null'){
+                                $rootScope.factoryOrders=response;
+
+                                 var modalWindow =$modal.open({
+                                     templateUrl: "/modules/buyer/views/cargo/order_for_factory.html",
+                                     controller: 'ChangeFactoryController',
+                                     backdrop:'static'
+                                 });
+                                 modalWindow.result.then(
+                                     function(id){
+                                        $rootScope.order_id=id;
+                                         console.log($rootScope.order_id);
+                                         //$scope.buttonAction_two();
+                                         var data=CargoCalculator.parseData();
+                                         console.log(data);
+                                         url=config.API.host + "cargo/addproduct";
+                                         RestFactory.request(url, 'POST', data).then(
+                                             function (response) {
+                                                 console.log(response);
+                                                 if (response!='null') {
+                                                     // $scope.cargo_order_row.push($rootScope.row);
+                                                    /* $scope.cargo_order_row.push({
+                                                         "article": $rootScope.row.article,
+                                                         "size_list": $rootScope.row.size_list[i],
+                                                         "count_list": $rootScope.row.count_list[i],
+                                                         "photo": $rootScope.row.photo,
+                                                         "active": '',
+                                                         "id":$rootScope.newcargo_items[number].id
+                                                     });*/
+
+
+
+
+
+                                                     //$scope.cargo_items.splice(number, 1);
+                                                 }
+                                                 else{
+
+                                                 }
+                                             }
+                                         )
+
+
+
+                                     }
+                                 )
+                            }
+
+                             });
+
+
+
+
+                        }
+                    )
+                };
+
+
+
+
+
                  /**
                  * Add to cargo
                  */
-                $scope.buttonAction = function () {
+                $scope.buttonAction_two=function () {
                     var number = 0;
                     length = $scope.cargo_items.length;
-                    if (length > 1) {
-                        for (var i = 0; i < length; i++) {
-                            //console.log( $rootScope.newcargo_items);
-                            if( typeof $rootScope.newcargo_items[i].product!='undefined'){
-                                if ($rootScope.row.article == $rootScope.newcargo_items[i].product.articul) {
-                                    number = i;
-                                    break;
+                        console.log( $scope.cargo_items);
 
-                                }
-                                else{
-                                    if ($rootScope.row.article == $rootScope.newcargo_items[i].articul) {
+                    if($rootScope.newcargo_items){
+                        if (length > 1) {
+                            for (var i = 0; i < length; i++){
+                                console.log("items", $rootScope.newcargo_items);
+                                if( typeof $rootScope.newcargo_items[i].product=='object'){
+                                    if ($rootScope.row.article == $rootScope.newcargo_items[i].product.articul) {
                                         number = i;
                                         break;
 
                                     }
+                                    else{
+                                        if ($rootScope.row.article == $rootScope.newcargo_items[i].articul) {
+                                            number = i;
+                                            break;
+
+                                        }
+                                    }
                                 }
+
                             }
 
                         }
-
                     }
+
+
+
                     //url = config.API.host + "/cargo/addtocargo";
-                    url = config.API.host + "/cargo/addproduct";
+                    url = config.API.host + "cargo/addproduct";
                     length = $rootScope.row.size_list.length;
-                    console.log("new_cargo",$rootScope.new_cargo);
+                    /*console.log("new_cargo",$rootScope.new_cargo);
                     console.log( "newcargo_items",$rootScope.newcargo_items);
                     console.log("items",$rootScope.items);
                     console.log("cart",$rootScope.cart);
-                    console.log("row",$rootScope.row);
+                    console.log("row",$rootScope.order_id);
+                    console.log("factoryOrders",$rootScope.factoryOrders);
+                    console.log("row",$rootScope.order_id);*/
 
-                    if(typeof $rootScope.new_cargo == "undefined" && typeof $rootScope.newcargo_items.product=='undefined'){
+                   /* if($rootScope.newcargo_items==undefined){
+
+                    }
+*/
+
+                    if($rootScope.newcargo_items!=undefined||typeof $rootScope.new_cargo == "undefined" && typeof $rootScope.newcargo_items.product=='undefined'){
                         cargoId=$rootScope.cart.cargo.id;
 
 
@@ -963,10 +1096,11 @@ app.controller('CargoItemsController',
 
                                 data = {
                                     'cargoId': $rootScope.cart.cargo.id,
-                                    'orderId': $rootScope.newcargo_items[number].id,//orderid
+                                    'orderId':$rootScope.order_id,//orderid
                                     'sizeId': $rootScope.row.size_list[i].id,
                                     //'id': $rootScope.newcargo_items[number].id,//id prod
                                     'articul': $rootScope.newcargo_items[number].articul,
+                                    'productId': $rootScope.newcargo_items[number].articul,
                                     'factoryArticul': $rootScope.newcargo_items[number].vendor_articul,
                                     'count': $rootScope.row.count_list[i].value,
                                     'price': $rootScope.newcargo_items[number].price_cn
@@ -1000,19 +1134,20 @@ app.controller('CargoItemsController',
 
                             data = {
                                 'cargoId': $rootScope.cart.cargo.id,
-                                'orderId': $rootScope.newcargo_items[number].id,//orderid
+                                'orderId': $rootScope.order_id,//orderid
                                 'sizeId': $rootScope.row.size_list[0].id,
                                 //'id': $rootScope.newcargo_items[number].id,//id prod
                                 'articul': $rootScope.newcargo_items[number].articul,
+                                'productId': $rootScope.newcargo_items[number].articul,
                                 'factoryArticul': $rootScope.newcargo_items[number].vendor_articul,
                                 'count': $rootScope.row.count_list[0].value,
                                 'price': $rootScope.newcargo_items[number].price_cn
                             };
-                            console.log(data);
+                            console.log("data",data);
                             RestFactory.request(url, 'POST', data).then(
                                 function (response) {
                                     console.log(response);
-                                    if (response) {
+                                    if (response!='null') {
                                        // $scope.cargo_order_row.push($rootScope.row);
                                         $scope.cargo_order_row.push({
                                             "article": $rootScope.row.article,
@@ -1029,6 +1164,9 @@ app.controller('CargoItemsController',
 
                                         $scope.cargo_items.splice(number, 1);
                                     }
+                                    else{
+
+                                    }
                                 }
                             )
                         }
@@ -1040,10 +1178,12 @@ app.controller('CargoItemsController',
 
                                 data = {
                                     'cargoId': $rootScope.new_cargo.cargo.id,
-                                    'orderId': $rootScope.newcargo_items[number].id,//orderid
+                                   // 'orderId': $rootScope.newcargo_items[number].id,//orderid
+                                    'orderId': $rootScope.order_id,//orderid
                                     'sizeId': $rootScope.row.size_list[i].id,
                                     //'id': $rootScope.newcargo_items[number].product.id,//id prod
                                     'articul': $rootScope.newcargo_items[number].product.articul,
+                                    'productId': $rootScope.newcargo_items[number].product.articul,
                                     'factoryArticul': $rootScope.newcargo_items[number].product.factoryArticul,
                                     'count': $rootScope.row.count_list[i].value,
                                     'price': $rootScope.newcargo_items[number].price
@@ -1072,10 +1212,12 @@ app.controller('CargoItemsController',
 
                             data = {
                                 'cargoId': $rootScope.new_cargo.cargo.id,
-                                'orderId': $rootScope.newcargo_items[number].id,//orderid
+                                //'orderId': $rootScope.newcargo_items[number].id,//orderid
+                                'orderId': $rootScope.order_id,//orderid
                                 'sizeId': $rootScope.row.size_list[0].id,
                                 //'id': $rootScope.newcargo_items[number].product.id,//id prod
                                 'articul': $rootScope.newcargo_items[number].product.articul,
+                                'productId': $rootScope.newcargo_items[number].product.articul,
                                 'factoryArticul': $rootScope.newcargo_items[number].product.factoryArticul,
                                 'count': $rootScope.row.count_list[0].value,
                                 'price': $rootScope.newcargo_items[number].price
@@ -1103,6 +1245,10 @@ app.controller('CargoItemsController',
                         }
                     }
                 };
+
+            $scope.$watch('cargo_order_row',function(newVal,oldVal){
+                console.log("watcher",newVal,oldVal);
+            });
             /**
              * save
              */
@@ -1153,6 +1299,30 @@ app.controller('CargoItemsController',
             }
             }]);
 
+
+app.controller('ChangeFactoryController',function($scope,$rootScope,$modalInstance, RestFactory,$modal){
+
+    $scope.change=function(changed_factory){
+        //console.log(changed_factory);
+        $modalInstance.close(changed_factory);
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+
+    $scope.choose=function(id){
+        //console.log(id);
+        //$rootScope.order_id=id;
+        $modalInstance.close(id);
+    }
+
+
+
+
+});
+
+
+
 app.controller('NewProductController',function($scope,$modalInstance, RestFactory,$modal){
 
     $scope.save=function(articul){
@@ -1168,13 +1338,84 @@ app.controller('NewProductController',function($scope,$modalInstance, RestFactor
 
 });
 
-app.controller('AddProductController',function($scope,$modalInstance, RestFactory){
+app.controller('AddProductController',function($scope,$rootScope,$modalInstance, RestFactory,CargoCalculator){
 
     $scope.create=function(obj){
         console.log('create',obj);
-        var url=config.API.host+"cargo/addtocargo";
-        var cargoId,docId,sizeId,id,articul,factoryArticul,count,price;
-        RestFactory.request()
+        $modalInstance.close(obj);
+        //var url=config.API.host+"cargo/addtocargo";
+
+        console.log(config);
+        var url=config.API.jsoncreate +'?params[params][vendor_id]='+1+'&params[params][vendor_articul]='+obj.factory_articul+'&params[params][cat_title]=Test&params[params][brand_id]='+1+'&params[params][category]='+1+'&params[params][weight]='+0+'&params[params][price]='+obj.price+'&params[params][status]=1';
+       /* var data={
+            cargoId:0,
+            docId:0,
+            sizeId:0,
+            id:0,
+            articul:0,
+            factoryArticul:obj.factory_articul,
+            count:0,
+            price:obj.price
+        };*/
+        RestFactory.request(url).then(
+            function(response){
+
+                var result = JSON.parse(response.result).products;
+                console.log(result);
+                var resolveData = CargoCalculator.resolveResponse(result);
+
+                //$scope.cargo_items=resolveData;
+                $rootScope.tmp=resolveData;
+
+                if($rootScope.newcargo_items){
+                    for(var i;i<response.length;i++){
+                        $rootScope.newcargo_items.push(result);
+                    }
+                }
+                else{
+                    //$rootScope.newcargo_items=result;
+                    angular.forEach(result,function(value,key){
+                        $rootScope.newcargo_items=[];
+                        $rootScope.newcargo_items.push(value);
+                    })
+                }
+
+
+
+
+
+                if(result) {
+
+                    var url=config.API.host +'/cargo/addproduct';
+
+                    /* var data = {
+                        'productId' : result.id,
+                        'articul'   : result.articul,
+                        'factoryArticul': result.vendor_articul,
+                        'count': ,
+                        'sizeId' : ,
+                        'price': ,
+                        'orderId' : ,
+                        'cargoId' :
+                    };*/
+
+                   /* RestFactory.request(url, 'POST', $.param()).then(
+                        function(response){
+
+                            var result = JSON.parse(response.result).products;
+
+
+                            if(result) {
+
+
+
+                            }
+                        }
+                    );*/
+
+                }
+            }
+        );
     };
 
     $scope.cancel = function () {

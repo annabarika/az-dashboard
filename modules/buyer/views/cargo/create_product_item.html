@@ -11,22 +11,22 @@
             </p>
             <table class="table table-hover">
                 <tbody>
-                <tr>
+               <!-- <tr>
                     <td>
                         <p class="form-inline">
                             <label class="control-label">cargoId</label>
-                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="create_product.cargoId" >
+                            <input class="sm form-control pull-right" type="hidden" numbers-only ng-model="create_product.cargoId" >
                         </p>
                     </td>
-                </tr>
-                <tr>
+                </tr>-->
+               <!-- <tr>
                     <td>
                         <p class="form-inline">
                             <label class="control-label">articul</label>
-                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="create_product.articul" >
+                            <input class="sm form-control pull-right" type="hidden" numbers-only ng-model="create_product.articul" >
                         </p>
                     </td>
-                </tr>
+                </tr>-->
                 <tr>
                     <td>
                         <p class="form-inline">
@@ -35,15 +35,15 @@
                         </p>
                     </td>
                 </tr>
-                <tr>
+                <!--<tr>
                     <td>
                         <p class="form-inline">
                             <label class="control-label">Count</label>
-                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="create_product.count">
+                            <input class="sm form-control pull-right" type="hidden" numbers-only ng-model="create_product.count">
                         </p>
                     </td>
-                </tr>
-                <tr>
+                </tr>-->
+                <!--<tr>
                     <td>
                         <p class="form-inline">
                             <label class="control-label">Size</label>
@@ -53,12 +53,12 @@
                             </select>
                         </p>
                     </td>
-                </tr>
+                </tr>-->
                 <tr>
                     <td>
                         <p class="form-inline">
                             <label class="control-label">Price</label>
-                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="create_product.count">
+                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="create_product.price">
                         </p>
                     </td>
                 </tr>
@@ -69,7 +69,7 @@
     <!--footer-->
     <div class="modal-footer">
 
-        <button type="button" class="btn btn-primary" ng-click="create(add)"><span class="fa fa-check"> Create</span></button>
+        <button type="button" class="btn btn-primary" ng-click="create(create_product)"><span class="fa fa-check"> Create</span></button>
         <button type="button" class="btn btn-danger" ng-click="$close()"><span class="fa fa-times"> Cancel</span></button>
     </div>
 </div>

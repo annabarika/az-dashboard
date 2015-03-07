@@ -40,7 +40,9 @@
                                 "article":  value.articul,
                                 "size_list": (function() {
                                         var sizes = [];
-
+                                        if(value.sizes == null){
+                                            return sizes;
+                                        }
                                         for (var k = 0; k < $rootScope.all_sizes.length; k++) {
 
                                             for(var v = 0; v < value.sizes.length; v++) {
@@ -58,6 +60,9 @@
                                 "count_list": (function() {
 
                                     var counts=[];
+                                    if(value.sizes == null){
+                                        return counts;
+                                    }
                                     if (value.sizes.length > 1) {
 
                                         for(var i=0; i<value.sizes.length;i++){
@@ -92,7 +97,45 @@
                             //}
 
                         return rules;
+                    },
+
+                parseData:function(){
+
+                    var cargoId,orderId,sizeId,articul,productId,factoryArticul,count,price;
+                    /*console.log("we here");
+                    console.log( "newcargo_items",$rootScope.newcargo_items);
+                    console.log("items",$rootScope.items);
+                    console.log("cart",$rootScope.cart);
+                    console.log("row",$rootScope.order_id);
+                    console.log("factoryOrders",$rootScope.factoryOrders);
+                    console.log("row",$rootScope.row);*/
+                    parser_one();
+                    function parser_one(){
+                        var length=$rootScope.cart.products.length;
+                        for(var i=0;i<length;i++){
+                            if($rootScope.cart.products[i].articul==$rootScope.row.article){
+                                productId=$rootScope.cart.products[i].productId;
+                                factoryArticul=$rootScope.cart.products[i].factoryArticul;
+                                price=$rootScope.cart.products[i].price;
+                            }
+                        }
                     }
+
+
+
+
+                    var result={
+                        'cargoId': ($rootScope.cart.cargo) ? $rootScope.cart.cargo.id: "",
+                        'orderId':($rootScope.order_id)?$rootScope.order_id:"",
+                        'sizeId': $rootScope.row.size_list[0].id,
+                        'articul': $rootScope.row.article,
+                        'productId':productId,
+                        'factoryArticul':factoryArticul,
+                        'price':price
+                    };
+
+                    return result;
+                }
                 };
             //};
         }]);

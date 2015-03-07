@@ -50,7 +50,7 @@ class API {
 	 * @return $this
 	 */
 	public function setURL($url){
-		$this->url = $url;
+		$this->url = urldecode($url);
 		return $this;
 	}
 	/**
