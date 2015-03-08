@@ -1,8 +1,11 @@
 (function(){
 
     angular.module("services.cargo",[])
-
-        .factory("CargoCalculator", ['$rootScope', function($rootScope) {
+        .constant("SERVER", {
+            "addProduct": config.API.host + "cargo/addproduct"
+        })
+        .factory("CargoCalculator", ['$rootScope', 'SERVER', '$http',
+            function($rootScope, SERVER, $http) {
 
             return {
 
@@ -25,13 +28,42 @@
                 },
 
                 /**
+                 * Add cargo order products to summary
+                 *
+                 * @param object products
+                 */
+                addToSummary: function (products) {
+
+                    $rootScope.addedToSummary =[];
+
+                    if(products.length > 0) {
+
+                        angular.forEach(products, function(value, index) {
+
+                            $http.post(SERVER.addProduct, products[index])
+
+                                .success(function(data){
+
+                                    if(typeof data == 'object'){
+
+                                        $rootScope.addedToSummary.push(data);
+                                    }
+                                })
+                                .error(function(data,status){
+                                    console.log("error",data,status);
+                                })
+                        });
+
+                    }
+
+                },
+
+                /**
                  * Calc delivery total to cargo
                  *
                  * @param object products
                  */
                 resolveResponse: function (response) {
-                   /* var length=response.length;
-                    if(length) {*/
 
                         var rules = [];
 
@@ -84,18 +116,6 @@
                             rules.push(pushObj);
                         });
 
-                            //var result =[];
-                            //for(var j= 0; j < rules.length; j++) {
-                            //
-                            //    result.push({
-                            //        'article'       : rules[j].article,
-                            //        'size_list'     : rules[j].size_list(),
-                            //        'count_list'    : rules[j].count_list(),
-                            //        'photo'         : rules[j].photo(),
-                            //        'active'        : rules[j].active
-                            //    })
-                            //}
-
                         return rules;
                     },
                 /**
@@ -145,15 +165,18 @@
                         }
                     }
                     else{
+                        //console.log("typeof sizeList",typeof $rootScope.row.size_list);
+
+
                         var obj={
                             'cargoId': ($rootScope.cart.cargo) ? $rootScope.cart.cargo.id: "",
                             'orderId':($rootScope.order_id)?$rootScope.order_id:"",
-                            'sizeId': $rootScope.row.size_list[0].id,
+                            'sizeId': (jQuery.isEmptyObject($rootScope.row.size_list))?null:$rootScope.row.size_list[0].id,
                             'articul': $rootScope.row.article,
                             'productId':productId,
                             'factoryArticul':factoryArticul,
                             'price':price,
-                            'count':$rootScope.row.count_list[0].value
+                            'count':(jQuery.isEmptyObject($rootScope.row.count_list))?null:$rootScope.row.count_list[0].value
                         };
                         result.push(obj);
                     }
