@@ -1,6 +1,8 @@
 var config = {
 	API: {
-		host:"http://azimuth.local/api/",
+		host:"http://green.f.compass/api/",
+		jsonp:"http://green.f.compass/api/jsonp.php",
+		jsoncreate:"http://green.f.compass/api/jsoncreate.php",
 		key: 'test'
 	}
 };
@@ -15,7 +17,8 @@ var config = {
 		"widgets",
 		"ui.bootstrap",
 		"services",
-		"modules.buyer"
+		"modules.buyer",
+        'MessageCenterModule'
 	])
 
 		.config(function ($routeProvider, $locationProvider, $httpProvider) {

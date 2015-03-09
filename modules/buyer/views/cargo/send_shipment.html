@@ -5,14 +5,20 @@
         <h4 class="modal-title" id="myModalLabel">Send Shipment</h4>
     </div>
     <div class="modal-body">
+        <input type="hidden" ng-init="id = cargo.id">
+        <input type="hidden" ng-init="arriveWeight = cargo.arriveWeight">
+        <input type="hidden" ng-init="arrivePlaces = cargo.arrivePlaces">
         <div class="table-responsive">
+            <p>
+                Confirm the shipment please
+            </p>
             <table class="table table-hover">
                 <tbody>
                 <tr>
                     <td>
                         <p class="form-inline">
                             <label class="control-label">Cargo shipped (kg)</label>
-                            <input class="sm form-control pull-right" type="text">
+                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="arriveWeight" ng-value="{{arriveWeight}}">
                         </p>
                     </td>
                 </tr>
@@ -20,7 +26,7 @@
                     <td>
                         <p class="form-inline">
                             <label class="control-label">Cargo places</label>
-                            <input class="sm form-control pull-right" type="text">
+                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="arrivePlaces" ng-value="{{arrivePlaces}}">
                         </p>
                     </td>
                 </tr>
@@ -31,7 +37,7 @@
     <!--footer-->
     <div class="modal-footer">
         <button type="button" class="btn btn-info"><span class="fa fa-file-o"> Print document</span></button>
-        <button type="button" class="btn btn-primary"><span class="fa fa-check"> Send cargo</span></button>
-        <button type="button" class="btn btn-danger pull-right mt-10" ng-click="$close()"><span class="fa fa-times"> Cancel</span></button>
+        <button type="button" class="btn btn-primary" ng-controller="CargoCartController" ng-click="sendShipment()"><span class="fa fa-check"> Accept</span></button>
+        <button type="button" class="btn btn-danger" ng-click="$close()"><span class="fa fa-times"> Decline</span></button>
     </div>
 </div>

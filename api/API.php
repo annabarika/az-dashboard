@@ -39,7 +39,7 @@ class API {
 		$this->options = array(
 			CURLOPT_HEADER => false,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT => 2
+			CURLOPT_TIMEOUT => 10
 		);
 		$this->host 	= 'http://'.$host;
 		$this->url 		= '/';
@@ -50,7 +50,7 @@ class API {
 	 * @return $this
 	 */
 	public function setURL($url){
-		$this->url = $url;
+		$this->url = urldecode($url);
 		return $this;
 	}
 	/**
@@ -106,17 +106,23 @@ class API {
 	 * @return mixed
 	 */
 	public function call(){
+
 		$options = array(
 			CURLOPT_URL => $this->host.$this->url."?".$this->params,
 			CURLOPT_CUSTOMREQUEST => $this->method, // GET POST PUT PATCH DELETE HEAD OPTIONS
 		);
-		if( $this->method == 'POST'){
-			$options[CURLOPT_POSTFIELDS] = $this->data;
+		if( $this->method == 'POST' || $this->method == 'PUT'){
+			$options[CURLOPT_POSTFIELDS] = http_build_query($this->data);
 		}
 		$options = $options + $this->options;
-
 		curl_setopt_array($this->getHandle(), $options );
-		$response = curl_exec($this->getHandle());
-		return json_decode($response, true);
+
+		$result = curl_exec($this->getHandle());
+
+		if(curl_errno($this->getHandle())){
+			throw new \Exception(curl_error($this->getHandle()));
+		}
+		return json_decode($result, true);
+
 	}
 }

@@ -65,7 +65,7 @@ app.controller('OrderListController',
                         }
                         $scope.data = data;
                         $scope.orders = $scope.data;
-                        console.log($scope.orders);
+                        //console.log($scope.orders);
 
                         $scope.buttons = [
                             {
@@ -246,7 +246,7 @@ app.controller('OrderListController',
             };*/
 
             $scope.$watch('files',function(newVal){
-                console.log(newVal);
+                //console.log(newVal);
                 if(newVal){
                     $rootScope.uploadFiles=$scope.files;
                 }
