@@ -1,8 +1,6 @@
 var config = {
 	API: {
-		host:"http://compass-buyer.me/api/",
-		jsonp:"http://green.f.compass/api/jsonp.php",
-		jsoncreate:"http://green.f.compass/api/jsoncreate.php",
+		host:"http://azimuth.me/api/",
 		key: 'test'
 	}
 };

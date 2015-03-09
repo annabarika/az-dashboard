@@ -28,10 +28,10 @@ app.config(function($routeProvider){
 			controller:"BestCalendarController"
 		}
 	)
-        .when('/buyer/bestsellers/bestseller_cart',
+        .when('/buyer/bestsellers/item/:bestsellerId',
         {
-            templateUrl:"/modules/buyer/views/bestsellers/bestseller_cart.html",
-            controller:"BestsellerCartController"
+            templateUrl:"/modules/buyer/views/bestsellers/item.html",
+            controller:"BestsellerItemController"
         }
     )
 		.when('/buyer/payments',
