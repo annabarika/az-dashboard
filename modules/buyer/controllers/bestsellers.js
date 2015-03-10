@@ -8,11 +8,12 @@ app.controller('BestsellerItemController', function($scope, $rootScope, $route, 
 
     $rootScope.documentTitle = "Item";
 
-    var url=config.API.host+"bestseller/load/"+$route.current.params.bestsellerId;
+    var url=config.API.host+"bestseller/get/id/"+$route.current.params.bestsellerId;
 
     RestFactory.request( url )
         .then(function(response){
-            console.log(response);
+            $scope.product = response;
+            $rootScope.documentTitle = $scope.product.title + ' ' + $scope.product.brand + ' ('+ $scope.product.articul +')';
 
         },
         function(error){

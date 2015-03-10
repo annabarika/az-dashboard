@@ -1,5 +1,5 @@
 <!-- start box layout -->
-<div class="box-layout">
+<div class="box-layout" ng-controller="BestsellerItemController">
     <div class="col-md-12 bdr-l bg-auto height-auto">
 
         <!-- start page header -->
@@ -7,8 +7,7 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-12 va-m">
-                    <h4>Dolce & Gabbana (69543)</h4>
-                    <p class="text-muted mb-0">Other: Обувщик</p>
+                    <p class="text-muted mb-0">{{product.factoryId}}</p>
                 </div>
             </div>
             <!--/ basic info heading -->
@@ -18,52 +17,10 @@
 
         <div class="container-fluid pt-md pb-md">
             <div class="row">
-                <div class="col-sm-1 col-md-1">
+                <div class="col-sm-1 col-md-1" ng-repeat="photo in product.photos">
                     <!-- thumbnail -->
                     <div class="thumbnail">
-                        <img src="/assets/images/avatar/avatar9.jpg">
-                    </div>
-                    <!--/ thumbnail -->
-                </div>
-                <div class="col-sm-1 col-md-1">
-                    <!-- thumbnail -->
-                    <div class="thumbnail">
-                        <img src="/assets/images/avatar/avatar18.jpg">
-                    </div>
-                    <!--/ thumbnail -->
-                </div>
-                <div class="col-sm-1 col-md-1">
-                    <!-- thumbnail -->
-                    <div class="thumbnail">
-                        <img src="/assets/images/avatar/avatar9.jpg">
-                    </div>
-                    <!--/ thumbnail -->
-                </div>
-                <div class="col-sm-1 col-md-1">
-                    <!-- thumbnail -->
-                    <div class="thumbnail">
-                        <img src="/assets/images/avatar/avatar18.jpg">
-                    </div>
-                    <!--/ thumbnail -->
-                </div>
-                <div class="col-sm-1 col-md-1">
-                    <!-- thumbnail -->
-                    <div class="thumbnail">
-                        <img src="/assets/images/avatar/avatar6.jpg">
-                    </div>
-                    <!--/ thumbnail -->
-                </div>
-                <div class="col-sm-1 col-md-1">
-                    <!-- thumbnail -->
-                    <div class="thumbnail">
-                        <img src="/assets/images/avatar/avatar9.jpg">
-                    </div>
-                    <!--/ thumbnail -->
-                </div>
-                <div class="col-sm-1 col-md-1">
-                    <!-- thumbnail -->
-                    <div class="thumbnail">
-                        <img src="/assets/images/avatar/avatar18.jpg">
+                        <img src="http://back95.ru/f/catalogue/{{product.id}}/{{photo}}"/>
                     </div>
                     <!--/ thumbnail -->
                 </div>
