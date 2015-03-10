@@ -13,7 +13,7 @@ app.controller('BestsellerItemController', function($scope, $rootScope, $route, 
     RestFactory.request( url )
         .then(function(response){
             $scope.product = response;
-            $rootScope.documentTitle = $scope.product.title + ' ' + $scope.product.brand + ' ('+ $scope.product.articul +')';
+            $rootScope.documentTitle = $scope.product.brand + ' ('+ $scope.product.articul +')';
 
         },
         function(error){

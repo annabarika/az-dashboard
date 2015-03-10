@@ -6,8 +6,14 @@
         <div class="page-header">
             <!-- basic info heading -->
             <div class="box-layout">
-                <div class="col-sm-12 va-m">
+                <div class="col-sm-4 va-m">
                     <p class="text-muted mb-0">{{product.factoryId}}</p>
+                </div>
+                <div class="col-sm-8">
+                    <div class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> Save</div>
+                    <button type="submit" class="btn btn-info" ng-click="addNewItems()"><span class="fa fa-file-o"> Create PDF</span></button>
+                    <button type="submit" class="btn btn-success" ng-click="sendShipment()"><span class="fa fa-check"> Create order</span></button>
+
                 </div>
             </div>
             <!--/ basic info heading -->
@@ -20,7 +26,7 @@
                 <div class="col-sm-1 col-md-1" ng-repeat="photo in product.photos">
                     <!-- thumbnail -->
                     <div class="thumbnail">
-                        <img src="http://back95.ru/f/catalogue/{{product.id}}/{{photo}}"/>
+                        <img src="http://back95.ru/f/p120x120/catalogue/{{product.id}}/{{photo}}"/>
                     </div>
                     <!--/ thumbnail -->
                 </div>
@@ -30,32 +36,18 @@
             <div class="col-sm-12 col-md-12">
                 <div class="panel box-layout ovf-h">
                     <div class="col-md-4 bdr-r-md va-m">
-                        <div class="panel panel-default border-n mt-20">
+                        <div class="panel panel-default border-n">
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <tbody>
                                     <tr>
                                         <td>Total sales speed:</td>
-                                        <td>6356</td>
+                                        <td>{{product.saleSpeed}}</td>
                                     </tr>
                                     <tr>
                                         <td>Average discount (retail / wholesale):</td>
                                         <td>
-                                            37% / 47%
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Size chart
-                                        </td>
-                                        <td>
-                                            <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 10</span></button>
-                                            <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 20</span></button>
-                                            <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 30</span></button>
-                                            <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 50</span></button>
-                                            <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 100</span></button>
-                                            <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 200</span></button>
-                                            <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 500</span></button>
+                                            {{product.marketing.discount.retail | number:0}}% / {{product.marketing.discount.wholesale | number:0}}%
                                         </td>
                                     </tr>
                                     </tbody>
@@ -67,22 +59,9 @@
                         <div class="pa-md">
                             <form role="form">
                                 <div class="form-group">
-                                    <label class="control-label">Notes</label>
-                                    <textarea class="form-control" placeholder="" rows="3"></textarea>
-                                </div>
-                                <hr class="mnr-md mnl-md">
-                                <div class="form-group">
-                                    <label class="switch switch-sm switch-success">
-                                        <input type="checkbox" checked="">
-                                        <span class="switch"></span><span class="text ml-xs">All products</span>
-                                    </label>
+                                    <textarea class="form-control" placeholder="Add notes to product" rows="3"></textarea>
                                 </div>
                             </form>
-                        </div>
-                        <div class="pa-md">
-                            <button type="submit" class="btn btn-success"><span class="fa fa-plus"> Save</span></button>
-                            <button type="submit" class="btn btn-success" ng-click="addNewItems()"><span class="fa fa-file-o"> PDF</span></button>
-                            <button type="submit" class="btn btn-info" ng-click="sendShipment()"><span class="fa fa-check"> Send</span></button>
                         </div>
                     </div>
                 </div>
@@ -91,32 +70,62 @@
             </div>
         </div>
         <div class="row">
+
+
             <div class="col-md-6">
-                <widget-table
-                        datarows="cartProduct"
-                        dataheader="tableHeader"
-                        edit="edit()"
-                        row="row"
-                        toolbar-buttons="buttonsCart"
-                        button-action="buttonAction()"
-                        >
-                </widget-table>
+                <div style="padding-left:20px;">
+                    <h3>Size chart to order</h3>
+                    <div style="margin:20px 0;">
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 10</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 20</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 30</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 50</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 100</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 200</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 500</span></button>
+                </div>
+                <table class="table" style="background:white;">
+                    <tr>
+                        <th>Size</th>
+                        <th>Count</th>
+                        <th>Sale speed</th>
+                        <th>Sales (customers)</th>
+                        <th>Returns</th>
+                    </tr>
+                    <tr ng-repeat="(size, sizeData) in product.marketing.sizes">
+                        <td>{{size}}</td>
+                        <td><input type="text" name="count" size="3" value="0"/></td>
+                        <td>{{sizeData.saleSpeed | number:0}}</td>
+                        <td>{{sizeData.sales}} ({{sizeData.customers}})</td>
+                        <td>{{sizeData.returns / sizeData.sales * 100 | number:0}}</td>
+                    </tr>
+                </table>
+                </div>
             </div>
             <div class="col-md-6">
-                <widget-table
-                        datarows="logOperations"
-                        dataheader="tableHeaderLogOperations"
-                        edit="edit()"
-                        row="row"
-                        >
-                </widget-table>
-                <widget-table
-                        datarows="historyCart"
-                        dataheader="tableHeaderHistoryCart"
-                        edit="edit()"
-                        row="row"
-                        >
-                </widget-table>
+                <div style="padding-left:20px;">
+                    <h3>Buying history</h3>
+                </div>
+                <table class="table" style="background:white;">
+                    <tr>
+                        <th>Buying date</th>
+                        <th>Sizes = Count</th>
+                        <th>Notes</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="(date, data) in product.buyingHistory.buying">
+                        <td>
+                            <a href="http://back95.com/buyer/re_buying/item_details/{{product.id}}/{{data.buyingId}}" target="_blank">{{date}}</a>
+                        </td>
+                        <td>
+                            <div ng-repeat="(size, count) in data.sizes">
+                                {{size}}=<b>{{count}}</b>
+                            </div>
+                        </td>
+                        <td>{{data.notes}}</td>
+                        <td>{{data.status}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
