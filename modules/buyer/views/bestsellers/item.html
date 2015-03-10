@@ -8,13 +8,13 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-4 va-m">
-                    <p class="text-muted mb-0">Factory: {{product.factoryName}}</p>
-                    <p class="text-muted mb-0">Status: {{product.status}}</p>
+                    <p class="text-muted mb-0">Factory: {{factory.name}}</p>
+                    <p class="text-muted mb-0">Status: {{bestseller.status}}</p>
                 </div>
                 <div class="col-sm-8">
-                    <div class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> Save</div>
-                    <button type="submit" class="btn btn-info" ng-click="addNewItems()"><span class="fa fa-file-o"> Create PDF</span></button>
-                    <button ng-hide="product.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
+                    <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> Save</div>
+                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="addNewItems()"><span class="fa fa-file-o"> Create PDF</span></button>
+                    <button ng-hide="bestseller.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
 
                 </div>
             </div>
@@ -76,7 +76,7 @@
 
             <div class="col-md-6">
                 <div style="padding-left:20px;">
-                    <h3>Size chart to order</h3>
+                    <h3>Size chart to order <span ng-show="order.id">(#{{order.id}})</span></h3>
                     <div style="margin:20px 0;">
                     <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 10</span></button>
                     <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 20</span></button>
