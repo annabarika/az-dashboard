@@ -7,24 +7,29 @@ app.controller('BestsellerItemController',
         '$scope', '$rootScope', '$route', '$location', 'RestFactory',
 
         function($scope, $rootScope, $route, $location, RestFactory){
-    $scope.$route = $route;
-    $scope.$location = $location;
+            $scope.$route = $route;
+            $scope.$location = $location;
 
-    $rootScope.documentTitle = "Item";
+            $rootScope.documentTitle = "Item";
 
-    var url = config.API.host+"bestseller/get/id/"+$route.current.params.bestsellerId;
 
-    RestFactory.request( url )
-        .then(function(response){
+            $scope.load = function() {
+                var url = config.API.host + "bestseller/get/id/" + $route.current.params.bestsellerId;
 
-            $scope.product = response;
-            $scope.sizes = { add: [{size:'XS', count:1}], L: {count:2}, M:{count:3}};
-            $rootScope.documentTitle = $scope.product.brand + ' ('+ $scope.product.articul +')';
+                RestFactory.request(url)
+                    .then(function (response) {
 
-        },
-        function(error){
-            console.log(error);
-        });
+                        $scope.product = response;
+                        $scope.sizes = {add: [{size: 'XS', count: 1}], L: {count: 2}, M: {count: 3}};
+                        $rootScope.documentTitle = $scope.product.brand + ' (' + $scope.product.articul + ')';
+
+                    },
+                    function (error) {
+                        console.log(error);
+                    });
+            };
+
+            $scope.load();
 
     $scope.createOrder = function( sizes ){
         // Preparing order rows
@@ -53,34 +58,37 @@ app.controller('BestsellerItemController',
                 });
             }
         }
-        console.log($scope.product);
-        console.log(products);
-
         // Creating order
-        var url=config.API.host+"order/create";
+        var createOrderUrl = config.API.host+"order/create";
         var order = {
             factoryId: $scope.product.factoryId,
             buyerId: 328,
             type: 1
         };
-/*
-        RestFactory.request(url, 'POST', order)
+
+        RestFactory.request(createOrderUrl, 'POST', order)
             .then(function(response){
                 if(response.id){
-
-                }
-            });*/
-        var orderId = 9;
-        var addProductUrl = config.API.host+"order/create-bestseller-row";
-        for( i in products){
-            products[i].orderId = orderId;
-            RestFactory.request(addProductUrl, 'POST', products[i])
-                .then(function(response){
-                    console.log(response);
-                    if(response.id){
+                    var orderId = response.id;
+                    var addProductUrl = config.API.host+"order/create-bestseller-row";
+                    // Adding items to order
+                    for( i in products){
+                        products[i].orderId = orderId;
+                        RestFactory.request(addProductUrl, 'POST', products[i])
+                            .then(function(response){
+                                //console.log(response);
+                                if( response.id ){
+                                    //console.log(i);
+                                    products.splice(0, 1);
+                                    if(products.length == 0){
+                                        $scope.load();
+                                    }
+                                    //console.log(products.length);
+                                }
+                            });
 
                     }
-                });
-        }
+                }
+            });
     }
 }]);
