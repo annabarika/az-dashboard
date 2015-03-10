@@ -1,11 +1,12 @@
 <?php
-//error_reporting(2047);
+error_reporting(2047);
 #phpinfo();
 require __DIR__.'/config.php';
 require __DIR__.'/API.php';
 //'uml.maggadda.dev95.ru'
 #echo file_get_contents('http://compass-buyer.local/order/load');
 #die();
+
 try {
 	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['host'];
 

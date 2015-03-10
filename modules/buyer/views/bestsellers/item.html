@@ -94,32 +94,32 @@
                         <th>Returns, %</th>
                     </tr>
                     <tr>
-                        <td><input type="text" ng-model="sizes.new[0].size" value="" size="6"/></td>
-                        <td><input type="text" ng-model="sizes.new[0].count" value="" size="3"/></td>
+                        <td><input type="text" ng-model="sizes.add[0].size" value="XS" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[0].count" value="1" size="3"/></td>
                         <td colspan="3"></td>
                     </tr>
                     <tr>
-                        <td><input type="text" ng-model="sizes.new[1].size" value="" size="6"/></td>
-                        <td><input type="text" ng-model="sizes.new[1].count" value="" size="3"/></td>
+                        <td><input type="text" ng-model="sizes.add[1].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[1].count" value="" size="3"/></td>
                         <td colspan="3"></td>
                     </tr>
                     <tr ng-repeat="(size, sizeData) in product.marketing.sizes">
                         <td>{{size}}
                             <input type="hidden" ng-model="sizes[size].size" value="{{size}}"/>
                         </td>
-                        <td><input type="text" ng-model="sizes[size].count" size="3" value="0"/></td>
+                        <td><input type="text" ng-model="sizes[size].count" size="3" value="2"/></td>
                         <td>{{sizeData.saleSpeed | number:0}}</td>
                         <td>{{sizeData.sales}} ({{sizeData.customers}})</td>
                         <td>{{sizeData.returns / sizeData.sales * 100 | number:0}}</td>
                     </tr>
                     <tr>
-                        <td><input type="text" ng-model="sizes.new[2].size" value="" size="6"/></td>
-                        <td><input type="text" ng-model="sizes.new[2].count" value="" size="3"/></td>
+                        <td><input type="text" ng-model="sizes.add[2].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[2].count" value="" size="3"/></td>
                         <td colspan="3"></td>
                     </tr>
                     <tr>
-                        <td><input type="text" ng-model="sizes.new[3].size" value="" size="6"/></td>
-                        <td><input type="text" ng-model="sizes.new[3].count" value="" size="3"/></td>
+                        <td><input type="text" ng-model="sizes.add[3].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[3].count" value="" size="3"/></td>
                         <td colspan="3"></td>
                     </tr>
                 </table>
