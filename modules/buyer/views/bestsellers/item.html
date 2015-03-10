@@ -1,5 +1,6 @@
 <!-- start box layout -->
-<div class="box-layout" ng-controller="BestsellerItemController">
+<form ng-controller="BestsellerItemController">
+<div class="box-layout">
     <div class="col-md-12 bdr-l bg-auto height-auto">
 
         <!-- start page header -->
@@ -12,7 +13,7 @@
                 <div class="col-sm-8">
                     <div class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> Save</div>
                     <button type="submit" class="btn btn-info" ng-click="addNewItems()"><span class="fa fa-file-o"> Create PDF</span></button>
-                    <button type="submit" class="btn btn-success" ng-click="sendShipment()"><span class="fa fa-check"> Create order</span></button>
+                    <button ng-hide="product.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
 
                 </div>
             </div>
@@ -90,14 +91,36 @@
                         <th>Count</th>
                         <th>Sale speed</th>
                         <th>Sales (customers)</th>
-                        <th>Returns</th>
+                        <th>Returns, %</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.new[0].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.new[0].count" value="" size="3"/></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.new[1].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.new[1].count" value="" size="3"/></td>
+                        <td colspan="3"></td>
                     </tr>
                     <tr ng-repeat="(size, sizeData) in product.marketing.sizes">
-                        <td>{{size}}</td>
-                        <td><input type="text" name="count" size="3" value="0"/></td>
+                        <td>{{size}}
+                            <input type="hidden" ng-model="sizes[size].size" value="{{size}}"/>
+                        </td>
+                        <td><input type="text" ng-model="sizes[size].count" size="3" value="0"/></td>
                         <td>{{sizeData.saleSpeed | number:0}}</td>
                         <td>{{sizeData.sales}} ({{sizeData.customers}})</td>
                         <td>{{sizeData.returns / sizeData.sales * 100 | number:0}}</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.new[2].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.new[2].count" value="" size="3"/></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.new[3].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.new[3].count" value="" size="3"/></td>
+                        <td colspan="3"></td>
                     </tr>
                 </table>
                 </div>
@@ -132,3 +155,4 @@
 </div>
 <!--/ end box layout -->
 </div>
+</form>
