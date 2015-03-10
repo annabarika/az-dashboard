@@ -10,6 +10,7 @@ app.controller('BestsellersController',
             $scope.$location = $location;
 
             $scope.calendar = {};
+            $rootScope.bestsellers = [];
 
             $rootScope.documentTitle = "Bestsellers calendar";
 
@@ -43,6 +44,52 @@ app.controller('BestsellersController',
                     function (error) {
                         console.log(error);
                     });
+            };
+
+            $scope.showMonth = function(year, month) {
+                var startDate = year + '-' + month + '-01';
+                var endDate = year + '-' + month + '-31';
+                var url = config.API.host + "bestseller/load/orderDate/" + startDate + ',' + endDate;
+                $rootScope.selectedDate = { year: year, month: config.monthNames[month-1] };
+
+                RestFactory.request(url)
+                    .then(function (response) {
+                        var productId = [];
+                        $rootScope.bestsellers = response;
+
+                        for( var i in response){
+                            productId.push(response[i].productId);
+                        }
+
+                        var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + productId.join(',');
+                        RestFactory.request(productsLoadUrl)
+                            .then(function (response) {
+                                for( var i in $rootScope.bestsellers ){
+                                    productId = $rootScope.bestsellers[i].productId;
+                                    $rootScope.bestsellers[i].product = response[productId];
+                                }
+                                //$scope.$apply();
+
+                                console.log(response);
+                                console.log($scope);
+                            });
+
+                    });
+            };
+
+            $scope.loadProducts = function(id){
+                var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + id;
+                RestFactory.request(productsLoadUrl)
+                    .then(function (response) {
+                        for( var i in response) {
+                            $rootScope.products = response;
+                        }
+                        //$scope.$apply();
+
+                        console.log(response);
+                        console.log($scope);
+                    });
+
             };
 
             $scope.loadCalendar();

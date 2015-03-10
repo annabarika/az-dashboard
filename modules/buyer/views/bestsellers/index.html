@@ -1,17 +1,20 @@
 <!-- start box-layout -->
-<div class="box-layout" ng-controller="DatepickerCtrl">
-<div  class="col-md-9 bg-white height-auto">
+<div class="box-layout">
+<div  class="col-md-9 bg-white height-auto" ng-controller="BestsellersController">
     <div class="scroll">
+
         <!-- start page header -->
         <div class="calendar" ng-model="calendar">
             <div class="year" ng-repeat="(year, months) in calendar">
-                <h2>{{year}}</h2>
-                <div class="month" ng-repeat="(m, monthData) in months">
+                <div class="clearfix"><h1>{{year}}</h1></div>
+                <div class="col-md-2 month" ng-repeat="(m, monthData) in months">
                     <h4>{{monthData.name}}</h4>
-                    <div class="fc-content"><span class="fc-title">{{monthData.count}}</span></div>
+                    <div class="fc-content" ng-click="showMonth(year, m)">{{monthData.count}}</div>
                 </div>
             </div>
         </div>
+
+
         <div class="page-header clearfix">
             <div class="row">
                 <div class="col-md-12">
@@ -195,91 +198,38 @@
         <div class="page-header clearfix">
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="mb-sm">April 2014</h3>
+                    <h3 class="mb-sm">{{selectedDate.month}} {{selectedDate.year}}</h3>
                 </div>
             </div>
-            <p class="input-group">
+            <p class="input-group" ng-controller="DatepickerCtrl">
                 <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-                    <span class="input-group-btn">
-                       <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
             </p>
         </div>
         <!--/ end page header -->
-        <div class="pa-md">
+        <div class="pa-md"  ng-controller="BestsellersController">
             <div class="panel panel-default">
+
                 <div class="panel-heading">
                     <div class="panel-title text-center">
                         <h5 class="fw-sb">Ordered</h5>
                     </div>
                 </div>
+
                 <table class="table table-bordered">
                     <tbody>
-                    <tr ng-repeat="row in summaryCart" ng-click="edit(row)">
-
-                        <td ng-repeat="(k,v) in row">
-                            <img src="{{row.a_photo}}" class="img-sm" ng-if="k=='a_photo'">
-                            <div ng-if="k!='a_photo'">{{v}}</div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title text-center">
-                        <h5 class="fw-sb">Total</h5>
-                    </div>
-                </div>
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr>
+                    <tr ng-repeat="item in bestsellers">
                         <td>
-                            <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
+                            <img src="http://back95.com/f/catalogue/{{item.product.id}}/{{ item.product.preview[1] }}" class="img-sm"/>
                         </td>
-                        <td class="text-center">
-                            <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            Signal
-                        </td>
-                        <td class="text-center">
-                            234
-                        </td>
-                    </tr>
-                    <tr>
                         <td>
-                            <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
+                            <h4><a href="/buyer/bestsellers/item/{{item.id}}">{{item.product.articul}}</a></h4>
+                            <h5>{{item.product.title}} {{item.product.brand}}</h5>
                         </td>
-                        <td class="text-center">
-                            <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            Signal
-                        </td>
-                        <td class="text-center">
-                            234
-                        </td>
-                    </tr>
-                    <tr>
                         <td>
-                            <img class="img-sm" src="/assets/images/avatar/avatar9.jpg">
-                        </td>
-                        <td class="text-center">
-                            <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            Signal
-                        </td>
-                        <td class="text-center">
-                            234
+                            <a href="/buyer/orders/id/{{item.orderId}}">{{item.orderId}}</a>
                         </td>
                     </tr>
                     </tbody>
