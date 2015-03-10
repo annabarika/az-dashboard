@@ -25,7 +25,7 @@ app.config(function($routeProvider){
 		.when('/buyer/bestsellers',
 		{
 			templateUrl:"/modules/buyer/views/bestsellers/index.html",
-			controller:"BestCalendarController"
+			controller:"BestsellersController"
 		}
 	)
         .when('/buyer/bestsellers/item/:bestsellerId',

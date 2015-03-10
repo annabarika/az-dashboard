@@ -1,6 +1,53 @@
 var app = angular.module("modules.buyer.bestsellers", [
 
 ]);
+app.controller('BestsellersController',
+    [
+        '$scope', '$rootScope', '$route', '$location', 'RestFactory',
+
+        function($scope, $rootScope, $route, $location, RestFactory) {
+            $scope.$route = $route;
+            $scope.$location = $location;
+
+            $scope.calendar = {};
+
+            $rootScope.documentTitle = "Bestsellers calendar";
+
+            $scope.loadCalendar = function(){
+
+                var url = config.API.host + "bestseller/load/status/1";
+
+                RestFactory.request(url)
+                    .then(function (response) {
+                        for( var i in response ){
+                            var dateArray = response[i].orderDate.split('-');
+                            if( $scope.calendar[dateArray[0]] == undefined){
+                                $scope.calendar[dateArray[0]] = [];
+                            }
+                            var month = parseInt(dateArray[1]);
+                            if( $scope.calendar[dateArray[0]][month] == undefined){
+                                $scope.calendar[dateArray[0]][month] = { count: 1, name: config.monthNames[month-1] };
+                            }
+                            $scope.calendar[dateArray[0]][month].count++;
+                        }
+
+                        // Filling calendar width months
+                        for( var y in $scope.calendar ){
+                            for( var month = 1; month <= 12; month++){
+                                if($scope.calendar[y][month] == undefined){
+                                    $scope.calendar[y][month] = { count:0, name: config.monthNames[month-1] };
+                                }
+                            }
+                        }
+                    },
+                    function (error) {
+                        console.log(error);
+                    });
+            };
+
+            $scope.loadCalendar();
+        }
+    ]);
 
 app.controller('BestsellerItemController',
     [
