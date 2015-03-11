@@ -61,12 +61,12 @@ app.controller('CargoController',
             $scope.addNewCargo = function(){
 
                 $rootScope.modalInstance = $modal.open({
-                    templateUrl: "/modules/buyer/views/cargo/new_cargo.html",
+                    templateUrl: "/modules/buyer/views/cargo/new_cargo2.html",
                     controller: 'CargoController',
                     backdrop:'static',
                     resolve:{
-                        Factory:function(){
-                            return $scope.Factory;
+                        factories: function(){
+                            return $scope.factories;
                         }
                     }
                 });
@@ -83,7 +83,7 @@ app.controller('CargoController',
 
                 RestFactory.request(config.API.host+"cargo/create" , "POST", cargo)
                     .then(function(response){
-                        //console.log("new cargo",response);
+                        console.log("new cargo", response);
                         if( response.cargo.id ){
                             $rootScope.modalInstance.close();
                             $location.path( '/buyer/cargo/id/'+ response.cargo.id );
@@ -170,5 +170,10 @@ app.controller('CargoOrderController',
 
                 });
 
+            $scope.selectOrder = function(orderId){
+                console.log(orderId);
+                // Attaching orderId to cargo
+
+            };
         }
     ]);

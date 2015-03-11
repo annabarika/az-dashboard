@@ -12,22 +12,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="order in factoryOrders track by $index">
+            <tr ng-repeat="order in orders track by $index">
                 <td>
                     {{order.id}}
                 </td>
-                <!--<td>
+                <td>
                     <div class="media np">
                         <div class="media-left">
-                                      <span class="img-wrapper img-rounded" style="float:left" ng-repeat="item in products[$index]|limitTo:3">
-                                        <img ng-src="http://back95.ru/f/catalogue/{{item.product.id}}/{{item.product.photos[0]}}">
-                                      </span>
+                              <span style="float:left" ng-repeat="item in order.products|limitTo:3">
+                                <img ng-src="http://back95.ru/f/catalogue/{{item.product.id}}/{{item.product.preview[0]}}">
+                              </span>
                         </div>
                     </div>
-                    <p>total {{products[$index].length}} pos..</p>
-                </td>-->
+                    <p>total {{order.products.length}} pcs.</p>
+                </td>
                 <td>
-                    <button class="btn-default" ng-click="choose(order.id)">choose</button>
+                    <button class="btn btn-default" ng-click="selectOrder(order.id)">Select</button>
                 </td>
             </tr>
             </tbody>
