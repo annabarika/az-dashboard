@@ -113,6 +113,7 @@ class API {
 		if( $this->method == 'POST' || $this->method == 'PUT'){
 			$options[CURLOPT_POSTFIELDS] = http_build_query($this->data);
 		}
+
 		$options = $options + $this->options;
 		curl_setopt_array($this->getHandle(), $options );
 		$result = curl_exec($this->getHandle());

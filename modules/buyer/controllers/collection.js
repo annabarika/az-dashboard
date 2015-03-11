@@ -43,6 +43,11 @@ app.controller('NewCollectionController', ['$scope','$rootScope','$location','Co
                console.log(value);
            }
         });
+
+        $scope.$watch("photo",function(value){
+            $rootScope.photo=value;
+        });
+
     }]
 );
 
@@ -64,6 +69,10 @@ app.controller("ModalController",function($scope,$rootScope,data,CollectionServi
     }
 
 });
+
+/**
+ * Add new products, create collection controllers
+ */
 
 app.controller("UploadController",['$scope','$rootScope','$location','CollectionService',"$modal",
     function ($scope, $rootScope, $location, CollectionService,$modal) {
@@ -87,7 +96,6 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
             $scope.stepIcons[newVal].classList.add('active');
         });
 
-
         /* Getting collection */
         $rootScope.documentTitle = "Collection";
         /*$('#sort1, #sort2, #sort3, #sort4').sortable({
@@ -102,18 +110,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
         };
 
-        $scope.count=321;
-        /*$scope.getFiles=function(){
-         console.log(fileinput.value);
-         $scope.newCollection=fileinput.value;
-         $scope.$apply();
-
-         };*/
-
-        $scope.$watch("photo",function(value){
-            console.log(value);
-            $rootScope.collection=value;
-        });
+        //$scope.count=321;
 
         $scope.back=function(){
 
@@ -137,6 +134,34 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
         };
 
         $scope.nextStep=function(){
+
+            if($rootScope.photo==undefined){
+
+                $rootScope.message="You are forgot upload photo";
+                $modal.open({
+                    templateUrl: '/app/views/error.html',
+                    controller: 'BsAlertCtrl',
+                    size: 'lg'
+                });
+                return;
+            }
+
+            if($scope.step==0){
+
+                CollectionService.uploadFiles();
+            }
+
+            if($scope.step==1){
+                console.log("this",$scope.step);
+            }
+
+            if($scope.step==2){
+                console.log("this",$scope.step);
+            }
+        };
+
+
+        /*$scope.nextStep=function(){
             if( $rootScope.collection){
                 console.log($rootScope.collection);
                 $scope.step++;
@@ -151,6 +176,6 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
             }
 
-        }
+        }*/
 
     }]);

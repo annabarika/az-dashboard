@@ -9,7 +9,8 @@
                 GETFACTORIES : config.API.host+'factory/load',
                 GETCOLLECTIONS : config.API.host+'catalogue/load-collections',
                 FACTORYCOLLECTIONS:config.API.host+"catalogue-collection/load/factoryId/",
-                CREATECOLLECTION:config.API.host+"catalogue-collection/create"
+                CREATECOLLECTION:config.API.host+"catalogue-collection/create",
+                LOADFILES:config.API.host+'catalogue/loadfiles'
             };
 
         })())
@@ -24,8 +25,8 @@
 
         })())
 
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',"$rootScope",
-            function(API, TEMPLATE, RestFactory, messageCenterService, $modal,$rootScope) {
+        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',"$rootScope","$http",
+            function(API, TEMPLATE, RestFactory, messageCenterService, $modal,$rootScope,$http) {
 
             return {
 
@@ -78,6 +79,29 @@
 
                         }
                     );
+                },
+                uploadFiles:function(){
+                    //console.log("uploads",$rootScope.photo);
+
+                    var fd=new FormData();
+                    angular.forEach($rootScope.photo,function(file){
+                        fd.append('file',file);
+                    });
+                    console.log(fd);
+                    /*RestFactory.request(API.LOADFILES,"POST",fd).then(
+                        function(response){
+                            console.log(response);
+                        }
+                    );*/
+                    $http.post(API.LOADFILES,fd,
+                        {
+                            transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}
+                        })
+                        .success(function(data){
+                            console.log(data);
+                        });
+
                 },
                 /**
                  * param @path:string,

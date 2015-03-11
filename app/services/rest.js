@@ -31,8 +31,8 @@
 				var req ={
 					method: method,
 					url: url,
-					data: data,
-                    headers : headers
+					data: data
+                    //,headers : headers
 				};
 				//console.log(req);
 				$http(req)
