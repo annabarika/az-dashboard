@@ -326,13 +326,19 @@ app.controller('CargoProductSearchController',
             $scope.$location = $location;
 
             $scope.search = function(query){
-                RestFactory.request(config.API.host + "products/search/query/"+query)
+                RestFactory.request(config.API.host + "product/search/query/"+query)
                     .then(function(response){
-                        console.log(response);
+                        $rootScope.modalInstance.close();
                         if(response.length > 0){
-
+                            
+                        }else{
+                            $scope.createNewProductConfirm();
                         }
                     });
+            };
+
+            $scope.createNewProductConfirm = function(){
+
             };
         }
     ]);
