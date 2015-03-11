@@ -6,7 +6,8 @@
         .constant('API', (function () {
 
             return {
-                GETFACTORY :    config.API.host+'/factory/load'
+                GETFACTORY      :   config.API.host+'factory/load',
+                GETCOLLECTIONS  :   config.API.host+'catalogue/load-collections'
             };
 
         })())
@@ -15,7 +16,7 @@
         .constant('TEMPLATE', (function () {
 
             return {
-                NEW    :    '/template/path'
+                COLLECTIONSLIST    :    '/template/path'
             };
 
         })())
@@ -32,6 +33,36 @@
                     console.log(RestFactory);
                     console.log(messageCenterService);
                     console.log($modal);
+                },
+
+                /**
+                 * Collections filter params
+                 *
+                 * @param params
+                 * @returns {Array}
+                 */
+                filter: function(params) {
+
+                    var params = [];
+                    return params;
+                },
+
+                /**
+                 * Get collection with filters
+                 *
+                 * @param params
+                 * @returns {Array}
+                 */
+                getCollections: function(params) {
+
+                    var collections = [];
+                    RestFactory.request(API.GETCOLLECTIONS, 'GET', params).then(function(response) {
+
+                        var collections = response;
+
+                    });
+
+                    return collections;
                 }
             };
         }]);

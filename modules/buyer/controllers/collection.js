@@ -8,5 +8,9 @@ app.controller('NewCollectionController', ['$scope','$rootScope','$location','Co
         // set title
         $rootScope.documentTitle = "Collection";
         CollectionService.debug();
+
+        // get all collections with their params
+        $scope.collections = CollectionService.getCollections(params);
+
     }]
 );
