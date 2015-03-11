@@ -6,7 +6,7 @@
         .constant('API', (function () {
 
             return {
-                LOGOUT :    config.API.host+'/routeto back'
+                GETFACTORY :    config.API.host+'/factory/load'
             };
 
         })())
