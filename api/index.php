@@ -27,21 +27,21 @@ try {
 				echo $exec;
 				echo system($exec);
 
-/*				$request = curl_init('http://lex.b.compass/order/loadfiles/');
-				curl_setopt($request, CURLOPT_POST, true);
-				curl_setopt($request, CURLOPT_SAFE_UPLOAD, true);
+				/*				$request = curl_init('http://lex.b.compass/order/loadfiles/');
+                                curl_setopt($request, CURLOPT_POST, true);
+                                curl_setopt($request, CURLOPT_SAFE_UPLOAD, true);
 
-				curl_setopt(
-					$request,
-					CURLOPT_POSTFIELDS,
-					array(
-						'file' => '@' . $file['tmp_name']
-					));
-				curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
-				print_r(curl_exec($request));
-				curl_close($request);*/
+                                curl_setopt(
+                                    $request,
+                                    CURLOPT_POSTFIELDS,
+                                    array(
+                                        'file' => '@' . $file['tmp_name']
+                                    ));
+                                curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+                                print_r(curl_exec($request));
+                                curl_close($request);*/
 			}
-die();
+			die();
 			/*$files = [];
 			require __DIR__.'/CURLBot.php';
 

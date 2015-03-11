@@ -2,22 +2,20 @@
     <!--header-->
     <div class="modal-header">
         <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Change factory</h4>
+        <h4 class="modal-title" id="myModalLabel">Please, select the factory</h4>
     </div>
     <div class="modal-body">
+        Test
         <form>
-           <!-- <select data-ng-model="newCargo.factory">
-                <option ng-repeat="item in  Factory">{{item.name}}</option>
-            </select>-->
-            <select class="form-control" data-ng-model="newCargo.factory"
-                    ng-options="opt as opt.name for opt in Factory">
+            <select class="form-control" data-ng-model="newCargo.factories"
+                    ng-options="opt as opt.name for opt in factories">
                 <option value="">Choose factory</option>
             </select>
         </form>
     </div>
     <!--footer-->
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="saveFactory(newCargo.factory)">Create</button>
+        <button type="button" class="btn btn-primary" ng-click="createCargo(newCargo.factories)">Create</button>
         <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
     </div>
 </div>

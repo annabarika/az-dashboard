@@ -65,7 +65,7 @@ app.controller('OrderListController',
                         }
                         $scope.data = data;
                         $scope.orders = $scope.data;
-                        //console.log($scope.orders);
+                        console.log($scope.orders);
 
                         $scope.buttons = [
                             {
@@ -86,6 +86,7 @@ app.controller('OrderListController',
              //Loading factories
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
+                    console.log(response);
 					var factory = [];
 					for( var i in response ){
 

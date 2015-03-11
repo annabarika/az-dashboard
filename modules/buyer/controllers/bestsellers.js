@@ -1,263 +1,192 @@
 var app = angular.module("modules.buyer.bestsellers", [
 
 ]);
+app.controller('BestsellersController',
+    [
+        '$scope', '$rootScope', '$route', '$location', 'RestFactory',
 
-app.controller('BestCalendarController',
+        function($scope, $rootScope, $route, $location, RestFactory) {
+            $scope.$route = $route;
+            $scope.$location = $location;
 
-	[
-		'$scope',
-		'$rootScope',
-		"$modal",
-		"$location",
-		"$route",
-		"RestFactory",
+            $scope.calendar = {};
+            $rootScope.bestsellers = [];
 
-		function ($scope, $rootScope, $modal, $location, $route, RestFactory){
+            $rootScope.documentTitle = "Bestsellers calendar";
 
-			$scope.$route = $route;
-			$scope.$location = $location;
-			var url,data,method,header,length,array,year,month,monthBegin,monthEnd;
-			/* Getting payments */
-			$rootScope.documentTitle = "Bestsellers";
+            $scope.loadCalendar = function(){
 
-			$scope.months=
-			{
-				'01':'January',
-				'02':'Fabruary',
-				'03':'March',
-				'04':'April',
-				'05':'May',
-				'06':'June',
-				'07':'July',
-				'08':'August',
-				'09':'September',
-				'10':'October',
-				'11':'November',
-				'12':'December'
-			};
+                var url = config.API.host + "bestseller/load/status/1";
 
-			$scope.current_year=new Date().getFullYear();
+                RestFactory.request(url)
+                    .then(function (response) {
+                        for( var i in response ){
+                            var dateArray = response[i].orderDate.split('-');
+                            if( $scope.calendar[dateArray[0]] == undefined){
+                                $scope.calendar[dateArray[0]] = [];
+                            }
+                            var month = parseInt(dateArray[1]);
+                            if( $scope.calendar[dateArray[0]][month] == undefined){
+                                $scope.calendar[dateArray[0]][month] = { count: 1, name: config.monthNames[month-1] };
+                            }
+                            $scope.calendar[dateArray[0]][month].count++;
+                        }
 
-			$scope.changeYear=function(step){
-				$scope.current_year=$scope.current_year+step;
-			};
+                        // Filling calendar width months
+                        for( var y in $scope.calendar ){
+                            for( var month = 1; month <= 12; month++){
+                                if($scope.calendar[y][month] == undefined){
+                                    $scope.calendar[y][month] = { count:0, name: config.monthNames[month-1] };
+                                }
+                            }
+                        }
+                    },
+                    function (error) {
+                        console.log(error);
+                    });
+            };
 
-			$scope.bestsellers={};
+            $scope.showMonth = function(year, month) {
+                var startDate = year + '-' + month + '-01';
+                var endDate = year + '-' + month + '-31';
+                var url = config.API.host + "bestseller/load/orderDate/" + startDate + ',' + endDate;
+                $rootScope.selectedDate = { year: year, month: config.monthNames[month-1] };
 
-			url=config.API.host+"bestseller/load/status/1";
+                RestFactory.request(url)
+                    .then(function (response) {
+                        var productId = [];
+                        $rootScope.bestsellers = response;
 
-			RestFactory.request(url)
-				.then(function(response){
+                        for( var i in response){
+                            productId.push(response[i].productId);
+                        }
 
-					if(response){
-						length=response.length;
+                        var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + productId.join(',');
+                        RestFactory.request(productsLoadUrl)
+                            .then(function (response) {
+                                for( var i in $rootScope.bestsellers ){
+                                    productId = $rootScope.bestsellers[i].productId;
+                                    $rootScope.bestsellers[i].product = response[productId];
+                                }
+                                //$scope.$apply();
 
-						var tempArr=[];
-						for(var i=0;i<length;i++){
-							angular.forEach(response[i],function(value,key){
-								if(key=='createDate'){
-									array = value.split("-");
-									year=array[0];
-									month=array[1];
-									tempArr.push({year:year,month:month,item:response[i]});
-								}
-							})
-						}
-						array=[];
-						angular.forEach(tempArr,function(value,key){
+                                console.log(response);
+                                console.log($scope);
+                            });
 
-							if($scope.bestsellers[value.year]==undefined){
+                    });
+            };
 
-								$scope.bestsellers[value.year]={
-									'01':[],
-									'02':[],
-									'03':[],
-									'04':[],
-									'05':[],
-									'06':[],
-									'07':[],
-									'08':[],
-									'09':[],
-									'10':[],
-									'11':[],
-									'12':[]
-								};
-							}
-							angular.forEach($scope.bestsellers[value.year],function(val,month){
-								if(month==value.month){
-									val.push(value.item);
-								}
-							});
+            $scope.loadProducts = function(id){
+                var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + id;
+                RestFactory.request(productsLoadUrl)
+                    .then(function (response) {
+                        for( var i in response) {
+                            $rootScope.products = response;
+                        }
+                        //$scope.$apply();
 
-						});
-						console.log($scope.bestsellers,$scope.current_year);
-					}
-				});
+                        console.log(response);
+                        console.log($scope);
+                    });
 
+            };
 
+            $scope.loadCalendar();
+        }
+    ]);
 
+app.controller('BestsellerItemController',
+    [
+        '$scope', '$rootScope', '$route', '$location', 'RestFactory',
+
+        function($scope, $rootScope, $route, $location, RestFactory){
+            $scope.$route = $route;
+            $scope.$location = $location;
+
+            $rootScope.documentTitle = "Item";
 
 
-			$scope.currentMonth=function(monthName){
-				$scope.current_month=monthName;
+            $scope.load = function() {
+                var url = config.API.host + "bestseller/get/id/" + $route.current.params.bestsellerId;
 
-				angular.forEach($scope.months,function(value,key){
-					if(value==monthName){
-						month=key;
+                RestFactory.request(url)
+                    .then(function (response) {
 
-					}
-				});
-				monthBegin=$scope.current_year+"-"+month+"-01";
-				monthEnd=$scope.current_year+"-"+month+"-31";
-				url=config.API.host+"bestseller/load-detailed/status/1/orderDate/"+monthBegin+","+monthEnd;
-				console.log(url);
-				RestFactory.request(url)
-					.then(function(response){
-						$scope.bests_orders=response;
-						console.log($scope.bests_orders);
+                        $scope.product = response.product;
+                        $scope.bestseller = response.bestseller;
+                        $scope.order = response.order;
+                        $scope.factory = response.factory;
 
-					},function(error){
-						console.log(error)
-					});
-			};
+                        $scope.sizes = {add: [{size: 'XS', count: 1}], L: {count: 2}, M: {count: 3}};
+                        $rootScope.documentTitle = $scope.product.brand + ' (' + $scope.product.articul + ')';
+
+                    },
+                    function (error) {
+                        console.log(error);
+                    });
+            };
+
+            $scope.load();
+
+            $scope.createOrder = function( sizes ){
+                // Preparing order rows
+                //console.log( Object.keys(sizes).length );
+                if( Object.keys(sizes).length == 0 ) return false;
+
+                var products = [];
+                var size = '';
+                if( sizes.add ){
+                    for( var i in sizes.add ){
+                        size = sizes.add[i].size;
+                        sizes[size] = { count : sizes.add[i].count };
+                    }
+                }
+
+
+                for( var size in sizes){
+                    if( size != 'add' ){
+                        products.push({
+                            size: size,
+                            productId: $scope.product.id,
+                            count: sizes[size].count,
+                            price: $scope.product.price,
+                            factoryArticul: $scope.product.factoryArticul,
+                            bestsellerId: $scope.$route.current.params.bestsellerId
+                        });
+                    }
+                }
+                // Creating order
+                var createOrderUrl = config.API.host+"order/create";
+                var order = {
+                    factoryId: $scope.product.factoryId,
+                    buyerId: 328,
+                    type: 1
+                };
+
+                RestFactory.request(createOrderUrl, 'POST', order)
+                    .then(function(response){
+                        if(response.id){
+                            var orderId = response.id;
+                            var addProductUrl = config.API.host+"order/create-bestseller-row";
+                            // Adding items to order
+                            for( i in products){
+                                products[i].orderId = orderId;
+                                RestFactory.request(addProductUrl, 'POST', products[i])
+                                    .then(function(response){
+                                        //console.log(response);
+                                        if( response.id ){
+                                            //console.log(i);
+                                            products.splice(0, 1);
+                                            if(products.length == 0){
+                                                $scope.load();
+                                            }
+                                            //console.log(products.length);
+                                        }
+                                    });
+
+                            }
+                        }
+                    });
+        }
 }]);
-
-app.controller('BestsellerCartController',
-	[
-		'$scope',
-		'$rootScope',
-		"$modal",
-		"$location",
-		"$route",
-		"RestFactory",
-
-
-		function ($scope, $rootScope, $modal, $location, $route, RestFactory){
-
-			$scope.$route = $route;
-			$scope.$location = $location;
-
-			/* Getting cargo */
-			$scope.summaryCart = [
-				{
-					"a_photo":"/assets/images/avatar/avatar18.jpg",
-					"article":"3234555",
-					"size":"M",
-					"count":"3x",
-					"curency":"100"
-				},
-
-				{
-					"a_photo":"/assets/images/avatar/avatar17.jpg",
-					"article":"8676",
-					"size":"S",
-					"count":"3x",
-					"curency":"100"
-				},
-
-				{
-					"a_photo":"/assets/images/avatar/avatar18.jpg",
-					"article":"4435",
-					"size":"L",
-					"count":"3x",
-					"curency":"100"
-				},
-
-				{
-					"a_photo":"/assets/images/avatar/avatar3.jpg",
-					"article":"35356",
-					"size":"M",
-					"count":"3x",
-					"curency":"100"
-				},
-				{
-					"a_photo":"/assets/images/avatar/avatar8.jpg",
-					"article":"995453",
-					"size":"M",
-					"count":"3x",
-					"curency":"100"
-				},
-				{
-					"a_photo":"/assets/images/avatar/avatar1.jpg",
-					"article":"344657",
-					"size":"M",
-					"count":"3x",
-					"curency":"100"
-				},
-				{
-					"a_photo":"/assets/images/avatar/avatar16.jpg",
-					"article":"233567",
-					"size":"M",
-					"count":"3x",
-					"curency":"100"
-				},
-				{
-					"a_photo":"/assets/images/avatar/avatar18.jpg",
-					"article":"9799898",
-					"size":"M",
-					"count":"3x",
-					"curency":"100"
-				}
-			];
-
-			$scope.edit = function (obj) {
-				console.log(obj);
-				$location.path( '/buyer/bestsellers/bestseller_cart');
-			};
-
-			$scope.tableHeader = [
-				{ name: "size", title: 'Size' },
-				{ name: "count", title: 'Count' },
-				{ name: "speed", title: 'Sales speed' },
-				{ name: "sales", title: 'Sales' },
-				{ name: "returns", title: 'Returns' }
-			];
-			$scope.buttonsCart=[{
-				class:"btn btn-default",
-				icon:"fa fa-trash-o"
-			}];
-			$scope.buttonAction=function(){
-				alert("delete");
-			};
-			RestFactory.request('data/cartProduct.json')
-				.then(function(response){
-					//$scope.cartProduct =response;
-					//var l=$scope.cartProduct.length;
-					//for(var i=0;i<l;i++){
-					//    angular.forEach($scope.cartProduct[i],function(v,k){
-					//        if(k=='returns'){
-					//            //v=v+'%';
-					//            console.log(v);
-					//            console.log(typeof v);
-					//        }
-					//        if(k=='sales'){
-					//            //v=v+'%';
-					//            console.log(v);
-					//            console.log(typeof v);
-					//        }
-					//    });
-					//}
-
-					$scope.cartProduct =response;
-					console.log($scope.cartProduct);
-				});
-
-			$scope.tableHeaderHistoryCart = [
-				{ name: "date", title: 'Re buying date' },
-				{ name: "size", title: 'Size&count' }
-			];
-			RestFactory.request('data/historyCart.json')
-				.then(function(response){
-					$scope.historyCart =response;
-				});
-
-			$scope.tableHeaderLogOperations = [
-				{ name: "type", title: 'Operations type' },
-				{ name: "time", title: 'Time' },
-				{ name: "date", title: 'Date' }
-			];
-			RestFactory.request('data/logOperations.json')
-				.then(function(response){
-					$scope.logOperations =response;
-				});
-	}]);
