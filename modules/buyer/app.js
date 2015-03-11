@@ -46,6 +46,12 @@ app.config(function($routeProvider){
             controller:"NewCollectionController"
         }
     )
+		.when('/buyer/collection/upload',
+		{
+			templateUrl:"/modules/buyer/views/collection/collection.html",
+			controller:"UploadController"
+		}
+	)
         .when('/buyer/cargo',
         {
             templateUrl:"/modules/buyer/views/cargo/index.html",

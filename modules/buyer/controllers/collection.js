@@ -2,7 +2,7 @@ var app = angular.module("modules.buyer.collection", [
 
 ]);
 
-app.controller('NewCollectionController', ['$scope','$rootScope','$location','CollectionService', "RestFactory",
+app.controller('NewCollectionController', ['$scope','$rootScope','$location','CollectionService',
     function ($scope, $rootScope, $location, CollectionService) {
 
         $scope.factories=CollectionService.getFactories();
@@ -19,23 +19,138 @@ app.controller('NewCollectionController', ['$scope','$rootScope','$location','Co
         * Add new collection*/
          $scope.newCollection=function(){
                 var modalInstance=CollectionService.showModal('NEW',$scope.factories);
-                    modalInstance.result.then(function(factory){
-                        $scope.selectedFactory=factory;
-                        console.log("selected",$scope.selectedFactory.id);
 
+                modalInstance.result.then(function(factory){
 
+                    $rootScope.factoryId=factory.id;
+
+                    CollectionService.getFactoryCollections(factory.id);
+
+                    var modalInstance=CollectionService.showModal("CHOOSE");
+
+                    modalInstance.result.then(function(collection){
+
+                        $rootScope.collection=collection;
+                        $location.path("buyer/collection/upload");
+                    })
                     });
+
+
          };
 
+        $scope.$watch('collection',function(value){
+           if(value){
+               console.log(value);
+           }
+        });
     }]
 );
 
-app.controller("ModalController",function($scope,$rootScope,$modalInstance){
-
+app.controller("ModalController",function($scope,$rootScope,data,CollectionService,$modalInstance){
+    $scope.data=data;
     $scope.cancel=function(){
         $modalInstance.dismiss();
     };
     $scope.chooseFactory=function(factory){
         $modalInstance.close(factory);
+    };
+    $scope.chooseCollection=function(collection){
+        $modalInstance.close(collection);
+    };
+    $scope.createNew=function(){
+        console.log("newCollection",$rootScope.factoryId);
+        CollectionService.createCollection($rootScope.factoryId);
+
     }
+
 });
+
+app.controller("UploadController",['$scope','$rootScope','$location','CollectionService',"$modal",
+    function ($scope, $rootScope, $location, CollectionService,$modal) {
+        var fileinput;
+
+        if($rootScope.collection==undefined){
+            $location.path("/buyer/collection");
+        }
+
+        $scope.collectionTemplates = [
+            "modules/buyer/views/collection/upload.html",
+            "modules/buyer/views/collection/prepare.html",
+            "modules/buyer/views/collection/finish.html"
+        ];
+
+        $scope.step=0;
+
+        $scope.stepIcons=document.getElementsByClassName('steps');
+
+        $scope.$watch('step',function(newVal){
+            $scope.stepIcons[newVal].classList.add('active');
+        });
+
+
+        /* Getting collection */
+        $rootScope.documentTitle = "Collection";
+        /*$('#sort1, #sort2, #sort3, #sort4').sortable({
+         connectWith: ".sort",
+         opacity: 0.5,
+         dropOnEmpty: true
+         }).disableSelection();*/
+
+        $scope.upload=function(){
+            fileinput = document.getElementById("fileUpload");
+            fileinput.click();
+
+        };
+
+        $scope.count=321;
+        /*$scope.getFiles=function(){
+         console.log(fileinput.value);
+         $scope.newCollection=fileinput.value;
+         $scope.$apply();
+
+         };*/
+
+        $scope.$watch("photo",function(value){
+            console.log(value);
+            $rootScope.collection=value;
+        });
+
+        $scope.back=function(){
+
+            if($scope.step==2){
+                console.log("finish",$scope.step);
+                $scope.step=0;
+                for(i=0;i<$scope.stepIcons.length;i++){
+                    $scope.stepIcons[i].classList.remove('active');
+                }
+            }
+
+            else{
+                if($scope.step>0) {
+                    console.log($scope.step);
+                    $scope.step--;
+                }
+                else{
+                    $location.path('/');
+                }
+            }
+        };
+
+        $scope.nextStep=function(){
+            if( $rootScope.collection){
+                console.log($rootScope.collection);
+                $scope.step++;
+            }
+            else{
+                $rootScope.message="You are forgot upload photo";
+                $modal.open({
+                    templateUrl: '/app/views/error.html',
+                    controller: 'BsAlertCtrl',
+                    size: 'lg'
+                });
+
+            }
+
+        }
+
+    }]);

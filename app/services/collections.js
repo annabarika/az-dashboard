@@ -7,7 +7,9 @@
 
             return {
                 GETFACTORIES : config.API.host+'factory/load',
-                GETCOLLECTIONS : config.API.host+'catalogue/load-collections'
+                GETCOLLECTIONS : config.API.host+'catalogue/load-collections',
+                FACTORYCOLLECTIONS:config.API.host+"catalogue-collection/load/factoryId/",
+                CREATECOLLECTION:config.API.host+"catalogue-collection/create"
             };
 
         })())
@@ -16,24 +18,21 @@
         .constant('TEMPLATE', (function () {
 
             return {
-                NEW    :   "/modules/buyer/views/collection/chooseFactory.html"
+                NEW    :   "/modules/buyer/views/collection/chooseFactory.html",
+                CHOOSE :   "/modules/buyer/views/collection/chooseCollection.html"
             };
 
         })())
 
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',
-            function(API, TEMPLATE, RestFactory, messageCenterService, $modal) {
+        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',"$rootScope",
+            function(API, TEMPLATE, RestFactory, messageCenterService, $modal,$rootScope) {
 
             return {
 
-                debug : function() {
-                    console.log('Check incapsulated services');
-                    console.log(API);
-                    console.log(TEMPLATE);
-                    console.log(RestFactory);
-                    console.log(messageCenterService);
-                    console.log($modal);
-                },
+                /**
+                 *
+                 * @returns {Array}
+                 */
 
                 getFactories:function(){
 
@@ -47,25 +46,57 @@
                     return factories;
                 },
 
+
+                /**
+                 *  $param id:string,
+                 *  return : array[]
+                 */
+                 getFactoryCollections:function(id){
+                    var url=API.FACTORYCOLLECTIONS+id;
+
+                    RestFactory.request(url).then(function(response){
+
+                           $rootScope.factoryCollections=response;
+
+                        }
+                    );
+
+                 },
+                createCollection:function(factoryId){
+                    var data={
+                        factoryId:factoryId,
+                        name:"test"
+                    };
+
+                    RestFactory.request(API.CREATECOLLECTION,"POST",data).then(function(response){
+
+                            //$rootScope.factoryCollections=response;
+                            console.log(response);
+                            if(response){
+                                $rootScope.collection=response;
+                            }
+
+                        }
+                    );
+                },
                 /**
                  * param @path:string,
                  * param @factories:array
                  * return @object
                  */
-                 showModal:function(path,factories){
-                    console.log(factories);
+                showModal:function(path,data){
+                   // console.log("data",data);
                     var modal=$modal.open({
                         templateUrl:TEMPLATE[path],
                         controller:"ModalController",
                         resolve:{
-                            factories:function(){
-                                return factories;
+                            data:function(){
+                                return data;
                             }
                         }
                     });
                     return modal;
-                 }
-
+                }
             };
         }]);
 })();
