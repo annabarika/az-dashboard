@@ -6,7 +6,8 @@
         .constant('API', (function () {
 
             return {
-                LOGOUT :    config.API.host+'/routeto back'
+                GETFACTORY : config.API.host+'factory/load',
+                GETCOLLECTIONS : config.API.host+'catalogue/load-collections'
             };
 
         })())
@@ -32,7 +33,24 @@
                     console.log(RestFactory);
                     console.log(messageCenterService);
                     console.log($modal);
+                },
+
+                getFactories:function(){
+
+                    var factory=[];
+
+                    RestFactory.request(API.GETFACTORY).then(
+
+                        function(response){
+                            if(response){
+                                factory=response;
+                            }
+
+                        }
+                    );
+                    return factory;
                 }
+
             };
         }]);
 })();

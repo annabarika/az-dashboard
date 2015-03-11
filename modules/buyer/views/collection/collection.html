@@ -1,0 +1,76 @@
+<!-- start box layout -->
+<div class="box-layout">
+    <!-- start left side -->
+    <div class="col-md-2 bg-white height-auto">
+        <div class="pr-lg pl-lg pt-md pb-md">
+            <h3 class="mb-sm">Steps to create new collection</h3>
+            <p class="text-muted mb-lg">Please upload photos of new collection</p>
+            <ul class="step">
+                <li>
+                    <div class="steps">
+                        <span class="steps-figure">1</span>
+                        <span class="steps-text">Upload photos</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="steps">
+                        <span class="steps-figure">2</span>
+                        <span class="steps-text">Prepare photos</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="steps">
+                        <span class="steps-figure">3</span>
+                        <span class="steps-text">Finish</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <hr class="nm visible-xs visible-sm"><!-- horizontal rule -->
+    <!--/ end left side -->
+
+    <div class="col-md-10 bdr-l bg-auto height-auto">
+
+        <!-- start page header -->
+        <div class="page-header">
+            <!-- basic info heading -->
+            <div class="box-layout">
+                <div class="col-sm-12 va-m">
+                    <h4>Upload</h4>
+                    <p class="text-muted mb-0">Select multiple</p>
+                </div>
+            </div>
+            <!--/ basic info heading -->
+        </div>
+        <!--/ end page header -->
+
+
+        <div class="container-fluid pt-md pb-md">
+            <div class="slide-down">
+                <!-- start upload -->
+                <div ng-include="collectionTemplates[step]"></div>
+
+                <div class="clearfix" ng-hide="step==2">
+                    <a class="btn btn-primary" ng-click="back()"><span class="fa fa-long-arrow-left" ></span> Back</a>
+                    <button type="submit" class="btn btn-primary pull-right" ng-click="nextStep()">
+                        <span ng-show="step==0">Next step</span>
+                        <span ng-show="step==1">Finish</span>
+                        <span class="fa fa-long-arrow-right"></span>
+                    </button>
+                </div>
+
+                <div class="row mt-lg" ng-show="step==2">
+                    <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
+                        <a class="btn btn-block btn-primary" ng-click="back()">Go Back</a>
+                    </div>
+                </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+<!--/ end box layout -->
+</div>
