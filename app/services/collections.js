@@ -1,13 +1,18 @@
 (function(){
 
-    angular.module("services.collections",[])
+    angular.module("services.collections",['LocalStorageModule'])
+
+        .config(['localStorageServiceProvider', function(localStorageServiceProvider){
+            localStorageServiceProvider.setPrefix('collections');
+            localStorageServiceProvider.setStorageType('localStorage');
+        }])
 
         // create config API ROUTES
         .constant('API', (function () {
 
             return {
-                GETFACTORY      :   config.API.host+'factory/load',
-                GETCOLLECTIONS  :   config.API.host+'catalogue/load-collections'
+                GETFACTORIES    :   config.API.host+'factory/load',
+                GETCOLLECTIONS  :   config.API.host+'catalogue-collection/load/status/0'
             };
 
         })())
@@ -21,48 +26,85 @@
 
         })())
 
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',
-            function(API, TEMPLATE, RestFactory, messageCenterService, $modal) {
+        .factory("CollectionService", ['API', 'TEMPLATE', '$q', '$http', 'messageCenterService', '$modal', '$rootScope', 'localStorageService',
+            function(API, TEMPLATE, $q, $http, messageCenterService, $modal, $rootScope, localStorageService) {
 
             return {
 
-                debug : function() {
-                    console.log('Check incapsulated services');
-                    console.log(API);
-                    console.log(TEMPLATE);
-                    console.log(RestFactory);
-                    console.log(messageCenterService);
-                    console.log($modal);
-                },
-
                 /**
-                 * Collections filter params
+                 * Get Scope of Factories
                  *
-                 * @param params
-                 * @returns {Array}
+                 * @returns {T.promise|*|d.promise|promise|m.ready.promise|fd.g.promise}
                  */
-                filter: function(params) {
+                getFactories: function () {
 
-                    var params = [];
-                    return params;
-                },
+                    var deferred = $q.defer();
 
-                /**
-                 * Get collection with filters
-                 *
-                 * @param params
-                 * @returns {Array}
-                 */
-                getCollections: function(params) {
+                    $http.get(API.GETFACTORIES).success(function (response) {
 
-                    var collections = [];
-                    RestFactory.request(API.GETCOLLECTIONS, 'GET', params).then(function(response) {
+                        if (response) {
 
-                        var collections = response;
+                            var factories = [];
+                            angular.forEach(response, function(value) {
+                                factories.push(value.factory);
+                            });
 
+                            $rootScope.factories = factories;
+
+                            deferred.resolve(response);
+                        }
+                        else {
+                            deferred.resolve(response);
+                        }
+
+                    }).error(function (error) {
+
+                        deferred.reject(error);
                     });
 
-                    return collections;
+                    return deferred.promise;
+                },
+
+                /**
+                 * Get Scope of Factories
+                 *
+                 * @returns {T.promise|*|d.promise|promise|m.ready.promise|fd.g.promise}
+                 */
+                getCollections: function (params) {
+
+                    var deferred = $q.defer(), url = (_.isUndefined(params) == false) ? API.GETCOLLECTIONS+params : API.GETCOLLECTIONS;;
+
+                    $http.get(url).success(function (response) {
+
+                        if (response) {
+                                var collections = [];
+
+                                angular.forEach(response, function(value) {
+
+                                angular.forEach($rootScope.factories, function(factory) {
+
+                                    if(factory.id == value.factoryId) {
+                                        value.factoryName = factory.name;
+                                    }
+
+                                    collections.push(value);
+                                });
+                            });
+
+                            $rootScope.collections = collections;
+
+                            deferred.resolve(response);
+                        }
+                        else {
+                            deferred.resolve(response);
+                        }
+
+                    }).error(function (error) {
+
+                        deferred.reject(error);
+                    });
+
+                    return deferred.promise;
                 }
             };
         }]);
