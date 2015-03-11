@@ -101,7 +101,6 @@
                     return deferred.promise;
                 },
 
-
                 /**
                  * Get Card of selected collection
                  *
@@ -146,7 +145,6 @@
                         });
                     }
 
-                    console.log(res);
                     return res;
                 },
 
@@ -158,7 +156,27 @@
                 getImagePath: function() {
 
                     return API.IMAGES_PATH;
-                }
+                },
+
+                /**
+                 * Delete collection
+                 */
+                deleteCollection: function (collectionId) {},
+
+                /**
+                 * Delete product
+                 */
+                deleteProduct: function (productId) {},
+
+                /**
+                 * Checkout collection position
+                 */
+                checkoutPosition: function (productId) {},
+
+                /**
+                 * Checkout collection
+                 */
+                checkoutCollection: function (collectionId) {}
             };
         }]);
 })();

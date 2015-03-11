@@ -50,12 +50,21 @@
                         {{product.factory.name}}
                     </td>
                     <td>
-                        <h4 ng-repeat="size in product.sizes">{{size.name}}</h4>
+                        <ul class="media-list mb-sm sm">
+                            <li ng-repeat="size in product.sizes" class="media">
+                                <p class="mt-5">{{size.name}}</p>
+                            </li>
+                            <li>
+                                <button class="btn btn-success" ng-click="addSize(product)"><i class="fa fa-plus"></i> add size</button>
+                            </li>
+                            </li>
+                        </ul>
+
                     </td>
                     <td>
-                        <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Checkout</span></button>
-                        <button class="btn btn-info" ng-click="updateCollection()"><span class="fa fa-check">Update collection</span></button>
-                        <button class="btn btn-red" ng-click="deleteCollection()"><span class="fa fa-check">Delete</span></button>
+                        <button class="btn btn-green" ng-click="addToOrder(product)"><span class="fa fa-check">Checkout</span></button>
+                        <button class="btn btn-info" ng-click="updateCollection(product)"><span class="fa fa-check">Update collection</span></button>
+                        <button class="btn btn-red" ng-click="deleteCollection(product)"><span class="fa fa-check">Delete</span></button>
                     </td>
                 </tr>
                 </tbody>

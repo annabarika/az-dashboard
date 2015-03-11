@@ -1,0 +1,21 @@
+<div ng-controller='CargoItemsController'>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Size</h4>
+    </div>
+    <div class="modal-body">
+        <!--<input type="text" placeholder="size" class="form-control" ng-model="new_size"/>-->
+        <select class="form-control" data-ng-model="new_size"
+                ng-options="opt as opt.name for opt in all_sizes">
+            <option value="">Choose size</option>
+        </select>
+
+        <input type="text" placeholder="count" class="form-control" ng-model="new_count"/>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="save(new_size,new_count)">Add</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

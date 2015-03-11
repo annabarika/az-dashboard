@@ -51,8 +51,8 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
 /**
  * Get collection card
  */
-app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams',
-        function ($scope, $rootScope, CollectionService, $routeParams) {
+app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService',
+        function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService) {
 
             // set title
             $rootScope.documentTitle = 'Collection Card #'+$routeParams.collectionId;
@@ -77,5 +77,46 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
 
                 }
             });
+
+            $scope.addSize=function(product) {
+
+                //show modal
+                modalWindow = $modal.open({
+                    templateUrl: "/modules/buyer/views/collection/add_size.html",
+                    controller: 'CollectionCardController',
+                    backdrop:'static',
+                    size:'sm'
+                });
+
+            };
+
+            $scope.addToOrder = function(product) {
+
+                // messageCenterService.add('success', 'The cargo has been successfully saved', { timeout: 3000 });
+                if(_.isUndefined(product) == false) {
+                    console.log(product);
+                }
+                else {
+                    console.log(product);
+                }
+            };
+            $scope.updateCollection = function(product){
+                if(_.isUndefined(product) == false) {
+
+                }
+                else {
+
+                }
+            };
+            $scope.deleteCollection = function(product){
+
+                if(_.isUndefined(product) == false) {
+
+                }
+                else {
+
+                }
+            };
+
         }]
 );
