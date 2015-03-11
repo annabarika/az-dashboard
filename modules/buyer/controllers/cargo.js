@@ -196,6 +196,7 @@ app.controller('CargoOrderProductsController',
             $scope.products         = [];
             $scope.orders           = [];
             $scope.cargoProducts    = {};
+            $scope.orderId = $scope.$route.current.params.orderId;
 
             $scope.productsHeader = [
                 { name: "preview", title: 'Preview' },
@@ -238,19 +239,32 @@ app.controller('CargoOrderProductsController',
                     }
                     products[product.productId].sizes[product.size] = {
                         size: product.size,
-                        count: product.count
+                        count: product.count,
+                        price: product.price
                     };
                 }
                 return products;
             };
 
-            $scope.addProductSize = function(productId, size, count){
-                var key = productId+'.'+size;
+            $scope.addProductSize = function(productId, size, count, price) {
+                var key = productId + '.' + size;
                 $scope.cargoProducts[key] = {
                     productId: productId,
-                    size:size,
-                    count:count
+                    size: size,
+                    count: count
                 };
+                var product = {
+                    cargoId: $scope.cargo.id,
+                    orderId: $scope.orderId,
+                    productId: productId,
+                    size: size,
+                    count: count,
+                    price: price
+                };
+                RestFactory.request(config.API.host + "cargo/add-to-cargo", "POST", product)
+                    .then(function (response) {
+
+                    });
             };
             $scope.deleteProductSize = function(product){
                 var key = product.productId+'.'+product.size;

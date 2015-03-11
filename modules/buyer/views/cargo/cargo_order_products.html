@@ -47,7 +47,10 @@
                                 <input ng-model="size.count" size="3"/>
                             </td>
                             <td>
-                                <button class="btn btn-green" ng-click="addProductSize(product.id, size.size, size.count)"><span class="fa fa-plus"> </span></button>
+                                <input ng-model="size.price" size="4"/>
+                            </td>
+                            <td>
+                                <button class="btn btn-green" ng-click="addProductSize(product.id, size.size, size.count, size.price)"><span class="fa fa-plus"> </span></button>
                             </td>
                         </tr>
                     </table>
