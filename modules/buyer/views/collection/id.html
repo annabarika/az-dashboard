@@ -1,0 +1,33 @@
+<!-- start box layout -->
+<div class="box-layout" ng-controller="CollectionCardController">
+    <div class="col-md-12 bdr-r bg-auto height-auto">
+        <!-- start page header -->
+        <div class="page-header">
+            <!-- basic info heading -->
+            <div class="box-layout">
+                <div class="col-sm-6 va-m">
+                    <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Checkout</span></button>
+                    <button class="btn btn-info" ng-click="updateCollection()"><span class="fa fa-check">Update collection</span></button>
+                    <button class="btn btn-red" ng-click="deleteCollection()"><span class="fa fa-check">Delete</span></button>
+                </div>
+            </div>
+            <!--/ basic info heading -->
+        </div>
+        <!--/ end page header -->
+        <div class="dataTables_wrapper form-inline no-footer">
+            <table class="table table-bordered table-striped dataTable no-footer" id="DataTable">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--/ end box layout -->

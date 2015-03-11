@@ -11,28 +11,20 @@
         .constant('API', (function () {
 
             return {
-                GETFACTORIES    :   config.API.host+'factory/load',
-                GETCOLLECTIONS  :   config.API.host+'catalogue-collection/load/status/0'
+                FACTORIES       :   config.API.host+'factory/load',
+                COLLECTIONS     :   config.API.host+'catalogue-collection/load/status/0',
+                COLLECTION_CARD :   config.API.host+'catalogue-collection/load/id/'
             };
 
         })())
 
-        // create config  Templates
-        .constant('TEMPLATE', (function () {
-
-            return {
-                COLLECTIONSLIST    :    '/template/path'
-            };
-
-        })())
-
-        .factory("CollectionService", ['API', 'TEMPLATE', '$q', '$http', 'messageCenterService', '$modal', '$rootScope', 'localStorageService',
-            function(API, TEMPLATE, $q, $http, messageCenterService, $modal, $rootScope, localStorageService) {
+        .factory("CollectionService", ['API', '$q', '$http', 'messageCenterService', '$modal', '$rootScope',
+            function(API, $q, $http, messageCenterService, $modal, $rootScope) {
 
             return {
 
                 /**
-                 * Get Scope of Factories
+                 * Get Scope of Collections
                  *
                  * @returns {T.promise|*|d.promise|promise|m.ready.promise|fd.g.promise}
                  */
@@ -40,7 +32,7 @@
 
                     var deferred = $q.defer();
 
-                    $http.get(API.GETFACTORIES).success(function (response) {
+                    $http.get(API.FACTORIES).success(function (response) {
 
                         if (response) {
 
@@ -68,11 +60,12 @@
                 /**
                  * Get Scope of Factories
                  *
+                 * @param params
                  * @returns {T.promise|*|d.promise|promise|m.ready.promise|fd.g.promise}
                  */
                 getCollections: function (params) {
 
-                    var deferred = $q.defer(), url = (_.isUndefined(params) == false) ? API.GETCOLLECTIONS+params : API.GETCOLLECTIONS;;
+                    var deferred = $q.defer(), url = (_.isUndefined(params) == false) ? API.COLLECTIONS+params : API.COLLECTIONS;
 
                     $http.get(url).success(function (response) {
 
@@ -93,6 +86,37 @@
 
                             $rootScope.collections = collections;
 
+                            deferred.resolve(response);
+                        }
+                        else {
+                            deferred.resolve(response);
+                        }
+
+                    }).error(function (error) {
+
+                        deferred.reject(error);
+                    });
+
+                    return deferred.promise;
+                },
+
+
+                /**
+                 * Get Card of selected collection
+                 *
+                 * @returns {T.promise|*|d.promise|promise|m.ready.promise|fd.g.promise}
+                 */
+                getCollectionCard: function (id) {
+
+                    var deferred = $q.defer();
+
+                    $http.get(API.COLLECTION_CARD+id).success(function (response) {
+
+                        if (response) {
+
+                            $rootScope.collection = _.first(response);
+
+                            console.log('Collection card', $rootScope.collection);
                             deferred.resolve(response);
                         }
                         else {

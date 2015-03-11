@@ -2,8 +2,8 @@ var app = angular.module("modules.buyer.collection", [
 
 ]);
 
-app.controller('NewCollectionController', ['$scope','$rootScope','$location', '$timeout', 'CollectionService',
-    function ($scope, $rootScope, $location, $timeout, CollectionService) {
+app.controller('CollectionsController', ['$scope','$rootScope','CollectionService', 'localStorageService', '$location',
+    function ($scope, $rootScope, CollectionService, localStorageService, $location) {
 
         // set title
         $rootScope.documentTitle = "Collection";
@@ -41,5 +41,21 @@ app.controller('NewCollectionController', ['$scope','$rootScope','$location', '$
         // get factories to filter
         CollectionService.getFactories();
 
+        $scope.edit = function(){
+            localStorageService.set('id', $rootScope.row.id);
+            $location.path('/buyer/collection/id/'+$rootScope.row.id)
+        };
     }]
+)
+
+app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', 'localStorageService',
+        function ($scope, $rootScope, CollectionService, localStorageService) {
+
+            CollectionService.getCollectionCard(localStorageService.get('id'));
+
+            // set title
+            //$rootScope.documentTitle = 'Collection Card "'+$rootScope.collection.name+'"';
+
+
+        }]
 );
