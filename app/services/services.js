@@ -1,6 +1,6 @@
 angular.module("services",
 [
     "services.rest",
-    "services.errors",
-    "services.cargo"
+    "services.cargo",
+    "services.collections"
 ]);
