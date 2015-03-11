@@ -3,7 +3,9 @@ var config = {
         host:"http://lex.f.azimuth/api/",
         imagehost:"http://arrow.b.compass",
 		key: 'test'
-	}
+	},
+    monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
 };
 
 (function(){
@@ -17,7 +19,7 @@ var config = {
 		"ui.bootstrap",
 		"services",
 		"modules.buyer",
-        'MessageCenterModule',
+        'MessageCenterModule'
 	])
 
 		.config(function ($routeProvider, $locationProvider, $httpProvider) {

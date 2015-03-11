@@ -5,23 +5,12 @@
                 <div class="btn btn-info" ng-click="addNewCargo()"><i class="fa fa-plus"></i> New cargo</div>
             </div>
             <div class="col-sm-5">
-               <!-- <div class="col-sm-3 va-m">
-                    <multi-select
-                            default-label="Status filter"
-                            input-model="orderStatus"
-                            output-model="resultData"
-                            button-label="icon name"
-                            item-label="icon name maker"
-                            tick-property="ticked"
-                            max-labels="2"
-                            >
-                    </multi-select>
-                </div>-->
+
                 <div class="col-sm-4 va-m">
                     <multi-select
-                            default-label="Payment status"
-                            input-model="orderPaymentStatus"
-                            output-model="resultData.orderPayment"
+                            default-label="Cargo status"
+                            input-model="cargoStatus"
+                            output-model="resultData.cargoStatus"
                             button-label="icon name"
                             item-label="icon name maker"
                             tick-property="ticked"
@@ -53,8 +42,8 @@
 </div>
 
 <widget-table
-        datarows="cargo"
-        dataheader="tableHeader"
+        datarows="cargoDocuments"
+        dataheader="cargoDocumentsHeader"
         edit="edit()"
         row="row"
         toolbar-battons="buttons"

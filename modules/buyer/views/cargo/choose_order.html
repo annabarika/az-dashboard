@@ -1,0 +1,38 @@
+<div ng-show="orders.length > 0" ng-controller='CargoOrderController'>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>
+                    # Order
+                </th>
+
+                <th>
+
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="order in orders track by $index">
+                <td>
+                    {{order.id}}
+                </td>
+                <td>
+                    <div class="media np">
+                        <div class="media-left">
+                              <span style="float:left" ng-repeat="item in order.products|limitTo:3">
+                                <img ng-src="http://back95.ru/f/catalogue/{{item.product.id}}/{{item.product.preview[0]}}">
+                              </span>
+                        </div>
+                    </div>
+                    <p>total {{order.products.length}} pcs.</p>
+                </td>
+                <td>
+                    <button class="btn btn-default" ng-click="selectOrder(order.id)">Select</button>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+</div>
+
+<h3 ng-show="orders.length == 0">Sorry, there's no orders for this factory.</h3>

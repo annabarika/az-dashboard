@@ -1,0 +1,21 @@
+<div ng-controller='NewCollectionController'>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Choose Collection</h4>
+    </div>
+    <div class="modal-body">
+        <form>
+            <select class="form-control" data-ng-model="currentCollection"
+                    ng-options="opt as opt.name for opt in factoryCollections">
+                <option value="">Choose collection</option>
+            </select>
+            <button class="btn-green" ng-click="createNew()">Create new</button>
+        </form>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="chooseCollection(currentCollection)">Choose</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

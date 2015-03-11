@@ -1,0 +1,159 @@
+<!-- start box layout -->
+<form ng-controller="BestsellerItemController">
+<div class="box-layout">
+    <div class="col-md-12 bdr-l bg-auto height-auto">
+
+        <!-- start page header -->
+        <div class="page-header">
+            <!-- basic info heading -->
+            <div class="box-layout">
+                <div class="col-sm-4 va-m">
+                    <p class="text-muted mb-0">Factory: {{factory.name}}</p>
+                    <p class="text-muted mb-0">Status: {{bestseller.status}}</p>
+                </div>
+                <div class="col-sm-8">
+                    <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> Save</div>
+                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="addNewItems()"><span class="fa fa-file-o"> Create PDF</span></button>
+                    <button ng-hide="bestseller.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
+
+                </div>
+            </div>
+            <!--/ basic info heading -->
+        </div>
+        <!--/ end page header -->
+
+
+        <div class="container-fluid pt-md pb-md">
+            <div class="row">
+                <div class="col-sm-1 col-md-1" ng-repeat="photo in product.photos">
+                    <!-- thumbnail -->
+                    <div class="thumbnail">
+                        <img src="http://back95.ru/f/p120x120/catalogue/{{product.id}}/{{photo}}"/>
+                    </div>
+                    <!--/ thumbnail -->
+                </div>
+            </div>
+            <div class="row">
+            <!-- question widget -->
+            <div class="col-sm-12 col-md-12">
+                <div class="panel box-layout ovf-h">
+                    <div class="col-md-4 bdr-r-md va-m">
+                        <div class="panel panel-default border-n">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <td>Total sales speed:</td>
+                                        <td>{{product.saleSpeed}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Average discount (retail / wholesale):</td>
+                                        <td>
+                                            {{product.marketing.discount.retail | number:0}}% / {{product.marketing.discount.wholesale | number:0}}%
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 va-m">
+                        <div class="pa-md">
+                            <form role="form">
+                                <div class="form-group">
+                                    <textarea class="form-control" placeholder="Add notes to product" rows="3"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/ question widget -->
+            </div>
+        </div>
+        <div class="row">
+
+
+            <div class="col-md-6">
+                <div style="padding-left:20px;">
+                    <h3>Size chart to order <span ng-show="order.id">(#{{order.id}})</span></h3>
+                    <div style="margin:20px 0;">
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 10</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 20</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 30</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 50</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 100</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 200</span></button>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 500</span></button>
+                </div>
+                <table class="table" style="background:white;">
+                    <tr>
+                        <th>Size</th>
+                        <th>Count</th>
+                        <th>Sale speed</th>
+                        <th>Sales (customers)</th>
+                        <th>Returns, %</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.add[0].size" value="XS" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[0].count" value="1" size="3"/></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.add[1].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[1].count" value="" size="3"/></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr ng-repeat="(size, sizeData) in product.marketing.sizes">
+                        <td>{{size}}
+                            <input type="hidden" ng-model="sizes[size].size" value="{{size}}"/>
+                        </td>
+                        <td><input type="text" ng-model="sizes[size].count" size="3" value="2"/></td>
+                        <td>{{sizeData.saleSpeed | number:0}}</td>
+                        <td>{{sizeData.sales}} ({{sizeData.customers}})</td>
+                        <td>{{sizeData.returns / sizeData.sales * 100 | number:0}}</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.add[2].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[2].count" value="" size="3"/></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" ng-model="sizes.add[3].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes.add[3].count" value="" size="3"/></td>
+                        <td colspan="3"></td>
+                    </tr>
+                </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div style="padding-left:20px;">
+                    <h3>Buying history</h3>
+                </div>
+                <table class="table" style="background:white;">
+                    <tr>
+                        <th>Buying date</th>
+                        <th>Sizes = Count</th>
+                        <th>Notes</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="(date, data) in product.buyingHistory.buying">
+                        <td>
+                            <a href="http://back95.com/buyer/re_buying/item_details/{{product.id}}/{{data.buyingId}}" target="_blank">{{date}}</a>
+                        </td>
+                        <td>
+                            <div ng-repeat="(size, count) in data.sizes">
+                                {{size}}=<b>{{count}}</b>
+                            </div>
+                        </td>
+                        <td>{{data.notes}}</td>
+                        <td>{{data.status}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ end box layout -->
+</div>
+</form>

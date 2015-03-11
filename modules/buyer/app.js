@@ -25,13 +25,13 @@ app.config(function($routeProvider){
 		.when('/buyer/bestsellers',
 		{
 			templateUrl:"/modules/buyer/views/bestsellers/index.html",
-			controller:"BestCalendarController"
+			controller:"BestsellersController"
 		}
 	)
-        .when('/buyer/bestsellers/bestseller_cart',
+        .when('/buyer/bestsellers/item/:bestsellerId',
         {
-            templateUrl:"/modules/buyer/views/bestsellers/bestseller_cart.html",
-            controller:"BestsellerCartController"
+            templateUrl:"/modules/buyer/views/bestsellers/item.html",
+            controller:"BestsellerItemController"
         }
     )
 		.when('/buyer/payments',
@@ -51,6 +51,11 @@ app.config(function($routeProvider){
                 }
             }
         })
+        .when('/buyer/collection/upload',
+        {
+            templateUrl:"/modules/buyer/views/collection/collection.html",
+            controller:"UploadController"
+        })
         .when('/buyer/collection/id/:collectionId',
         {
             templateUrl:"/modules/buyer/views/collection/id.html",
@@ -62,10 +67,16 @@ app.config(function($routeProvider){
             controller:"CargoController"
         }
     )
-        .when('/buyer/cargo/cargo_cart',
+        .when('/buyer/cargo/id/:id',
         {
-            templateUrl:"/modules/buyer/views/cargo/cargo_cart.html",
-            controller:"CargoCartController"
+            templateUrl:"/modules/buyer/views/cargo/cargo_document.html",
+            controller:"CargoDocumentController"
+        }
+    )
+        .when('/buyer/cargo/id/:id/choose-order',
+        {
+            templateUrl:"/modules/buyer/views/cargo/choose_order.html",
+            controller:"CargoOrderController"
         }
     )
         .when('/buyer/cargo/cargo_items',

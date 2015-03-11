@@ -10,7 +10,7 @@
                     $parse(attrs.fileInput)
                         .assign(scope,elm[0].files);
                     scope.$apply();
-                    console.log(elm)
+                    console.log("elm",elm)
                 })
             }
         }
