@@ -58,6 +58,12 @@ app.config(function($routeProvider){
             controller:"CargoDocumentController"
         }
     )
+        .when('/buyer/cargo/id/:id/choose-order',
+        {
+            templateUrl:"/modules/buyer/views/cargo/choose_order.html",
+            controller:"CargoOrderController"
+        }
+    )
         .when('/buyer/cargo/cargo_items',
         {
             templateUrl:"/modules/buyer/views/cargo/cargo_items.html",

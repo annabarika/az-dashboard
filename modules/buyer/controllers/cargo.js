@@ -17,18 +17,50 @@ app.controller('CargoController',
             $scope.$location = $location;
             $rootScope.documentTitle = 'Cargo management';
 
+            $scope.cargoDocuments   = [];
+            $scope.factories        = [];
+
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
-                    var factory = [];
                     for( var i in response ){
-                        factory.push( { id: response[i].factory.id, name: response[i].factory.name } );
+                        $scope.factories[response[i].factory.id] = { id: response[i].factory.id, name: response[i].factory.name };
                     }
-                    $scope.Factory=factory;
+                    $scope.loadCargos();
                 });
+
+            $scope.loadCargos = function(){
+                RestFactory.request(config.API.host + "cargo/load")
+                    .then(function(response){
+
+                        $scope.cargoDocumentsHeader = [
+                            { name: "id", title: 'ID' },
+                            { name: "factory", title: 'Factory' },
+                            { name: "document", title: 'Cargo document' },
+                            { name: "createDate", title: 'Create date' },
+                            { name: "status", title: 'Status' }
+                        ];
+                        for(var i in response){
+                            var factoryName = ( $scope.factories[response[i].factoryId] ) ? $scope.factories[response[i].factoryId].name : '';
+
+                            $scope.cargoDocuments.push({
+                                id: response[i].id,
+                                factory: factoryName,
+                                document: response[i].document,
+                                createDate: response[i].createDate,
+                                status: response[i].status
+                            });
+                        }
+                    });
+
+            };
+
+            $scope.edit = function(){
+                $location.path( '/buyer/cargo/id/'+ $rootScope.row.id );
+            };
             /* bulding new cargo*/
             $scope.addNewCargo = function(){
 
-                $rootScope.modalInstance =$modal.open({
+                $rootScope.modalInstance = $modal.open({
                     templateUrl: "/modules/buyer/views/cargo/new_cargo.html",
                     controller: 'CargoController',
                     backdrop:'static',
@@ -44,7 +76,7 @@ app.controller('CargoController',
                 var cargo = {
                     'parentId' : 0,
                     'factoryId': factory.id,
-                    'document': 0,
+                    'document': '',
                     'status': 0,
                     'employeeId': 328
                 };
@@ -79,6 +111,64 @@ app.controller('CargoDocumentController',
 
             $scope.$route = $route;
             $scope.$location = $location;
+
+            $scope.cargo = {};
+            $scope.factory = {};
+            $scope.products = [];
+
             $rootScope.documentTitle = 'Document #' + $route.current.params.id;
+
+            RestFactory.request(config.API.host + "cargo/get/id/"+$route.current.params.id)
+                .then(function(response){
+                    console.log(response);
+                    $scope.cargo = response.cargo;
+                    $scope.factory = response.factory;
+                    $scope.products = response.products;
+                });
+
+            $scope.chooseOrder = function(){
+                $location.path( '/buyer/cargo/id/'+ $scope.cargo.id +'/choose-order' );
+            }
+        }
+    ]);
+
+app.controller('CargoOrderController',
+    [
+        '$scope',
+        '$rootScope',
+        "$modal",
+        "$location",
+        "$route",
+        "RestFactory",
+
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory) {
+
+            $scope.$route = $route;
+            $scope.$location = $location;
+
+            $scope.cargo    = {};
+            $scope.factory  = {};
+            $scope.products = [];
+            $scope.orders   = [];
+
+            $rootScope.documentTitle = 'Loading...';
+
+            RestFactory.request(config.API.host + "cargo/get/id/"+$route.current.params.id)
+                .then(function(response){
+                    $scope.cargo = response.cargo;
+                    $scope.factory = response.factory;
+                    $scope.products = response.products;
+
+                    $rootScope.documentTitle = 'Choose order: cargo #' + $scope.cargo.id + ' ('+ $scope.factory.name +')';
+
+                    RestFactory.request(config.API.host + "cargo/get-orders/cargoId/"+$scope.cargo.id+'/factoryId/'+$scope.cargo.factoryId)
+                        .then(function(response){
+                            if(response.length > 0){
+                                $scope.orders = response;
+                            }
+                        });
+
+                });
+
         }
     ]);

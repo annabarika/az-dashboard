@@ -889,7 +889,7 @@ app.controller('CargoItemsController',
                                          $rootScope.factoryOrders=response;
 
                                          var modalWindow =$modal.open({
-                                             templateUrl: "/modules/buyer/views/cargo/order_for_factory.html",
+                                             templateUrl: "/modules/buyer/views/cargo/choose_order.html",
                                              controller: 'ChangeFactoryController',
                                              backdrop:'static'
                                          });
