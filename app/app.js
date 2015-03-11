@@ -1,6 +1,6 @@
 var config = {
 	API: {
-		host:"http://arrow.f.compass/api/",
+		host:"http://green.f.compass/api/",
 		key: 'test'
 	},
     monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]

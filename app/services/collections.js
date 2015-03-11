@@ -6,7 +6,7 @@
         .constant('API', (function () {
 
             return {
-                GETFACTORY : config.API.host+'factory/load',
+                GETFACTORIES : config.API.host+'factory/load',
                 GETCOLLECTIONS : config.API.host+'catalogue/load-collections'
             };
 
@@ -16,7 +16,7 @@
         .constant('TEMPLATE', (function () {
 
             return {
-                NEW    :    '/template/path'
+                NEW    :   "/modules/buyer/views/collection/chooseFactory.html"
             };
 
         })())
@@ -37,18 +37,34 @@
 
                 getFactories:function(){
 
-                    var factory=[];
+                    var factories=[];
+                    RestFactory.request(API.GETFACTORIES).then(function(response){
 
-                    RestFactory.request(API.GETFACTORY).then(
+                        angular.forEach(response,function(value,key){
+                            factories.push(value.factory);
+                        });
+                    });
+                    return factories;
+                },
 
-                        function(response){
-                            if(response){
-                                factory=response;
+                /**
+                 * param @path:string,
+                 * param @factories:array
+                 * return @object
+                 */
+                 showModal:function(path,factories){
+                    console.log(factories);
+                    var modal=$modal.open({
+                        templateUrl:TEMPLATE[path],
+                        controller:"ModalController",
+                        resolve:{
+                            factories:function(){
+                                return factories;
                             }
                         }
-                    );
-                    return factory;
-                }
+                    });
+                    return modal;
+                 }
 
             };
         }]);
