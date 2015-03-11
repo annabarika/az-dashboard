@@ -13,7 +13,8 @@
             return {
                 FACTORIES       :   config.API.host+'factory/load',
                 COLLECTIONS     :   config.API.host+'catalogue-collection/load/status/0',
-                COLLECTION_CARD :   config.API.host+'catalogue-collection/get-collection-products/collectionId/'
+                COLLECTION_CARD :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
+                IMAGES_PATH     :   config.API.imagehost+'/files/factory/attachments/'
             };
 
         })())
@@ -144,7 +145,19 @@
                             res.push(collections[key]);
                         });
                     }
+
+                    console.log(res);
                     return res;
+                },
+
+                /**
+                 * Get image path
+                 *
+                 * @returns {*}
+                 */
+                getImagePath: function() {
+
+                    return API.IMAGES_PATH;
                 }
             };
         }]);

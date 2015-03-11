@@ -24,12 +24,14 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             if(_.isUndefined(filter) == false) {
 
                 if(_.isEmpty(filter) == false) {
-
+                    var fFilter = [];
                     for(var i in filter) {
                         if(filter[i].ticked === true) {
-                            $scope.filteredFactory.push(filter[i].id)
+                            fFilter.push(filter[i].id)
                         }
                     };
+
+                    $scope.filteredFactory = _.uniq(fFilter, true);
                     CollectionService.getCollections('/factoryId/'+$scope.filteredFactory.join())
                 }
             }
@@ -55,13 +57,24 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
             // set title
             $rootScope.documentTitle = 'Collection Card #'+$routeParams.collectionId;
 
+            $scope.productsHeader = [
+                { name: "preview", title: 'Preview' },
+                { name: "articul", title: 'Articul' },
+                { name: "name", title: 'Name' },
+                { name: "price", title: 'Price' },
+                { name: "factory", title: 'Factory' },
+                { name: "sizes", title: 'Sizes' },
+                { name: "manage", title: 'Manage' },
+            ];
+
             CollectionService.getCollectionCard($routeParams.collectionId).then(function(response) {
 
-                $rootScope.collection = {};
+                $scope.items = [], $scope.imagePath = CollectionService.getImagePath();
 
                 if(_.isUndefined(response) == false) {
 
-                    $rootScope.collection.push(CollectionService.extractProducts(response));
+                    $scope.items=CollectionService.extractProducts(response);
+
                 }
             });
         }]

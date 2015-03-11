@@ -1,6 +1,7 @@
 var config = {
 	API: {
         host:"http://lex.f.azimuth/api/",
+        imagehost:"http://arrow.b.compass",
 		key: 'test'
 	}
 };
