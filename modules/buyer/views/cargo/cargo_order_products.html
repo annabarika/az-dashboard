@@ -1,0 +1,108 @@
+<!-- start box layout -->
+<div class="box-layout" ng-controller="CargoOrderProductsController">
+    <div class="col-md-8 bdr-r bg-auto height-auto">
+        <!-- start page header -->
+        <div class="page-header">
+            <!-- basic info heading -->
+            <div class="box-layout">
+                <div class="col-sm-6 va-m">
+                    <h4>Add items to document</h4>
+                </div>
+                <button class="btn btn-info pull-right" ng-click="done()"><span class="fa fa-check"> Done</span></button>
+
+                <button class="btn btn-green" ng-click="addCustomProducts()"><span class="fa fa-check"> Add custom products</span></button>
+            </div>
+            <!--/ basic info heading -->
+        </div>
+        <!--/ end page header -->
+        <div class="dataTables_wrapper form-inline no-footer">
+        <table class="table table-bordered table-striped dataTable no-footer" id="DataTable">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th class="sorting" ng-repeat="item in productsHeader"
+                    ng-class="{'sort-asc':item.sort>0,'sort-desc':item.sort<0}"><a href="">
+                    {{item.title}}</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="product in products track by $index">
+                <td>{{$index+1}}</td>
+                <td>
+                    <img src="http://back95.ru/f/catalogue/{{product.id}}/{{product.preview[1]}}"/>
+                </td>
+                <td>
+                    <h4>{{product.articul}}</h4>
+                    {{product.title}} {{product.brand}}
+                    <h5>FA: {{product.factoryArticul}}</h5>
+                </td>
+                <td>
+                    <table>
+                        <tr ng-repeat="size in product.sizes">
+                            <td>
+                                {{size.size}}
+                            </td>
+                            <td>
+                                <input ng-model="size.count" size="3"/>
+                            </td>
+                            <td>
+                                <button class="btn btn-green" ng-click="addProductSize(product.id, size.size, size.count)"><span class="fa fa-plus"> </span></button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <!-- start right side -->
+
+    <!--/ end right side -->
+    <div class="col-md-4 height-auto">
+        <!--/ end page header -->
+        <div class="pa-md clearfix">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title text-center">
+                        <h5 class="fw-sb">Added to cargo document</h5>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr class="text-center" ng-repeat="item in cargoProducts track by $index">
+                        <td class="text-center">
+                            <div class="media np">
+                                <div class="media-left">
+                        <span class="img-wrapper img-rounded">
+                         <img src="http://back95.ru/f/catalogue/{{item.productId}}/{{products[item.productId].preview[1]}}">
+                        </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading mb-0 fw-sb"><a href="">{{products[item.productId].articul}}</a></h5>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            {{item.size}}
+                        </td>
+                        <td class="text-center">
+                            x
+                        </td>
+                        <td class="text-center">
+                            {{item.count}}
+                        </td>
+                        <td class="text-center">
+                            <button type="submit" class="btn btn-default" ng-click="deleteProductSize(item)"><span class="fa fa-trash-o"></span></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ end box layout -->

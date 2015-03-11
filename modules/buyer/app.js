@@ -64,12 +64,13 @@ app.config(function($routeProvider){
             controller:"CargoOrderController"
         }
     )
-        .when('/buyer/cargo/cargo_items',
+        .when('/buyer/cargo/id/:id/order/:orderId',
         {
-            templateUrl:"/modules/buyer/views/cargo/cargo_items.html",
-            controller:"CargoItemsController"
+            templateUrl:"/modules/buyer/views/cargo/cargo_order_products.html",
+            controller:"CargoOrderProductsController"
         }
-    );
+    )
+    ;
 });
 
 app.run( function($rootScope, $location) {

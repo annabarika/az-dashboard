@@ -171,9 +171,95 @@ app.controller('CargoOrderController',
                 });
 
             $scope.selectOrder = function(orderId){
-                console.log(orderId);
                 // Attaching orderId to cargo
+                $location.path( '/buyer/cargo/id/'+ $scope.cargo.id +'/order/'+orderId );
+            };
+        }
+    ]);
 
+app.controller('CargoOrderProductsController',
+    [
+        '$scope',
+        '$rootScope',
+        "$modal",
+        "$location",
+        "$route",
+        "RestFactory",
+
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory) {
+
+            $scope.$route = $route;
+            $scope.$location = $location;
+
+            $scope.cargo            = {};
+            $scope.factory          = {};
+            $scope.products         = [];
+            $scope.orders           = [];
+            $scope.cargoProducts    = {};
+
+            $scope.productsHeader = [
+                { name: "preview", title: 'Preview' },
+                { name: "articul", title: 'Articul' },
+                { name: "sizes", title: 'Sizes' },
+            ];
+            $rootScope.documentTitle = 'Loading...';
+
+            RestFactory.request(config.API.host + "cargo/get/id/"+$route.current.params.id)
+                .then(function(response){
+                    $scope.cargo = response.cargo;
+                    $scope.factory = response.factory;
+                    $scope.products = response.products;
+
+                    $rootScope.documentTitle = 'Add products to cargo #' + $scope.cargo.id + ' ('+ $scope.factory.name +')';
+
+                    RestFactory.request(config.API.host + "cargo/get-order-products/cargoId/"+$scope.cargo.id +"/orderId/"+$scope.$route.current.params.orderId)
+                        .then(function(response){
+                            if(response.length > 0){
+                                $scope.products = $scope.groupByProductId(response);
+                                console.log($scope.products);
+                            }
+                        });
+
+                });
+            $scope.groupByProductId = function(productsArray){
+                var products = {};
+                for( var i in productsArray){
+                    var product = productsArray[i];
+                    if(products[product.productId] == undefined ){
+                        products[product.productId] = {
+                            id: product.productId,
+                            articul: product.product.articul,
+                            factoryArticul: product.product.factoryArticul,
+                            title: product.product.title,
+                            brand: product.product.brand,
+                            preview: product.product.preview,
+                            sizes: {}
+                        };
+                    }
+                    products[product.productId].sizes[product.size] = {
+                        size: product.size,
+                        count: product.count
+                    };
+                }
+                return products;
+            };
+
+            $scope.addProductSize = function(productId, size, count){
+                var key = productId+'.'+size;
+                $scope.cargoProducts[key] = {
+                    productId: productId,
+                    size:size,
+                    count:count
+                };
+            };
+            $scope.deleteProductSize = function(product){
+                var key = product.productId+'.'+product.size;
+                delete $scope.cargoProducts[key];
+            };
+
+            $scope.done = function(){
+                // Attaching orderId to cargo
+                $location.path( '/buyer/cargo/id/'+ $scope.cargo.id );
             };
         }
     ]);
