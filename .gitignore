@@ -2,6 +2,6 @@
 npm-debug.log
 logs
 
-#vendor
+vendor
 vendor-dist
 api/config.php
