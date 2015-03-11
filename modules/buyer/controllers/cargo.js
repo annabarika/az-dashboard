@@ -92,15 +92,14 @@ app.controller('CargoController',
                                     data[key]=value;
                                     // $scope.date.push(item['createDate']);
                                 }
-                                if(key=='status'){
+                                if(key=='status') {
 
-                                    if($scope.orderPaymentStatus){
+                                    if($scope.orderPaymentStatus) {
                                         data[key]=$scope.orderPaymentStatus[value].name;
                                     }
                                     else{
                                         data[key]=value;
                                     }
-
                                 }
                             })
                         }
