@@ -15,6 +15,7 @@ app.controller('CargoController',
 
             $scope.$route = $route;
             $scope.$location = $location;
+            $rootScope.documentTitle = 'Cargo management';
 
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
@@ -27,7 +28,7 @@ app.controller('CargoController',
             /* bulding new cargo*/
             $scope.addNewCargo = function(){
 
-                var modalInstance =$modal.open({
+                $rootScope.modalInstance =$modal.open({
                     templateUrl: "/modules/buyer/views/cargo/new_cargo.html",
                     controller: 'CargoController',
                     backdrop:'static',
@@ -40,10 +41,6 @@ app.controller('CargoController',
             };
 
             $scope.createCargo = function(factory){
-                console.log(factory);
-                //console.log(obj.id);
-                $modalInstance.close();
-
                 var cargo = {
                     'parentId' : 0,
                     'factoryId': factory.id,
@@ -55,9 +52,9 @@ app.controller('CargoController',
                 RestFactory.request(config.API.host+"cargo/create" , "POST", cargo)
                     .then(function(response){
                         //console.log("new cargo",response);
-                        if( typeof response == 'object'){
-                            console.log(response);
-                            $rootScope.cart=response;
+                        if( response.cargo.id ){
+                            $rootScope.modalInstance.close();
+                            $location.path( '/buyer/cargo/id/'+ response.cargo.id );
                         }
                         else{
                             console.log(response);
@@ -66,7 +63,22 @@ app.controller('CargoController',
                         console.log(error);
                     });
             };
+        }
+    ]);
 
+app.controller('CargoDocumentController',
+    [
+        '$scope',
+        '$rootScope',
+        "$modal",
+        "$location",
+        "$route",
+        "RestFactory",
 
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory) {
+
+            $scope.$route = $route;
+            $scope.$location = $location;
+            $rootScope.documentTitle = 'Document #' + $route.current.params.id;
         }
     ]);

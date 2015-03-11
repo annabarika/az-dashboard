@@ -52,10 +52,10 @@ app.config(function($routeProvider){
             controller:"CargoController"
         }
     )
-        .when('/buyer/cargo/cargo_cart',
+        .when('/buyer/cargo/id/:id',
         {
-            templateUrl:"/modules/buyer/views/cargo/cargo_cart.html",
-            controller:"CargoCartController"
+            templateUrl:"/modules/buyer/views/cargo/cargo_document.html",
+            controller:"CargoDocumentController"
         }
     )
         .when('/buyer/cargo/cargo_items',
