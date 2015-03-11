@@ -13,7 +13,7 @@
             return {
                 FACTORIES       :   config.API.host+'factory/load',
                 COLLECTIONS     :   config.API.host+'catalogue-collection/load/status/0',
-                COLLECTION_CARD :   config.API.host+'catalogue-collection/load/id/'
+                COLLECTION_CARD :   config.API.host+'catalogue-collection/get-collection-products/collectionId/'
             };
 
         })())
@@ -114,21 +114,37 @@
 
                         if (response) {
 
-                            $rootScope.collection = _.first(response);
-
-                            console.log('Collection card', $rootScope.collection);
                             deferred.resolve(response);
                         }
                         else {
                             deferred.resolve(response);
                         }
-
                     }).error(function (error) {
 
                         deferred.reject(error);
                     });
 
                     return deferred.promise;
+                },
+
+                /**
+                 * Extract server response data requested by collectionId
+                 * @param data
+                 * @returns {Array}
+                 */
+                extractProducts: function(data) {
+
+                    for (var first in data) break;
+                    var first = data[first], res = [];
+
+                    if(_.isEmpty(first) === false) {
+
+                        angular.forEach(first, function(collections) {
+                            for (var key in collections) break;
+                            res.push(collections[key]);
+                        });
+                    }
+                    return res;
                 }
             };
         }]);

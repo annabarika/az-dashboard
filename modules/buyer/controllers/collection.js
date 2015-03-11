@@ -1,7 +1,8 @@
-var app = angular.module("modules.buyer.collection", [
+var app = angular.module("modules.buyer.collection", []);
 
-]);
-
+/**
+ * Get collection representation
+ */
 app.controller('CollectionsController', ['$scope','$rootScope','CollectionService', 'localStorageService', '$location',
     function ($scope, $rootScope, CollectionService, localStorageService, $location) {
 
@@ -38,9 +39,6 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             }
         });
 
-        // get factories to filter
-        CollectionService.getFactories();
-
         $scope.edit = function(){
             localStorageService.set('id', $rootScope.row.id);
             $location.path('/buyer/collection/id/'+$rootScope.row.id)
@@ -48,14 +46,23 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
     }]
 )
 
-app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', 'localStorageService',
-        function ($scope, $rootScope, CollectionService, localStorageService) {
-
-            CollectionService.getCollectionCard(localStorageService.get('id'));
+/**
+ * Get collection card
+ */
+app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams',
+        function ($scope, $rootScope, CollectionService, $routeParams) {
 
             // set title
-            //$rootScope.documentTitle = 'Collection Card "'+$rootScope.collection.name+'"';
+            $rootScope.documentTitle = 'Collection Card #'+$routeParams.collectionId;
 
+            CollectionService.getCollectionCard($routeParams.collectionId).then(function(response) {
 
+                $rootScope.collection = {};
+
+                if(_.isUndefined(response) == false) {
+
+                    $rootScope.collection.push(CollectionService.extractProducts(response));
+                }
+            });
         }]
 );

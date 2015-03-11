@@ -43,7 +43,13 @@ app.config(function($routeProvider){
         .when('/buyer/collection',
         {
             templateUrl:"/modules/buyer/views/collection/index.html",
-            controller:"CollectionsController"
+            controller:"CollectionsController",
+            resolve: {
+                // load factories by default
+                factories: function (CollectionService) {
+                    CollectionService.getFactories()
+                }
+            }
         })
         .when('/buyer/collection/id/:collectionId',
         {
