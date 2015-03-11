@@ -1,9 +1,11 @@
 <?php
-//error_reporting(2047);
+error_reporting(2047);
 #phpinfo();
 require __DIR__.'/config.php';
 require __DIR__.'/API.php';
 //'uml.maggadda.dev95.ru'
+#echo file_get_contents('http://compass-buyer.local/order/load');
+#die();
 
 try {
 	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['host'];
@@ -11,8 +13,14 @@ try {
 	$APIService = new API($host);
 	$APIService->setMethod('GET');
 
-	$request = str_replace( 'api/', '', $_GET['_request']);
-	unset($_GET['_request']);
+	if(!isset($_GET['request'])){
+		$request = $_SERVER['REDIRECT_URL'];
+	}else{
+		$request = $_GET['_request'];
+		unset($_GET['_request']);
+	}
+	$request = str_replace( 'api/', '', $request);
+
 	unset($_GET['host']);
 
 	if($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -78,6 +86,7 @@ try {
 	}
 
 	$response = $APIService->setURL($request)->call();
+
 	echo json_encode($response);
 
 }catch( \Exception $e ){

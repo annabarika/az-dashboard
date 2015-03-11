@@ -107,7 +107,7 @@ class API {
 	 */
 	public function call(){
 		$options = array(
-			CURLOPT_URL => $this->host.$this->url,
+			CURLOPT_URL => $this->host.$this->url."?".$this->params,
 			CURLOPT_CUSTOMREQUEST => $this->method, // GET POST PUT PATCH DELETE HEAD OPTIONS
 		);
 		if( $this->method == 'POST' || $this->method == 'PUT'){
