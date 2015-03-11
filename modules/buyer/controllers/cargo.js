@@ -61,7 +61,7 @@ app.controller('CargoController',
             $scope.addNewCargo = function(){
 
                 $rootScope.modalInstance = $modal.open({
-                    templateUrl: "/modules/buyer/views/cargo/new_cargo2.html",
+                    templateUrl: "/modules/buyer/views/cargo/new_cargo.html",
                     controller: 'CargoController',
                     backdrop:'static',
                     resolve:{
@@ -234,25 +234,36 @@ app.controller('CargoOrderProductsController',
                             title: product.product.title,
                             brand: product.product.brand,
                             preview: product.product.preview,
+                            price: product.price,
                             sizes: {}
                         };
                     }
                     products[product.productId].sizes[product.size] = {
                         size: product.size,
                         count: product.count,
-                        price: product.price
+                        price: product.price,
+                        custom: 0
                     };
                 }
                 return products;
             };
 
-            $scope.addProductSize = function(productId, size, count, price) {
+            $scope.addProductSize = function(productId, size, count, price, custom) {
                 var key = productId + '.' + size;
                 $scope.cargoProducts[key] = {
                     productId: productId,
                     size: size,
                     count: count
                 };
+                if(custom){
+                    $scope.products[productId].sizes[size] = {
+                        size: size,
+                        count: count,
+                        price: price,
+                        custom: 0
+                    };
+                    delete $scope.products[productId].sizes[''];
+                }
                 var product = {
                     cargoId: $scope.cargo.id,
                     orderId: $scope.orderId,
@@ -266,14 +277,62 @@ app.controller('CargoOrderProductsController',
 
                     });
             };
+
+            $scope.addProductCustomSize = function(productId){
+                $scope.products[productId].sizes[''] = {
+                    size: '',
+                    count: 0,
+                    price: $scope.products[productId].price,
+                    custom: 1
+                };
+            };
             $scope.deleteProductSize = function(product){
                 var key = product.productId+'.'+product.size;
                 delete $scope.cargoProducts[key];
             };
 
+            $scope.addCustomProducts = function(){
+                $rootScope.modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/cargo/add_product_search.html",
+                    controller: 'CargoProductSearchController',
+                    backdrop:'static',
+                    resolve:{
+                        factories: function(){
+                            return $scope.factories;
+                        }
+                    }
+                });
+            };
+
             $scope.done = function(){
                 // Attaching orderId to cargo
                 $location.path( '/buyer/cargo/id/'+ $scope.cargo.id );
+            };
+        }
+    ]);
+
+app.controller('CargoProductSearchController',
+    [
+        '$scope',
+        '$rootScope',
+        "$modal",
+        "$location",
+        "$route",
+        "RestFactory",
+
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory) {
+
+            $scope.$route = $route;
+            $scope.$location = $location;
+
+            $scope.search = function(query){
+                RestFactory.request(config.API.host + "products/search/query/"+query)
+                    .then(function(response){
+                        console.log(response);
+                        if(response.length > 0){
+
+                        }
+                    });
             };
         }
     ]);

@@ -39,7 +39,7 @@ class API {
 		$this->options = array(
 			CURLOPT_HEADER => false,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT => 10
+			CURLOPT_TIMEOUT => 20
 		);
 		$this->host 	= 'http://'.$host;
 		$this->url 		= '/';

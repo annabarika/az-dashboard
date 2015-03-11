@@ -42,6 +42,7 @@
                         <tr ng-repeat="size in product.sizes">
                             <td>
                                 {{size.size}}
+                                <input ng-model="size.size" size="4"/>
                             </td>
                             <td>
                                 <input ng-model="size.count" size="3"/>
@@ -50,10 +51,12 @@
                                 <input ng-model="size.price" size="4"/>
                             </td>
                             <td>
-                                <button class="btn btn-green" ng-click="addProductSize(product.id, size.size, size.count, size.price)"><span class="fa fa-plus"> </span></button>
+                                <button class="btn btn-blue" ng-click="addProductSize(product.id, size.size, size.count, size.price, size.custom)"><span class="fa fa-plus"> </span></button>
                             </td>
+
                         </tr>
                     </table>
+                    <button class="btn btn-green" ng-click="addProductCustomSize(product.id)"><span class="fa fa-plus"> Add size</span></button>
                 </td>
             </tr>
             </tbody>
