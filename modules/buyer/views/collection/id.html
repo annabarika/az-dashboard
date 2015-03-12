@@ -55,16 +55,18 @@
                                 <p class="mt-5">{{size.name}}</p>
                             </li>
                             <li>
-                                <button class="btn btn-success" ng-click="addSize(product)"><i class="fa fa-plus"></i> add size</button>
+                                <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)"><i class="fa fa-plus"></i> add size</button>
                             </li>
                             </li>
                         </ul>
 
                     </td>
                     <td>
-                        <button class="btn btn-green" ng-click="addToOrder(product)"><span class="fa fa-check">Checkout</span></button>
-                        <button class="btn btn-info" ng-click="updateCollection(product)"><span class="fa fa-check">Update collection</span></button>
-                        <button class="btn btn-red" ng-click="deleteCollection(product)"><span class="fa fa-check">Delete</span></button>
+                        <div class="btn-group">
+                        <button class="btn btn-green" ng-click="addToOrder(product)"><span class="fa fa-check">Checkout row</span></button>
+                        <button class="btn btn-info" ng-click="updateCollection(product)"><span class="fa fa-check">Update row</span></button>
+                        <button class="btn btn-red" ng-click="deleteCollection(product)"><span class="fa fa-check">Delete row</span></button>
+                        </div>
                     </td>
                 </tr>
                 </tbody>

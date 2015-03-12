@@ -3,8 +3,8 @@ var app = angular.module("modules.buyer.collection", []);
 /**
  * Get collection representation
  */
-app.controller('CollectionsController', ['$scope','$rootScope','CollectionService', 'localStorageService', '$location',
-    function ($scope, $rootScope, CollectionService, localStorageService, $location) {
+app.controller('CollectionsController', ['$scope','$rootScope','CollectionService', '$location',
+    function ($scope, $rootScope, CollectionService, $location) {
 
         // set title
         $rootScope.documentTitle = "Collection";
@@ -17,6 +17,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             { name: "createDate", title: 'Create date'}
         ];
         $scope.filteredFactory = [];
+
 
         // Watch factory filters
         $scope.$watch('filter',function(filter) {
@@ -32,30 +33,53 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
                     };
 
                     $scope.filteredFactory = _.uniq(fFilter, true);
-                    CollectionService.getCollections('/factoryId/'+$scope.filteredFactory.join())
+                    CollectionService.getCollections('/factoryId/'+$scope.filteredFactory.join()).then(function(response) {
+
+                        $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+
+                    });
                 }
             }
             else {
-                // get factories to filter
-                CollectionService.getCollections();
+                // get all collections
+                CollectionService.getCollections().then(function(response) {
+
+                    $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+
+                });
             }
         });
 
+        // get factories to filter
+        CollectionService.getFactories().then(function(response) {
+
+            var factories = [];
+            angular.forEach(response, function(value) {
+                factories.push(value.factory);
+            });
+
+            $rootScope.factories = factories;
+
+        });
+
         $scope.edit = function(){
-            localStorageService.set('id', $rootScope.row.id);
             $location.path('/buyer/collection/id/'+$rootScope.row.id)
         };
 
         /*
          * Add new collection*/
-        $scope.newCollection=function(){
+        $scope.newCollection = function(){
             var modalInstance=CollectionService.showModal('NEW',$scope.factories);
 
             modalInstance.result.then(function(factory){
 
                 $rootScope.factoryId=factory.id;
 
-                CollectionService.getFactoryCollections(factory.id);
+                CollectionService.getFactoryCollections(factory.id).then(function(response) {
+
+                    $rootScope.factoryCollections=response;
+
+                });
 
                 var modalInstance=CollectionService.showModal("CHOOSE");
 
@@ -184,8 +208,8 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
 }]);
 
-app.controller("ModalController",function($scope,$rootScope,data,CollectionService,$modalInstance){
-    $scope.data=data;
+app.controller("ModalController",function($scope,$rootScope,CollectionService,$modalInstance){
+   // $scope.data=data;
     $scope.cancel=function(){
         $modalInstance.dismiss();
     };
@@ -199,6 +223,9 @@ app.controller("ModalController",function($scope,$rootScope,data,CollectionServi
         console.log("newCollection",$rootScope.factoryId);
         CollectionService.createCollection($rootScope.factoryId);
 
+    }
+    $scope.chooseSize=function(size){
+        $modalInstance.close(size);
     }
 
 });
@@ -228,26 +255,45 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
 
                 if(_.isUndefined(response) == false) {
 
-                    $scope.items=CollectionService.extractProducts(response);
-
+                    $scope.items = CollectionService.extractProducts(response);
                 }
             });
 
-            $scope.addSize=function(product) {
+            CollectionService.loadSizes().then(function(response){
+                $rootScope.all_sizes=response;
+            });
 
-                //show modal
-                modalWindow = $modal.open({
-                    templateUrl: "/modules/buyer/views/collection/add_size.html",
-                    controller: 'CollectionCardController',
-                    backdrop:'static',
-                    size:'sm'
+            $scope.addSize = function(product) {
+                var flag=true;
+
+                var i = CollectionService.compareProduct($scope.items, product);
+
+                var modalInstance = CollectionService.showModal("ADDSIZE");
+                modalInstance.result.then(function(size){
+                    if(_.isUndefined(i) == false) {
+
+                        if(!$scope.items[i].hasOwnProperty('sizes')) {
+                            $scope.items[i].sizes=[];
+                        }
+                        angular.forEach($scope.items[i].sizes,function(value) {
+
+                            if(value.id==size.id) {
+                                messageCenterService.add('warning', 'Size already added', { timeout: 3000 });
+                                flag=false;
+                            }
+                        });
+                        if(flag){
+                            $scope.items[i].sizes.push(size);
+                        }
+                    }
+
                 });
-
             };
 
             $scope.addToOrder = function(product) {
 
-                // messageCenterService.add('success', 'The cargo has been successfully saved', { timeout: 3000 });
+                var i = CollectionService.compareProduct($scope.items, product);
+
                 if(_.isUndefined(product) == false) {
                     console.log(product);
                 }
@@ -256,6 +302,9 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 }
             };
             $scope.updateCollection = function(product){
+
+                var i = CollectionService.compareProduct($scope.items, product);
+
                 if(_.isUndefined(product) == false) {
 
                 }
@@ -265,6 +314,8 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
             };
             $scope.deleteCollection = function(product){
 
+                var i = CollectionService.compareProduct($scope.items, product);
+
                 if(_.isUndefined(product) == false) {
 
                 }
@@ -273,5 +324,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 }
             };
 
-        }]
-);
+        }
+]);
+
+
