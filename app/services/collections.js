@@ -84,8 +84,10 @@
                     //console.log("uploads",$rootScope.photo);
 
                     var fd=new FormData();
+                    console.log($rootScope.photo);
                     angular.forEach($rootScope.photo,function(file){
-                        fd.append('file',file);
+                        fd.append('file[]',file);
+                        console.log('file',file);
                     });
                     console.log(fd);
                     /*RestFactory.request(API.LOADFILES,"POST",fd).then(
