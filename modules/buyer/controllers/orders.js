@@ -128,7 +128,7 @@ app.controller('OrderListController',
                 if($rootScope.method=='Cancel'){
 
                     modalWindow=$modal.open({
-                        templateUrl: "/app/views/ask.html",
+                        templateUrl: "/app/views/new_product_create_confirm.html",
                         controller: 'OrdersListController',
                         backdrop:'static'
                     });

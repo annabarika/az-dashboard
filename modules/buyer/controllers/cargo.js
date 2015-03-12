@@ -326,11 +326,12 @@ app.controller('CargoProductSearchController',
             $scope.$location = $location;
 
             $scope.search = function(query){
+                $rootScope.query = query;
                 RestFactory.request(config.API.host + "product/search/query/"+query)
                     .then(function(response){
                         $rootScope.modalInstance.close();
                         if(response.length > 0){
-                            
+
                         }else{
                             $scope.createNewProductConfirm();
                         }
@@ -338,7 +339,64 @@ app.controller('CargoProductSearchController',
             };
 
             $scope.createNewProductConfirm = function(){
+                $rootScope.modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/cargo/new_product_create_confirm.html",
+                    controller: 'CargoProductSearchController',
+                    backdrop:'static',
+                    resolve:{
+                        factories: function(){
+                            return $scope.factories;
+                        }
+                    }
+                });
+            };
 
+            $scope.createNewProductForm = function(){
+                $rootScope.newProduct = {
+                    factoryArticul: $rootScope.query,
+                    price: 0
+                };
+
+                RestFactory.request(config.API.host + "cargo/get/id/"+$scope.$route.current.params.id)
+                    .then(function(response){
+                        if(response.cargo){
+
+                            $rootScope.modalInstance.close();
+
+                            $scope.newProduct.factoryId = response.cargo.factoryId;
+
+                            $rootScope.modalInstance = $modal.open({
+                                templateUrl: "/modules/buyer/views/cargo/new_product_create.html",
+                                controller: 'CargoProductSearchController',
+                                backdrop:'static',
+                                resolve:{
+                                    newProduct: function(){
+                                        return $rootScope.newProduct;
+                                    }
+                                }
+                            });
+
+                        }else{
+                            console.log(response);
+                        }
+                    });
+            };
+            $scope.createNewProduct = function(newProduct){
+
+                RestFactory.request(config.API.host + "product/create")
+                    .then(function(response){
+                        //$scope.search(newProduct.factoryArticul);
+                        $scope.search("1234");
+                        if(response.cargo){
+                            console.log(response);
+                        }else{
+                            console.log(response);
+                        }
+                    });
+            };
+            $scope.cancelCreate = function(){
+                $rootScope.modalInstance.close();
+                $location.path( '/buyer/cargo/id/'+ $scope.$route.current.params.id );
             };
         }
     ]);
