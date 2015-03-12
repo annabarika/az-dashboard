@@ -1,0 +1,15 @@
+<div ng-controller='CollectionCardController'>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+    </div>
+    <div class="modal-body">
+        <h3>Are you sure you want to delete this collection?</h3>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="applyCancelCollection()">Yes</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">No</button>
+    </div>
+</div>

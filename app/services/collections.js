@@ -14,8 +14,9 @@
                 CREATECOLLECTION:   config.API.host+"catalogue-collection/create",
                 LOADFILES       :   config.API.host+'catalogue/loadfiles',
                 LOADSIZES       :   config.API.host+'size/load',
-                DELETEPRODUCT   :   config.API.host+'catalogue-collection/delete-collection-product/',
-                CANCELCOLLECTION   : config.API.host+'/catalogue-collection/cancel/'
+                CANCELPRODUCT   :   config.API.host+'catalogue-collection/delete-collection-product/',
+                CANCELCOLLECTION   : config.API.host+'catalogue-collection/cancel/',
+                CANCELCOLLECTION   : config.API.host+'catalogue-collection/update/'
             };
         })())
 
@@ -25,13 +26,15 @@
             return {
                 NEW    :   "/modules/buyer/views/collection/choose_factory.html",
                 CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
-                ADDSIZE:   "/modules/buyer/views/collection/add_size.html"
+                ADDSIZE:   "/modules/buyer/views/collection/add_size.html",
+                CANCEL_COLLECTION :   "/modules/buyer/views/collection/ask_collection.html",
+                CANCEL_PRODUCT :   "/modules/buyer/views/collection/ask_product.html"
             };
 
         })())
 
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',
-            function(API, TEMPLATE, RestFactory, messageCenterService, $modal) {
+        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', '$modal',
+            function(API, TEMPLATE, RestFactory, $modal) {
 
             return {
                 
@@ -74,9 +77,8 @@
                             if(factory.id == value.factoryId) {
                                 value.factoryName = factory.name;
                             }
-
-                            collections.push(value);
                         });
+                        collections.push(value);
                     });
 
                     return collections;
@@ -164,8 +166,7 @@
                  */
                 cancelCollection: function (collectionId) {
 
-                    var url = API.CANCELCOLLECTION+'collectionId/'+collectionId
-                    return RestFactory.request(url);
+                    return RestFactory.request(API.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
                 },
 
                 /**
@@ -173,9 +174,9 @@
                  */
                 deleteProduct: function (collectionId, productId) {
 
-                    var url = API.DELETEPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
+                    var url = API.CANCELPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
 
-                    return RestFactory.request(url);
+                    return RestFactory.request(url, 'DELETE');
                 },
 
                 /**
@@ -198,7 +199,6 @@
                     return RestFactory.request(API.LOADSIZES);
                 },
 
-
                 /**
                  *  Show Modal window
                  *
@@ -206,16 +206,14 @@
                  * @param data
                  * @returns {*}
                  */
-                showModal : function(path,data){
-                    // console.log("data",data);
-                    var modal=$modal.open({
-                        templateUrl:TEMPLATE[path],
-                        controller:"ModalController"
+                showModal : function(path){
+
+                    var modal= $modal.open({
+                        templateUrl : TEMPLATE[path],
+                        controller : "ModalController"
                     });
                     return modal;
                 },
-
-
 
                 createCollection : function(factoryId){
                     var data={
@@ -235,11 +233,6 @@
                     );
                 },
                 
-
-
-
-
-
                 uploadFiles : function() {
                     //console.log("uploads",$rootScope.photo);
 
@@ -264,8 +257,6 @@
 
                 },
 
-
-
                 /**
                  * Checkout collection position
                  */
@@ -275,7 +266,6 @@
                  * Checkout collection
                  */
                 checkoutCollection: function (collectionId) {}
-
 
             };
         }]);

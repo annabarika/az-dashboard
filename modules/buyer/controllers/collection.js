@@ -208,14 +208,60 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
 }]);
 
-app.controller("ModalController",function($scope,$rootScope,CollectionService,$modalInstance){
-   // $scope.data=data;
+app.controller("ModalController",function($scope,$rootScope,CollectionService,$modalInstance, $routeParams, $location, messageCenterService, $timeout){
+
     $scope.cancel=function(){
         $modalInstance.dismiss();
     };
     $scope.chooseFactory=function(factory){
         $modalInstance.close(factory);
     };
+
+    /**
+     * Apply collection canceled (deleted)
+     */
+    $scope.applyCancelCollection = function() {
+
+        CollectionService.cancelCollection($routeParams.collectionId).then(function(response) {
+
+            if(response) {
+
+                $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+                messageCenterService.add('success', 'The collection has been successfully removed', { timeout: 2000 });
+
+                $timeout(function() {
+                    $location.path("buyer/collection");
+                }, 2000);
+            }
+            else {
+                messageCenterService.add('danger', 'Failed', { timeout: 3000 });
+            }
+        });
+
+        $modalInstance.close();
+    };
+
+    /**
+     * Apply product canceled (deleted)
+     */
+    $scope.applyCancelProduct = function() {
+
+        CollectionService.deleteProduct($routeParams.collectionId, $rootScope.productId).then(function(response) {
+
+            if(response.hasOwnProperty('status') && _.isUndefined(response.status) === false) {
+
+                $rootScope.items.splice($rootScope.row, 1);
+
+                messageCenterService.add('success', 'Product have been removed from existing collection', { timeout: 3000 });
+            }
+            else {
+                messageCenterService.add('danger', 'Failed', { timeout: 3000 });
+            }
+        });
+
+        $modalInstance.close();
+    };
+
     $scope.chooseCollection=function(collection){
         $modalInstance.close(collection);
     };
@@ -239,7 +285,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
         function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService) {
 
             // set title
-            $rootScope.documentTitle = 'Collection Card #'+$routeParams.collectionId;
+            $rootScope.documentTitle = 'Collection Checkout Card #'+$routeParams.collectionId;
 
             $scope.productsHeader = [
                 { name: "preview", title: 'Preview' },
@@ -254,11 +300,11 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
             // Get collection card
             CollectionService.getCollectionCard($routeParams.collectionId).then(function(response) {
 
-                $scope.items = [], $scope.imagePath = CollectionService.getImagePath();
+                $rootScope.items = [], $scope.imagePath = CollectionService.getImagePath();
 
                 if(_.isUndefined(response) == false) {
 
-                    $scope.items = CollectionService.extractProducts(response);
+                    $rootScope.items = CollectionService.extractProducts(response);
 
                 }
             });
@@ -270,19 +316,15 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
 
             //Cancel collection
             $scope.cancelCollection = function(){
-
-                console.log('CollectionId:', $routeParams.collectionId);
-                return false;
-                CollectionService.cancelCollection($routeParams.collectionId);
+                CollectionService.showModal("CANCEL_COLLECTION");
             };
 
             // Delete product row
-            $scope.deleteProduct = function(productId){
+            $scope.deleteProduct = function(productId, row) {
 
-                console.log('CollectionId:', $routeParams.collectionId, 'ProductId:', productId);
-                return false;
-                CollectionService.deleteProduct($routeParams.collectionId, productId);
-
+                $rootScope.productId = productId;
+                $rootScope.row = row;
+                CollectionService.showModal("CANCEL_PRODUCT");
             };
 
             // Add product(s) to order
@@ -292,13 +334,13 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 return false;
 
                 if(_.isUndefined(product) == false) {
-                    var i = CollectionService.compareProduct($scope.items, product.catalogueProduct);
+                    var i = CollectionService.compareProduct($rootScope.items, product.catalogueProduct);
                     console.log(i);
-                    CollectionService.addToOrder($scope.items[i]);
+                    CollectionService.addToOrder($rootScope.items[i]);
                 }
                 else {
                     console.log(product);
-                    CollectionService.addToOrder($scope.items);
+                    CollectionService.addToOrder($rootScope.items);
                 }
 
             };
@@ -307,16 +349,16 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
             $scope.addSize = function(product) {
                 var flag=true;
 
-                var i = CollectionService.compareProduct($scope.items, product);
+                var i = CollectionService.compareProduct($rootScope.items, product);
 
                 var modalInstance = CollectionService.showModal("ADDSIZE");
                 modalInstance.result.then(function(size){
                     if(_.isUndefined(i) == false) {
 
-                        if(!$scope.items[i].hasOwnProperty('sizes')) {
-                            $scope.items[i].sizes=[];
+                        if(!$rootScope.items[i].hasOwnProperty('sizes')) {
+                            $rootScope.items[i].sizes=[];
                         }
-                        angular.forEach($scope.items[i].sizes,function(value) {
+                        angular.forEach($rootScope.items[i].sizes,function(value) {
 
                             if(value.id==size.id) {
                                 messageCenterService.add('warning', 'Size already added', { timeout: 3000 });
@@ -324,7 +366,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                             }
                         });
                         if(flag){
-                            $scope.items[i].sizes.push(size);
+                            $rootScope.items[i].sizes.push(size);
                         }
                     }
 

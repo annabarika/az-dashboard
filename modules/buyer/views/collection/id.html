@@ -7,7 +7,7 @@
             <div class="box-layout">
                 <div class="col-sm-6 va-m">
                     <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Add to order</span></button>
-                    <button class="btn btn-yellow" ng-click="cancelCollection()"><span class="fa fa-check">Cancel</span></button>
+                    <button class="btn btn-red" ng-click="cancelCollection()"><span class="fa fa-check">Delete</span></button>
                 </div>
             </div>
             <!--/ basic info heading -->
@@ -75,8 +75,8 @@
                     </td>
                     <td>
                         <div class="btn-group">
-                        <button class="btn btn-green" ng-click="addToOrder(product.catalogueProduct.id)"><span class="fa fa-check">Add to order</span></button>
-                        <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id)"><span class="fa fa-check">Delete row</span></button>
+                        <button class="btn btn-green" ng-click="addToOrder(product)"><span class="fa fa-check">Add to order</span></button>
+                        <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check">Delete</span></button>
                         </div>
                     </td>
                 </tr>
