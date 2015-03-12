@@ -140,8 +140,9 @@
                             collectionId:collection.id,
                             photos:[value.id],
                             sizes:sizes,
-                            currensyId:'5',
-                            factoryId:collection.factoryId
+                            currencyId:5,
+                            factoryId:parseInt(collection.factoryId),
+                            name:"noname"
                         };
 
                         this.push(product);
@@ -163,7 +164,8 @@
                     });
                     var query= $.param(params);
                     console.log("q",query,params);
-                    return RestFactory.request(API.LOADPRODUCTS,"POST", query);
+                   // return RestFactory.request(API.LOADPRODUCTS,"POST", query);
+                    return RestFactory.request(API.LOADPRODUCTS,"POST", products);
                 },
                 /**
                  * Extract server response data requested by collectionId

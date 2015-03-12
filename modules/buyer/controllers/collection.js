@@ -143,7 +143,14 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
             fileinput.click();
 
         };
+        /*var readAsDataURL = function (file, scope) {
+            var deferred = $q.defer();
 
+            var reader = getReader(deferred, scope);
+            reader.readAsDataURL(file);
+
+            return deferred.promise;
+        };*/
 
 
         $scope.back=function(){
@@ -207,9 +214,8 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
                             console.log("loading prod",response);
 
-
-                            //$scope.count=response.length;
-                            //$scope.step++;
+                            $scope.count=response.length;
+                            $scope.step++;
                         }
                     )
                 }

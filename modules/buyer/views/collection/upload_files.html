@@ -21,7 +21,8 @@
                         <!-- thumbnail -->
                         <div class="thumbnail"  >
                             <p>{{img.name}}</p>
-                            <img src="/assets/images/avatar/avatar9.jpg" style="height:120px;">
+                            <!--<img src="/assets/images/avatar/avatar9.jpg" style="height:120px;">-->
+                            <img ng-src="{{imagePath}}{{item.path}}" style="height:120px;">
                             <div class="caption">
                                 <h4 class="ellipsis mb-xs"></h4>
                                 <!--<div class="progress progress-sm nm">

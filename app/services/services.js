@@ -2,5 +2,6 @@ angular.module("services",
 [
     "services.rest",
     "services.cargo",
-    "services.collections"
+    "services.collections",
+    "services.fileReader"
 ]);
