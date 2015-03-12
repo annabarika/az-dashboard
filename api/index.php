@@ -71,8 +71,7 @@ die();
 		}
 	}
 	else if($_SERVER['REQUEST_METHOD'] == 'PUT') {
-		$input = file_get_contents('php://input');
-		parse_str($input, $params);
+		$params = json_decode(file_get_contents('php://input'), true);
 
 		$APIService->setMethod('PUT');
 		$APIService->setData($params);

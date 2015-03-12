@@ -18,8 +18,9 @@ Angular-based frontend application for Compass project
 ## Cargo
 - Cargo documents
 - Cargo document 
-- - Add product
+-- Add product
+-- Product rows
+- Sending cargo to shipment
 
 [TODO]
-- Send cargo
 - Cancel cargo

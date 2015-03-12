@@ -115,6 +115,7 @@ app.controller('CargoDocumentController',
             $scope.cargo = {};
             $scope.factory = {};
             $scope.products = [];
+            $scope.logisticCompanies = [];
 
             $rootScope.documentTitle = 'Document #' + $route.current.params.id;
 
@@ -126,9 +127,17 @@ app.controller('CargoDocumentController',
                 { name: "count", title: "Count" },
                 { name: "price", title: "Price" }
             ];
+
+            RestFactory.request(config.API.host + "logisticCompany/load")
+                .then(function(response){
+                    $scope.logisticCompanies = response;
+                });
+
+
             RestFactory.request(config.API.host + "cargo/get/id/"+$route.current.params.id)
                 .then(function(response){
                     $scope.cargo = response.cargo;
+                    $scope.cargo.logisticCompany = $scope.getLogisticCompany();
                     $scope.factory = response.factory;
                     for( var i in response.products){
                         var product = response.products[i];
@@ -147,7 +156,39 @@ app.controller('CargoDocumentController',
 
             $scope.chooseOrder = function(){
                 $location.path( '/buyer/cargo/id/'+ $scope.cargo.id +'/choose-order' );
-            }
+            };
+
+            $scope.getLogisticCompany = function(){
+                    for( var i in $scope.logisticCompanies){
+                        if($scope.cargo.logisticCompanyId == $scope.logisticCompanies[i].id){
+                            return $scope.logisticCompanies[i];
+                        }
+                    }
+            };
+            $scope.sendCargo = function(){
+                console.log($scope.cargo);
+                $rootScope.modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/cargo/send_cargo.html",
+                    controller: 'CargoDocumentController',
+                    backdrop:'static',
+                    resolve:{
+                    }
+                });
+            };
+
+            $scope.sendShipment = function(){
+                console.log($scope.cargo);
+                $scope.cargo.logisticCompanyId = $scope.cargo.logisticCompany.id;
+                RestFactory.request(config.API.host + "cargo/ship", "PUT", $scope.cargo)
+                    .then(function(response){
+                        if(response.status == true ){
+                            $rootScope.modalInstance.close();
+                        }else {
+                            console.log(response);
+                        }
+                    });
+
+            };
         }
     ]);
 
