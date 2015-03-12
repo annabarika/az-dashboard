@@ -58,7 +58,7 @@ app.controller('BestsellersController',
                         $rootScope.bestsellers = response;
 
                         for( var i in response){
-                            productId.push(response[i].productId);
+                            productId.push(response[i].id);
                         }
 
                         var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + productId.join(',');
