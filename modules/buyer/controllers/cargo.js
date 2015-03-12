@@ -193,7 +193,7 @@ app.controller('CargoOrderProductsController',
 
             $scope.cargo            = {};
             $scope.factory          = {};
-            $scope.products         = [];
+            $rootScope.products         = [];
             $scope.orders           = [];
             $scope.cargoProducts    = {};
             $scope.orderId = $scope.$route.current.params.orderId;
@@ -205,23 +205,27 @@ app.controller('CargoOrderProductsController',
             ];
             $rootScope.documentTitle = 'Loading...';
 
+
             RestFactory.request(config.API.host + "cargo/get/id/"+$route.current.params.id)
                 .then(function(response){
                     $scope.cargo = response.cargo;
                     $scope.factory = response.factory;
-                    $scope.products = response.products;
 
                     $rootScope.documentTitle = 'Add products to cargo #' + $scope.cargo.id + ' ('+ $scope.factory.name +')';
 
-                    RestFactory.request(config.API.host + "cargo/get-order-products/cargoId/"+$scope.cargo.id +"/orderId/"+$scope.$route.current.params.orderId)
-                        .then(function(response){
-                            if(response.length > 0){
-                                $scope.products = $scope.groupByProductId(response);
-                                console.log($scope.products);
-                            }
-                        });
-
+                    $scope.loadProductsByOrder();
                 });
+
+            $scope.loadProductsByOrder = function(new_product){
+                RestFactory.request(config.API.host + "cargo/get-order-products/cargoId/" + $scope.cargo.id + "/orderId/" + $scope.$route.current.params.orderId)
+                    .then(function (response) {
+                        if (response.length > 0) {
+                            $rootScope.products = $scope.groupByProductId(response);
+                            console.log($rootScope.products);
+                        }
+                    });
+            };
+
             $scope.groupByProductId = function(productsArray){
                 var products = {};
                 for( var i in productsArray){
@@ -256,13 +260,13 @@ app.controller('CargoOrderProductsController',
                     count: count
                 };
                 if(custom){
-                    $scope.products[productId].sizes[size] = {
+                    $rootScope.products[productId].sizes[size] = {
                         size: size,
                         count: count,
                         price: price,
                         custom: 0
                     };
-                    delete $scope.products[productId].sizes[''];
+                    delete $rootScope.products[productId].sizes[''];
                 }
                 var product = {
                     cargoId: $scope.cargo.id,
@@ -279,10 +283,10 @@ app.controller('CargoOrderProductsController',
             };
 
             $scope.addProductCustomSize = function(productId){
-                $scope.products[productId].sizes[''] = {
+                $rootScope.products[productId].sizes[''] = {
                     size: '',
                     count: 0,
-                    price: $scope.products[productId].price,
+                    price: $rootScope.products[productId].price,
                     custom: 1
                 };
             };
@@ -292,9 +296,10 @@ app.controller('CargoOrderProductsController',
             };
 
             $scope.addCustomProducts = function(){
+
                 $rootScope.modalInstance = $modal.open({
-                    templateUrl: "/modules/buyer/views/cargo/add_product_search.html",
-                    controller: 'CargoProductSearchController',
+                    templateUrl: "/modules/buyer/views/cargo/product_search.html",
+                    controller: 'CargoOrderProductsController',
                     backdrop:'static',
                     resolve:{
                         factories: function(){
@@ -308,40 +313,49 @@ app.controller('CargoOrderProductsController',
                 // Attaching orderId to cargo
                 $location.path( '/buyer/cargo/id/'+ $scope.cargo.id );
             };
-        }
-    ]);
-
-app.controller('CargoProductSearchController',
-    [
-        '$scope',
-        '$rootScope',
-        "$modal",
-        "$location",
-        "$route",
-        "RestFactory",
-
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory) {
-
-            $scope.$route = $route;
-            $scope.$location = $location;
 
             $scope.search = function(query){
                 $rootScope.query = query;
                 RestFactory.request(config.API.host + "product/search/query/"+query)
                     .then(function(response){
                         $rootScope.modalInstance.close();
+                        $rootScope.searchResult = response;
+
                         if(response.length > 0){
 
+                            $rootScope.modalInstance = $modal.open({
+                                templateUrl: "/modules/buyer/views/cargo/product_search_result.html",
+                                controller: 'CargoOrderProductsController',
+                                backdrop:'static',
+                                size: 'lg',
+                                resolve:{
+                                }
+                            });
                         }else{
                             $scope.createNewProductConfirm();
                         }
                     });
             };
 
+            $scope.selectProduct = function(product){
+
+                $rootScope.modalInstance.close();
+                $rootScope.products[product.id] = {
+                        id: product.id,
+                        articul: product.articul,
+                        factoryArticul: product.factoryArticul,
+                        title: product.title,
+                        brand: product.brand,
+                        preview: product.preview,
+                        price: product.price,
+                        sizes: {}
+                    };
+            };
+
             $scope.createNewProductConfirm = function(){
                 $rootScope.modalInstance = $modal.open({
                     templateUrl: "/modules/buyer/views/cargo/new_product_create_confirm.html",
-                    controller: 'CargoProductSearchController',
+                    controller: 'CargoOrderProductsController',
                     backdrop:'static',
                     resolve:{
                         factories: function(){
@@ -367,7 +381,7 @@ app.controller('CargoProductSearchController',
 
                             $rootScope.modalInstance = $modal.open({
                                 templateUrl: "/modules/buyer/views/cargo/new_product_create.html",
-                                controller: 'CargoProductSearchController',
+                                controller: 'CargoOrderProductsController',
                                 backdrop:'static',
                                 resolve:{
                                     newProduct: function(){

@@ -27,7 +27,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="product in products track by $index">
+            <tr ng-repeat="product in products track by $index" ng-model="products">
                 <td>{{$index+1}}</td>
                 <td>
                     <img src="http://back95.ru/f/catalogue/{{product.id}}/{{product.preview[1]}}"/>
