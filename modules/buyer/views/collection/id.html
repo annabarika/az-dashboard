@@ -6,9 +6,8 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-6 va-m">
-                    <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Checkout</span></button>
-                    <button class="btn btn-info" ng-click="updateCollection()"><span class="fa fa-check">Update collection</span></button>
-                    <button class="btn btn-red" ng-click="deleteCollection()"><span class="fa fa-check">Delete</span></button>
+                    <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Add to order</span></button>
+                    <button class="btn btn-yellow" ng-click="cancelCollection()"><span class="fa fa-check">Cancel</span></button>
                 </div>
             </div>
             <!--/ basic info heading -->
@@ -50,22 +49,34 @@
                         {{product.factory.name}}
                     </td>
                     <td>
-                        <ul class="media-list mb-sm sm">
-                            <li ng-repeat="size in product.sizes" class="media">
-                                <p class="mt-5">{{size.name}}</p>
-                            </li>
-                            <li>
-                                <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)"><i class="fa fa-plus"></i> add size</button>
-                            </li>
-                            </li>
-                        </ul>
-
+                        <table>
+                            <tr>
+                                <td>
+                                    <ul class="media-list mb-sm sm">
+                                        <li ng-repeat="size in product.sizes" class="media">
+                                            {{size.name}}
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul ng-if="product.sizes[0]" class="media-list mb-sm sm">
+                                        <li ng-repeat="size in product.sizes" class="media">
+                                            <input type="text" class="sm form-control" ng-model="size.count"/>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)"><i class="fa fa-plus"></i> add size</button>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td>
                         <div class="btn-group">
-                        <button class="btn btn-green" ng-click="addToOrder(product)"><span class="fa fa-check">Checkout row</span></button>
-                        <button class="btn btn-info" ng-click="updateCollection(product)"><span class="fa fa-check">Update row</span></button>
-                        <button class="btn btn-red" ng-click="deleteCollection(product)"><span class="fa fa-check">Delete row</span></button>
+                        <button class="btn btn-green" ng-click="addToOrder(product.catalogueProduct.id)"><span class="fa fa-check">Add to order</span></button>
+                        <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id)"><span class="fa fa-check">Delete row</span></button>
                         </div>
                     </td>
                 </tr>

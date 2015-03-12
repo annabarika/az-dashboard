@@ -13,7 +13,9 @@
                 FACTORYCOLLECTIONS: config.API.host+"catalogue-collection/load/factoryId/",
                 CREATECOLLECTION:   config.API.host+"catalogue-collection/create",
                 LOADFILES       :   config.API.host+'catalogue/loadfiles',
-                LOADSIZES       :   config.API.host+'size/load'
+                LOADSIZES       :   config.API.host+'size/load',
+                DELETEPRODUCT   :   config.API.host+'catalogue-collection/delete-collection-product/',
+                CANCELCOLLECTION   : config.API.host+'/catalogue-collection/cancel/'
             };
         })())
 
@@ -141,11 +143,39 @@
                         angular.forEach(first, function(collections, index) {
 
                             angular.forEach(collections, function(product) {
+
+                                // assign sizes count to product
+                                if(product.hasOwnProperty('sizes') && _.isEmpty(product.sizes) == false) {
+                                    angular.forEach(product.sizes, function(value, index) {
+
+                                        product.sizes[index].count = '0';
+                                    });
+                                }
+
                                 res.push(product);
                             });
                         });
                     }
                     return res;
+                },
+
+                /**
+                 * Cancel collection
+                 */
+                cancelCollection: function (collectionId) {
+
+                    var url = API.CANCELCOLLECTION+'collectionId/'+collectionId
+                    return RestFactory.request(url);
+                },
+
+                /**
+                 * Delete product
+                 */
+                deleteProduct: function (collectionId, productId) {
+
+                    var url = API.DELETEPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
+
+                    return RestFactory.request(url);
                 },
 
                 /**
@@ -234,15 +264,7 @@
 
                 },
 
-                /**
-                 * Delete collection
-                 */
-                deleteCollection: function (collectionId) {},
 
-                /**
-                 * Delete product
-                 */
-                deleteProduct: function (productId) {},
 
                 /**
                  * Checkout collection position

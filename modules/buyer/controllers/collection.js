@@ -224,7 +224,9 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
         CollectionService.createCollection($rootScope.factoryId);
 
     }
-    $scope.chooseSize=function(size){
+    $scope.chooseSize=function(size,count){
+       //console.log(size,count);
+        size.count=count;
         $modalInstance.close(size);
     }
 
@@ -249,6 +251,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 { name: "manage", title: 'Manage' },
             ];
 
+            // Get collection card
             CollectionService.getCollectionCard($routeParams.collectionId).then(function(response) {
 
                 $scope.items = [], $scope.imagePath = CollectionService.getImagePath();
@@ -256,13 +259,51 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 if(_.isUndefined(response) == false) {
 
                     $scope.items = CollectionService.extractProducts(response);
+
                 }
             });
 
+            // Load scope sizes
             CollectionService.loadSizes().then(function(response){
                 $rootScope.all_sizes=response;
             });
 
+            //Cancel collection
+            $scope.cancelCollection = function(){
+
+                console.log('CollectionId:', $routeParams.collectionId);
+                return false;
+                CollectionService.cancelCollection($routeParams.collectionId);
+            };
+
+            // Delete product row
+            $scope.deleteProduct = function(productId){
+
+                console.log('CollectionId:', $routeParams.collectionId, 'ProductId:', productId);
+                return false;
+                CollectionService.deleteProduct($routeParams.collectionId, productId);
+
+            };
+
+            // Add product(s) to order
+            $scope.addToOrder = function(product) {
+
+                console.log('ProductId:', product);
+                return false;
+
+                if(_.isUndefined(product) == false) {
+                    var i = CollectionService.compareProduct($scope.items, product.catalogueProduct);
+                    console.log(i);
+                    CollectionService.addToOrder($scope.items[i]);
+                }
+                else {
+                    console.log(product);
+                    CollectionService.addToOrder($scope.items);
+                }
+
+            };
+
+            //Add sizes to product
             $scope.addSize = function(product) {
                 var flag=true;
 
@@ -288,42 +329,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                     }
 
                 });
-            };
-
-            $scope.addToOrder = function(product) {
-
-                var i = CollectionService.compareProduct($scope.items, product);
-
-                if(_.isUndefined(product) == false) {
-                    console.log(product);
-                }
-                else {
-                    console.log(product);
-                }
-            };
-            $scope.updateCollection = function(product){
-
-                var i = CollectionService.compareProduct($scope.items, product);
-
-                if(_.isUndefined(product) == false) {
-
-                }
-                else {
-
-                }
-            };
-            $scope.deleteCollection = function(product){
-
-                var i = CollectionService.compareProduct($scope.items, product);
-
-                if(_.isUndefined(product) == false) {
-
-                }
-                else {
-
-                }
-            };
-
+            }
         }
 ]);
 
