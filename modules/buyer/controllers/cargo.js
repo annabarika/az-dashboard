@@ -118,12 +118,31 @@ app.controller('CargoDocumentController',
 
             $rootScope.documentTitle = 'Document #' + $route.current.params.id;
 
+            $scope.productsTableHeader = [
+                { name: "photo", title: "Preview" },
+                { name: "articul", title: "Articul" },
+                { name: "factoryArticul", title: "Factory articul" },
+                { name: "size", title: "Size" },
+                { name: "count", title: "Count" },
+                { name: "price", title: "Price" }
+            ];
             RestFactory.request(config.API.host + "cargo/get/id/"+$route.current.params.id)
                 .then(function(response){
-                    console.log(response);
                     $scope.cargo = response.cargo;
                     $scope.factory = response.factory;
-                    $scope.products = response.products;
+                    for( var i in response.products){
+                        var product = response.products[i];
+                        console.log(product);
+                        $scope.products[i] = {
+                            photo: 'http://back95.com/f/catalogue/'+product.productId+'/'+product.product.preview[1],
+                            articul: product.product.articul,
+                            factoryArticul: product.product.factoryArticul,
+                            size: product.size,
+                            count: product.count,
+                            price: product.price,
+                        };
+                    }
+                    console.log($scope.products);
                 });
 
             $scope.chooseOrder = function(){
