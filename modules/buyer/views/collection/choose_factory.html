@@ -1,4 +1,4 @@
-<div ng-controller='NewCollectionController'>
+<div ng-controller='CollectionsController'>
     <!--header-->
     <div class="modal-header">
         <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -7,7 +7,7 @@
     <div class="modal-body">
         <form>
             <select class="form-control" data-ng-model="newCollection.factories"
-                    ng-options="opt as opt.name for opt in data">
+                    ng-options="opt as opt.name for opt in factories">
                 <option value="">Choose factory</option>
             </select>
         </form>

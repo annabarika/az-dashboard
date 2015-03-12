@@ -43,15 +43,18 @@ app.config(function($routeProvider){
         .when('/buyer/collection',
         {
             templateUrl:"/modules/buyer/views/collection/index.html",
-            controller:"NewCollectionController"
-        }
-    )
-		.when('/buyer/collection/upload',
-		{
-			templateUrl:"/modules/buyer/views/collection/collection.html",
-			controller:"UploadController"
-		}
-	)
+            controller:"CollectionsController"
+        })
+        .when('/buyer/collection/upload',
+        {
+            templateUrl:"/modules/buyer/views/collection/collection.html",
+            controller:"UploadController"
+        })
+        .when('/buyer/collection/id/:collectionId',
+        {
+            templateUrl:"/modules/buyer/views/collection/id.html",
+            controller:"CollectionCardController"
+        })
         .when('/buyer/cargo',
         {
             templateUrl:"/modules/buyer/views/cargo/index.html",

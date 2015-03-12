@@ -32,7 +32,7 @@
 					method: method,
 					url: url,
 					data: data
-                    //,headers : headers
+                    ,headers : headers
 				};
 				//console.log(req);
 				$http(req)

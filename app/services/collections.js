@@ -1,69 +1,193 @@
 (function(){
 
-    angular.module("services.collections",[])
+    angular.module("services.collections", [])
 
         // create config API ROUTES
         .constant('API', (function () {
 
             return {
-                GETFACTORIES : config.API.host+'factory/load',
-                GETCOLLECTIONS : config.API.host+'catalogue/load-collections',
-                FACTORYCOLLECTIONS:config.API.host+"catalogue-collection/load/factoryId/",
-                CREATECOLLECTION:config.API.host+"catalogue-collection/create",
-                LOADFILES:config.API.host+'catalogue/loadfiles'
+                FACTORIES       :   config.API.host+'factory/load',
+                COLLECTIONS     :   config.API.host+'catalogue-collection/load/status/0',
+                COLLECTION_CARD :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
+                IMAGES_PATH     :   config.API.imagehost+'/files/factory/attachments/',
+                FACTORYCOLLECTIONS: config.API.host+"catalogue-collection/load/factoryId/",
+                CREATECOLLECTION:   config.API.host+"catalogue-collection/create",
+                LOADFILES       :   config.API.host+'catalogue/loadfiles',
+                LOADSIZES       :   config.API.host+'size/load'
             };
-
         })())
 
         // create config  Templates
         .constant('TEMPLATE', (function () {
 
             return {
-                NEW    :   "/modules/buyer/views/collection/chooseFactory.html",
-                CHOOSE :   "/modules/buyer/views/collection/chooseCollection.html"
+                NEW    :   "/modules/buyer/views/collection/choose_factory.html",
+                CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
+                ADDSIZE:   "/modules/buyer/views/collection/add_size.html"
             };
 
         })())
 
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',"$rootScope","$http",
-            function(API, TEMPLATE, RestFactory, messageCenterService, $modal,$rootScope,$http) {
+        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',
+            function(API, TEMPLATE, RestFactory, messageCenterService, $modal) {
 
             return {
+                
+                /**
+                 * Get All factories
+                 *
+                 * @returns {*}
+                 */
+                getFactories: function () {
+
+                    return RestFactory.request(API.FACTORIES);
+                },
 
                 /**
+                 * Get All Collections
                  *
+                 * @param params
+                 * @returns {*}
+                 */
+                getCollections: function (params) {
+
+                    var url = (_.isUndefined(params) == false) ? API.COLLECTIONS+params : API.COLLECTIONS;
+
+                    return RestFactory.request(url);
+                },
+
+                /**
+                 *  Return filtered collections
+                 *
+                 * @param factories
                  * @returns {Array}
                  */
+                filterCollections : function(response, factories) {
 
-                getFactories:function(){
+                    var collections = [];
+                    angular.forEach(response, function(value) {
 
-                    var factories=[];
-                    RestFactory.request(API.GETFACTORIES).then(function(response){
+                        angular.forEach(factories, function(factory) {
 
-                        angular.forEach(response,function(value,key){
-                            factories.push(value.factory);
+                            if(factory.id == value.factoryId) {
+                                value.factoryName = factory.name;
+                            }
+
+                            collections.push(value);
                         });
                     });
-                    return factories;
+
+                    return collections;
+                },
+
+                /**
+                 * /**
+                 * Get collections by factory
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                getFactoryCollections : function(id){
+
+                    var url = API.FACTORYCOLLECTIONS+id;
+
+                    return RestFactory.request(url);
+                },
+
+                /**
+                 * Get Card of selected collection
+                 *
+                 * @returns {*}
+                 */
+                getCollectionCard: function (id) {
+
+                    var url = API.COLLECTION_CARD+id;
+                    return RestFactory.request(url);
+                },
+
+                /**
+                 * Get compare product index
+                 *
+                 * @param items
+                 * @param product
+                 */
+                compareProduct: function(items, product) {
+
+                    var i;
+                    angular.forEach(items, function(collection, index) {
+
+                        if(collection.catalogueProduct.id === product.id) {
+
+                            i = index;
+                        }
+                    });
+
+                    return i;
+                },
+
+                /**
+                 * Extract server response data requested by collectionId
+                 *
+                 * @param data
+                 * @returns {Array}
+                 */
+                extractProducts: function(data) {
+
+                    for (var first in data) break;
+                    var first = data[first], res = [];
+
+                    if(_.isEmpty(first) === false) {
+
+                        angular.forEach(first, function(collections, index) {
+
+                            angular.forEach(collections, function(product) {
+                                res.push(product);
+                            });
+                        });
+                    }
+                    return res;
+                },
+
+                /**
+                 * Get image path
+                 *
+                 * @returns {*}
+                 */
+                getImagePath: function() {
+
+                    return API.IMAGES_PATH;
+                },
+
+                /**
+                 * Load sizes
+                 *
+                 * @returns {*}
+                 */
+                loadSizes: function () {
+
+                    return RestFactory.request(API.LOADSIZES);
                 },
 
 
                 /**
-                 *  $param id:string,
-                 *  return : array[]
+                 *  Show Modal window
+                 *
+                 * @param path
+                 * @param data
+                 * @returns {*}
                  */
-                 getFactoryCollections:function(id){
-                    var url=API.FACTORYCOLLECTIONS+id;
+                showModal : function(path,data){
+                    // console.log("data",data);
+                    var modal=$modal.open({
+                        templateUrl:TEMPLATE[path],
+                        controller:"ModalController"
+                    });
+                    return modal;
+                },
 
-                    RestFactory.request(url).then(function(response){
 
-                           $rootScope.factoryCollections=response;
 
-                        }
-                    );
-
-                 },
-                createCollection:function(factoryId){
+                createCollection : function(factoryId){
                     var data={
                         factoryId:factoryId,
                         name:"test"
@@ -80,7 +204,13 @@
                         }
                     );
                 },
-                uploadFiles:function(){
+                
+
+
+
+
+
+                uploadFiles : function() {
                     //console.log("uploads",$rootScope.photo);
 
                     var fd=new FormData();
@@ -91,10 +221,10 @@
                     });
                     console.log(fd);
                     /*RestFactory.request(API.LOADFILES,"POST",fd).then(
-                        function(response){
-                            console.log(response);
-                        }
-                    );*/
+                     function(response){
+                     console.log(response);
+                     }
+                     );*/
                     $http.post(API.LOADFILES,fd,
                         {
                             transformRequest: angular.identity,
@@ -105,24 +235,28 @@
                         });
 
                 },
+
                 /**
-                 * param @path:string,
-                 * param @factories:array
-                 * return @object
+                 * Delete collection
                  */
-                showModal:function(path,data){
-                   // console.log("data",data);
-                    var modal=$modal.open({
-                        templateUrl:TEMPLATE[path],
-                        controller:"ModalController",
-                        resolve:{
-                            data:function(){
-                                return data;
-                            }
-                        }
-                    });
-                    return modal;
-                }
+                deleteCollection: function (collectionId) {},
+
+                /**
+                 * Delete product
+                 */
+                deleteProduct: function (productId) {},
+
+                /**
+                 * Checkout collection position
+                 */
+                checkoutPosition: function (productId) {},
+
+                /**
+                 * Checkout collection
+                 */
+                checkoutCollection: function (collectionId) {}
+
+
             };
         }]);
 })();

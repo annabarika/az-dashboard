@@ -1,9 +1,11 @@
 var config = {
 	API: {
-		host:"http://green.f.compass/api/",
-		key: ''
+        host:"http://lex.f.azimuth/api/",
+        imagehost:"http://arrow.b.compass",
+		key: 'test'
 	},
     monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
 };
 
 (function(){
