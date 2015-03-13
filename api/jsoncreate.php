@@ -7,12 +7,15 @@ require __DIR__.'/API.php';
 //'uml.maggadda.dev95.ru'
 
 try {
+
 	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['jsoncreate'];
 
 	$APIService = new API($host);
 
 	$APIService->setMethod('GET');
 
+
+    var_dump($_REQUEST);
 	$response = $APIService->setURL(http_build_query($_REQUEST))->call();
 
 

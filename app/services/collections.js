@@ -21,7 +21,12 @@
                 CANCELPRODUCT   :   config.API.host+'catalogue-collection/delete-collection-product/',
                 CANCELCOLLECTION   : config.API.host+'catalogue-collection/cancel/',
                 LOADSIZES       :   config.API.host+'size/load',
-                LOADPRODUCTS    :   config.API.host+'catalogue-collection/add-collection-product'
+                LOADPRODUCTS    :   config.API.host+'catalogue-collection/add-collection-product',
+                LOADORDERTYPES  :   config.API.host+'order-type/load/',
+                ORDERCREATE     :   config.API.host+'order/create',
+                PRODUCTSCREATE  :   config.API.host+'jsoncreate.php',
+                ADDORDERTOCOLLECTION  :   config.API.host+'catalogue-collection/add-order-collection',
+                CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row',
             };
         })())
 
@@ -32,6 +37,7 @@
                 NEW    :   "/modules/buyer/views/collection/choose_factory.html",
                 CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
                 ADDSIZE:   "/modules/buyer/views/collection/add_size.html",
+                ADDORDER:   "/modules/buyer/views/collection/add_order.html",
                 CANCEL_COLLECTION :   "/modules/buyer/views/collection/ask_collection.html",
                 CANCEL_PRODUCT :   "/modules/buyer/views/collection/ask_product.html"
             };
@@ -244,6 +250,16 @@
                 },
 
                 /**
+                 * Load types
+                 *
+                 * @returns {*}
+                 */
+                loadOrderTypes: function () {
+
+                    return RestFactory.request(API.LOADORDERTYPES);
+                },
+
+                /**
                  *  Show Modal window
                  *
                  * @param path
@@ -290,15 +306,95 @@
                 },
 
                 /**
-                 * Checkout collection position
+                 * Create order
                  */
-                checkoutPosition: function (productId) {},
+                orderCreate: function (order) {
+
+                    var params = {
+                        'buyerId'       :   order.buyerId,
+                        'factoryId'     :   order.collection.factoryId,
+                        'type'          :   order.type.id,
+                        'currencyId'    :   order.currencyId
+                    };
+
+                    RestFactory.request(API.ORDERCREATE,"POST", params).then(function(responseOrder) {
+
+                            if(response.id) {
+                                var params = {
+                                    'id'        :   parseInt(order.collection.id),
+                                    'orderId'   :   parseInt(responseOrder.id)
+                                };
+
+                                return RestFactory.request(API.ADDORDERTOCOLLECTION,"PUT", $.param(params));
+                            }
+                            else return false;
+                    });
+                },
 
                 /**
-                 * Checkout collection
+                 * Create order
                  */
-                checkoutCollection: function (collectionId) {}
+                productsCreate: function (data) {
 
+
+                    var products = {
+                        id    :   1, // factory product ID
+                        orderId : 1,
+                        sizeId,
+                        count,
+                        price,
+                        articul,
+                        factoryArticul
+
+                    };
+                    return RestFactory.request(API.CREATEPRODUCTFACTORY,"POST",products);
+
+                    //var products = [];
+                    //
+                    //products.push({params : {
+                    //    'vendor_articul'    : 1,
+                    //    'cat_title'         : 'Product title',
+                    //    'brand_id'          : 0,
+                    //    'category'          : {
+                    //        0 : 0
+                    //    },
+                    //    'weight'            : 0,
+                    //    'cat_type'          : 0,
+                    //    'price'             : 0
+                    //}
+                    //});
+                    //
+                    //console.log('Products', products);
+                    //console.log('Products line', decodeURIComponent($.param(products)));
+
+                    //angular.forEach(data, function(value, index) {
+                    //
+                    //    products.push({params : {
+                    //            'vendor_articul'    : 1,
+                    //            'cat_title'         : 'Product title',
+                    //            'brand_id'          : 0,
+                    //            'category'          : {
+                    //                0 : 0
+                    //            },
+                    //            'weight'            : 0,
+                    //            'cat_type'          : 0,
+                    //            'price'             : 0
+                    //        }
+                    //    });
+                    //});
+
+
+                    return false;
+
+                    //var params = {
+                    //    'buyerId' :   data.buyerId,
+                    //    'factoryId' :   data.collection.factoryId,
+                    //    'type'  :    data.type.id,
+                    //    'currencyId' :   data.currencyId
+                    //};
+
+                    //return RestFactory.request(API.PRODUCTSCREATE,"GET", {});
+                }
             };
         }]);
 })();
