@@ -162,6 +162,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
             if($scope.step==2){
                 $scope.step=0;
+                $rootScope.photo=undefined;
                 for(i=0;i<$scope.stepIcons.length;i++){
                     $scope.stepIcons[i].classList.remove('active');
                 }
@@ -244,6 +245,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
         $scope.delete=function(index){
             $scope.items.splice(index,1);
             if(_.isEmpty($scope.items)){
+                $rootScope.photo=undefined;
                 $scope.step=0;
             }
         };
