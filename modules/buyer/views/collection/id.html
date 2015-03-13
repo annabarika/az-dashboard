@@ -1,5 +1,5 @@
 <!-- start box layout -->
-<div class="box-layout" data-ng-controller="CollectionCardController">
+<div class="box-layout">
     <div class="col-md-12 bdr-r bg-auto height-auto">
         <!-- start page header -->
         <div class="page-header">
@@ -18,7 +18,7 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th class="sorting" ng-repeat="item in productsHeader"
+                    <th class="sorting sort-desc" ng-repeat="item in productsHeader" ng-click="sortReorder(productsHeader.name, $event)"
                         ng-class="{'sort-asc':item.sort>0,'sort-desc':item.sort<0}"><a href="">
                         {{item.title}}</a>
                     </th>
@@ -43,7 +43,7 @@
                         {{product.catalogueProduct.name}}
                     </td>
                     <td>
-                        {{product.catalogueProduct.price}} ¥
+                        {{product.catalogueProduct.price}} {{product.currency.ISOCode}}
                     </td>
                     <td>
                         {{product.factory.name}}
@@ -75,7 +75,7 @@
                     </td>
                     <td>
                         <div class="btn-group">
-                        <button class="btn btn-green" ng-click="addToOrder(product)"><span class="fa fa-check">Add to order</span></button>
+                        <button class="btn btn-green" ng-click="addToOrder(product.catalogueProduct.id, $index)"><span class="fa fa-check">Add to order</span></button>
                         <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check">Delete</span></button>
                         </div>
                     </td>

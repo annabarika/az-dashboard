@@ -11,27 +11,34 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="item in collection">
+        <tr ng-repeat="item in items">
             <td>
                 <!--<ul id="sort1" class="sort" ng-repeat="photo in item.photo track by $index">-->
                 <!--<li>-->
                 <!--<img class="thumbnail sm" src={{photo}} draggable>-->
                 <!--</li>-->
                 <!--</ul>-->
-                {{item.name}}
+                {{item.path}}
+                <div class="media np">
+                    <div class="media-left">
+                                <span class="img-wrapper img-rounded">
+                                    <img ng-src="{{imagePath}}{{item.path}}" >
+                                </span>
+                    </div>
+                </div>
             </td>
             <td>
-                <input class="form-control" type="text">
+                <input class="form-control" type="text" ng-model="item.article">
             </td>
             <td>
-                <input class="form-control" type="text">
+                <input class="form-control" type="text" ng-model="item.sizes">
             </td>
             <td>
-                <input class="form-control" type="number">
+                <input class="form-control" type="number" ng-model="item.price">
             </td>
             <td align="center">
                 <div class="toolbar">
-                    <a href="" class="btn btn-sm btn-info"><span class="fa fa-trash-o"></span></a>
+                    <a href="" class="btn btn-sm btn-info" ng-click="delete($index)"><span class="fa fa-trash-o"></span></a>
                 </div>
             </td>
         </tr>

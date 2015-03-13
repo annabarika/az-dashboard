@@ -91,27 +91,28 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             });
         };
 
-        $scope.$watch("photo",function(value){
-            $rootScope.photo=value;
-        });
         
-    }]
-);
+    }
+]);
 
 /**
- * Add new products, create collection controllers
+ * Upload photos controller
  */
-
 app.controller("UploadController",['$scope','$rootScope','$location','CollectionService',"$modal",
     function ($scope, $rootScope, $location, CollectionService,$modal) {
         var fileinput;
+
+        $scope.$watch("photo",function(value){
+            $rootScope.photo=value;
+        });
+
 
         if($rootScope.collection==undefined){
             $location.path("/buyer/collection");
         }
 
         $scope.collectionTemplates = [
-            "modules/buyer/views/collection/upload.html",
+            "modules/buyer/views/collection/upload_files.html",
             "modules/buyer/views/collection/prepare.html",
             "modules/buyer/views/collection/finish.html"
         ];
@@ -125,7 +126,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
         });
 
         /* Getting collection */
-        $rootScope.documentTitle = "Collection";
+        $rootScope.documentTitle = "Create New Collection";
         /*$('#sort1, #sort2, #sort3, #sort4').sortable({
          connectWith: ".sort",
          opacity: 0.5,
@@ -138,7 +139,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
         };
 
-        //$scope.count=321;
+
 
         $scope.back=function(){
 
@@ -160,9 +161,11 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
                 }
             }
         };
-
+        /**
+         * include templates and upload photos,products
+         */
         $scope.nextStep=function(){
-
+            //show error window
             if($rootScope.photo==undefined){
 
                 $rootScope.message="You are forgot upload photo";
@@ -176,44 +179,64 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
             if($scope.step==0){
 
-                CollectionService.uploadFiles();
+                CollectionService.uploadFiles($rootScope.photo).success(function(data){
+                    console.log("upload",data);
+                    if(_.isArray(data)){
+                        $scope.items=data;
+                        $scope.imagePath = CollectionService.getImagePath();
+                        $scope.step++;
+
+                    }
+                });
             }
 
             if($scope.step==1){
-                console.log("this",$scope.step);
+
+                $scope.products=CollectionService.buildProductsArray($scope.items,$rootScope.collection, $rootScope.all_sizes);
+                console.log($scope.products);
+
+                if(_.isEmpty($scope.products)== false){
+
+                    CollectionService.loadProducts($scope.products).then(
+                        function(response){
+
+                            console.log("loading prod",response);
+
+
+                            //$scope.count=response.length;
+                            //$scope.step++;
+                        }
+                    )
+                }
+
             }
 
             if($scope.step==2){
                 console.log("this",$scope.step);
             }
         };
-
-
-        /*$scope.nextStep=function(){
-         if( $rootScope.collection){
-         console.log($rootScope.collection);
-         $scope.step++;
-         }
-         else{
-         $rootScope.message="You are forgot upload photo";
-         $modal.open({
-         templateUrl: '/app/views/error.html',
-         controller: 'BsAlertCtrl',
-         size: 'lg'
-         });
-
-         }
-
-         }*/
+        /**
+         *
+         * @param index
+         */
+        $scope.delete=function(index){
+            $scope.items.splice(index,1);
+            if(_.isEmpty($scope.items)){
+                $scope.step=0;
+            }
+        };
 
 }]);
 
+/**
+ * Modal window controller
+ */
 app.controller("ModalController",function($scope,$rootScope,CollectionService,$modalInstance, $routeParams, $location, messageCenterService, $timeout){
 
-    $scope.cancel=function(){
+    $scope.cancel = function(){
         $modalInstance.dismiss();
     };
-    $scope.chooseFactory=function(factory){
+    $scope.chooseFactory = function(factory){
         $modalInstance.close(factory);
     };
 
@@ -244,7 +267,7 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
     /**
      * Apply product canceled (deleted)
      */
-    $scope.applyCancelProduct = function() {
+    $scope.applyDeleteProduct = function() {
 
         CollectionService.deleteProduct($routeParams.collectionId, $rootScope.productId).then(function(response) {
 
@@ -265,25 +288,33 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
     $scope.chooseCollection=function(collection){
         $modalInstance.close(collection);
     };
-    $scope.createNew=function(){
-        console.log("newCollection",$rootScope.factoryId);
-        CollectionService.createCollection($rootScope.factoryId);
 
-    }
+    $scope.createNew=function(){
+
+        CollectionService.createCollection($rootScope.factoryId).then(function(response){
+
+                if(response){
+                    $modalInstance.close(response);
+                }
+
+            });
+    };
+
     $scope.chooseSize=function(size,count){
-       //console.log(size,count);
+
         size.count=count;
         $modalInstance.close(size);
+
     }
 
 });
 
 /**
- * Get collection card
+ * Get collection checkout card
  */
-app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService',
-        function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService) {
-
+app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService', 'localStorageService',
+        function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService, localStorageService) {
+            console.log('This controller');
             // set title
             $rootScope.documentTitle = 'Collection Checkout Card #'+$routeParams.collectionId;
 
@@ -305,7 +336,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 if(_.isUndefined(response) == false) {
 
                     $rootScope.items = CollectionService.extractProducts(response);
-
+                    localStorageService.set('items', $rootScope.items);
                 }
             });
 
@@ -313,6 +344,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
             CollectionService.loadSizes().then(function(response){
                 $rootScope.all_sizes=response;
             });
+
 
             //Cancel collection
             $scope.cancelCollection = function(){
@@ -368,11 +400,10 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                         if(flag){
                             $rootScope.items[i].sizes.push(size);
                         }
-                    }
 
+                        localStorageService.set('items', $rootScope.items);
+                    }
                 });
             }
         }
 ]);
-
-

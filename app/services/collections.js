@@ -1,6 +1,11 @@
 (function(){
 
-    angular.module("services.collections", [])
+    angular.module("services.collections",['LocalStorageModule'])
+
+        .config(['localStorageServiceProvider', function(localStorageServiceProvider){
+            localStorageServiceProvider.setPrefix('collections');
+            localStorageServiceProvider.setStorageType('localStorage');
+        }])
 
         // create config API ROUTES
         .constant('API', (function () {
@@ -13,10 +18,10 @@
                 FACTORYCOLLECTIONS: config.API.host+"catalogue-collection/load/factoryId/",
                 CREATECOLLECTION:   config.API.host+"catalogue-collection/create",
                 LOADFILES       :   config.API.host+'catalogue/loadfiles',
-                LOADSIZES       :   config.API.host+'size/load',
                 CANCELPRODUCT   :   config.API.host+'catalogue-collection/delete-collection-product/',
                 CANCELCOLLECTION   : config.API.host+'catalogue-collection/cancel/',
-                CANCELCOLLECTION   : config.API.host+'catalogue-collection/update/'
+                LOADSIZES       :   config.API.host+'size/load',
+                LOADPRODUCTS    :   config.API.host+'catalogue-collection/add-collection-product'
             };
         })())
 
@@ -33,8 +38,8 @@
 
         })())
 
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', '$modal',
-            function(API, TEMPLATE, RestFactory, $modal) {
+        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', '$modal', '$http',
+            function(API, TEMPLATE, RestFactory, $modal, $http) {
 
             return {
                 
@@ -128,7 +133,46 @@
 
                     return i;
                 },
+                buildProductsArray:function(data,collection,sizes){
+                    //console.log(data,collection);
+                    var array=[];
 
+                    angular.forEach(data,function(value,i){
+
+                        sizes=value.sizes.split(/[\s,]+/);
+
+                        //console.log(sizes);
+                        var product={
+                            articul:value.article,
+                            price:value.price,
+                            collectionId:collection.id,
+                            photos:[value.id],
+                            sizes:sizes,
+                            currensyId:'5',
+                            factoryId:collection.factoryId
+                        };
+
+                        this.push(product);
+
+                    },array);
+                    //console.log("this",array);
+                    return array;
+                },
+
+                /**
+                 *
+                 * @param products
+                 */
+                loadProducts:function(products){
+                    var params={},i=1;
+                    angular.forEach(products,function(value,key){
+                        params['product'+i]=value;
+                        i++;
+                    });
+                    var query= $.param(params);
+                    console.log("q",query,params);
+                    return RestFactory.request(API.LOADPRODUCTS,"POST", query);
+                },
                 /**
                  * Extract server response data requested by collectionId
                  *
@@ -206,7 +250,7 @@
                  * @param data
                  * @returns {*}
                  */
-                showModal : function(path){
+                showModal : function(path) {
 
                     var modal= $modal.open({
                         templateUrl : TEMPLATE[path],
@@ -218,43 +262,31 @@
                 createCollection : function(factoryId){
                     var data={
                         factoryId:factoryId,
-                        name:"test"
+                        name:"collection"
                     };
 
-                    RestFactory.request(API.CREATECOLLECTION,"POST",data).then(function(response){
-
-                            //$rootScope.factoryCollections=response;
-                            console.log(response);
-                            if(response){
-                                $rootScope.collection=response;
-                            }
-
-                        }
-                    );
+                    return RestFactory.request(API.CREATECOLLECTION,"POST",data);
                 },
-                
-                uploadFiles : function() {
-                    //console.log("uploads",$rootScope.photo);
+
+                /**
+                 *
+                 * @param photo
+                 * @returns {*}
+                 */
+                uploadFiles : function(photo) {
 
                     var fd=new FormData();
-                    angular.forEach($rootScope.photo,function(file){
-                        fd.append('file',file);
+
+                    angular.forEach(photo,function(file){
+                        fd.append('file[]',file);
+
                     });
-                    console.log(fd);
-                    /*RestFactory.request(API.LOADFILES,"POST",fd).then(
-                     function(response){
-                     console.log(response);
-                     }
-                     );*/
-                    $http.post(API.LOADFILES,fd,
+
+                    return $http.post(API.LOADFILES,fd,
                         {
                             transformRequest: angular.identity,
                             headers: {'Content-Type': undefined}
-                        })
-                        .success(function(data){
-                            console.log(data);
                         });
-
                 },
 
                 /**
