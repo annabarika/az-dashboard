@@ -45,7 +45,7 @@
 </head>
 
 <body ng-controller="MainController">
-    <section id="app-wrapper" data-ui-view="" class="ng-scope">
+    <section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }" class="ng-scope">
         <sidebar ng-class="classes[index % classes.length]">111</sidebar>
 
         <header id="app-header" class="navbar"></header>
