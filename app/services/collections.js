@@ -26,7 +26,7 @@
                 ORDERCREATE     :   config.API.host+'order/create',
                 PRODUCTSCREATE  :   config.API.host+'jsoncreate.php',
                 ADDORDERTOCOLLECTION  :   config.API.host+'catalogue-collection/add-order-collection',
-                CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row',
+                CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row'
             };
         })())
 
@@ -336,21 +336,33 @@
                  */
                 productsCreate: function (data) {
 
-
-                    var products = {
-                        id    :   1, // factory product ID
-                        orderId : 1,
-                        sizeId,
-                        count,
-                        price,
-                        articul,
-                        factoryArticul
-
-                    };
-                    return RestFactory.request(API.CREATEPRODUCTFACTORY,"POST",products);
-
-                    //var products = [];
+                    var products = [];
                     //
+                    //products.push({
+                    //    id    :   1, // factory {product ID
+                    //    productId    :   234, // backend product ID
+                    //    orderId : 1,
+                    //    sizeId  : 2,
+                    //    count   : 3,
+                    //    price   : 343,
+                    //    articul : '23343',
+                    //    factoryArticul: '2323'
+                    //});
+                    //products.push({
+                    //    id    :   2, // factory product ID
+                    //    productId    :   234, // backend product ID
+                    //    orderId : 34,
+                    //    sizeId  : 1,
+                    //    count   : 34,
+                    //    price   : 343,
+                    //    articul : '23343',
+                    //    factoryArticul: '2323'
+                    //});
+                    //
+                    ////RestFactory.request(API.CREATEPRODUCTFACTORY,"POST",products);
+                    //return false;
+                    //var products = [];
+                    // To Backend
                     //products.push({params : {
                     //    'vendor_articul'    : 1,
                     //    'cat_title'         : 'Product title',
@@ -384,7 +396,20 @@
                     //});
 
 
-                    return false;
+                    //BACK END Product Create
+
+                    products.push({params : {
+                        'vendor_articul'    : 1,
+                        'cat_title'         : 'Product title',
+                        'brand_id'          : 0,
+                        'category'          : {
+                            0 : 0
+                        },
+                        'weight'            : 0,
+                        'cat_type'          : 0,
+                        'price'             : 0
+                    }
+                    });
 
                     //var params = {
                     //    'buyerId' :   data.buyerId,
@@ -393,7 +418,9 @@
                     //    'currencyId' :   data.currencyId
                     //};
 
-                    //return RestFactory.request(API.PRODUCTSCREATE,"GET", {});
+                    return RestFactory.request(API.PRODUCTSCREATE, "POST", products);
+                    return false;
+
                 }
             };
         }]);

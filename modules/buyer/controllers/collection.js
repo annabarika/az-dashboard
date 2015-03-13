@@ -45,6 +45,8 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
                 CollectionService.getCollections().then(function(response) {
 
                     $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+                    console.log('All collections', $rootScope.collections);
+
                 });
             }
         });
@@ -244,6 +246,7 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
 
     /**
      * Check out order from compass
+     *
      * @param order
      */
     $scope.checkOut = function(order) {
@@ -386,7 +389,6 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 // load order types
                 CollectionService.loadOrderTypes().then(function(response) {
                     $rootScope.all_types = response;
-
                     var collection = _.first(_.filter($rootScope.collections, function(collection){
 
                         // Find current collection
@@ -409,6 +411,8 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                             ? index.currency.id : 5;
 
                         $rootScope.order.collection = collection;
+
+                        console.log('Order', $rootScope.order);
 
                         // add items to collection
                         if(_.isUndefined(product)) {
