@@ -14,8 +14,6 @@ try {
 
 	$APIService->setMethod('POST');
 
-
-    var_dump($_REQUEST); exit;
 	$response = $APIService->setURL(http_build_query($_REQUEST))->call();
 
 

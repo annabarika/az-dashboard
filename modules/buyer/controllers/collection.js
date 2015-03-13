@@ -404,6 +404,20 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 CollectionService.showModal("CANCEL_PRODUCT");
             };
 
+            // Delete product row
+            $scope.saveProduct = function(product) {
+
+                CollectionService.saveProduct(product).then(function(response) {
+
+                    if(response.catalogueProduct) {
+                        messageCenterService.add('success', 'Product row successfuly updated', { timeout: 3000 });
+                    }
+                    else {
+                        messageCenterService.add('error', 'Error update', { timeout: 3000 });
+                    }
+                });
+            };
+
             // Add product(s) to order
             $scope.addToOrder = function(product) {
 

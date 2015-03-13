@@ -37,16 +37,18 @@
                         </div>
                     </td>
                     <td>
-                        {{product.catalogueProduct.articul}}
+                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" value="{{product.catalogueProduct.articul}}" />
                     </td>
                     <td>
-                        {{product.catalogueProduct.name}}
+                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.name" value="{{product.catalogueProduct.name}}" />
+
                     </td>
                     <td>
-                        {{product.catalogueProduct.price}} {{product.currency.ISOCode}}
+                        <input type="text" class="sm form-control" ng-model="product.catalogueProduct.price" value="{{product.catalogueProduct.price}}" />
+                         {{product.currency.ISOCode}}
                     </td>
                     <td>
-                        <input type="text" class="sm form-control" ng-model="size.count"/>
+                        {{product.factory.name}}
                     </td>
                     <td>
                         <table>
@@ -76,6 +78,7 @@
                     <td>
                         <div class="btn-group">
                         <button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check">Add to order</span></button>
+                        <button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>
                         <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check">Delete</span></button>
                         </div>
                     </td>

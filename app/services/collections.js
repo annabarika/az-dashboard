@@ -18,13 +18,14 @@
                 FACTORYCOLLECTIONS: config.API.host+"catalogue-collection/load/factoryId/",
                 CREATECOLLECTION:   config.API.host+"catalogue-collection/create",
                 LOADFILES       :   config.API.host+'catalogue/loadfiles',
+                LOADPRODUCTS    :   config.API.host+'catalogue-collection/add-collection-product',
                 CANCELPRODUCT   :   config.API.host+'catalogue-collection/delete-collection-product/',
                 CANCELCOLLECTION   : config.API.host+'catalogue-collection/cancel/',
                 LOADSIZES       :   config.API.host+'size/load',
-                LOADPRODUCTS    :   config.API.host+'catalogue-collection/add-collection-product',
                 LOADORDERTYPES  :   config.API.host+'order-type/load/',
                 ORDERCREATE     :   config.API.host+'order/create',
                 PRODUCTSCREATE  :   config.API.host+'jsoncreate.php',
+                PRODUCTUPDATE   :   config.API.host+'catalogue/update',
                 ADDORDERTOCOLLECTION  :   config.API.host+'catalogue-collection/add-order-collection',
                 CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row'
             };
@@ -232,6 +233,33 @@
                     var url = API.CANCELPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
 
                     return RestFactory.request(url, 'DELETE');
+                },
+
+                /**
+                 * Save product
+                 */
+                saveProduct: function (product) {
+
+                    var params = {
+                        'id' : product.catalogueProduct.id,
+                        'articul' : product.catalogueProduct.articul,
+                        'name'    : product.catalogueProduct.name,
+                        'price'   : product.catalogueProduct.price,
+                        'currencyId' : product.currency.id,
+                        'sizes'     :   (function() {
+                                var sizes = [];
+                                angular.forEach(product.sizes, function(value, index){
+                                    sizes.push({
+                                        id : value.id,
+                                        name : value.name
+                                    })
+                                });
+
+                            return sizes;
+                        })(product)
+                    };
+
+                    return RestFactory.request(API.PRODUCTUPDATE, 'PUT', $.param(params));
                 },
 
                 /**
