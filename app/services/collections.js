@@ -146,22 +146,26 @@
                     angular.forEach(data,function(value,i){
 
                         sizes=value.sizes.split(/[\s,]+/);
-
+                        var photos=[];
+                        angular.forEach(value.photos,function(img){
+                            this.push(img.id);
+                        },photos);
                         //console.log(sizes);
                         var product={
                             articul:value.article,
                             price:value.price,
                             collectionId:collection.id,
-                            photos:[value.id],
+                            photos:photos,
                             sizes:sizes,
-                            currensyId:'5',
-                            factoryId:collection.factoryId
+                            currencyId:5,
+                            factoryId:parseInt(collection.factoryId),
+                            name:"noname"
                         };
 
                         this.push(product);
 
                     },array);
-                    //console.log("this",array);
+                    console.log("this",array);
                     return array;
                 },
 
@@ -177,7 +181,8 @@
                     });
                     var query= $.param(params);
                     console.log("q",query,params);
-                    return RestFactory.request(API.LOADPRODUCTS,"POST", query);
+                   // return RestFactory.request(API.LOADPRODUCTS,"POST", query);
+                    return RestFactory.request(API.LOADPRODUCTS,"POST", products);
                 },
                 /**
                  * Extract server response data requested by collectionId
