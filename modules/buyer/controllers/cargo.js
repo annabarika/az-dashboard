@@ -159,11 +159,11 @@ app.controller('CargoDocumentController',
             };
 
             $scope.getLogisticCompany = function(){
-                    for( var i in $scope.logisticCompanies){
-                        if($scope.cargo.logisticCompanyId == $scope.logisticCompanies[i].id){
-                            return $scope.logisticCompanies[i];
-                        }
+                for( var i in $scope.logisticCompanies){
+                    if($scope.cargo.logisticCompanyId == $scope.logisticCompanies[i].id){
+                        return $scope.logisticCompanies[i];
                     }
+                }
             };
             $scope.sendCargo = function(){
                 console.log($scope.cargo);
@@ -401,15 +401,15 @@ app.controller('CargoOrderProductsController',
 
                 $rootScope.modalInstance.close();
                 $rootScope.products[product.id] = {
-                        id: product.id,
-                        articul: product.articul,
-                        factoryArticul: product.factoryArticul,
-                        title: product.title,
-                        brand: product.brand,
-                        preview: product.preview,
-                        price: product.price,
-                        sizes: {}
-                    };
+                    id: product.id,
+                    articul: product.articul,
+                    factoryArticul: product.factoryArticul,
+                    title: product.title,
+                    brand: product.brand,
+                    preview: product.preview,
+                    price: product.price,
+                    sizes: {}
+                };
             };
 
             $scope.createNewProductConfirm = function(){

@@ -188,5 +188,5 @@ app.controller('BestsellerItemController',
                             }
                         }
                     });
-        }
-}]);
+            }
+        }]);
