@@ -11,8 +11,9 @@ try {
 
 	$APIService = new API($host);
 
-	$APIService->setMethod('POST');
-
+	$APIService->setMethod('GET');
+    print_r($host);
+    print_r($_REQUEST); exit;
 	$response = $APIService->setURL(http_build_query($_REQUEST))->call();
 
 

@@ -350,12 +350,13 @@
                         'currencyId'    :   order.currencyId
                     };
 
-                    RestFactory.request(API.ORDERCREATE,"POST", params).then(function(responseOrder) {
+                    return RestFactory.request(API.ORDERCREATE,"POST", params).then(function(response) {
 
+                        console.log(response);
                             if(response.id) {
                                 var params = {
                                     'id'        :   parseInt(order.collection.id),
-                                    'orderId'   :   parseInt(responseOrder.id)
+                                    'orderId'   :   parseInt(response.id)
                                 };
 
                                 return RestFactory.request(API.ADDORDERTOCOLLECTION,"PUT", $.param(params));
@@ -369,91 +370,72 @@
                  */
                 productsCreate: function (data) {
 
-                    var products = [];
-                    //
-                    //products.push({
-                    //    id    :   1, // factory {product ID
-                    //    productId    :   234, // backend product ID
-                    //    orderId : 1,
-                    //    sizeId  : 2,
-                    //    count   : 3,
-                    //    price   : 343,
-                    //    articul : '23343',
-                    //    factoryArticul: '2323'
-                    //});
-                    //products.push({
-                    //    id    :   2, // factory product ID
-                    //    productId    :   234, // backend product ID
-                    //    orderId : 34,
-                    //    sizeId  : 1,
-                    //    count   : 34,
-                    //    price   : 343,
-                    //    articul : '23343',
-                    //    factoryArticul: '2323'
-                    //});
-                    //
-                    ////RestFactory.request(API.CREATEPRODUCTFACTORY,"POST",products);
-                    //return false;
-                    //var products = [];
-                    // To Backend
-                    //products.push({params : {
-                    //    'vendor_articul'    : 1,
-                    //    'cat_title'         : 'Product title',
-                    //    'brand_id'          : 0,
-                    //    'category'          : {
-                    //        0 : 0
-                    //    },
-                    //    'weight'            : 0,
-                    //    'cat_type'          : 0,
-                    //    'price'             : 0
-                    //}
-                    //});
-                    //
-                    //console.log('Products', products);
-                    //console.log('Products line', decodeURIComponent($.param(products)));
+                    // Query String to backend create product
+                    //+'?params[params][vendor_id]='+1+'
+                    // &params[params][vendor_articul]='+obj.factory_articul+'
+                    // &params[params][cat_title]=Test
+                    // &params[params][brand_id]='+1+'
+                    // &params[params][category]='+1+'
+                    // &params[params][weight]='+0+'
+                    // &params[params][price]='+obj.price+'
+                    // &params[params][status]=1
+                    //RestFactory.request(API.PRODUCTSCREATE+'?'+Object.toQueryString(products), "GET");
 
-                    //angular.forEach(data, function(value, index) {
-                    //
-                    //    products.push({params : {
-                    //            'vendor_articul'    : 1,
-                    //            'cat_title'         : 'Product title',
-                    //            'brand_id'          : 0,
-                    //            'category'          : {
-                    //                0 : 0
-                    //            },
-                    //            'weight'            : 0,
-                    //            'cat_type'          : 0,
-                    //            'price'             : 0
-                    //        }
-                    //    });
-                    //});
+                    return RestFactory.request('/testing/mocks/products.json', "GET").then(function(backend) {
 
+                        if (backend.result) {
+                            var response = JSON.parse(backend.result);
 
-                    //BACK END Product Create
+                            if (response.hasOwnProperty('products')) {
 
-                    products.push({params : {
-                        'vendor_articul'    : 1,
-                        'cat_title'         : 'Product title',
-                        'brand_id'          : 0,
-                        'category'          : {
-                            0 : 0
-                        },
-                        'weight'            : 0,
-                        'cat_type'          : 0,
-                        'price'             : 0
-                    }
+                                // Good Job!
+                                var products = [];
+
+                                //if (data.items.length == Object.keys(response.products).length) {
+
+                                    // Compared front <-> backend created products
+
+                                    angular.forEach(data.items, function (frontendProduct) {
+
+                                        angular.forEach(frontendProduct.sizes, function (size) {
+                                            var tmp = {};
+                                            tmp.id = frontendProduct.catalogueProduct.id,
+                                            tmp.articul =   (function() {
+                                                return _.pluck(_.filter(response.products, function(backProduct) {
+
+                                                    // compare products
+                                                    if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
+                                                        return backProduct.articul;
+                                                    }
+                                                }), 'articul').toString();
+                                            })(frontendProduct.catalogueProduct);
+
+                                            tmp.productId = (function() {
+                                                return _.pluck(_.filter(response.products, function(backProduct) {
+
+                                                    // compare products
+                                                    if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
+                                                        return backProduct.id;
+                                                    }
+                                                }), 'id').toString();
+
+                                            })(frontendProduct.catalogueProduct);
+
+                                            tmp.sizeId  =   size.id;
+                                            tmp.count   =   size.count;
+                                            tmp.price   =   frontendProduct.catalogueProduct.price;
+                                            tmp.orderId =   data.collection.orderId;
+                                            tmp.factoryArticul =   frontendProduct.catalogueProduct.articul;
+
+                                            products.push(tmp);
+                                        });
+                                    });
+
+                                    return RestFactory.request(API.CREATEPRODUCTFACTORY,"POST", products);
+                                //}
+                            }
+                        }
                     });
-
-                    //var params = {
-                    //    'buyerId' :   data.buyerId,
-                    //    'factoryId' :   data.collection.factoryId,
-                    //    'type'  :    data.type.id,
-                    //    'currencyId' :   data.currencyId
-                    //};
-
-                    return RestFactory.request(API.PRODUCTSCREATE, "POST", products);
-                    return false;
-
                 }
             };
         }]);

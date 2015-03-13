@@ -92,7 +92,6 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             });
         };
 
-        
     }
 ]);
 
@@ -277,7 +276,23 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
             console.log('Order Response create', response);
 
             if(response.id) {
-                CollectionService.productsCreate($rootScope.order.items);
+
+                CollectionService.productsCreate($rootScope.order).then(function(response) {
+
+                    if(response) {
+
+                        $modalInstance.close();
+
+                        messageCenterService.add('success', 'Order successfuly created', { timeout: 3000 });
+
+                        $timeout(function() {
+                            $location.path("buyer/collection");
+                        }, 2000);
+                    }
+                    else {
+                        messageCenterService.add('danger', 'Order create failed', { timeout: 3000 });
+                    }
+                });
             }
             else {
                 messageCenterService.add('danger', 'Order does not created', { timeout: 3000 });
@@ -357,13 +372,13 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
 /**
  * Get collection checkout card
  */
-app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService',
-        function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService) {
+app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService', '$timeout', '$location',
+        function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService, $timeout, $location) {
 
             // set title
             $rootScope.documentTitle = 'Collection Checkout Card #'+$routeParams.collectionId;
 
-            $scope.productsHeader = [
+            $scope.tableHeader = [
                 { name: "preview", title: 'Preview' },
                 { name: "articul", title: 'Articul' },
                 { name: "name", title: 'Name' },
@@ -449,16 +464,17 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
 
                         $rootScope.order.collection = collection;
 
-                        console.log('Order', $rootScope.order);
-
                         // add items to collection
                         if(_.isUndefined(product)) {
                             $rootScope.order.items = $rootScope.items;
                         }
                         else {
-                            var i = CollectionService.compareProduct($rootScope.items, product.catalogueProduct)
+                            var i = CollectionService.compareProduct($rootScope.items, product.catalogueProduct);
+                            $rootScope.order.items = [];
                             $rootScope.order.items.push($rootScope.items[i]);
                         }
+
+                        console.log('Order', $rootScope.order);
 
                         if(_.isNull($rootScope.order.collection.orderId)) {
                             // Create new order
@@ -466,8 +482,20 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                         }
                         else {
                             // Add to existing order $rootScope.order.collection.orderId
-                            CollectionService.productsCreate($rootScope.order.items);
+                            CollectionService.productsCreate($rootScope.order).then(function(response) {
 
+                                if(response) {
+
+                                    messageCenterService.add('success', 'Order successfuly created', { timeout: 3000 });
+
+                                    $timeout(function() {
+                                        $location.path("buyer/collection");
+                                    }, 2000);
+                                }
+                                else {
+                                    messageCenterService.add('danger', 'Order create failed', { timeout: 3000 });
+                                }
+                            });
                         }
                     }
                     else {

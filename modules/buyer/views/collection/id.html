@@ -18,8 +18,8 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th class="sorting sort-desc" ng-repeat="item in productsHeader" ng-click="sortReorder(productsHeader.name, $event)"
-                        ng-class="{'sort-asc':item.sort>0,'sort-desc':item.sort<0}"><a href="">
+                    <th class="sorting sort-desc" ng-repeat="headerRow in tableHeader" ng-click="sortReorder(headerRow.name, $event)"
+                        ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">
                         {{item.title}}</a>
                     </th>
                 </tr>
