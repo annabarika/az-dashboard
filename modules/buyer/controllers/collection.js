@@ -174,7 +174,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
                     $scope.step--;
                 }
                 else{
-                    $location.path('/');
+                    $location.path('/buyer/collection');
                 }
             }
         };
