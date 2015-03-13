@@ -1,7 +1,7 @@
 var config = {
 	API: {
-		host:"http://azimuth.me/api/",
-		key: 'test'
+        host:"http://localhost:7888/api/",
+        key: 'test'
 	},
     monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 };
