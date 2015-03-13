@@ -118,11 +118,6 @@ class API {
 		curl_setopt_array($this->getHandle(), $options );
 		$result = curl_exec($this->getHandle());
 
-        print $result;
-        if($result === false)
-        {
-            echo 'Ошибка curl: ' . curl_error($result);
-        } exit;
 		if(curl_errno($this->getHandle())){
 			throw new \Exception(curl_error($this->getHandle()));
 		}

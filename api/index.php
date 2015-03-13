@@ -33,7 +33,7 @@ try {
 				}
 
 				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'http://arrow.b.compass/catalogue/loadfiles');
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].'/catalogue/loadfiles');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_POST, 1);
 				curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);

@@ -381,7 +381,9 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 if(_.isUndefined(response) == false) {
 
                     $rootScope.items = CollectionService.extractProducts(response);
-
+                    if(_.isEmpty($rootScope.items)) {
+                        messageCenterService.add('warning', 'Products not found in this collection', { timeout: 3000 });
+                    }
                     console.log('Collections items', $rootScope.items);
                 }
             });
@@ -413,7 +415,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                         messageCenterService.add('success', 'Product row successfuly updated', { timeout: 3000 });
                     }
                     else {
-                        messageCenterService.add('error', 'Error update', { timeout: 3000 });
+                        messageCenterService.add('danger', 'Error update', { timeout: 3000 });
                     }
                 });
             };

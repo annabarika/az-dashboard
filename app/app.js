@@ -1,7 +1,7 @@
 var config = {
 	API: {
         host:"http://lex.f.azimuth/api/",
-        imagehost:"http://arrow.b.compass",
+        imagehost:"http://lex.b.compass",
 		key: 'test'
 	},
     monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]

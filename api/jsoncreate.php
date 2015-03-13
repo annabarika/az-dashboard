@@ -4,7 +4,6 @@
 #phpinfo();
 require __DIR__.'/config.php';
 require __DIR__.'/API.php';
-//'uml.maggadda.dev95.ru'
 
 try {
 
