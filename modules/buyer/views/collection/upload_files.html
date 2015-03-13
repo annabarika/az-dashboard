@@ -18,19 +18,13 @@
             <div class="pa-md">
                 <div class="row">
                     <div class="col-sm-2 col-md-2" ng-repeat="img in photo">
-                        <!-- thumbnail -->
-                        <div class="thumbnail"  >
-                            <p>{{img.name}}</p>
-                            <!--<img src="/assets/images/avatar/avatar9.jpg" style="height:120px;">-->
-                            <img ng-src="{{imagePath}}{{item.path}}" style="height:120px;">
-                            <div class="caption">
-                                <h4 class="ellipsis mb-xs"></h4>
-                                <!--<div class="progress progress-sm nm">
-                                    <div class="progress-bar"></div>
-                                </div>-->
-                            </div>
+
+                        <div class="thumbnail">
+                            <img file-preview="img" style="height:120px;"/>
                         </div>
-                        <!--/ thumbnail -->
+
+
+
                     </div>
 
                 </div>

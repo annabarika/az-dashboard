@@ -19,7 +19,8 @@ var config = {
 		"ui.bootstrap",
 		"services",
 		"modules.buyer",
-        'MessageCenterModule'
+        'MessageCenterModule',
+		"ang-drag-drop"
 	])
 
 		.config(function ($routeProvider, $locationProvider, $httpProvider) {

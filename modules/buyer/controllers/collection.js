@@ -132,31 +132,35 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
         /* Getting collection */
         $rootScope.documentTitle = "Create New Collection";
-        /*$('#sort1, #sort2, #sort3, #sort4').sortable({
-         connectWith: ".sort",
-         opacity: 0.5,
-         dropOnEmpty: true
-         }).disableSelection();*/
+
+        $scope.dropSuccessHandler = function($event,index,object){
+
+            object.photos.splice(index,1);
+
+            if(object.photos.length==0){
+
+                angular.forEach($scope.items,function(item,i){
+                    if(item.$$hashKey==object.$$hashKey){
+
+                        $scope.items.splice(i,1);
+                    }
+                })
+            }
+        };
+
+        $scope.onDrop = function($event,$data,array){
+            array.push($data);
+        };
 
         $scope.upload=function(){
             fileinput = document.getElementById("fileUpload");
             fileinput.click();
 
         };
-        /*var readAsDataURL = function (file, scope) {
-            var deferred = $q.defer();
-
-            var reader = getReader(deferred, scope);
-            reader.readAsDataURL(file);
-
-            return deferred.promise;
-        };*/
-
 
         $scope.back=function(){
 
             if($scope.step==2){
-                console.log("finish",$scope.step);
                 $scope.step=0;
                 for(i=0;i<$scope.stepIcons.length;i++){
                     $scope.stepIcons[i].classList.remove('active');
@@ -194,7 +198,14 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
                 CollectionService.uploadFiles($rootScope.photo).success(function(data){
 
                     if(_.isArray(data)){
-                        $scope.items=data;
+                        $scope.items=[];
+
+                        angular.forEach(data,function(value,index){
+                            this.push({
+                                photos:[value]
+                            })
+                        },$scope.items);
+
                         $scope.imagePath = CollectionService.getImagePath();
                         $scope.step++;
 

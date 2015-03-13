@@ -132,13 +132,16 @@
                     angular.forEach(data,function(value,i){
 
                         sizes=value.sizes.split(/[\s,]+/);
-
+                        var photos=[];
+                        angular.forEach(value.photos,function(img){
+                            this.push(img.id);
+                        },photos);
                         //console.log(sizes);
                         var product={
                             articul:value.article,
                             price:value.price,
                             collectionId:collection.id,
-                            photos:[value.id],
+                            photos:photos,
                             sizes:sizes,
                             currencyId:5,
                             factoryId:parseInt(collection.factoryId),
@@ -148,7 +151,7 @@
                         this.push(product);
 
                     },array);
-                    //console.log("this",array);
+                    console.log("this",array);
                     return array;
                 },
 

@@ -13,16 +13,14 @@
         <tbody>
         <tr ng-repeat="item in items">
             <td>
-                <!--<ul id="sort1" class="sort" ng-repeat="photo in item.photo track by $index">-->
-                <!--<li>-->
-                <!--<img class="thumbnail sm" src={{photo}} draggable>-->
-                <!--</li>-->
-                <!--</ul>-->
-                {{item.path}}
                 <div class="media np">
-                    <div class="media-left">
-                                <span class="img-wrapper img-rounded">
-                                    <img ng-src="{{imagePath}}{{item.path}}" >
+                    <div class="media-left" ng-repeat="img in item.photos track by $index">
+                                <span class="img-wrapper img-rounded"
+                                      ui-draggable="true"
+                                      ui-on-Drop="onDrop($event,$data,item.photos)"
+                                      drag="img"
+                                      on-drop-success="dropSuccessHandler($event,$index,item)">
+                                    <img ng-src="{{imagePath}}{{img.path}}" >
                                 </span>
                     </div>
                 </div>
