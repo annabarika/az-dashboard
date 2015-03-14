@@ -1,6 +1,11 @@
 (function(){
 
-    angular.module("services.collections", [])
+    angular.module("services.collections",['LocalStorageModule'])
+
+        .config(['localStorageServiceProvider', function(localStorageServiceProvider){
+            localStorageServiceProvider.setPrefix('collections');
+            localStorageServiceProvider.setStorageType('localStorage');
+        }])
 
         // create config API ROUTES
         .constant('API', (function () {
@@ -13,8 +18,16 @@
                 FACTORYCOLLECTIONS: config.API.host+"catalogue-collection/load/factoryId/",
                 CREATECOLLECTION:   config.API.host+"catalogue-collection/create",
                 LOADFILES       :   config.API.host+'catalogue/loadfiles',
+                LOADPRODUCTS    :   config.API.host+'catalogue-collection/add-collection-product',
+                CANCELPRODUCT   :   config.API.host+'catalogue-collection/delete-collection-product/',
+                CANCELCOLLECTION   : config.API.host+'catalogue-collection/cancel/',
                 LOADSIZES       :   config.API.host+'size/load',
-                LOADPRODUCTS    :   config.API.host+'catalogue-collection/add-collection-product'
+                LOADORDERTYPES  :   config.API.host+'order-type/load/',
+                ORDERCREATE     :   config.API.host+'order/create',
+                PRODUCTSCREATE  :   config.API.host+'jsoncreate.php',
+                PRODUCTUPDATE   :   config.API.host+'catalogue/update',
+                ADDORDERTOCOLLECTION  :   config.API.host+'catalogue-collection/add-order-collection',
+                CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row'
             };
         })())
 
@@ -24,13 +37,16 @@
             return {
                 NEW    :   "/modules/buyer/views/collection/choose_factory.html",
                 CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
-                ADDSIZE:   "/modules/buyer/views/collection/add_size.html"
+                ADDSIZE:   "/modules/buyer/views/collection/add_size.html",
+                ADDORDER:   "/modules/buyer/views/collection/add_order.html",
+                CANCEL_COLLECTION :   "/modules/buyer/views/collection/ask_collection.html",
+                CANCEL_PRODUCT :   "/modules/buyer/views/collection/ask_product.html"
             };
 
         })())
 
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', 'messageCenterService', '$modal',"$http",
-            function(API, TEMPLATE, RestFactory, messageCenterService, $modal,$http) {
+        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', '$modal', '$http',
+            function(API, TEMPLATE, RestFactory, $modal, $http) {
 
             return {
                 
@@ -73,9 +89,8 @@
                             if(factory.id == value.factoryId) {
                                 value.factoryName = factory.name;
                             }
-
-                            collections.push(value);
                         });
+                        collections.push(value);
                     });
 
                     return collections;
@@ -186,11 +201,65 @@
                         angular.forEach(first, function(collections, index) {
 
                             angular.forEach(collections, function(product) {
+
+                                // assign sizes count to product
+                                if(product.hasOwnProperty('sizes') && _.isEmpty(product.sizes) == false) {
+                                    angular.forEach(product.sizes, function(value, index) {
+
+                                        product.sizes[index].count = '0';
+                                    });
+                                }
+
                                 res.push(product);
                             });
                         });
                     }
                     return res;
+                },
+
+                /**
+                 * Cancel collection
+                 */
+                cancelCollection: function (collectionId) {
+
+                    return RestFactory.request(API.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
+                },
+
+                /**
+                 * Delete product
+                 */
+                deleteProduct: function (collectionId, productId) {
+
+                    var url = API.CANCELPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
+
+                    return RestFactory.request(url, 'DELETE');
+                },
+
+                /**
+                 * Save product
+                 */
+                saveProduct: function (product) {
+
+                    var params = {
+                        'id' : product.catalogueProduct.id,
+                        'articul' : product.catalogueProduct.articul,
+                        'name'    : product.catalogueProduct.name,
+                        'price'   : product.catalogueProduct.price,
+                        'currencyId' : product.currency.id,
+                        'sizes'     :   (function() {
+                                var sizes = [];
+                                angular.forEach(product.sizes, function(value, index){
+                                    sizes.push({
+                                        id : value.id,
+                                        name : value.name
+                                    })
+                                });
+
+                            return sizes;
+                        })(product)
+                    };
+
+                    return RestFactory.request(API.PRODUCTUPDATE, 'PUT', $.param(params));
                 },
 
                 /**
@@ -213,6 +282,15 @@
                     return RestFactory.request(API.LOADSIZES);
                 },
 
+                /**
+                 * Load types
+                 *
+                 * @returns {*}
+                 */
+                loadOrderTypes: function () {
+
+                    return RestFactory.request(API.LOADORDERTYPES);
+                },
 
                 /**
                  *  Show Modal window
@@ -221,16 +299,14 @@
                  * @param data
                  * @returns {*}
                  */
-                showModal : function(path,data){
-                    // console.log("data",data);
-                    var modal=$modal.open({
-                        templateUrl:TEMPLATE[path],
-                        controller:"ModalController"
+                showModal : function(path) {
+
+                    var modal= $modal.open({
+                        templateUrl : TEMPLATE[path],
+                        controller : "ModalController"
                     });
                     return modal;
                 },
-
-
 
                 createCollection : function(factoryId){
                     var data={
@@ -240,6 +316,7 @@
 
                     return RestFactory.request(API.CREATECOLLECTION,"POST",data);
                 },
+
                 /**
                  *
                  * @param photo
@@ -262,26 +339,104 @@
                 },
 
                 /**
-                 * Delete collection
+                 * Create order
                  */
-                deleteCollection: function (collectionId) {},
+                orderCreate: function (order) {
+
+                    var params = {
+                        'buyerId'       :   order.buyerId,
+                        'factoryId'     :   order.collection.factoryId,
+                        'type'          :   order.type.id,
+                        'currencyId'    :   order.currencyId
+                    };
+
+                    return RestFactory.request(API.ORDERCREATE,"POST", params).then(function(response) {
+
+                        console.log(response);
+                            if(response.id) {
+                                var params = {
+                                    'id'        :   parseInt(order.collection.id),
+                                    'orderId'   :   parseInt(response.id)
+                                };
+
+                                return RestFactory.request(API.ADDORDERTOCOLLECTION,"PUT", $.param(params));
+                            }
+                            else return false;
+                    });
+                },
 
                 /**
-                 * Delete product
+                 * Create order
                  */
-                deleteProduct: function (productId) {},
+                productsCreate: function (data) {
 
-                /**
-                 * Checkout collection position
-                 */
-                checkoutPosition: function (productId) {},
+                    // Query String to backend create product
+                    //+'?params[params][vendor_id]='+1+'
+                    // &params[params][vendor_articul]='+obj.factory_articul+'
+                    // &params[params][cat_title]=Test
+                    // &params[params][brand_id]='+1+'
+                    // &params[params][category]='+1+'
+                    // &params[params][weight]='+0+'
+                    // &params[params][price]='+obj.price+'
+                    // &params[params][status]=1
+                    //RestFactory.request(API.PRODUCTSCREATE+'?'+Object.toQueryString(products), "GET");
 
-                /**
-                 * Checkout collection
-                 */
-                checkoutCollection: function (collectionId) {}
+                    return RestFactory.request('/testing/mocks/products.json', "GET").then(function(backend) {
 
+                        if (backend.result) {
+                            var response = JSON.parse(backend.result);
 
+                            if (response.hasOwnProperty('products')) {
+
+                                // Good Job!
+                                var products = [];
+
+                                //if (data.items.length == Object.keys(response.products).length) {
+
+                                    // Compared front <-> backend created products
+
+                                    angular.forEach(data.items, function (frontendProduct) {
+
+                                        angular.forEach(frontendProduct.sizes, function (size) {
+                                            var tmp = {};
+                                            tmp.id = frontendProduct.catalogueProduct.id,
+                                            tmp.articul =   (function() {
+                                                return _.pluck(_.filter(response.products, function(backProduct) {
+
+                                                    // compare products
+                                                    if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
+                                                        return backProduct.articul;
+                                                    }
+                                                }), 'articul').toString();
+                                            })(frontendProduct.catalogueProduct);
+
+                                            tmp.productId = (function() {
+                                                return _.pluck(_.filter(response.products, function(backProduct) {
+
+                                                    // compare products
+                                                    if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
+                                                        return backProduct.id;
+                                                    }
+                                                }), 'id').toString();
+
+                                            })(frontendProduct.catalogueProduct);
+
+                                            tmp.sizeId  =   size.id;
+                                            tmp.count   =   size.count;
+                                            tmp.price   =   frontendProduct.catalogueProduct.price;
+                                            tmp.orderId =   data.collection.orderId;
+                                            tmp.factoryArticul =   frontendProduct.catalogueProduct.articul;
+
+                                            products.push(tmp);
+                                        });
+                                    });
+
+                                    return RestFactory.request(API.CREATEPRODUCTFACTORY,"POST", products);
+                                //}
+                            }
+                        }
+                    });
+                }
             };
         }]);
 })();

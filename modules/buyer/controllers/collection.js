@@ -6,10 +6,6 @@ var app = angular.module("modules.buyer.collection", []);
 app.controller('CollectionsController', ['$scope','$rootScope','CollectionService', '$location',
     function ($scope, $rootScope, CollectionService, $location) {
 
-        CollectionService.loadSizes().then(function(response){
-            $rootScope.all_sizes=response;
-        });
-
         // set title
         $rootScope.documentTitle = "Collection";
 
@@ -49,6 +45,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
                 CollectionService.getCollections().then(function(response) {
 
                     $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+                    console.log('All collections', $rootScope.collections);
 
                 });
             }
@@ -73,7 +70,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
         /*
          * Add new collection*/
         $scope.newCollection = function(){
-            var modalInstance=CollectionService.showModal('NEW',$scope.factories);
+            var modalInstance = CollectionService.showModal('NEW',$scope.factories);
 
             modalInstance.result.then(function(factory){
 
@@ -95,14 +92,12 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             });
         };
 
-        
-    }]
-);
+    }
+]);
 
 /**
- * Add new products, create collection controllers
+ * Upload photos controller
  */
-
 app.controller("UploadController",['$scope','$rootScope','$location','CollectionService',"$modal",
     function ($scope, $rootScope, $location, CollectionService,$modal) {
         var fileinput;
@@ -198,7 +193,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
             if($scope.step==0){
 
                 CollectionService.uploadFiles($rootScope.photo).success(function(data){
-
+                    console.log("upload",data);
                     if(_.isArray(data)){
                         $scope.items=[];
 
@@ -217,7 +212,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
             if($scope.step==1){
 
-                $scope.products=CollectionService.buildProductsArray($scope.items,$rootScope.collection,$rootScope.all_sizes);
+                $scope.products=CollectionService.buildProductsArray($scope.items,$rootScope.collection, $rootScope.all_sizes);
                 console.log($scope.products);
 
                 if(_.isEmpty($scope.products)== false){
@@ -253,18 +248,109 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
 }]);
 
-app.controller("ModalController",function($scope,$rootScope,CollectionService,$location,$modalInstance){
+/**
+ * Modal window controller
+ */
+app.controller("ModalController",function($scope,$rootScope,CollectionService,$modalInstance, $routeParams, $location, messageCenterService, $timeout){
 
-    $scope.cancel=function(){
+    $scope.cancel = function(){
         $modalInstance.dismiss();
     };
-    $scope.chooseFactory=function(factory){
+
+    /**
+     * Chose factory
+     * @param factory
+     */
+    $scope.chooseFactory = function(factory){
         $modalInstance.close(factory);
     };
-    $scope.chooseCollection=function(collection){
+
+    /**
+     * Check out order from compass
+     *
+     * @param order
+     */
+    $scope.checkOut = function(order) {
+
+        CollectionService.orderCreate(order).then(function(response) {
+
+            console.log('Order Response create', response);
+
+            if(response.id) {
+
+                CollectionService.productsCreate($rootScope.order).then(function(response) {
+
+                    if(response) {
+
+                        $modalInstance.close();
+
+                        messageCenterService.add('success', 'Order successfuly created', { timeout: 3000 });
+
+                        $timeout(function() {
+                            $location.path("buyer/collection");
+                        }, 2000);
+                    }
+                    else {
+                        messageCenterService.add('danger', 'Order create failed', { timeout: 3000 });
+                    }
+                });
+            }
+            else {
+                messageCenterService.add('danger', 'Order does not created', { timeout: 3000 });
+            }
+        });
+    };
+
+    /**
+     * Apply collection canceled (deleted)
+     */
+    $scope.applyCancelCollection = function() {
+
+        CollectionService.cancelCollection($routeParams.collectionId).then(function(response) {
+
+            if(response) {
+
+                $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+                messageCenterService.add('success', 'The collection has been successfully removed', { timeout: 2000 });
+
+                $timeout(function() {
+                    $location.path("buyer/collection");
+                }, 2000);
+            }
+            else {
+                messageCenterService.add('danger', 'Failed', { timeout: 3000 });
+            }
+        });
+
+        $modalInstance.close();
+    };
+
+    /**
+     * Apply product canceled (deleted)
+     */
+    $scope.applyDeleteProduct = function() {
+
+        CollectionService.deleteProduct($routeParams.collectionId, $rootScope.productId).then(function(response) {
+
+            if(response.hasOwnProperty('status') && _.isUndefined(response.status) === false) {
+
+                $rootScope.items.splice($rootScope.row, 1);
+
+                messageCenterService.add('success', 'Product have been removed from existing collection', { timeout: 3000 });
+            }
+            else {
+                messageCenterService.add('danger', 'Failed', { timeout: 3000 });
+            }
+        });
+
+        $modalInstance.close();
+    };
+
+    $scope.chooseCollection = function(collection){
         $modalInstance.close(collection);
     };
-    $scope.createNew=function(){
+
+    $scope.createNew = function(){
 
         CollectionService.createCollection($rootScope.factoryId).then(function(response){
 
@@ -274,22 +360,26 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$l
 
             });
     };
-    $scope.chooseSize=function(size){
+
+    $scope.chooseSize=function(size,count){
+
+        size.count=count;
         $modalInstance.close(size);
+
     }
 
 });
 
 /**
- * Get collection card
+ * Get collection checkout card
  */
-app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService',
-        function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService) {
+app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService', '$timeout', '$location',
+        function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService, $timeout, $location) {
 
             // set title
-            $rootScope.documentTitle = 'Collection Card #'+$routeParams.collectionId;
+            $rootScope.documentTitle = 'Collection Checkout Card #'+$routeParams.collectionId;
 
-            $scope.productsHeader = [
+            $scope.tableHeader = [
                 { name: "preview", title: 'Preview' },
                 { name: "articul", title: 'Articul' },
                 { name: "name", title: 'Name' },
@@ -299,31 +389,135 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 { name: "manage", title: 'Manage' },
             ];
 
+            // Get collection card
             CollectionService.getCollectionCard($routeParams.collectionId).then(function(response) {
 
-                $scope.items = [], $scope.imagePath = CollectionService.getImagePath();
+                $rootScope.items = [], $scope.imagePath = CollectionService.getImagePath();
 
                 if(_.isUndefined(response) == false) {
 
-                    $scope.items = CollectionService.extractProducts(response);
+                    $rootScope.items = CollectionService.extractProducts(response);
+                    if(_.isEmpty($rootScope.items)) {
+                        messageCenterService.add('warning', 'Products not found in this collection', { timeout: 3000 });
+                    }
+                    console.log('Collections items', $rootScope.items);
                 }
             });
 
+            // Load scope sizes
+            CollectionService.loadSizes().then(function(response){
+                $rootScope.all_sizes=response;
+            });
 
+            //Cancel collection
+            $scope.cancelCollection = function(){
+                CollectionService.showModal("CANCEL_COLLECTION");
+            };
 
+            // Delete product row
+            $scope.deleteProduct = function(productId, row) {
+
+                $rootScope.productId = productId;
+                $rootScope.row = row;
+                CollectionService.showModal("CANCEL_PRODUCT");
+            };
+
+            // Delete product row
+            $scope.saveProduct = function(product) {
+
+                CollectionService.saveProduct(product).then(function(response) {
+
+                    if(response.catalogueProduct) {
+                        messageCenterService.add('success', 'Product row successfuly updated', { timeout: 3000 });
+                    }
+                    else {
+                        messageCenterService.add('danger', 'Error update', { timeout: 3000 });
+                    }
+                });
+            };
+
+            // Add product(s) to order
+            $scope.addToOrder = function(product) {
+
+                // load order types
+                CollectionService.loadOrderTypes().then(function(response) {
+                    $rootScope.all_types = response;
+                    var collection = _.first(_.filter($rootScope.collections, function(collection){
+
+                        // Find current collection
+                        if(collection.id == $routeParams.collectionId) {
+                            for (var first in collection) {
+                                return collection;
+                            }
+                        }
+                    }));
+
+                    if(!_.isEmpty(collection)) {
+
+                        $rootScope.order = {};
+
+                        //@TODO BuyerId need to be defined
+                        $rootScope.order.buyerId = 1;
+
+                        var index = _.first($rootScope.items);
+                        $rootScope.order.currencyId = (index.hasOwnProperty('currency'))
+                            ? index.currency.id : 5;
+
+                        $rootScope.order.collection = collection;
+
+                        // add items to collection
+                        if(_.isUndefined(product)) {
+                            $rootScope.order.items = $rootScope.items;
+                        }
+                        else {
+                            var i = CollectionService.compareProduct($rootScope.items, product.catalogueProduct);
+                            $rootScope.order.items = [];
+                            $rootScope.order.items.push($rootScope.items[i]);
+                        }
+
+                        console.log('Order', $rootScope.order);
+
+                        if(_.isNull($rootScope.order.collection.orderId)) {
+                            // Create new order
+                            CollectionService.showModal("ADDORDER");
+                        }
+                        else {
+                            // Add to existing order $rootScope.order.collection.orderId
+                            CollectionService.productsCreate($rootScope.order).then(function(response) {
+
+                                if(response) {
+
+                                    messageCenterService.add('success', 'Order successfuly created', { timeout: 3000 });
+
+                                    $timeout(function() {
+                                        $location.path("buyer/collection");
+                                    }, 2000);
+                                }
+                                else {
+                                    messageCenterService.add('danger', 'Order create failed', { timeout: 3000 });
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        messageCenterService.add('danger', 'You have not selected collection', { timeout: 3000 });
+                    }
+                });
+            },
+
+            //Add sizes to product
             $scope.addSize = function(product) {
                 var flag=true;
 
-                var i = CollectionService.compareProduct($scope.items, product);
+                var i = CollectionService.compareProduct($rootScope.items, product);
 
-                var modalInstance = CollectionService.showModal("ADDSIZE");
-                modalInstance.result.then(function(size){
+                CollectionService.showModal("ADDSIZE").result.then(function(size){
                     if(_.isUndefined(i) == false) {
 
-                        if(!$scope.items[i].hasOwnProperty('sizes')) {
-                            $scope.items[i].sizes=[];
+                        if(!$rootScope.items[i].hasOwnProperty('sizes')) {
+                            $rootScope.items[i].sizes=[];
                         }
-                        angular.forEach($scope.items[i].sizes,function(value) {
+                        angular.forEach($rootScope.items[i].sizes,function(value) {
 
                             if(value.id==size.id) {
                                 messageCenterService.add('warning', 'Size already added', { timeout: 3000 });
@@ -331,48 +525,10 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                             }
                         });
                         if(flag){
-                            $scope.items[i].sizes.push(size);
+                            $rootScope.items[i].sizes.push(size);
                         }
                     }
-
                 });
-            };
-
-            $scope.addToOrder = function(product) {
-
-                var i = CollectionService.compareProduct($scope.items, product);
-
-                if(_.isUndefined(product) == false) {
-                    console.log(product);
-                }
-                else {
-                    console.log(product);
-                }
-            };
-            $scope.updateCollection = function(product){
-
-                var i = CollectionService.compareProduct($scope.items, product);
-
-                if(_.isUndefined(product) == false) {
-
-                }
-                else {
-
-                }
-            };
-            $scope.deleteCollection = function(product){
-
-                var i = CollectionService.compareProduct($scope.items, product);
-
-                if(_.isUndefined(product) == false) {
-
-                }
-                else {
-
-                }
-            };
-
+            }
         }
 ]);
-
-

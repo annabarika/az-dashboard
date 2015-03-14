@@ -1,14 +1,13 @@
 <!-- start box layout -->
-<div class="box-layout" data-ng-controller="CollectionCardController">
+<div class="box-layout">
     <div class="col-md-12 bdr-r bg-auto height-auto">
         <!-- start page header -->
         <div class="page-header">
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-6 va-m">
-                    <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Checkout</span></button>
-                    <button class="btn btn-info" ng-click="updateCollection()"><span class="fa fa-check">Update collection</span></button>
-                    <button class="btn btn-red" ng-click="deleteCollection()"><span class="fa fa-check">Delete</span></button>
+                    <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Add to order</span></button>
+                    <button class="btn btn-red" ng-click="cancelCollection()"><span class="fa fa-check">Delete</span></button>
                 </div>
             </div>
             <!--/ basic info heading -->
@@ -19,8 +18,8 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th class="sorting" ng-repeat="item in productsHeader"
-                        ng-class="{'sort-asc':item.sort>0,'sort-desc':item.sort<0}"><a href="">
+                    <th class="sorting sort-desc" ng-repeat="headerRow in tableHeader" ng-click="sortReorder(headerRow.name, $event)"
+                        ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">
                         {{item.title}}</a>
                     </th>
                 </tr>
@@ -38,34 +37,49 @@
                         </div>
                     </td>
                     <td>
-                        {{product.catalogueProduct.articul}}
+                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" value="{{product.catalogueProduct.articul}}" />
                     </td>
                     <td>
-                        {{product.catalogueProduct.name}}
+                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.name" value="{{product.catalogueProduct.name}}" />
+
                     </td>
                     <td>
-                        {{product.catalogueProduct.price}} ¥
+                        <input type="text" class="sm form-control" ng-model="product.catalogueProduct.price" value="{{product.catalogueProduct.price}}" />
+                         {{product.currency.ISOCode}}
                     </td>
                     <td>
                         {{product.factory.name}}
                     </td>
                     <td>
-                        <ul class="media-list mb-sm sm">
-                            <li ng-repeat="size in product.sizes" class="media">
-                                <p class="mt-5">{{size.name}}</p>
-                            </li>
-                            <li>
-                                <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)"><i class="fa fa-plus"></i> add size</button>
-                            </li>
-                            </li>
-                        </ul>
-
+                        <table>
+                            <tr>
+                                <td>
+                                    <ul class="media-list mb-sm sm">
+                                        <li ng-repeat="size in product.sizes" class="media">
+                                            {{size.name}}
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul ng-if="product.sizes[0]" class="media-list mb-sm sm">
+                                        <li ng-repeat="size in product.sizes" class="media">
+                                            <input type="text" class="sm form-control" ng-model="size.count"/>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)"><i class="fa fa-plus"></i> add size</button>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td>
                         <div class="btn-group">
-                        <button class="btn btn-green" ng-click="addToOrder(product)"><span class="fa fa-check">Checkout row</span></button>
-                        <button class="btn btn-info" ng-click="updateCollection(product)"><span class="fa fa-check">Update row</span></button>
-                        <button class="btn btn-red" ng-click="deleteCollection(product)"><span class="fa fa-check">Delete row</span></button>
+                        <button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check">Add to order</span></button>
+                        <button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>
+                        <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check">Delete</span></button>
                         </div>
                     </td>
                 </tr>
