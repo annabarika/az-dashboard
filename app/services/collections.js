@@ -1,11 +1,6 @@
 (function(){
 
-    angular.module("services.collections",['LocalStorageModule'])
-
-        .config(['localStorageServiceProvider', function(localStorageServiceProvider){
-            localStorageServiceProvider.setPrefix('collections');
-            localStorageServiceProvider.setStorageType('localStorage');
-        }])
+    angular.module("services.collections",[])
 
         // create config API ROUTES
         .constant('API', (function () {
