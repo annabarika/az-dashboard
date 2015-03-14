@@ -159,6 +159,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
                 $scope.step=0;
                 $rootScope.photo=undefined;
                 for(i=0;i<$scope.stepIcons.length;i++){
+
                     $scope.stepIcons[i].classList.remove('active');
                 }
             }
@@ -212,14 +213,11 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
             if($scope.step==1){
 
                 $scope.products=CollectionService.buildProductsArray($scope.items,$rootScope.collection, $rootScope.all_sizes);
-                console.log($scope.products);
 
                 if(_.isEmpty($scope.products)== false){
 
                     CollectionService.loadProducts($scope.products).then(
                         function(response){
-
-                            console.log("loading prod",response);
 
                             $scope.count=response.length;
                             $scope.step++;
@@ -375,6 +373,12 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
 app.controller('CollectionCardController', ['$scope','$rootScope','CollectionService', '$routeParams', 'messageCenterService', '$timeout', '$location',
         function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService, $timeout, $location) {
 
+            if(_.isUndefined($rootScope.collections)){
+                $location.path("buyer/collection");
+            }
+
+
+
             // set title
             $rootScope.documentTitle = 'Collection Checkout Card #'+$routeParams.collectionId;
 
@@ -385,7 +389,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 { name: "price", title: 'Price' },
                 { name: "factory", title: 'Factory' },
                 { name: "sizes", title: 'Sizes' },
-                { name: "manage", title: 'Manage' },
+                { name: "manage", title: 'Manage' }
             ];
 
             // Get collection card
@@ -436,7 +440,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
             };
 
             // Add product(s) to order
-            $scope.addToOrder = function(product) {
+            $scope.addToOrder = function(product,position) {
 
                 // load order types
                 CollectionService.loadOrderTypes().then(function(response) {
@@ -489,8 +493,9 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                                     messageCenterService.add('success', 'Order successfuly created', { timeout: 3000 });
 
                                     $timeout(function() {
-                                        $location.path("buyer/collection");
-                                    }, 2000);
+
+                                        $rootScope.items.splice(position, 1);
+                                    }, 1000);
                                 }
                                 else {
                                     messageCenterService.add('danger', 'Order create failed', { timeout: 3000 });
