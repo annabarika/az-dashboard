@@ -77,6 +77,9 @@
                 filterCollections : function(response, factories) {
 
                     var collections = [];
+
+                    console.log('Collections', response);
+
                     angular.forEach(response, function(value) {
 
                         angular.forEach(factories, function(factory) {
@@ -88,7 +91,10 @@
                         collections.push(value);
                     });
 
-                    return collections;
+                    // using an iteratee function to sort collection by dateCreate
+                    var sorted = _.sortBy(collections, 'createDate').reverse();
+
+                    return sorted;
                 },
 
                 /**
