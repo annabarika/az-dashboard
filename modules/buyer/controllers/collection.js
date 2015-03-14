@@ -164,6 +164,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
                 $scope.step=0;
                 $rootScope.photo=undefined;
                 for(i=0;i<$scope.stepIcons.length;i++){
+
                     $scope.stepIcons[i].classList.remove('active');
                 }
             }
