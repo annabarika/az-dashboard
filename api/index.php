@@ -1,11 +1,6 @@
 <?php
-error_reporting(2047);
-#phpinfo();
 require __DIR__.'/config.php';
 require __DIR__.'/API.php';
-//'uml.maggadda.dev95.ru'
-#echo file_get_contents('http://compass-buyer.local/order/load');
-#die();
 
 try {
 	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['host'];
@@ -13,14 +8,8 @@ try {
 	$APIService = new API($host);
 	$APIService->setMethod('GET');
 
-	if(!isset($_GET['request'])){
-		$request = $_SERVER['REDIRECT_URL'];
-	}else{
-		$request = $_GET['_request'];
-		unset($_GET['_request']);
-	}
-	$request = str_replace( 'api/', '', $request);
-
+	$request = str_replace( 'api/', '', $_GET['_request']);
+	unset($_GET['_request']);
 	unset($_GET['host']);
 
 	if($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -28,41 +17,34 @@ try {
 	}
 
 	else if($_SERVER['REQUEST_METHOD'] == 'POST') {
-		if (!empty($_FILES)){
+		if (!empty($_FILES)) {
+			$post = [];
 
-			foreach($_FILES as $key=>$file) {
-				$exec = "curl -i -X POST -H \"Content-Type: multipart/form-data\" -F \"file=@{$file['tmp_name']};filename={$file['name']};id=4\" http://lex.b.compass/order/loadfiles";
-				echo $exec;
-				echo system($exec);
+			foreach ($_FILES as $files) {
+				$file_count = count($files['name']);
 
-/*				$request = curl_init('http://lex.b.compass/order/loadfiles/');
-				curl_setopt($request, CURLOPT_POST, true);
-				curl_setopt($request, CURLOPT_SAFE_UPLOAD, true);
+				for($i = 0; $i < $file_count; $i++) {
+					$file = $_SERVER['DOCUMENT_ROOT'].'tmp/'.$files['name'][$i];
 
-				curl_setopt(
-					$request,
-					CURLOPT_POSTFIELDS,
-					array(
-						'file' => '@' . $file['tmp_name']
-					));
-				curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
-				print_r(curl_exec($request));
-				curl_close($request);*/
+					if(move_uploaded_file($files['tmp_name'][$i], $file)){
+						$post['file['.$i.']'] = new CURLFile($file, $files['type'][$i]);
+					}
+				}
+
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].'/catalogue/loadfiles');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
+
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+	//			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+
+				$response = curl_exec($ch);
+				curl_close($ch);
+				echo $response;
+				die;
 			}
-die();
-			/*$files = [];
-			require __DIR__.'/CURLBot.php';
-
-			$bot = new CurlBot();
-			foreach($_FILES as $key=>$file) {
-				print_r($file);
-				$file['name'] = $file['tmp_name'];
-				$bot->submitForm('http://lex.b.compass/order/loadfiles', array(), $file);
-				print_r($bot->getPageHeader());
-				print_r($bot->getPageBody());
-			}
-
-			die();*/
 		}else {
 
 			$APIService->setMethod('POST');
@@ -85,9 +67,9 @@ die();
 	}
 
 	$response = $APIService->setURL($request)->call();
-
 	echo json_encode($response);
 
 }catch( \Exception $e ){
 	echo $e->getMessage();
 }
+

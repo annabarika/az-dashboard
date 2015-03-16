@@ -106,7 +106,6 @@ class API {
 	 * @return mixed
 	 */
 	public function call(){
-
 		$options = array(
 			CURLOPT_URL => $this->host.$this->url."?".$this->params,
 			CURLOPT_CUSTOMREQUEST => $this->method, // GET POST PUT PATCH DELETE HEAD OPTIONS
@@ -114,15 +113,14 @@ class API {
 		if( $this->method == 'POST' || $this->method == 'PUT'){
 			$options[CURLOPT_POSTFIELDS] = http_build_query($this->data);
 		}
+
 		$options = $options + $this->options;
 		curl_setopt_array($this->getHandle(), $options );
-
 		$result = curl_exec($this->getHandle());
-
+        echo $result; exit;
 		if(curl_errno($this->getHandle())){
 			throw new \Exception(curl_error($this->getHandle()));
 		}
 		return json_decode($result, true);
-
 	}
 }

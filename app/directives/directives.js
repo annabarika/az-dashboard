@@ -176,54 +176,6 @@
     }]);
 //widget sidebar
 
-    //drag
-    app.directive('ngDraggable', function($document, $window){
-        function makeDraggable(scope, element, attr) {
-            var startX = 0;
-            var startY = 0;
-
-            // Start with a random pos
-            var x = Math.floor((Math.random() * 500) + 40);
-            var y = Math.floor((Math.random() * 360) + 40);
-
-            element.css({
-                position: 'absolute',
-                cursor: 'pointer',
-                top: y + 'px',
-                left: x + 'px'
-            });
-
-            element.on('mousedown', function(event) {
-                event.preventDefault();
-
-                startX = event.pageX - x;
-                startY = event.pageY - y;
-
-                $document.on('mousemove', mousemove);
-                $document.on('mouseup', mouseup);
-            });
-
-            function mousemove(event) {
-                y = event.pageY - startY;
-                x = event.pageX - startX;
-
-                element.css({
-                    top: y + 'px',
-                    left: x + 'px'
-                });
-            }
-
-            function mouseup() {
-                $document.unbind('mousemove', mousemove);
-                $document.unbind('mouseup', mouseup);
-            }
-        }
-        return {
-            link: makeDraggable
-        };
-    });
-
-
   /* file Uploader directive*/
     app.directive("fileInput",["$parse",function($parse){
 
@@ -238,7 +190,23 @@
             }
         }
     }]);
-
+    app.directive('filePreview', function (FileReader) {
+        return {
+            restrict: 'A',
+            scope: {
+                filePreview: '='
+            },
+            link: function (scope, element, attrs) {
+                scope.$watch('filePreview', function (filePreview) {
+                    if (filePreview && Object.keys(filePreview).length !== 0) {
+                        FileReader.readAsDataUrl(filePreview).then(function (result) {
+                            element.attr('src', result);
+                        });
+                    }
+                });
+            }
+        };
+    });
     app.directive('numbersOnly', function(){
         return {
             require: 'ngModel',
