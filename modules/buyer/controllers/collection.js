@@ -14,14 +14,28 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             { name: "id", title: 'ID' },
             { name: "name", title: 'Collection' },
             { name: "factoryName",title:"Factory"},
+            { name: "statusName",   title:"Status"},
             { name: "createDate", title: 'Create date'}
         ];
         $scope.filteredFactory = [];
 
+        // get statuses to filter
+        CollectionService.getCollectionStatuses().then(function(response) {
+
+            var statuses = [];
+            for( var i in response ){
+
+                statuses.push({ id: response[i].statusId, name: response[i].name });
+            }
+
+            $rootScope.statuses = statuses;
+
+        });
 
         // Watch factory filters
-        $scope.$watch('filter',function(filter) {
+        $scope.$watchCollection('filter', function(filter) {
 
+            //console.log(filter);
             if(_.isUndefined(filter) == false) {
 
                 if(_.isEmpty(filter) == false) {
@@ -35,7 +49,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
                     $scope.filteredFactory = _.uniq(fFilter, true);
                     CollectionService.getCollections('/factoryId/'+$scope.filteredFactory.join()).then(function(response) {
 
-                        $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+                        $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
 
                     });
                 }
@@ -44,7 +58,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
                 // get all collections
                 CollectionService.getCollections().then(function(response) {
 
-                    $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+                    $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
                     console.log('All collections', $rootScope.collections);
                 });
             }
@@ -61,6 +75,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
             $rootScope.factories = factories;
 
         });
+
 
         $scope.edit = function(){
             $location.path('/buyer/collection/id/'+$rootScope.row.id)
@@ -306,7 +321,7 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
 
             if(response) {
 
-                $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories);
+                $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
                 messageCenterService.add('success', 'The collection has been successfully removed', { timeout: 2000 });
 
                 $timeout(function() {

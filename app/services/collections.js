@@ -22,7 +22,8 @@
                 PRODUCTSCREATE  :   config.API.host+'jsoncreate.php',
                 PRODUCTUPDATE   :   config.API.host+'catalogue/update',
                 ADDORDERTOCOLLECTION  :   config.API.host+'catalogue-collection/add-order-collection',
-                CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row'
+                CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row',
+                LOADSTATUSES          : config.API.host+'status/load/type/factoryCatalogue'
             };
         })())
 
@@ -56,6 +57,16 @@
                 },
 
                 /**
+                 * Get collection statuses
+                 *
+                 * @returns {*}
+                 */
+                getCollectionStatuses: function () {
+
+                    return RestFactory.request(API.LOADSTATUSES);
+                },
+
+                /**
                  * Get All Collections
                  *
                  * @param params
@@ -74,7 +85,7 @@
                  * @param factories
                  * @returns {Array}
                  */
-                filterCollections : function(response, factories) {
+                filterCollections : function(response, factories, statuses) {
 
                     var collections = [];
 
@@ -86,6 +97,13 @@
 
                             if(factory.id == value.factoryId) {
                                 value.factoryName = factory.name;
+                            }
+                        });
+
+                        angular.forEach(statuses, function(status) {
+
+                            if(status.id == value.status) {
+                                value.statusName = status.name;
                             }
                         });
                         collections.push(value);
