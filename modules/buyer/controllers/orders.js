@@ -38,6 +38,7 @@ app.controller('OrderListController',
 
             /* Loading orders */
 			$rootScope.documentTitle = "Orders";
+            $rootScope.hideHeader = 'showHeader';
 			$scope.tableHeader = [
 				{ name: "id", title: 'ID' },
 				{ name: "type", title: 'Type' },

@@ -74,7 +74,6 @@ app.config(function($routeProvider){
 });
 
 app.run( function($rootScope, $location) {
-
 	$rootScope.$on( "$routeChangeStart", function() {
 		if ( $rootScope.row == null ) {
 
