@@ -27,6 +27,11 @@
   },
   {
     "title":"Application",
-    "icon":"ai ai-email"
+    "icon":"ai ai-email",
+    "menu":
+            [
+              {"title":"Test1"},
+              {"title":"Test2"}
+            ]
   }
 ]
