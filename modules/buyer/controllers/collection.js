@@ -69,7 +69,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
         /*
          * Add new collection*/
         $scope.newCollection = function(){
-            var modalInstance = CollectionService.showModal('NEW',$scope.factories);
+            var modalInstance = CollectionService.showModal('NEW',"sm");
 
             modalInstance.result.then(function(factory){
 
@@ -81,7 +81,7 @@ app.controller('CollectionsController', ['$scope','$rootScope','CollectionServic
 
                 });
 
-                var modalInstance=CollectionService.showModal("CHOOSE");
+                var modalInstance=CollectionService.showModal("CHOOSE",'sm');
 
                 modalInstance.result.then(function(collection){
 
@@ -109,6 +109,9 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
         if($rootScope.collection==undefined){
             $location.path("/buyer/collection");
         }
+        else{
+            $rootScope.documentTitle = "Collection name: "+$rootScope.collection.name;
+        }
 
         $scope.collectionTemplates = [
             "modules/buyer/views/collection/upload_files.html",
@@ -125,7 +128,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
         });
 
         /* Getting collection */
-        $rootScope.documentTitle = "Create New Collection";
+
 
         $scope.dropSuccessHandler = function($event,index,object){
 
@@ -219,6 +222,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
                         function(response){
 
                             $scope.count=response.length;
+
                             $scope.step++;
                         }
                     )
