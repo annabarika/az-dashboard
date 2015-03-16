@@ -703,3 +703,11 @@ tr.hold{
     left: 0px;
 
 }
+
+.hideHeader .navbar{
+    display: none;
+}
+
+.hideHeader #app-header.navbar ~ #app-content > .content-body{
+    padding-top: 0!important;
+}

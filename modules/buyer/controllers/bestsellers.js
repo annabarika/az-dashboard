@@ -11,6 +11,8 @@ app.controller('BestsellersController',
 
             $scope.calendar = {};
             $rootScope.bestsellers = [];
+            $rootScope.hideHeader = 'hideHeader';
+         
 
             $rootScope.documentTitle = "Bestsellers calendar";
 
