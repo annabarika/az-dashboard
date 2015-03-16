@@ -4,6 +4,6 @@ logs
 
 vendor
 vendor-dist
-api/config.php
 
-app/app.js
+api/config.php
+app/config.js

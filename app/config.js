@@ -1,17 +1,7 @@
-angular.module('BaseConfig', [
-
-]).service('load', function($rootScope){
-	var config = {
-		API: "http://azimuth/proxy/",
-		URLS: {
-			APP: "/app/",
-			MODULES: "/modules/",
-			WIDGETS: "/app/widgets/"
-		}
-	};
-	$rootScope.config = config;
-
-	return $rootScope.config;
-
-
-});
+var config = {
+    API: {
+        host:"http://azimuth/api/",
+        key: 'test'
+    },
+    monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+};
