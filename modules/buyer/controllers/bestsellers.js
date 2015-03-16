@@ -120,7 +120,8 @@ app.controller('BestsellerItemController',
                         $scope.order = response.order;
                         $scope.factory = response.factory;
 
-                        $scope.sizes = {add: [{size: 'XS', count: 1}], L: {count: 2}, M: {count: 3}};
+                        //$scope.sizes = {add: [{size: 'XS', count: 1}], L: {count: 2}, M: {count: 3}};
+                        $scope.sizes = {};
                         $rootScope.documentTitle = $scope.product.brand + ' (' + $scope.product.articul + ')';
 
                     },
