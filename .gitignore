@@ -2,8 +2,5 @@
 npm-debug.log
 logs
 
-vendor
-vendor-dist
-
 api/config.php
 app/config.js
