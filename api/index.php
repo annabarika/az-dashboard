@@ -19,24 +19,20 @@ try {
 	else if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (!empty($_FILES)) {
 			$post = [];
-
 			foreach ($_FILES as $files) {
 				$file_count = count($files['name']);
 
 				for($i = 0; $i < $file_count; $i++) {
-					$file = $_SERVER['DOCUMENT_ROOT'].'tmp/'.$files['name'][$i];
-
+					$file = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$files['name'][$i];
 					if(move_uploaded_file($files['tmp_name'][$i], $file)){
 						$post['file['.$i.']'] = new CURLFile($file, $files['type'][$i]);
 					}
 				}
-
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].'/catalogue/loadfiles');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($ch, CURLOPT_POST, 1);
 				curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
-
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 	//			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 
