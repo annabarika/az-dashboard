@@ -12,7 +12,7 @@
     <script src="/vendor/jquery/jquery-ui.js"></script>
     <script src="/vendor/jquery/calendar.js"></script>
     <script src="/vendor/jquery/fullcalendar.js"></script>
-    
+
     <script src="/vendor/velocity.min.js"></script>
     <script src="/vendor/less.min.js"></script>
     <script src="/vendor/lodash/lodash.js"></script>
@@ -51,71 +51,71 @@
 </head>
 
 <body ng-controller="MainController">
-    <section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }" class="ng-scope">
-        <sidebar ng-class="classes[index % classes.length]">111</sidebar>
+<section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }" class="ng-scope">
+    <sidebar ng-class="classes[index % classes.length]">111</sidebar>
 
-        <header id="app-header" class="navbar"></header>
+    <header id="app-header" class="navbar"></header>
 
-        <footer id="app-footer" class="ng-scope"></footer>
+    <footer id="app-footer" class="ng-scope"></footer>
 
-        <section id="app-content" class="clearfix ng-scope">
-            <!-- start: indicator -->
-            <div class="spinner-wrapper"><div data-indicator=""></div></div>
-            <!--/ end: indicator -->
+    <section id="app-content" class="clearfix ng-scope">
+        <!-- start: indicator -->
+        <div class="spinner-wrapper"><div data-indicator=""></div></div>
+        <!--/ end: indicator -->
 
-            <!-- start: content-body -->
-            <!-- uiView:  -->
-            <div class="content-body slide-down ng-scope">
-                <div class="page-header ng-scope">
-                    <div class="box-layout">
-                        <div class="col-sm-6 va-m">
-                            <h1>{{documentTitle}}</h1>
-                        </div>
-                        <div class="col-sm-6 va-m">
-                            <ol class="breadcrumb pull-right-sm mb-0">
-                                <li><a href="#">Buying office</a></li>
-                                <li class="active">Orders</li>
-                            </ol>
-                        </div>
+        <!-- start: content-body -->
+        <!-- uiView:  -->
+        <div class="content-body slide-down ng-scope">
+            <div class="page-header ng-scope">
+                <div class="box-layout">
+                    <div class="col-sm-6 va-m">
+                        <h1>{{documentTitle}}</h1>
+                    </div>
+                    <div class="col-sm-6 va-m">
+                        <ol class="breadcrumb pull-right-sm mb-0">
+                            <li><a href="#">Buying office</a></li>
+                            <li class="active">Orders</li>
+                        </ol>
                     </div>
                 </div>
-                <!-- start: box layout -->
-                <ng-view></ng-view>
-                <!--/ end: box layout -->
             </div>
-            <!--/ end: content-body -->
-
-        </section>
-        <!--/ end: application content -->
+            <!-- start: box layout -->
+            <ng-view></ng-view>
+            <!--/ end: box layout -->
+        </div>
+        <!--/ end: content-body -->
 
     </section>
+    <!--/ end: application content -->
 
-    <!-- Application level JS -->
-    <script src="/app/app.js"></script>
-    <script src="/app/config.js"></script>
-    <script src="/app/models/navigation.js"></script>
-    <script src="/app/directives/directives.js"></script>
-    <script src="/app/filters/filters.js"></script>
-    <!--Loading services-->
-    <script src="/app/services/services.js"></script>
-    <script src="/app/services/rest.js"></script>
-    <script src="/app/services/cargo.js"></script>
-    <script src="/app/services/collections.js"></script>
-    <script src="/app/services/filereader.js"></script>
+</section>
 
-    <!--Loading widgets-->
-    <script src="/app/widgets/widgets.js"></script>
-    <script src="/app/widgets/table.js"></script>
-    <script src="/app/widgets/modal.js"></script>
-    <script src="/app/widgets/autocomplete.js"></script>
-    <!-- Module level JS -->
-    <script src="/modules/buyer/app.js"></script>
-    <script src="/modules/buyer/controllers/orders.js"></script>
-    <script src="/modules/buyer/controllers/payments.js"></script>
-    <script src="/modules/buyer/controllers/bestsellers.js"></script>
-    <script src="/modules/buyer/controllers/collection.js"></script>
-    <script src="/modules/buyer/controllers/cargo.js"></script>
-    <!--
-    <!--/ Module level JS -->
+<!-- Application level JS -->
+<script src="/app/app.js"></script>
+<script src="/app/config.js"></script>
+<script src="/app/models/navigation.js"></script>
+<script src="/app/directives/directives.js"></script>
+<script src="/app/filters/filters.js"></script>
+<!--Loading services-->
+<script src="/app/services/services.js"></script>
+<script src="/app/services/rest.js"></script>
+<script src="/app/services/cargo.js"></script>
+<script src="/app/services/collections.js"></script>
+<script src="/app/services/filereader.js"></script>
+
+<!--Loading widgets-->
+<script src="/app/widgets/widgets.js"></script>
+<script src="/app/widgets/table.js"></script>
+<script src="/app/widgets/modal.js"></script>
+<script src="/app/widgets/autocomplete.js"></script>
+<!-- Module level JS -->
+<script src="/modules/buyer/app.js"></script>
+<script src="/modules/buyer/controllers/orders.js"></script>
+<script src="/modules/buyer/controllers/payments.js"></script>
+<script src="/modules/buyer/controllers/bestsellers.js"></script>
+<script src="/modules/buyer/controllers/collection.js"></script>
+<script src="/modules/buyer/controllers/cargo.js"></script>
+<!--
+<!--/ Module level JS -->
 </body>
 </html>
