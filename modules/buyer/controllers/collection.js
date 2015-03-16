@@ -33,10 +33,12 @@ app.controller('NewCollectionController',
 
 
 
-
+            // show header and max-sidebar
+            $rootScope.hideHeader = 'showHeader';
 
             /* Getting collection */
             $rootScope.documentTitle = "Collection";
+
             /*$('#sort1, #sort2, #sort3, #sort4').sortable({
                 connectWith: ".sort",
                 opacity: 0.5,

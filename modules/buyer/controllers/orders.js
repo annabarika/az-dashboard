@@ -36,9 +36,11 @@ app.controller('OrderListController',
 
             $scope.newOrder={};
 
+            // show header and max-sidebar
+            $rootScope.hideHeader = 'showHeader';
             /* Loading orders */
 			$rootScope.documentTitle = "Orders";
-            $rootScope.hideHeader = 'showHeader';
+
 			$scope.tableHeader = [
 				{ name: "id", title: 'ID' },
 				{ name: "type", title: 'Type' },

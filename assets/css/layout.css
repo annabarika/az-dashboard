@@ -694,7 +694,78 @@ tr.hold{
 .hideHeader .navbar{
     display: none;
 }
-
+.hideHeader .sidebar-left{
+    left: 0;
+    width: 68px;
+    overflow: visible;
+    position: fixed;
+    float: left;
+    background-color: #243342;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(255, 255, 255, 0.55);
+    z-index: 1010;
+    top: 0;
+    bottom: 0;
+    -webkit-transition: -webkit-transform .3s ease;
+    -o-transition: -o-transform .3s ease;
+    transition: transform .3s ease;
+    -webkit-box-shadow: 3px 0 10px -3px rgba(0, 0, 0, 0.7);
+    box-shadow: 3px 0 10px -3px rgba(0, 0, 0, 0.7);
+}
+.hideHeader #app-header.navbar {
+    left: 68px;
+}
+.hideHeader .sidebar-header{
+    width: 68px!important;
+    padding: 0;
+    text-align: center;
+}
+.hideHeader .sidebar-header .brand > .brand-text{
+    display: none;
+}
+.hideHeader .nav-sidebar > .nav-group > .nav-submenu {
+    display: none;
+    width: 182px;
+    position: absolute;
+    top: 0;
+    left: 68px;
+    padding: 15px!important;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+.hideHeader .nav-sidebar > .nav-group > .nav-submenu > li:first-child {
+    padding-top: 0;
+}
+.hideHeader  .nav-sidebar > .nav-group > .nav-submenu > li:last-child {
+    padding-bottom: 0;
+}
+.hideHeader .nav-sidebar > .nav-group.hover > .nav-submenu,
+.hideHeader .nav-sidebar > .nav-group:hover > .nav-submenu {
+    display: block;
+}
+.hideHeader .nav-sidebar > .nav-heading, .hideHeader .nav-sidebar > .nav-group a.nav-toggle .text {
+    display: none;
+}
+.hideHeader .nav-sidebar > .nav-group a.nav-toggle {
+    padding-right: 0;
+    line-height: 46px;
+}
+.hideHeader .nav-sidebar > .nav-group a {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    text-decoration: none;
+    line-height: 28px;
+}
+.hideHeader .nav-sidebar > .nav-group a.nav-toggle .figure.figure-right {
+    display: none;
+}
 .hideHeader #app-header.navbar ~ #app-content > .content-body{
     padding-top: 0!important;
+}
+.hideHeader .sidebar-left ~ #app-content{
+    margin-left: 68px!important;
+}
+.hideHeader .sidebar-left ~ #app-footer {
+    left: 0;
 }

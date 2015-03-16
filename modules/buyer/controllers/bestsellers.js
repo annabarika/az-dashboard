@@ -11,8 +11,8 @@ app.controller('BestsellersController',
 
             $scope.calendar = {};
             $rootScope.bestsellers = [];
+            // hide header and min-sidebar
             $rootScope.hideHeader = 'hideHeader';
-
 
             $rootScope.documentTitle = "Bestsellers calendar";
 

@@ -16,6 +16,7 @@ app.controller('CargoController',
             $scope.$route = $route;
             $scope.$location = $location;
             $rootScope.documentTitle = 'Cargo management';
+            // show header and max-sidebar
             $rootScope.hideHeader = 'showHeader';
 
             $scope.cargoDocuments   = [];

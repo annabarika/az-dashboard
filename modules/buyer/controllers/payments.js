@@ -16,7 +16,8 @@ app.controller('PaymentListController',
 
 			$scope.$route = $route;
 			$scope.$location = $location;
-
+            // show header and max-sidebar
+            $rootScope.hideHeader = 'showHeader';
 			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
