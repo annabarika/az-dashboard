@@ -1,0 +1,59 @@
+<div>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Send cargo</h4>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <p>
+                Confirm the shipment please
+            </p>
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <td>
+                        <p class="form-inline">
+                            <label class="control-label">Cargo company</label>
+                            <select class="form-control pull-right" ng-model="cargo.logisticCompany"
+                                    ng-options="opt as opt.name for opt in logisticCompanies">
+                                <option value="">Choose factory</option>
+                            </select>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="form-inline">
+                            <label class="control-label">Cargo document</label>
+                            <input class="form-control pull-right" type="text" numbers-only ng-model="cargo.document">
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <p class="form-inline">
+                            <label class="control-label">Weight shipped (kg)</label>
+                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="cargo.incomeWeight">
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="form-inline">
+                            <label class="control-label">Places shipped</label>
+                            <input class="sm form-control pull-right" type="text" numbers-only ng-model="cargo.incomePlaces">
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="sendShipment()"><span class="fa fa-check"> Confirm sending</span></button>
+        <button type="button" class="btn btn-danger" ng-click="$close()"><span class="fa fa-times"> Cancel</span></button>
+    </div>
+</div>

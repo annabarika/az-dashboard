@@ -13,7 +13,7 @@
                         <div class="col-md-12">
                             <div class="pull-right">
                                 <div class="dataTables_filter">
-                                    <label>Search:<input type="search"  ng-model="searchText" class="" placeholder=""></label>
+                                    <label>Filter:<input type="search"  ng-model="searchText" class="" placeholder=""></label>
                                 </div>
                             </div>
                         </div>
@@ -39,11 +39,11 @@
                             <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
 
                                 <div class="media np" ng-if="headerRow.name=='photo'">
-                                    <!--<div class="media-left">
-                                      <span class="img-wrapper img-rounded">-->
-                                        <img ng-src="{{row.photo}}">
-                                     <!-- </span>
-                                    </div>-->
+                                    <div class="media-left">
+                                      <span class="img-wrapper img-rounded">
+                                        <img ng-src="{{row.photo}}"/>
+                                        </span>
+                                    </div>
                                 </div>
 
 

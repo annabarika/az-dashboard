@@ -11,6 +11,8 @@ app.controller('BestsellersController',
 
             $scope.calendar = {};
             $rootScope.bestsellers = [];
+            $rootScope.hideHeader = 'hideHeader';
+         
 
             $rootScope.documentTitle = "Bestsellers calendar";
 
@@ -58,7 +60,7 @@ app.controller('BestsellersController',
                         $rootScope.bestsellers = response;
 
                         for( var i in response){
-                            productId.push(response[i].productId);
+                            productId.push(response[i].id);
                         }
 
                         var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + productId.join(',');
@@ -188,5 +190,5 @@ app.controller('BestsellerItemController',
                             }
                         }
                     });
-        }
-}]);
+            }
+        }]);

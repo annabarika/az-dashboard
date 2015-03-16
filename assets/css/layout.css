@@ -233,7 +233,7 @@ body > #app-wrapper {
     color: rgba(0, 0, 0, 0.75);
 }
 #app-header.navbar .navbar-nocollapse .navbar-left {
-    float: left !important;
+    float: left;
 }
 #app-header.navbar .navbar-nocollapse .navbar-left .open .dropdown-menu {
     left: 0;
@@ -284,27 +284,25 @@ body > #app-wrapper {
         left: 68px;
     }
 }
-@media (max-width: 767px) {
+@media  (min-width: 480px) and (max-width: 1024px) {
     #app-header.navbar .navbar-nocollapse .navbar-left {
         float: right !important;
     }
     .csstransforms3d.sidebar-open-ltr.app-sidebar.sidebar-left {
-        -webkit-transform: translate3d(250px, 0, 0);
-        transform: translate3d(250px, 0, 0);
-        -webkit-transition: -webkit-transform .3s ease;
-        -o-transition: -o-transform .3s ease;
-        transition: transform .3s ease;
-        -webkit-box-shadow: 3px 0 10px -3px rgba(0, 0, 0, 0.7);
-        box-shadow: 3px 0 10px -3px rgba(0, 0, 0, 0.7);
         overflow: visible;
+        left: 0!important;
     }
     .no-csstransforms3d.sidebar-open-ltr.app-sidebar.sidebar-left {
-        left: 0;
+        left: 0!important;
         overflow: hidden;
         width: 0;
         border: none;
     }
+    .sidebar-left ~ #app-header.navbar, .sidebar-left.sidebar-left-collapse ~ #app-header.navbar, .sidebar-left {
+        left: 0!important;
+    }
 }
+
 .app-sidebar {
     position: fixed;
     z-index: 1010;
@@ -465,6 +463,11 @@ body > #app-wrapper {
         background-position: -2px 10px;
     }
 }
+@media (min-width: 767px) and (max-width: 1024px) {
+    .app-sidebar.sidebar-left {
+        overflow: visible;
+    }
+}
 #app-content {
     min-height: 985px;
     position: relative;
@@ -491,6 +494,11 @@ body > #app-wrapper {
     }
     .sidebar-left.sidebar-left-collapse ~ #app-content {
         margin-left: 68px;
+    }
+}
+@media (min-width: 767px) and (max-width: 1024px) {
+    .sidebar-left ~ #app-content, .sidebar-left.sidebar-left-collapse ~ #app-content {
+        margin-left: 0;
     }
 }
 #app-footer {
@@ -522,6 +530,11 @@ body > #app-wrapper {
     }
     .sidebar-left.sidebar-left-collapse  ~ #app-footer {
         left: 68px;
+    }
+}
+@media (min-width: 767px) and (max-width: 1024px) {
+    .sidebar-left  ~ #app-footer, .sidebar-left.sidebar-left-collapse  ~ #app-footer {
+        left: 0;
     }
 }
 .box-layout {
@@ -689,4 +702,12 @@ tr.hold{
     transition: left 1s;
     left: 0px;
 
+}
+
+.hideHeader .navbar{
+    display: none;
+}
+
+.hideHeader #app-header.navbar ~ #app-content > .content-body{
+    padding-top: 0!important;
 }

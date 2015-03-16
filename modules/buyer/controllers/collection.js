@@ -165,7 +165,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
 
             else{
                 if($scope.step>0) {
-                    //console.log($scope.step);
+                    console.log($scope.step);
                     $scope.step--;
                 }
                 else{
@@ -192,7 +192,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
             if($scope.step==0){
 
                 CollectionService.uploadFiles($rootScope.photo).success(function(data){
-                    //console.log("upload",data);
+                    console.log("upload",data);
                     if(_.isArray(data)){
                         $scope.items=[];
 
@@ -227,7 +227,7 @@ app.controller("UploadController",['$scope','$rootScope','$location','Collection
             }
 
             if($scope.step==2){
-                //console.log("this",$scope.step);
+                console.log("this",$scope.step);
             }
         };
         /**
@@ -270,7 +270,7 @@ app.controller("ModalController",function($scope,$rootScope,CollectionService,$m
 
         CollectionService.orderCreate(order).then(function(response) {
 
-            //console.log('Order Response create', response);
+            console.log('Order Response create', response);
 
             if(response.id) {
 
@@ -376,6 +376,8 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                 $location.path("buyer/collection");
             }
 
+
+
             // set title
             $rootScope.documentTitle = 'Collection Checkout Card #'+$routeParams.collectionId;
 
@@ -400,7 +402,7 @@ app.controller('CollectionCardController', ['$scope','$rootScope','CollectionSer
                     if(_.isEmpty($rootScope.items)) {
                         messageCenterService.add('warning', 'Products not found in this collection', { timeout: 3000 });
                     }
-                    //console.log('Collections items', $rootScope.items);
+                    console.log('Collections items', $rootScope.items);
                 }
             });
 
