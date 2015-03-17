@@ -1,122 +1,74 @@
-var app = angular.module("modules.buyer.bestsellers", []);
+var app = angular.module("modules.buyer.bestsellers", ['mwl.calendar']);
 
-app.controller('BestsellersController',
-    [
-        '$scope',
-        '$rootScope',
-        "$modal",
-        "$location",
-        "$route",
-        "RestFactory",
+/**
+ * Bestseller representation
+ */
+app.controller('BestsellersController', ['$scope', '$rootScope', "$modal", function ($scope, $rootScope, $modal) {
 
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory) {
+    // Startup setup
+    var currentYear = moment().year();
+    var currentMonth = moment().month();
+    $rootScope.documentTitle = "Bestsellers";
 
-            $scope.$route = $route;
-            $scope.$location = $location;
-            var url, data, method, header, length, array, year, month, monthBegin, monthEnd;
+    $scope.events = [
+        {
+            title: 'Event 1',
+            type: 'warning',
+            starts_at: new Date(currentYear,currentMonth,25,8,30),
+            ends_at: new Date(currentYear,currentMonth,25,9,30)
+        },
+        {
+            title: 'Event 2',
+            type: 'info',
+            starts_at: new Date(currentYear,currentMonth,19,7,30),
+            ends_at: new Date(currentYear,currentMonth,25,9,30)
+        },
+        {
+            title: 'This is a really long event title',
+            type: 'important',
+            starts_at: new Date(currentYear,currentMonth,25,6,30),
+            ends_at: new Date(currentYear,currentMonth,25,6,60)
+        },
+    ];
 
-            /* Getting payments */
-            $rootScope.documentTitle = "Bestsellers";
+    $scope.calendarView = 'month';
+    $scope.calendarDay = new Date();
 
-            $scope.months =
-            {
-                '01': 'January',
-                '02': 'Fabruary',
-                '03': 'March',
-                '04': 'April',
-                '05': 'May',
-                '06': 'June',
-                '07': 'July',
-                '08': 'August',
-                '09': 'September',
-                '10': 'October',
-                '11': 'November',
-                '12': 'December'
-            };
+    function showModal(action, event) {
+        $modal.open({
+            templateUrl: 'modalContent.html',
+            controller: function($scope, $modalInstance) {
+                $scope.$modalInstance = $modalInstance;
+                $scope.action = action;
+                $scope.event = event;
+            }
+        });
+    }
 
-            $scope.current_year = new Date().getFullYear();
+    $scope.eventClicked = function(event) {
+        showModal('Clicked', event);
+    };
 
-            $scope.changeYear = function (step) {
-                $scope.current_year = $scope.current_year + step;
-            };
+    $scope.eventEdited = function(event) {
+        showModal('Edited', event);
+    };
 
-            $scope.bestsellers = {};
+    $scope.eventDeleted = function(event) {
+        showModal('Deleted', event);
+    };
 
-            //url = config.API.host + "bestseller/load/status/1";
-            url=config.API.host+"bestseller/calendar/createDate/2015-02-01,2015-02-29";
-            RestFactory.request(url)
-                .then(function (response) {
-                    console.log("bests,load",response);
-                    /*if (response) {
-                        length = response.length;
+    $scope.setCalendarToToday = function() {
+        $scope.calendarDay = new Date();
+    };
 
-                        var tempArr = [];
-                        for (var i = 0; i < length; i++) {
-                            angular.forEach(response[i], function (value, key) {
-                                if (key == 'createDate') {
-                                    array = value.split("-");
-                                    year = array[0];
-                                    month = array[1];
-                                    tempArr.push({year: year, month: month, item: response[i]});
-                                }
-                            })
-                        }
-                        array = [];
-                        angular.forEach(tempArr, function (value, key) {
+    $scope.toggle = function($event, field, event) {
+        $event.preventDefault();
+        $event.stopPropagation();
 
-                            if ($scope.bestsellers[value.year] == undefined) {
+        event[field] = !event[field];
+    };
 
-                                $scope.bestsellers[value.year] = {
-                                    '01': [],
-                                    '02': [],
-                                    '03': [],
-                                    '04': [],
-                                    '05': [],
-                                    '06': [],
-                                    '07': [],
-                                    '08': [],
-                                    '09': [],
-                                    '10': [],
-                                    '11': [],
-                                    '12': []
-                                };
-                            }
-                            angular.forEach($scope.bestsellers[value.year], function (val, month) {
-                                if (month == value.month) {
-                                    val.push(value.item);
-                                }
-                            });
-
-                        });
-                        console.log($scope.bestsellers, $scope.current_year);
-                    }*/
-                });
-
-
-            $scope.currentMonth = function (monthName) {
-                $scope.current_month = monthName;
-
-                angular.forEach($scope.months, function (value, key) {
-                    if (value == monthName) {
-                        month = key;
-
-                    }
-                });
-                monthBegin = $scope.current_year + "-" + month + "-01";
-                monthEnd = $scope.current_year + "-" + month + "-31";
-                url = config.API.host + "bestseller/load-detailed/status/1/orderDate/" + monthBegin + "," + monthEnd;
-                console.log(url);
-                RestFactory.request(url)
-                    .then(function (response) {
-                        console.log(response);
-                        $scope.bests_orders = response;
-                        console.log($scope.bests_orders);
-
-                    }, function (error) {
-                        console.log(error)
-                    });
-            };
-        }]);
+}]);
 
 app.controller('BestsellerItemController',
     [

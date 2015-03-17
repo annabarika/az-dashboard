@@ -10,8 +10,7 @@
         "services",
         "modules.buyer",
         'MessageCenterModule',
-        "ang-drag-drop",
-        "mwl.calendar"
+        "ang-drag-drop"
     ])
 
         .config(function ($routeProvider, $locationProvider, $httpProvider) {
