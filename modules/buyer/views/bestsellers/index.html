@@ -1,6 +1,13 @@
-<div class="box-layout">
-
+<div class="box-layout" >
     <div  class="col-md-9 bg-white height-auto bdr-r-md">
+        <h2 class="text-center">{{ calendarControl.getTitle() }}</h2>
+        <div class="page-header text-center">
+            <div class="btn-group">
+                <button class="btn btn-primary" ng-click="calendarControl.prev()">&lt;</button>
+                <button class="btn btn-default" ng-click="setCalendarToToday()">Today</button>
+                <button class="btn btn-primary" ng-click="calendarControl.next()">&gt;</button>
+            </div>
+        </div>
         <div class="scroll">
             <mwl-calendar
                     calendar-events="events"
@@ -104,6 +111,72 @@
                                 234
                             </td>
                         </tr>
+                        <!-- <tr>
+                             <td class="text-center">
+                                 <div class="media np">
+                                     <div class="media-left">
+                                       <span class="img-wrapper img-rounded">
+                                         <img src="/assets/images/avatar/avatar9.jpg">
+                                       </span>
+                                     </div>
+                                 </div>
+                             </td>
+                             <td class="text-center">
+                                 <div class="media-body media-middle">
+                                     <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                                 </div>
+                             </td>
+                             <td class="text-center">
+                                 Signal
+                             </td>
+                             <td class="text-center">
+                                 234
+                             </td>
+                         </tr>
+                         <tr>
+                             <td class="text-center">
+                                 <div class="media np">
+                                     <div class="media-left">
+                                       <span class="img-wrapper img-rounded">
+                                         <img src="/assets/images/avatar/avatar9.jpg">
+                                       </span>
+                                     </div>
+                                 </div>
+                             </td>
+                             <td class="text-center">
+                                 <div class="media-body media-middle">
+                                     <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                                 </div>
+                             </td>
+                             <td class="text-center">
+                                 Signal
+                             </td>
+                             <td class="text-center">
+                                 234
+                             </td>
+                         </tr>
+                         <tr>
+                             <td class="text-center">
+                                 <div class="media np">
+                                     <div class="media-left">
+                                       <span class="img-wrapper img-rounded">
+                                         <img src="/assets/images/avatar/avatar9.jpg">
+                                       </span>
+                                     </div>
+                                 </div>
+                             </td>
+                             <td class="text-center">
+                                 <div class="media-body media-middle">
+                                     <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                                 </div>
+                             </td>
+                             <td class="text-center">
+                                 Signal
+                             </td>
+                             <td class="text-center">
+                                 234
+                             </td>
+                         </tr>-->
                         </tbody>
                     </table>
                 </div>
