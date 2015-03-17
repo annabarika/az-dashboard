@@ -175,7 +175,7 @@
                             collectionId:collection.id,
                             photos:photos,
                             sizes:sizes,
-                            currencyId:5,
+                            currencyId:1,
                             factoryId:parseInt(collection.factoryId),
                             name:"noname"
                         };
@@ -239,7 +239,7 @@
                  */
                 cancelCollection: function (collectionId) {
 
-                    return RestFactory.request(API.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
+                    return RestFactory.request(API.CANCELCOLLECTION, 'PUT', {'id' : collectionId} );
                 },
 
                 /**
@@ -378,8 +378,7 @@
                                     'id'        :   parseInt(order.collection.id),
                                     'orderId'   :   parseInt(response.id)
                                 };
-
-                                return RestFactory.request(API.ADDORDERTOCOLLECTION,"PUT", $.param(params));
+                                return RestFactory.request(API.ADDORDERTOCOLLECTION,"PUT", params );
                             }
                             else return false;
                     });

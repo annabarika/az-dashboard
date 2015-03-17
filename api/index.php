@@ -26,7 +26,7 @@ try {
 				$file_count = count($files['name']);
 
 				for($i = 0; $i < $file_count; $i++) {
-					$file = $_SERVER['DOCUMENT_ROOT'].'tmp/'.$files['name'][$i];
+					$file = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$files['name'][$i];
 
 					if(move_uploaded_file($files['tmp_name'][$i], $file)){
 						$post['file['.$i.']'] = new CURLFile($file, $files['type'][$i]);
@@ -58,7 +58,6 @@ try {
 	}
 	else if($_SERVER['REQUEST_METHOD'] == 'PUT') {
 		$params = json_decode(file_get_contents('php://input'), true);
-
 		$APIService->setMethod('PUT');
 		$APIService->setData($params);
 	}
