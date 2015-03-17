@@ -1,5 +1,13 @@
-<div class="box-layout" ng-controller="DatepickerCtrl">
+<div class="box-layout" >
     <div  class="col-md-9 bg-white height-auto bdr-r-md">
+        <h2 class="text-center">{{ calendarControl.getTitle() }}</h2>
+        <div class="page-header text-center">
+            <div class="btn-group">
+                <button class="btn btn-primary" ng-click="calendarControl.prev()">&lt;</button>
+                <button class="btn btn-default" ng-click="setCalendarToToday()">Today</button>
+                <button class="btn btn-primary" ng-click="calendarControl.next()">&gt;</button>
+            </div>
+        </div>
         <div class="scroll">
             <mwl-calendar
                     calendar-events="events"

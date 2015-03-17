@@ -31,7 +31,7 @@ app.controller('BestsellersController', ['$scope', '$rootScope', "$modal", funct
         },
     ];
 
-    $scope.calendarView = 'month';
+    $scope.calendarView = 'year';
     $scope.calendarDay = new Date();
 
     function showModal(action, event) {
