@@ -166,7 +166,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
 
         /* Getting collection */
-        $rootScope.documentTitle = "Create New Collection";
+
 
 
         $scope.dropSuccessHandler = function($event,index,object){

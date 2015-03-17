@@ -276,7 +276,7 @@
                         })(product)
                     };
 
-                    return RestFactory.request(API.PRODUCTUPDATE, 'PUT', $.param(params));
+                    return RestFactory.request(API.PRODUCTUPDATE, 'PUT', params);
                 },
 
                 /**
