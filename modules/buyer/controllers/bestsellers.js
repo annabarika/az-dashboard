@@ -9,7 +9,7 @@ app.controller('BestsellersController', ['$scope', '$rootScope', "$modal", funct
     var currentYear = moment().year();
     var currentMonth = moment().month();
     $rootScope.documentTitle = "Bestsellers";
-
+    $scope.current_year=currentYear;
     $scope.events = [
         {
             title: 'Event 1',
@@ -28,10 +28,10 @@ app.controller('BestsellersController', ['$scope', '$rootScope', "$modal", funct
             type: 'important',
             starts_at: new Date(currentYear,currentMonth,25,6,30),
             ends_at: new Date(currentYear,currentMonth,25,6,60)
-        },
+        }
     ];
-
-    $scope.calendarView = 'month';
+    $scope.viewer='year';
+    $scope.calendarView = $scope.viewer;
     $scope.calendarDay = new Date();
 
     function showModal(action, event) {
