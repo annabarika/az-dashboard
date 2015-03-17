@@ -1,73 +1,29 @@
-var app = angular.module("modules.buyer.bestsellers", ['mwl.calendar']);
+var app = angular.module("modules.buyer.bestsellers", []);
 
-/**
- * Bestseller representation
- */
-app.controller('BestsellersController', ['$scope', '$rootScope', "$modal", 'BestsellersService',
+// Bestseller's representation
+
+app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',
     function ($scope, $rootScope, $modal, BestsellersService) {
 
-        // Startup setup
-        $rootScope.documentTitle    = "Bestsellers";
-        $scope.calendarView         = "year";
-        $scope.calendarDay = new Date();
-        $scope.events               = [];
+            // Document header title
+            $rootScope.documentTitle = "Bestsellers";
 
-        BestsellersService.getCalendarData().then(function(response) {
+            // Get current state of date
+            $scope.currentYear = moment().year();
+            $scope.currentMonth = moment.utc(new Date()).format("MMMM");
 
-            $scope.events = BestsellersService.resolveCalendarData(response);
+            // Get numbered months
+            $scope.months = BestsellersService.getMonths();
 
-            console.log('Calendar data', $scope.events);
+            // Get bestsellers data
+            BestsellersService.getCalendarData().then(function(response) {
 
-        });
-
-
-    function showModal(action, event) {
-        $modal.open({
-            templateUrl: '/modules/buyer/views/bestsellers/test.html',
-            controller: function($scope, $modalInstance) {
-                $scope.$modalInstance = $modalInstance;
-                $scope.action = action;
-                $scope.event = event;
-
-                $scope.close=function(){
-                    $modalInstance.close();
-                };
-                $scope.cancel=function(){
-                    $modalInstance.dismiss();
-                }
-            }
-        });
+                $scope.bestsellers = BestsellersService.resolveCalendarData(response);
+                console.log('Bestsellers', $scope.bestsellers);
+            });
     }
+]);
 
-    $scope.monthClicked=function(event){
-        console.log(event);
-    };
-
-    $scope.eventClicked = function(event) {
-        showModal('Clicked', event);
-    };
-
-    $scope.eventEdited = function(event) {
-        showModal('Edited', event);
-    };
-
-    $scope.eventDeleted = function(event) {
-        $scope.calendarView='month';
-        //showModal('Deleted', event);
-    };
-
-    $scope.setCalendarToToday = function() {
-        $scope.calendarDay = new Date();
-    };
-
-    $scope.toggle = function($event, field, event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        event[field] = !event[field];
-    };
-
-}]);
 
 app.controller('BestsellerItemController',
     [

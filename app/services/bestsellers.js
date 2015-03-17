@@ -25,6 +25,15 @@
                 return  {
 
                     /**
+                     * Get months
+                     *
+                     * @returns {*}
+                     */
+                    getMonths : function() {
+                        return config.months;
+                    },
+
+                    /**
                      * Get calendar data by date range params
                      *
                      * @param dateRange
