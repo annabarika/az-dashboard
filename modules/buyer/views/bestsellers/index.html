@@ -30,6 +30,19 @@
                 </div>
             </div>
             <!-- end: panel -->
+            <mwl-calendar
+                    calendar-events="events"
+                    calendar-view="calendarView"
+                    calendar-current-day="calendarDay"
+                    calendar-control="calendarControl"
+                    calendar-event-click="eventClicked($event)"
+                    calendar-edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+                    calendar-delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+                    calendar-edit-event-click="eventEdited($event)"
+                    calendar-delete-event-click="eventDeleted($event)"
+                    calendar-auto-open="true"
+                    ></mwl-calendar>
+
         </div>
     </div>
     <div  class="col-md-3 bg-auto height-auto bdr-b-sm bdr-b-xs">
@@ -109,7 +122,7 @@
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">
-                                    <h5 class="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
+                                    <h5 cl ass="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
                                 </div>
                             </td>
                             <td class="text-center">
