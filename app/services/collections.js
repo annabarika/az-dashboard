@@ -23,7 +23,8 @@
                 PRODUCTUPDATE       :   config.API.host+'catalogue/update',
                 ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
                 CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
-                LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue'
+                LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue',
+                LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/"
             };
         })())
 
@@ -77,6 +78,11 @@
                     //var url = (_.isUndefined(params) == false) ? API.COLLECTIONS+params : API.COLLECTIONS;
 
                     return RestFactory.request(params);
+                },
+
+                getCurrentCollection:function(id){
+                    var url= API.LOADONECOLLECTION + id;
+                    return RestFactory.request(url);
                 },
 
                 /**
