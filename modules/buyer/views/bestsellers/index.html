@@ -1,35 +1,19 @@
 <div class="box-layout" ng-controller="DatepickerCtrl">
     <div  class="col-md-9 bg-white height-auto bdr-r-md">
         <div class="scroll">
-            <!-- start page header -->
-            <div class="page-header clearfix">
-                <div class="row ">
-                    <div class="col-md-12">
-                        <!--<span class="fc-header-title"><h2>2013</h2></span>-->
-                        <span class="fc-header-title">
-                           <h2><button class="btn btn-default" ng-click="changeYear(-1)"><i class="fa fa-chevron-left"></i></button>
-                               {{current_year}}
-                               <button class="btn btn-default" ng-click="changeYear(1)"><i class="fa fa-chevron-right"></i></button>
-                           </h2>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel fullcalendar box-layout">
-                <div  class="col-md-2 col-sm-2 fc" ng-repeat="(key,value) in bestsellers[current_year]">
-                    <p class="fc-widget-header">
-                        {{months[key]}}
-                    </p>
-                    <a class="fc-day-grid-event fc-event mr-5 ml-5" ng-click="currentMonth(months[key])">
-                        <!-- fc-event-success || fc-event-warning || fc-event-danger -->
-                        <div class="fc-content">
-                            <span class="fc-title pull-right">{{value.length}}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <!-- end: panel -->
+            <mwl-calendar
+                    calendar-events="events"
+                    calendar-view="calendarView"
+                    calendar-current-day="calendarDay"
+                    calendar-control="calendarControl"
+                    calendar-event-click="eventClicked($event)"
+                    calendar-edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+                    calendar-delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+                    calendar-edit-event-click="eventEdited($event)"
+                    calendar-delete-event-click="eventDeleted($event)"
+                    calendar-auto-open="true"
+                    >
+            </mwl-calendar>
         </div>
     </div>
     <div  class="col-md-3 bg-auto height-auto bdr-b-sm bdr-b-xs">
@@ -109,7 +93,7 @@
                             </td>
                             <td class="text-center">
                                 <div class="media-body media-middle">
-                                    <h5 class="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
+                                    <h5 cl ass="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
                                 </div>
                             </td>
                             <td class="text-center">

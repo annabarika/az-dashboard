@@ -44,12 +44,12 @@ app.controller('BestsellersController',
 
             $scope.bestsellers = {};
 
-            url = config.API.host + "bestseller/load/status/1";
-
+            //url = config.API.host + "bestseller/load/status/1";
+            url=config.API.host+"bestseller/calendar/createDate/2015-02-01,2015-02-29";
             RestFactory.request(url)
                 .then(function (response) {
                     console.log("bests,load",response);
-                    if (response) {
+                    /*if (response) {
                         length = response.length;
 
                         var tempArr = [];
@@ -91,7 +91,7 @@ app.controller('BestsellersController',
 
                         });
                         console.log($scope.bestsellers, $scope.current_year);
-                    }
+                    }*/
                 });
 
 
