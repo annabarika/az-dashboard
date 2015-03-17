@@ -710,7 +710,8 @@ angular.module('mwl.calendar')
       },
       controller: ["$scope", "$timeout", "$locale", "moment", function($scope, $timeout, $locale, moment) {
 
-        var self = this;
+
+          var self = this;
 
         this.titleFunctions = {};
 

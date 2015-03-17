@@ -6,52 +6,42 @@ var app = angular.module("modules.buyer.bestsellers", ['mwl.calendar']);
 app.controller('BestsellersController', ['$scope', '$rootScope', "$modal", 'BestsellersService',
     function ($scope, $rootScope, $modal, BestsellersService) {
 
-    // Startup setup
-    var currentYear = moment().year();
-    var currentMonth = moment().month();
-    $rootScope.documentTitle = "Bestsellers";
+        // Startup setup
+        $rootScope.documentTitle    = "Bestsellers";
+        $scope.calendarView         = "year";
+        $scope.calendarDay = new Date();
+        $scope.events               = [];
 
         BestsellersService.getCalendarData().then(function(response) {
 
-            console.log('Calendar data', response);
-            $scope.events = response;
+            $scope.events = BestsellersService.resolveCalendarData(response);
+
+            console.log('Calendar data', $scope.events);
+
         });
 
 
-    $scope.events = [
-        {
-            title: 'Event 1',
-            type: 'warning',
-            starts_at: new Date(currentYear,currentMonth,25,8,30),
-            ends_at: new Date(currentYear,currentMonth,25,9,30)
-        },
-        {
-            title: 'Event 2',
-            type: 'info',
-            starts_at: new Date(currentYear,currentMonth,19,7,30),
-            ends_at: new Date(currentYear,currentMonth,25,9,30)
-        },
-        {
-            title: 'This is a really long event title',
-            type: 'important',
-            starts_at: new Date(currentYear,currentMonth,25,6,30),
-            ends_at: new Date(currentYear,currentMonth,25,6,60)
-        },
-    ];
-
-    $scope.calendarView = 'year';
-    $scope.calendarDay = new Date();
-
     function showModal(action, event) {
         $modal.open({
-            templateUrl: 'modalContent.html',
+            templateUrl: '/modules/buyer/views/bestsellers/test.html',
             controller: function($scope, $modalInstance) {
                 $scope.$modalInstance = $modalInstance;
                 $scope.action = action;
                 $scope.event = event;
+
+                $scope.close=function(){
+                    $modalInstance.close();
+                };
+                $scope.cancel=function(){
+                    $modalInstance.dismiss();
+                }
             }
         });
     }
+
+    $scope.monthClicked=function(event){
+        console.log(event);
+    };
 
     $scope.eventClicked = function(event) {
         showModal('Clicked', event);
@@ -62,7 +52,8 @@ app.controller('BestsellersController', ['$scope', '$rootScope', "$modal", 'Best
     };
 
     $scope.eventDeleted = function(event) {
-        showModal('Deleted', event);
+        $scope.calendarView='month';
+        //showModal('Deleted', event);
     };
 
     $scope.setCalendarToToday = function() {

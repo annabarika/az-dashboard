@@ -7,6 +7,12 @@
                 <button class="btn btn-default" ng-click="setCalendarToToday()">Today</button>
                 <button class="btn btn-primary" ng-click="calendarControl.next()">&gt;</button>
             </div>
+            <div class="btn-group">
+                <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="calendarView" btn-radio="'year'">Year</label>
+                <label class="btn btn-primary ng-pristine ng-untouched ng-valid active" ng-model="calendarView" btn-radio="'month'">Month</label>
+                <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="calendarView" btn-radio="'week'">Week</label>
+                <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="calendarView" btn-radio="'day'">Day</label>
+            </div>
         </div>
         <div class="scroll">
             <mwl-calendar
@@ -18,6 +24,7 @@
                     calendar-edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
                     calendar-delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
                     calendar-edit-event-click="eventEdited($event)"
+                    calendar-event-label = "EVENT TITLE"
                     calendar-delete-event-click="eventDeleted($event)"
                     calendar-auto-open="true"
                     >
