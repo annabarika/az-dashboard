@@ -6,7 +6,7 @@
         .constant('API', (function () {
 
             return {
-
+                "LOAD"    :   config.API.host+'bestseller/calendar'
             };
         })())
 
@@ -19,12 +19,20 @@
 
         })())
 
-        .factory("BestsellersService", ['API', 'TEMPLATE', 'RestFactory', '$modal',
-            function(API, TEMPLATE, RestFactory, $modal) {
+        .factory("BestsellersService", ['API', 'TEMPLATE', 'RestFactory',
+            function(API, TEMPLATE, RestFactory) {
 
                 return  {
+                    /**
+                     *
+                     * @param params
+                     * @returns {*}
+                     */
+                    getCalendarData : function(params) {
 
+                        return RestFactory.request(API.LOAD);
+                    }
 
-                        };
+                };
             }]);
 })();
