@@ -89,8 +89,6 @@
 
                     var collections = [];
 
-                    console.log('Collections', response);
-
                     angular.forEach(response, function(value) {
 
                         angular.forEach(factories, function(factory) {
@@ -318,11 +316,14 @@
                  * @param data
                  * @returns {*}
                  */
-                showModal : function(path) {
+                showModal : function(path,size) {
+                    var s;
+                    _.isUndefined(size) ? s="sm":s=size ;
 
                     var modal= $modal.open({
                         templateUrl : TEMPLATE[path],
-                        controller : "ModalController"
+                        controller : "ModalController",
+                        size:s
                     });
                     return modal;
                 },

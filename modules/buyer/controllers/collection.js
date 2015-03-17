@@ -106,8 +106,8 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
         /*
          * Add new collection*/
-        $scope.newCollection = function () {
-            var modalInstance = CollectionService.showModal('NEW', $scope.factories);
+        $scope.newCollection = function(){
+            var modalInstance = CollectionService.showModal('NEW',"sm");
 
             modalInstance.result.then(function (factory) {
 
@@ -119,7 +119,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
                 });
 
-                var modalInstance = CollectionService.showModal("CHOOSE");
+                var modalInstance=CollectionService.showModal("CHOOSE",'sm');
 
                 modalInstance.result.then(function (collection) {
 
@@ -147,6 +147,9 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         if ($rootScope.collection == undefined) {
             $location.path("/buyer/collection");
         }
+        else{
+            $rootScope.documentTitle = "Collection name: "+$rootScope.collection.name;
+        }
 
         $scope.collectionTemplates = [
             "modules/buyer/views/collection/upload_files.html",
@@ -165,7 +168,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         /* Getting collection */
         $rootScope.documentTitle = "Create New Collection";
 
-        $scope.dropSuccessHandler = function ($event, index, object) {
+
+        $scope.dropSuccessHandler = function($event,index,object){
 
             object.photos.splice(index, 1);
 
@@ -256,7 +260,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                     CollectionService.loadProducts($scope.products).then(
                         function (response) {
 
-                            $scope.count = response.length;
+                            $scope.count=response.length;
+
                             $scope.step++;
                         }
                     )
