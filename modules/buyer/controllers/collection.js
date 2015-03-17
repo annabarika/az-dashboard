@@ -27,7 +27,12 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             var statuses = [];
             for (var i in response) {
 
-                statuses.push({id: response[i].statusId, name: response[i].name});
+                if(response[i].statusId == 2) {
+                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: false});
+                }
+                else {
+                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: true});
+                }
             }
 
             $rootScope.statuses = statuses;
@@ -166,7 +171,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
 
         /* Getting collection */
-        $rootScope.documentTitle = "Create New Collection";
+
 
 
         $scope.dropSuccessHandler = function($event,index,object){

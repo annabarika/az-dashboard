@@ -6,21 +6,21 @@
         .constant('API', (function () {
 
             return {
-                FACTORIES           :   config.API.host+'factory/load',
-                COLLECTIONS         :   config.API.host+'catalogue-collection/load/status/0,1',
-                COLLECTION_CARD     :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
-                IMAGES_PATH         :   config.API.imagehost+'/files/factory/attachments/',
-                FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/factoryId/",
-                CREATECOLLECTION    :   config.API.host+"catalogue-collection/create",
-                LOADFILES           :   config.API.host+'catalogue/loadfiles',
-                LOADPRODUCTS        :   config.API.host+'catalogue-collection/add-collection-product',
-                CANCELPRODUCT       :   config.API.host+'catalogue-collection/delete-collection-product/',
-                CANCELCOLLECTION    :   config.API.host+'catalogue-collection/cancel/',
-                LOADSIZES           :   config.API.host+'size/load',
-                LOADORDERTYPES      :   config.API.host+'order-type/load/',
-                ORDERCREATE         :   config.API.host+'order/create',
-                PRODUCTSCREATE      :   config.API.host+'jsoncreate.php',
-                PRODUCTUPDATE       :   config.API.host+'catalogue/update',
+                FACTORIES           :       config.API.host+'factory/load',
+                COLLECTIONS         :       config.API.host+'catalogue-collection/load/status/0,1',
+                COLLECTION_CARD     :       config.API.host+'catalogue-collection/get-collection-products/collectionId/',
+                IMAGES_PATH         :       config.API.imagehost+'/files/factory/attachments/',
+                FACTORYCOLLECTIONS  :       config.API.host+"catalogue-collection/load/factoryId/",
+                CREATECOLLECTION    :       config.API.host+"catalogue-collection/create",
+                LOADFILES           :       config.API.host+'catalogue/loadfiles',
+                LOADPRODUCTS        :       config.API.host+'catalogue-collection/add-collection-product',
+                CANCELPRODUCT       :       config.API.host+'catalogue-collection/delete-collection-product/',
+                CANCELCOLLECTION    :       config.API.host+'catalogue-collection/cancel/',
+                LOADSIZES           :       config.API.host+'size/load',
+                LOADORDERTYPES      :       config.API.host+'order-type/load/',
+                ORDERCREATE         :       config.API.host+'order/create',
+                PRODUCTSCREATE      :       config.API.host+'jsoncreate.php',
+                PRODUCTUPDATE       :       config.API.host+'catalogue/update',
                 ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
                 CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
                 LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue'
@@ -88,8 +88,6 @@
                 filterCollections : function(response, factories, statuses) {
 
                     var collections = [];
-
-                    console.log('Collections', response);
 
                     angular.forEach(response, function(value) {
 
@@ -278,7 +276,7 @@
                         })(product)
                     };
 
-                    return RestFactory.request(API.PRODUCTUPDATE, 'PUT', $.param(params));
+                    return RestFactory.request(API.PRODUCTUPDATE, 'PUT', params);
                 },
 
                 /**

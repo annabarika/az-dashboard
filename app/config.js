@@ -1,6 +1,6 @@
 var config = {
     API: {
-        host:"http://green.f.compass/api/",
+        host:"http://lex.f.azimuth/api/",
         key: 'test',
         imagehost:"http://lex.b.compass"
     },

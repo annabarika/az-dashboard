@@ -1,9 +1,6 @@
-var app = angular.module("modules.buyer.bestsellers", [
-
-]);
+var app = angular.module("modules.buyer.bestsellers", []);
 
 app.controller('BestsellersController',
-
     [
         '$scope',
         '$rootScope',
@@ -17,6 +14,7 @@ app.controller('BestsellersController',
             $scope.$route = $route;
             $scope.$location = $location;
             var url, data, method, header, length, array, year, month, monthBegin, monthEnd;
+
             /* Getting payments */
             $rootScope.documentTitle = "Bestsellers";
 
