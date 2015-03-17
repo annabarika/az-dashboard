@@ -19,15 +19,23 @@ try {
 	else if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (!empty($_FILES)) {
 			$post = [];
+            if(!file_exists($_SERVER['DOCUMENT_ROOT'].'tmp')) {
+                mkdir($_SERVER['DOCUMENT_ROOT'].'tmp', 0777);
+            }
 			foreach ($_FILES as $files) {
 				$file_count = count($files['name']);
 
 				for($i = 0; $i < $file_count; $i++) {
-					$file = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$files['name'][$i];
+					$file = $_SERVER['DOCUMENT_ROOT'].'tmp/'.$files['name'][$i];
+
 					if(move_uploaded_file($files['tmp_name'][$i], $file)){
 						$post['file['.$i.']'] = new CURLFile($file, $files['type'][$i]);
 					}
+                    else {
+                        throw new Exception('Could not move file to '.$file.' see '.__FILE__);
+                    }
 				}
+
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].'/catalogue/loadfiles');
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

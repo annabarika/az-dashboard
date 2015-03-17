@@ -1,6 +1,3 @@
 .idea
 npm-debug.log
 logs
-
-api/config.php
-app/config.js
