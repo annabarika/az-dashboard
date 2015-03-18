@@ -100,7 +100,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                 CollectionService.getCollections(url).then(function (response) {
 
                     $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-                    console.log('All collections', $rootScope.collections);
+                    //console.log('All collections', $rootScope.collections);
                 });
             }
         });
@@ -141,27 +141,19 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 /**
  * Upload photos controller
  */
-app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal", '$routeParams',
-    function ($scope, $rootScope, $location, CollectionService, $modal, $routeParams) {
+app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal",
+    function ($scope, $rootScope, $location, CollectionService, $modal) {
         var fileinput;
 
         $scope.$watch("photo", function (value) {
             $rootScope.photo = value;
         });
 
-
         if ($rootScope.collection == undefined) {
-            //$location.path("/buyer/collection");
-
-            CollectionService.getCurrentCollection($routeParams.collectionId).then(
-                function (response) {
-                    $rootScope.collection = response;
-                }
-            )
-
-
+            $location.path("/buyer/collection");
         }
         else {
+           // console.log($rootScope.collection);
             $rootScope.documentTitle = "Collection name: " + $rootScope.collection.name;
         }
 
@@ -225,6 +217,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 }
                 else {
                     $location.path('/buyer/collection');
+                    $rootScope.photo = undefined;
                 }
             }
         };
@@ -440,7 +433,6 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             {name: "sizes", title: 'Sizes'},
             {name: "manage", title: 'Manage'}
         ];
-
         // Get collection card
         CollectionService.getCollectionCard($routeParams.collectionId).then(function (response) {
 

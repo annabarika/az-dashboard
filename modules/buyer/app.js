@@ -54,11 +54,6 @@ app.config(function($routeProvider){
         {
             templateUrl:"/modules/buyer/views/collection/id.html",
             controller:"CollectionCardController"
-           /* resolve:{
-                collection:function($route){
-                    console.log($route);
-                }
-            }*/
         })
         .when('/buyer/cargo',
         {
