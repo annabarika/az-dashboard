@@ -144,7 +144,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal",
     function ($scope, $rootScope, $location, CollectionService, $modal) {
         var fileinput;
-
+        /*console.log("current",$rootScope.collection);*/
         $scope.$watch("photo", function (value) {
             $rootScope.photo = value;
         });
@@ -153,7 +153,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             $location.path("/buyer/collection");
         }
         else {
-           // console.log($rootScope.collection);
+            console.log($rootScope.collection);
             $rootScope.documentTitle = "Collection name: " + $rootScope.collection.name;
         }
 
@@ -212,7 +212,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
             else {
                 if ($scope.step > 0) {
-                    console.log($scope.step);
+
                     $scope.step--;
                 }
                 else {
@@ -240,7 +240,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             if ($scope.step == 0) {
 
                 CollectionService.uploadFiles($rootScope.photo).success(function (data) {
-                    console.log("upload", data);
+
                     if (_.isArray(data)) {
                         $scope.items = [];
 
@@ -276,7 +276,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             }
 
             if ($scope.step == 2) {
-                console.log("this", $scope.step);
+
             }
         };
         /**
@@ -433,6 +433,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             {name: "sizes", title: 'Sizes'},
             {name: "manage", title: 'Manage'}
         ];
+
         // Get collection card
         CollectionService.getCollectionCard($routeParams.collectionId).then(function (response) {
 
@@ -444,7 +445,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 if (_.isEmpty($rootScope.items)) {
                     messageCenterService.add('warning', 'Products not found in this collection', {timeout: 3000});
                 }
-                console.log('Collections items', $rootScope.items);
+                console.log('Collections items this', $rootScope.items);
             }
         });
 
@@ -482,6 +483,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
         // Add product(s) to order
         $scope.addToOrder = function (product, position) {
+            $scope.position=position;
 
             // load order types
             CollectionService.loadOrderTypes().then(function (response) {
@@ -524,7 +526,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                             CollectionService.productsCreate($rootScope.order).then(function (response) {
 
                                 if (response) {
-
+                                    console.log(response);
                                     messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
                                     $timeout(function () {
@@ -534,7 +536,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                                             $location.path('/buyer/collection');
                                         }
                                         else {
-                                            $rootScope.items.splice(position, 1);
+                                              $rootScope.items[position].inOrder=true;
                                         }
                                     }, 1000);
                                 }
@@ -545,8 +547,9 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                         }
                     });
                 }
+
             });
-        },
+        };
 
             //Add sizes to product
             $scope.addSize = function (product) {

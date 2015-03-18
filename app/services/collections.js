@@ -10,7 +10,7 @@
                 COLLECTIONS         :   config.API.host+'catalogue-collection/load/status/0,1',
                 COLLECTION_CARD     :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
                 IMAGES_PATH         :   config.API.imagehost+'/files/factory/attachments/',
-                FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/factoryId/",
+                FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
                 CREATECOLLECTION    :   config.API.host+"catalogue-collection/create",
                 LOADFILES           :   config.API.host+'catalogue/loadfiles',
                 LOADPRODUCTS        :   config.API.host+'catalogue-collection/add-collection-product',
@@ -189,7 +189,7 @@
                         this.push(product);
 
                     },array);
-                    console.log("this",array);
+
                     return array;
                 },
 
@@ -204,8 +204,7 @@
                         i++;
                     });
                     var query= $.param(params);
-                    console.log("q",query,params);
-                   // return RestFactory.request(API.LOADPRODUCTS,"POST", query);
+
                     return RestFactory.request(API.LOADPRODUCTS,"POST", products);
                 },
                 /**
@@ -232,7 +231,7 @@
                                         product.sizes[index].count = '0';
                                     });
                                 }
-
+                                product.inOrder=false;
                                 res.push(product);
                             });
                         });

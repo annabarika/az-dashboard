@@ -7,7 +7,7 @@ require __DIR__.'/API.php';
 
 try {
 
-	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['jsoncreate'];
+	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['createproducts'];
 
 	$APIService = new API($host);
 

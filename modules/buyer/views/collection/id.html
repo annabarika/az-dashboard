@@ -31,20 +31,20 @@
                             <div class="media-left">
                                 <span class="img-wrapper img-rounded">
                                     <img ng-src="{{imagePath}}{{product.files[0].path}}" >
+                                    {{imagePath}}{{product.files[0].path}}
                                 </span>
-                                {{imagePath}}{{product.files[0].path}}
                             </div>
                         </div>
                     </td>
                     <td>
-                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" value="{{product.catalogueProduct.articul}}" />
+                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" value="{{product.catalogueProduct.articul}}" ng-disabled="product.inOrder"/>
                     </td>
                     <td>
-                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.name" value="{{product.catalogueProduct.name}}" />
+                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.name" value="{{product.catalogueProduct.name}}" ng-disabled="product.inOrder"/>
 
                     </td>
                     <td>
-                        <input type="text" class="sm form-control" ng-model="product.catalogueProduct.price" value="{{product.catalogueProduct.price}}" />
+                        <input type="text" class="sm form-control" ng-model="product.catalogueProduct.price" value="{{product.catalogueProduct.price}}" ng-disabled="product.inOrder"/>
                          {{product.currency.ISOCode}}
                     </td>
                     <td>
@@ -63,24 +63,25 @@
                                 <td>
                                     <ul ng-if="product.sizes[0]" class="media-list mb-sm sm">
                                         <li ng-repeat="size in product.sizes" class="media">
-                                            <input type="text" class="sm form-control" ng-model="size.count"/>
+                                            <input type="text" class="sm form-control" ng-model="size.count" ng-disabled="product.inOrder"/>
                                         </li>
                                     </ul>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)"><i class="fa fa-plus"></i> add size</button>
+                                    <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)" ng-hide="product.inOrder"><i class="fa fa-plus"></i> add size</button>
                                 </td>
                             </tr>
                         </table>
                     </td>
                     <td>
-                        <div class="btn-group">
+                        <div class="btn-group" ng-hide="product.inOrder">
                         <button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check">Add to order</span></button>
                         <button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>
                         <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check">Delete</span></button>
                         </div>
+                        <div ng-show="product.inOrder">product ordered</div>
                     </td>
                 </tr>
                 </tbody>
