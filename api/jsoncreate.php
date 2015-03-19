@@ -7,11 +7,12 @@ require __DIR__.'/API.php';
 
 try {
 
-	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['createproducts'];
+	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['jsoncreate'];
 
 	$APIService = new API($host);
 
 	$APIService->setMethod('GET');
+
 	$response = $APIService->setURL(http_build_query($_REQUEST))->call();
 
 

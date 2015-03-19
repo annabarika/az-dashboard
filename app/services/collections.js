@@ -392,6 +392,9 @@
 
                 /**
                  * Create order
+                 *
+                 * @param data
+                 * @returns {*}
                  */
                 productsCreate: function (data) {
 
@@ -406,7 +409,7 @@
                     // &params[params][status]=1
                     //RestFactory.request(API.PRODUCTSCREATE+'?'+Object.toQueryString(products), "GET");
 
-                    return RestFactory.request('/testing/mocks/products.json', "GET").then(function(backend) {
+                    return RestFactory.request('/testing/mocks/products.json', "POST").then(function(backend) {
 
                         if (backend.result) {
                             var response = JSON.parse(backend.result);

@@ -1,209 +1,208 @@
 <div class="box-layout" ng-controller="DatepickerCtrl">
-    <div  class="col-md-9 bg-white height-auto bdr-r-md">
-        <div class="scroll">
-            <!-- start page header -->
-            <div class="page-header clearfix">
-                <div class="row ">
-                    <div class="col-md-12">
-                        <!--<span class="fc-header-title"><h2>2013</h2></span>-->
+<div  class="col-md-9 bg-white height-auto bdr-r-md">
+    <div class="scroll">
+        <!-- start page header -->
+        <div class="page-header clearfix">
+            <div class="row ">
+                <div class="col-md-12">
                         <span class="fc-header-title">
                            <h2><button class="btn btn-default" ng-click="changeYear(-1)"><i class="fa fa-chevron-left"></i></button>
-                               {{current_year}}
+                               {{currentYear}}
                                <button class="btn btn-default" ng-click="changeYear(1)"><i class="fa fa-chevron-right"></i></button>
                            </h2>
                         </span>
-                    </div>
                 </div>
             </div>
-
-            <div class="panel fullcalendar box-layout">
-                <div  class="col-md-2 col-sm-2 fc" ng-repeat="(key,value) in bestsellers[current_year]">
-                    <p class="fc-widget-header">
-                        {{months[key]}}
-                    </p>
-                    <a class="fc-day-grid-event fc-event mr-5 ml-5" ng-click="currentMonth(months[key])">
-                        <!-- fc-event-success || fc-event-warning || fc-event-danger -->
-                        <div class="fc-content">
-                            <span class="fc-title pull-right">{{value.length}}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <!-- end: panel -->
         </div>
-    </div>
-    <div  class="col-md-3 bg-auto height-auto bdr-b-sm bdr-b-xs">
-        <div class="scroll">
-            <!-- start page header -->
-            <div class="page-header clearfix">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 class="mb-sm">{{current_month}} {{current_year}}</h3>
+
+        <div class="panel fullcalendar box-layout">
+            <div  class="col-md-2 col-sm-2 fc" ng-repeat="(key,value) in bestsellers[currentYear]">
+                <p class="fc-widget-header">
+                    {{months[key]}}
+                </p>
+                <a class="fc-day-grid-event fc-event mr-5 ml-5" ng-click="currentMonth(months[key])">
+                    <!-- fc-event-success || fc-event-warning || fc-event-danger -->
+                    <div class="fc-content">
+                        <span class="fc-title pull-right">{{value}}</span>
                     </div>
+                </a>
+            </div>
+        </div>
+        <!-- end: panel -->
+    </div>
+</div>
+<div  class="col-md-3 bg-auto height-auto bdr-b-sm bdr-b-xs">
+    <div class="scroll">
+        <!-- start page header -->
+        <div class="page-header clearfix">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="mb-sm">{{currentMonth}} {{currentYear}}</h3>
                 </div>
-                <p class="input-group">
-                    <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            </div>
+            <p class="input-group">
+                <input type="text" class="form-control" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-                </p>
-            </div>
-            <!--/ end page header -->
-            <div class="pa-md">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title text-center">
-                            <h5 class="fw-sb">Ordered</h5>
-                        </div>
+            </p>
+        </div>
+        <!--/ end page header -->
+        <div class="pa-md">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title text-center">
+                        <h5 class="fw-sb">Ordered</h5>
                     </div>
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr ng-repeat="order in bests_orders">
-                            <td class="text-center">
-                                <div class="media np">
-                                    <div class="media-left">
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr ng-repeat="order in bests_orders">
+                        <td class="text-center">
+                            <div class="media np">
+                                <div class="media-left">
                                       <span class="img-wrapper img-rounded">
                                         <!--<img src={{img}}>-->
                                           <img ng-src="http://back95.ru/f/catalogue/{{order.id}}/{{order.photos[0]}}"/>
 
                                       </span>
-                                    </div>
                                 </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="media-body media-middle">
-                                    <h5 class="media-heading mb-0 fw-sb"><a href=""> {{order.articul}}</a></h5>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <p ng-repeat="size in order.sizeInfo">{{size}}</p>
-                            </td>
-                            <td class="text-center">
-                                {{order.saleSpeed}}
-                            </td>
-                            <td class="text-center">
-                                {{order.inStorage}}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading mb-0 fw-sb"><a href=""> {{order.articul}}</a></h5>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <p ng-repeat="size in order.sizeInfo">{{size}}</p>
+                        </td>
+                        <td class="text-center">
+                            {{order.saleSpeed}}
+                        </td>
+                        <td class="text-center">
+                            {{order.inStorage}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title text-center">
-                            <h5 class="fw-sb">Total</h5>
-                        </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title text-center">
+                        <h5 class="fw-sb">Total</h5>
                     </div>
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr ng-repeat="order in bests_orders">
-                            <td class="text-center">
-                                <div class="media np">
-                                    <div class="media-left">
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr ng-repeat="order in bests_orders">
+                        <td class="text-center">
+                            <div class="media np">
+                                <div class="media-left">
                                       <span class="img-wrapper img-rounded">
                                         <img ng-src="http://back95.ru/f/catalogue/{{order.id}}/{{order.photos[0]}}"/>
                                       </span>
-                                    </div>
                                 </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="media-body media-middle">
-                                    <h5 class="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                Signal
-                            </td>
-                            <td class="text-center">
-                                234
-                            </td>
-                        </tr>
-                        <!-- <tr>
-                             <td class="text-center">
-                                 <div class="media np">
-                                     <div class="media-left">
-                                       <span class="img-wrapper img-rounded">
-                                         <img src="/assets/images/avatar/avatar9.jpg">
-                                       </span>
-                                     </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="media-body media-middle">
+                                <h5 class="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            Signal
+                        </td>
+                        <td class="text-center">
+                            234
+                        </td>
+                    </tr>
+                   <tr>
+                         <td class="text-center">
+                             <div class="media np">
+                                 <div class="media-left">
+                                   <span class="img-wrapper img-rounded">
+                                     <img src="/assets/images/avatar/avatar9.jpg">
+                                   </span>
                                  </div>
-                             </td>
-                             <td class="text-center">
-                                 <div class="media-body media-middle">
-                                     <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                             </div>
+                         </td>
+                         <td class="text-center">
+                             <div class="media-body media-middle">
+                                 <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                             </div>
+                         </td>
+                         <td class="text-center">
+                             Signal
+                         </td>
+                         <td class="text-center">
+                             234
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="text-center">
+                             <div class="media np">
+                                 <div class="media-left">
+                                   <span class="img-wrapper img-rounded">
+                                     <img src="/assets/images/avatar/avatar9.jpg">
+                                   </span>
                                  </div>
-                             </td>
-                             <td class="text-center">
-                                 Signal
-                             </td>
-                             <td class="text-center">
-                                 234
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="text-center">
-                                 <div class="media np">
-                                     <div class="media-left">
-                                       <span class="img-wrapper img-rounded">
-                                         <img src="/assets/images/avatar/avatar9.jpg">
-                                       </span>
-                                     </div>
+                             </div>
+                         </td>
+                         <td class="text-center">
+                             <div class="media-body media-middle">
+                                 <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                             </div>
+                         </td>
+                         <td class="text-center">
+                             Signal
+                         </td>
+                         <td class="text-center">
+                             234
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="text-center">
+                             <div class="media np">
+                                 <div class="media-left">
+                                   <span class="img-wrapper img-rounded">
+                                     <img src="/assets/images/avatar/avatar9.jpg">
+                                   </span>
                                  </div>
-                             </td>
-                             <td class="text-center">
-                                 <div class="media-body media-middle">
-                                     <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                                 </div>
-                             </td>
-                             <td class="text-center">
-                                 Signal
-                             </td>
-                             <td class="text-center">
-                                 234
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="text-center">
-                                 <div class="media np">
-                                     <div class="media-left">
-                                       <span class="img-wrapper img-rounded">
-                                         <img src="/assets/images/avatar/avatar9.jpg">
-                                       </span>
-                                     </div>
-                                 </div>
-                             </td>
-                             <td class="text-center">
-                                 <div class="media-body media-middle">
-                                     <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                                 </div>
-                             </td>
-                             <td class="text-center">
-                                 Signal
-                             </td>
-                             <td class="text-center">
-                                 234
-                             </td>
-                         </tr>-->
-                        </tbody>
-                    </table>
-                </div>
-
-                <form role="form">
-                    <div class="form-group">
-                        <label class="control-label">Coments</label>
-                        <textarea class="form-control" placeholder="" rows="3"></textarea>
-                    </div>
-                    <hr class="mnr-md mnl-md">
-                    <div class="form-group">
-                        <label class="switch switch-sm switch-success">
-                            <input type="checkbox" checked="">
-                            <span class="switch"></span><span class="text ml-xs">All products</span>
-                        </label>
-                    </div>
-                </form>
+                             </div>
+                         </td>
+                         <td class="text-center">
+                             <div class="media-body media-middle">
+                                 <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
+                             </div>
+                         </td>
+                         <td class="text-center">
+                             Signal
+                         </td>
+                         <td class="text-center">
+                             234
+                         </td>
+                     </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <form role="form">
+                <div class="form-group">
+                    <label class="control-label">Coments</label>
+                    <textarea class="form-control" placeholder="" rows="3"></textarea>
+                </div>
+                <hr class="mnr-md mnl-md">
+                <div class="form-group">
+                    <label class="switch switch-sm switch-success">
+                        <input type="checkbox" checked="">
+                        <span class="switch"></span><span class="text ml-xs">All products</span>
+                    </label>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 </div>
 <!--/ end box-layout -->
