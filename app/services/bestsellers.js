@@ -3,12 +3,9 @@
     angular.module("services.bestsellers", [])
 
         // create config API ROUTES
-        .constant('API', (function () {
-
-            return {
-                "LOAD": config.API.host + 'bestseller/calendar/createDate/'
-            };
-        })())
+        .constant('API', {
+            "LOAD": config.API.host + 'bestseller/calendar/createDate/'
+        })
 
         // create config  Templates
         .constant('TEMPLATE', (function () {
