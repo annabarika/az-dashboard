@@ -154,10 +154,15 @@ body > #app-wrapper {
     overflow: hidden;
 }
 @media (max-width: 480px) {
-    #app-header.navbar .navbar-nocollapse .navbar-nav .dropdown-custom .dropdown-menu {
-        width: auto !important;
-        left: 15px !important;
-        right: 15px !important;
+    /*#app-header.navbar .navbar-nocollapse .navbar-nav .dropdown-custom .dropdown-menu {*/
+        /*width: auto !important;*/
+        /*left: 15px !important;*/
+        /*right: 15px !important;*/
+    /*}*/
+    .sidebar-open-ltr.app-sidebar.sidebar-left.csstransforms3d.sidebar-left-collapse{
+        width: 100% !important;
+        height: 200px !important;
+        top:58px;
     }
 }
 #app-header.navbar .navbar-nocollapse .navbar-nav .open .dropdown-menu {
@@ -288,6 +293,7 @@ body > #app-wrapper {
     #app-header.navbar .navbar-nocollapse .navbar-left {
         float: right !important;
     }
+
     .csstransforms3d.sidebar-open-ltr.app-sidebar.sidebar-left {
         -webkit-transform: translate3d(250px, 0, 0);
         transform: translate3d(250px, 0, 0);
@@ -298,11 +304,36 @@ body > #app-wrapper {
         box-shadow: 3px 0 10px -3px rgba(0, 0, 0, 0.7);
         overflow: visible;
     }
+
     .no-csstransforms3d.sidebar-open-ltr.app-sidebar.sidebar-left {
         left: 0;
         overflow: hidden;
         width: 0;
         border: none;
+    }
+
+    sidebar.app-sidebar.sidebar-left.sidebar-left-collapse {
+        height: 300px;
+        top: 56px;
+        width:100%!important;
+    }
+
+    .app-sidebar .sidebar-content {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    .app-sidebar .sidebar-header ~ .sidebar-content{
+        padding-top: 0!important;
+    }
+
+    .sidebar-left-collapse .app-sidebar.sidebar-left{
+        width:100%!important;
+    }
+    .sidebar-left-collapse .app-sidebar.sidebar-left .sidebar-header{
+        position: absolute;
+        top: -56px;
     }
 }
 .app-sidebar {
