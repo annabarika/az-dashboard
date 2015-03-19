@@ -2,8 +2,8 @@ var app = angular.module("modules.buyer.bestsellers", []);
 
 // Bestseller's representation
 
-app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',
-    function ($scope, $rootScope, $modal, BestsellersService) {
+app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',"RestFactory",
+    function ($scope, $rootScope, $modal, BestsellersService,RestFactory) {
 
         // Document header title
         $rootScope.documentTitle = "Bestsellers";
@@ -11,6 +11,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         // Get current state of date
         $scope.currentYear = moment().year();
         $scope.currentMonth = moment.utc(new Date()).format("MMMM");
+
         $scope.months = BestsellersService.getMonths();
 
         // Get bestsellers data
@@ -23,7 +24,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         // Change year navigation
         $scope.changeYear = function (index) {
             $scope.currentYear = $scope.currentYear + index;
-        }
+        };
 
         $scope.currentMonth = function (monthName) {
             $scope.currentMonth = monthName;
@@ -47,6 +48,37 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
                     console.log(error)
                 });
         };
+        /**
+         * Datepickers functions
+         */
+
+        $scope.dt = new Date();
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+        };
+        $scope.$watch('dt',function(newVal){
+            console.log('dt',newVal);
+        });
+
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
     }
 ]);
 

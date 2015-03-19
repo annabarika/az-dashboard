@@ -54,99 +54,23 @@
                                                 <td>
                                                     Paid total
                                                 </td>
-                                                <td>
-                                                    {{order.order.paidTotal}} {{order.currency.ISOCode}}
+                                                <td ng-click="showPayment()">
+                                                   {{order.order.paidTotal}}{{order.currency.ISOCode}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Create date</td>
                                                 <td>{{order.order.createDate|date:'medium'}}</td>
                                             </tr>
+                                            <tr>
+                                                <td>Cargo</td>
+                                                <td></td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-
-                           <!-- <div class="col-md-6">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="panel-title">Striped Row</div>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered">
-                                            <tbody>
-                                            <tr>
-                                                <td>Norman Harmon</td>
-                                                <td>
-                                                    <label>
-                                                        <multi-select
-                                                                input-model="test_list"
-                                                                output-model="resultData"
-                                                                button-label="icon name"
-                                                                item-label="icon name maker"
-                                                                tick-property="ticked"
-                                                                max-labels="2">
-                                                        </multi-select>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Plato Pickett</td>
-                                                <td>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nathan Paul</td>
-                                                <td><div class="radio custom">
-                                                    <label>
-                                                        <input type="radio" name="group2" value=""><span></span> Apr 5, 2015
-                                                    </label>
-                                                </div>
-                                                    <div class="radio custom">
-                                                        <label>
-                                                            <input type="radio" name="group2" value=""><span></span> Feb 4, 2013
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio custom disabled">
-                                                        <label>
-                                                            <input type="radio" value="" disabled><span></span> Option two is disabled
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nasim Larson</td>
-                                                <td>
-                                                    <div class="checkbox custom-info">
-                                                        <label>
-                                                            <input type="checkbox">
-                                                            <span></span>$11.28
-                                                        </label>
-                                                    </div>
-                                                    <div class="checkbox custom-info">
-                                                        <label>
-                                                            <input type="checkbox">
-                                                            <span></span>$60.18
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" readonly="">
-                                                        <span class="btn btn-default btn-file" data-flow-btn=""><i class="fa fa-folder-open"></i>
-                                                            <input type="file" name="files[]" id="js-upload-files" multiple>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>-->
                         </div>
                     </div>
                 </tab>
@@ -154,5 +78,20 @@
                 <tab heading="Cargo">Long Labeled Justified content</tab>
 </tabset>
 </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th ng-repeat="column in tableHeader">{{column.title}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
         </div>
     </div>
