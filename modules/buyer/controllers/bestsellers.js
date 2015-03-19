@@ -9,8 +9,11 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         $rootScope.documentTitle = "Bestsellers";
 
         // Get current state of date
-        $scope.currentYear = moment().year();
+        $scope.currentYear  = moment().year();
         $scope.currentMonth = moment.utc(new Date()).format("MMMM");
+
+        console.log($scope.currentMonth);
+
         $scope.months = BestsellersService.getMonths();
 
         // Get bestsellers data
@@ -20,21 +23,28 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
             console.log('Bestsellers', $scope.bestsellers);
         });
 
-        // Change year navigation
+        /**
+         * Select year navigation
+         *
+         * @param int index
+         */
         $scope.changeYear = function (index) {
-            $scope.currentYear = $scope.currentYear + index;
+            $scope.currentYear = $scope.currentYear + parseInt(index);
+            console.log('Selected year:', $scope.currentYear);
         }
 
-        $scope.currentMonth = function (monthName) {
-            $scope.currentMonth = monthName;
+        /**
+         * Select month navigation
+         *
+         * @param int monthISO eg. 02
+         */
+        $scope.currentMonth = function (monthISO) {
 
-            angular.forEach($scope.months, function (value, key) {
-                if (value == monthName) {
-                    month = key;
-                }
-            });
-            monthBegin = $scope.current_year + "-" + month + "-01";
-            monthEnd = $scope.current_year + "-" + month + "-31";
+            // get mont name eg. February
+            $scope.currentMonth = BestsellersService.getMonths(monthISO);
+
+            var range = BestsellersService.getMonthDayRange($scope.currentYear, monthISO);
+
             url = config.API.host + "bestseller/load-detailed/status/1/orderDate/" + monthBegin + "," + monthEnd;
             console.log(url);
             RestFactory.request(url)

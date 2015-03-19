@@ -51,8 +51,24 @@
                      *
                      * @returns {*}
                      */
-                    getMonths: function () {
-                        return config.months;
+                    getMonths: function (iso) {
+
+                        return (!iso) ? config.months : config.months[iso];
+                    },
+
+                    /**
+                     * Get month first and last days
+                     *
+                     * @returns {*}
+                     */
+                    getMonthDayRange: function (year, iso) {
+
+                        var range = {
+                            start : moment().subtract(iso, 'months').startOf('month').format(year+'-'+iso+'-DD'),
+                            end   : year+'-'+iso+'-'+new Date(year, iso, 0).getDate()
+                        }
+
+                        return range;
                     },
 
                     /**
