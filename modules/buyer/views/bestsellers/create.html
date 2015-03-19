@@ -1,0 +1,19 @@
+<div>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Please, type the articul</h4>
+    </div>
+    <div class="modal-body">
+        <form>
+            <autocomplete input-model="bestseller" output-model="bestseller"></autocomplete>
+            <span class="input-group-btn autocomplete_btn">
+            </span>
+        </form>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-green" ng-click="create()">Create</button>
+        <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
+    </div>
+</div>

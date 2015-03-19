@@ -1,59 +1,42 @@
 (function(){
 
-    angular.module("services.collections",[])
+    var app=angular.module("services.collections",[]);
 
-        // create config API ROUTES
-        .constant('API', (function () {
 
-            return {
-                FACTORIES           :       config.API.host+'factory/load',
-                COLLECTIONS         :       config.API.host+'catalogue-collection/load/status/0,1',
-                COLLECTION_CARD     :       config.API.host+'catalogue-collection/get-collection-products/collectionId/',
-                IMAGES_PATH         :       config.API.imagehost+'/files/factory/attachments/',
-                FACTORYCOLLECTIONS  :       config.API.host+"catalogue-collection/load/factoryId/",
-                CREATECOLLECTION    :       config.API.host+"catalogue-collection/create",
-                LOADFILES           :       config.API.host+'catalogue/loadfiles',
-                LOADPRODUCTS        :       config.API.host+'catalogue-collection/add-collection-product',
-                CANCELPRODUCT       :       config.API.host+'catalogue-collection/delete-collection-product/',
-                CANCELCOLLECTION    :       config.API.host+'catalogue-collection/cancel/',
-                LOADSIZES           :       config.API.host+'size/load',
-                LOADORDERTYPES      :       config.API.host+'order-type/load/',
-                ORDERCREATE         :       config.API.host+'order/create',
-                PRODUCTSCREATE      :       config.API.host+'jsoncreate.php',
-                PRODUCTUPDATE       :       config.API.host+'catalogue/update',
-                ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
-                CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
-                LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue'
-            };
-        })())
+    app.constant("PATH",{
+        FACTORIES           :   config.API.host+'factory/load',
+        COLLECTIONS         :   config.API.host+'catalogue-collection/load/status/0,1',
+        COLLECTION_CARD     :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
+        IMAGES_PATH         :   config.API.imagehost+'/files/factory/attachments/',
+        FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
+        CREATECOLLECTION    :   config.API.host+"catalogue-collection/create",
+        LOADFILES           :   config.API.host+'catalogue/loadfiles',
+        LOADPRODUCTS        :   config.API.host+'catalogue-collection/add-collection-product',
+        CANCELPRODUCT       :   config.API.host+'catalogue-collection/delete-collection-product/',
+        CANCELCOLLECTION    :   config.API.host+'catalogue-collection/cancel/',
+        LOADSIZES           :   config.API.host+'size/load',
+        LOADORDERTYPES      :   config.API.host+'order-type/load/',
+        ORDERCREATE         :   config.API.host+'order/create',
+        PRODUCTSCREATE      :   config.API.host+'jsoncreate.php',
+        PRODUCTUPDATE       :   config.API.host+'catalogue/update',
+        ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
+        CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
+        LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue',
+        LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/"
+    });
 
-        // create config  Templates
-        .constant('TEMPLATE', (function () {
+        app.factory("CollectionService", ["PATH", 'RestFactory', '$modal', "$http",
+            function(PATH, RestFactory, $modal, $http) {
 
             return {
-                NEW    :   "/modules/buyer/views/collection/choose_factory.html",
-                CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
-                ADDSIZE:   "/modules/buyer/views/collection/add_size.html",
-                ADDORDER:   "/modules/buyer/views/collection/add_order.html",
-                CANCEL_COLLECTION :   "/modules/buyer/views/collection/ask_collection.html",
-                CANCEL_PRODUCT :   "/modules/buyer/views/collection/ask_product.html"
-            };
 
-        })())
-
-        .factory("CollectionService", ['API', 'TEMPLATE', 'RestFactory', '$modal', '$http',
-            function(API, TEMPLATE, RestFactory, $modal, $http) {
-
-            return {
-                
                 /**
                  * Get All factories
                  *
                  * @returns {*}
                  */
                 getFactories: function () {
-
-                    return RestFactory.request(API.FACTORIES);
+                    return RestFactory.request(PATH.FACTORIES);
                 },
 
                 /**
@@ -63,7 +46,7 @@
                  */
                 getCollectionStatuses: function () {
 
-                    return RestFactory.request(API.LOADSTATUSES);
+                    return RestFactory.request(PATH.LOADSTATUSES);
                 },
 
                 /**
@@ -74,9 +57,14 @@
                  */
                 getCollections: function (params) {
 
-                    //var url = (_.isUndefined(params) == false) ? API.COLLECTIONS+params : API.COLLECTIONS;
+                    //var url = (_.isUndefined(params) == false) ? PATH.COLLECTIONS+params : PATH.COLLECTIONS;
 
                     return RestFactory.request(params);
+                },
+
+                getCurrentCollection:function(id){
+                    var url= PATH.LOADONECOLLECTION + id;
+                    return RestFactory.request(url);
                 },
 
                 /**
@@ -122,7 +110,7 @@
                  */
                 getFactoryCollections : function(id){
 
-                    var url = API.FACTORYCOLLECTIONS+id;
+                    var url = PATH.FACTORYCOLLECTIONS+id;
 
                     return RestFactory.request(url);
                 },
@@ -134,7 +122,7 @@
                  */
                 getCollectionCard: function (id) {
 
-                    var url = API.COLLECTION_CARD+id;
+                    var url = PATH.COLLECTION_CARD+id;
                     return RestFactory.request(url);
                 },
 
@@ -157,6 +145,13 @@
 
                     return i;
                 },
+                /**
+                 *
+                 * @param data
+                 * @param collection
+                 * @param sizes
+                 * @returns {Array}
+                 */
                 buildProductsArray:function(data,collection,sizes){
                     //console.log(data,collection);
                     var array=[];
@@ -183,7 +178,7 @@
                         this.push(product);
 
                     },array);
-                    console.log("this",array);
+
                     return array;
                 },
 
@@ -198,9 +193,8 @@
                         i++;
                     });
                     var query= $.param(params);
-                    console.log("q",query,params);
-                   // return RestFactory.request(API.LOADPRODUCTS,"POST", query);
-                    return RestFactory.request(API.LOADPRODUCTS,"POST", products);
+
+                    return RestFactory.request(PATH.LOADPRODUCTS,"POST", products);
                 },
                 /**
                  * Extract server response data requested by collectionId
@@ -226,7 +220,7 @@
                                         product.sizes[index].count = '0';
                                     });
                                 }
-
+                                product.inOrder=false;
                                 res.push(product);
                             });
                         });
@@ -239,7 +233,7 @@
                  */
                 cancelCollection: function (collectionId) {
 
-                    return RestFactory.request(API.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
+                    return RestFactory.request(PATH.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
                 },
 
                 /**
@@ -247,7 +241,7 @@
                  */
                 deleteProduct: function (collectionId, productId) {
 
-                    var url = API.CANCELPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
+                    var url = PATH.CANCELPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
 
                     return RestFactory.request(url, 'DELETE');
                 },
@@ -276,7 +270,7 @@
                         })(product)
                     };
 
-                    return RestFactory.request(API.PRODUCTUPDATE, 'PUT', params);
+                    return RestFactory.request(PATH.PRODUCTUPDATE, 'PUT', params);
                 },
 
                 /**
@@ -286,7 +280,7 @@
                  */
                 getImagePath: function() {
 
-                    return API.IMAGES_PATH;
+                    return PATH.IMAGES_PATH;
                 },
 
                 /**
@@ -296,7 +290,7 @@
                  */
                 loadSizes: function () {
 
-                    return RestFactory.request(API.LOADSIZES);
+                    return RestFactory.request(PATH.LOADSIZES);
                 },
 
                 /**
@@ -306,7 +300,7 @@
                  */
                 loadOrderTypes: function () {
 
-                    return RestFactory.request(API.LOADORDERTYPES);
+                    return RestFactory.request(PATH.LOADORDERTYPES);
                 },
 
                 /**
@@ -317,6 +311,16 @@
                  * @returns {*}
                  */
                 showModal : function(path,size) {
+
+                    var TEMPLATE={
+                        NEW    :   "/modules/buyer/views/collection/choose_factory.html",
+                        CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
+                        ADDSIZE:   "/modules/buyer/views/collection/add_size.html",
+                        ADDORDER:   "/modules/buyer/views/collection/add_order.html",
+                        CANCEL_COLLECTION :   "/modules/buyer/views/collection/ask_collection.html",
+                        CANCEL_PRODUCT :   "/modules/buyer/views/collection/ask_product.html"
+                    };
+
                     var s;
                     _.isUndefined(size) ? s="sm":s=size ;
 
@@ -328,13 +332,18 @@
                     return modal;
                 },
 
+                /**
+                 *
+                 * @param factoryId
+                 * @returns {*}
+                 */
                 createCollection : function(factoryId){
                     var data={
                         factoryId:factoryId,
                         name:"collection"
                     };
 
-                    return RestFactory.request(API.CREATECOLLECTION,"POST",data);
+                    return RestFactory.request(PATH.CREATECOLLECTION,"POST",data);
                 },
 
                 /**
@@ -351,7 +360,7 @@
 
                     });
 
-                    return $http.post(API.LOADFILES,fd,
+                    return $http.post(PATH.LOADFILES,fd,
                         {
                             transformRequest: angular.identity,
                             headers: {'Content-Type': undefined}
@@ -370,7 +379,7 @@
                         'currencyId'    :   order.currencyId
                     };
 
-                    return RestFactory.request(API.ORDERCREATE,"POST", params).then(function(response) {
+                    return RestFactory.request(PATH.ORDERCREATE,"POST", params).then(function(response) {
 
                         console.log(response);
                             if(response.id) {
@@ -379,7 +388,7 @@
                                     'orderId'   :   parseInt(response.id)
                                 };
 
-                                return RestFactory.request(API.ADDORDERTOCOLLECTION,"PUT", $.param(params));
+                                return RestFactory.request(PATH.ADDORDERTOCOLLECTION,"PUT", $.param(params));
                             }
                             else return false;
                     });
@@ -402,7 +411,7 @@
                     // &params[params][weight]='+0+'
                     // &params[params][price]='+obj.price+'
                     // &params[params][status]=1
-                    //RestFactory.request(API.PRODUCTSCREATE+'?'+Object.toQueryString(products), "GET");
+                    //RestFactory.request(PATH.PRODUCTSCREATE+'?'+Object.toQueryString(products), "GET");
 
                     return RestFactory.request('/testing/mocks/products.json', "POST").then(function(backend) {
 
@@ -454,7 +463,7 @@
                                         });
                                     });
 
-                                    return RestFactory.request(API.CREATEPRODUCTFACTORY,"POST", products);
+                                    return RestFactory.request(PATH.CREATEPRODUCTFACTORY,"POST", products);
                                 //}
                             }
                         }

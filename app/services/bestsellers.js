@@ -4,8 +4,8 @@
 
         // create config API ROUTES
         .constant('API', {
-            "LOAD": config.API.host + 'bestseller/calendar/status/1/createDate/',
-            "LOADDETAILS" : config.API.host + 'bestseller/load-detailed/status/1/createDate/'
+            "LOAD_ORDERER": config.API.host + 'bestseller/calendar/status/1/orderDate/',
+            "LOAD_ORDERED_DETAILS" : config.API.host + 'bestseller/load-detailed/status/1/orderDate/'
         })
 
         // create config  Templates
@@ -77,12 +77,12 @@
                     },
 
                     /**
-                     * Get calendar data by date range params
+                     * Get calendar ordered data by date range params
                      *
                      * @param dateRange
                      * @returns {*}
                      */
-                    getCalendarData: function (dateRange) {
+                    getCalendarOrderedData: function (dateRange) {
 
                         var range = [];
                         if (_.isUndefined(dateRange)) {
@@ -95,20 +95,20 @@
                             console.log('Selected date range');
                         }
 
-                        return RestFactory.request(API.LOAD + range.join(','));
+                        return RestFactory.request(API.LOAD_ORDERER + range.join(','));
                     },
 
                     /**
-                     * Get calendar data by date range params
+                     * Get calendar ordered items by date range params
                      *
                      * @param int year
                      * @param int iso month iso
                      * @returns {*}
                      */
-                    getDetailed: function (year, iso) {
+                    getOrderedDetailed: function (year, iso) {
 
                         var range = getMonthDayRange(year, iso);
-                        return RestFactory.request(API.LOADDETAILS + range.start+','+range.end);
+                        return RestFactory.request(API.LOAD_ORDERED_DETAILS + range.start+','+range.end);
                     },
 
                     /**

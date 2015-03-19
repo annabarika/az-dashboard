@@ -1,7 +1,6 @@
 var app = angular.module("modules.buyer.bestsellers", []);
 
 // Bestseller's representation
-
 app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',
     function ($scope, $rootScope, $modal, BestsellersService) {
 
@@ -12,11 +11,40 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         $scope.currentYear  = moment().year();
         $scope.currentMonth = moment.utc(new Date()).format("MMMM");
 
+        // Datepickers functions
+        $scope.dt = new Date();
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+        };
+        $scope.$watch('dt',function(newVal){
+            console.log('dt',newVal);
+        });
+
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
+
         // Get months
         $scope.months = BestsellersService.getMonths();
 
         // Get bestsellers data
-        BestsellersService.getCalendarData().then(function(response) {
+        BestsellersService.getCalendarOrderedData().then(function(response) {
 
             $scope.bestsellers = BestsellersService.resolveCalendarData(response);
             console.log('Bestsellers', $scope.bestsellers);
@@ -37,21 +65,40 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
          *
          * @param int monthISO eg. 02
          */
-        $scope.currentMonth = function (monthISO) {
+        $scope.selectMonth = function (monthISO) {
 
             // get mont name eg. February
             $scope.currentMonth = BestsellersService.getMonths(monthISO);
 
-            BestsellersService.getDetailed($scope.currentYear, monthISO).then(function(response) {
+            BestsellersService.getOrderedDetailed($scope.currentYear, monthISO).then(function(response) {
                 $scope.bestsellersOrdered = response;
+            });
+        };
+
+        /**
+         * Create bestseller modal autocomplete search
+         */
+        $scope.createBestseller = function() {
+
+            $rootScope.modalInstance = $modal.open({
+                templateUrl: "/modules/buyer/views/bestsellers/create.html",
+                controller: 'BestsellersAddController',
+                backdrop:'static',
+                size: 'sm'
             });
         };
     }
 ]);
 
+// Bestseller's add items
+app.controller('BestsellersAddController', ['$scope','$rootScope', 'BestsellersService',
+    function ($scope, $rootScope, BestsellersService) {
 
-app.controller('BestsellerItemController',
-    [
+         $scope.bestseller = {};
+    }
+]);
+
+app.controller('BestsellerItemController',[
         '$scope',
         '$rootScope',
         "$modal",

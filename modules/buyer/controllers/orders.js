@@ -42,6 +42,7 @@ app.controller('OrderListController',
 				{ name: "id", title: 'ID' },
 				{ name: "type", title: 'Type' },
 				{ name: "status", title: 'Status' },
+                { name: "factoryName", title: "Factory"},
 				{ name: "orderedTotal", title: 'Ordered total' },
 				{ name: "paymentStatus", title: 'Payment status' },
 				{ name: "createDate", title: 'Create date' },
@@ -86,7 +87,6 @@ app.controller('OrderListController',
              //Loading factories
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
-                    console.log(response);
 					var factory = [];
 					for( var i in response ){
 
@@ -122,7 +122,7 @@ app.controller('OrderListController',
             };
 
 
-            $scope.buttonAction=function(){
+            /*$scope.buttonAction=function(){
 
                 //console.log($rootScope.row,$rootScope.method);
 
@@ -160,7 +160,7 @@ app.controller('OrderListController',
                     });
                 }
 
-            };
+            };*/
 
             $scope.$watchCollection('resultData',function(newVal){
 
@@ -240,7 +240,7 @@ app.controller('OrderListController',
                     console.log(obj);
                 })
             };
-           /* $scope.filesChanged = function(elm){
+            /* $scope.filesChanged = function(elm){
 				console.log(elm.files);
                 $scope.newOrder.files=elm.files;
                 $scope.$apply();
@@ -263,8 +263,8 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
         fileinput.click();
     };
 
-    $scope.$watch('uploadFiles',function(){
-        //console.log("this",newVal,oldVal);
+    $scope.$watch('uploadFiles',function(newVal){
+        console.log("this",newVal);
          if($rootScope.uploadFiles){
 
             var i=1;
@@ -355,7 +355,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                 data=order,
 				contentType='multipart';
 
-           /* RestFactory.request(url,method,data, contentType)
+            /* RestFactory.request(url,method,data, contentType)
                 .then(function(response){
 					console.log(response);
                     if(response=='null'){
@@ -415,7 +415,27 @@ app.controller("OrderController",
 			RestFactory.request(config.API.host + "order/get/id/"+id)
 				.then(function(response){
 					$scope.order = response;
-					console.log( $scope.order );
+                    console.log($scope.order);
 				});
 
+            RestFactory.request(config.API.host+"order/get-rows/id/"+id).then(
+                function(response){
+                    console.log(response);
+                }
+            );
+
+
+            $scope.showPayment=function(){
+                $location.path('/buyer/payments/by-order/'+id);
+            };
+            $scope.tableHeader = [
+                { name: "photo", title: 'Photo' },
+                { name: "articul", title: 'Articul' },
+                { name: "title", title: 'Title' },
+                { name: "size", title: "Size"},
+                { name: "count", title: 'Count' },
+                { name: "price", title: 'Price' },
+                { name: "subtotal", title: 'Subtotal' }
+
+            ];
 }]);
