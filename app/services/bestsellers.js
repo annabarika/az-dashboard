@@ -5,7 +5,7 @@
         // create config API ROUTES
         .constant('API', {
             "LOAD": config.API.host + 'bestseller/calendar/status/1/createDate/',
-            "LOADDETAILS" : config.API.host + 'bestseller/load-detailed/status/1/orderDate/'
+            "LOADDETAILS" : config.API.host + 'bestseller/load-detailed/status/1/createDate/'
         })
 
         // create config  Templates

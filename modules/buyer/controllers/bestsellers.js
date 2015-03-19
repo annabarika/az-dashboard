@@ -18,7 +18,6 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         // Get bestsellers data
         BestsellersService.getCalendarData().then(function(response) {
 
-            console.log(response);
             $scope.bestsellers = BestsellersService.resolveCalendarData(response);
             console.log('Bestsellers', $scope.bestsellers);
         });
@@ -44,8 +43,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
             $scope.currentMonth = BestsellersService.getMonths(monthISO);
 
             BestsellersService.getDetailed($scope.currentYear, monthISO).then(function(response) {
-                console.log(response);
-                $scope.bests_orders = response;
+                $scope.bestsellersOrdered = response;
             });
         };
     }

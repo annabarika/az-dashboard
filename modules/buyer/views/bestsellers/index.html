@@ -55,37 +55,38 @@
                         <h5 class="fw-sb">Ordered</h5>
                     </div>
                 </div>
+
+                <!-- Product ordered template -->
                 <table class="table table-bordered">
                     <tbody>
-                    <tr ng-repeat="order in bests_orders">
+                    <tr ng-repeat="bestseller in bestsellersOrdered">
                         <td class="text-center">
                             <div class="media np">
                                 <div class="media-left">
                                       <span class="img-wrapper img-rounded">
-                                        <!--<img src={{img}}>-->
-                                          <img ng-src="http://back95.ru/f/catalogue/{{order.id}}/{{order.photos[0]}}"/>
+                                        <!--<img src={{img}}> {{bestseller}}-->
 
+                                          <img ng-src="http://back95.ru/f/catalogue/{{bestseller.productId}}/{{bestseller.product.photos[0]}}"/>
                                       </span>
                                 </div>
                             </div>
                         </td>
                         <td class="text-center">
                             <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href=""> {{order.articul}}</a></h5>
+                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestseller/id/{{bestseller.id}}">{{bestseller.articul}}</a> {{bestseller.title}} {{bestseller.brand}}</h5>
                             </div>
                         </td>
                         <td class="text-center">
-                            <p ng-repeat="size in order.sizeInfo">{{size}}</p>
+                            <p ng-repeat="size in order.sizeInfo">{{bestseller.orderId}}</p>
                         </td>
                         <td class="text-center">
-                            {{order.saleSpeed}}
-                        </td>
-                        <td class="text-center">
-                            {{order.inStorage}}
+                            {{bestseller.orderDate}}
                         </td>
                     </tr>
                     </tbody>
                 </table>
+                <!-- /Product ordered template -->
+
             </div>
 
             <div class="panel panel-default">
@@ -94,98 +95,29 @@
                         <h5 class="fw-sb">Total</h5>
                     </div>
                 </div>
+                <!-- Product total template -->
                 <table class="table table-bordered">
                     <tbody>
-                    <tr ng-repeat="order in bests_orders">
+                    <tr ng-repeat="bestseller in bestsellersOrdered">
                         <td class="text-center">
                             <div class="media np">
                                 <div class="media-left">
                                       <span class="img-wrapper img-rounded">
-                                        <img ng-src="http://back95.ru/f/catalogue/{{order.id}}/{{order.photos[0]}}"/>
+                                        <!--<img src={{img}}> {{bestseller}}-->
+                                          <img ng-src="http://back95.ru/f/catalogue/{{bestseller.productId}}/{{bestseller.product.photos[0]}}"/>
                                       </span>
                                 </div>
                             </div>
                         </td>
                         <td class="text-center">
                             <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="">{{order.articul}}</a></h5>
+                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestseller/id/{{bestseller.id}}">{{bestseller.articul}}</a> {{bestseller.title}} {{bestseller.brand}}</h5>
                             </div>
                         </td>
-                        <td class="text-center">
-                            Signal
-                        </td>
-                        <td class="text-center">
-                            234
-                        </td>
                     </tr>
-                   <tr>
-                         <td class="text-center">
-                             <div class="media np">
-                                 <div class="media-left">
-                                   <span class="img-wrapper img-rounded">
-                                     <img src="/assets/images/avatar/avatar9.jpg">
-                                   </span>
-                                 </div>
-                             </div>
-                         </td>
-                         <td class="text-center">
-                             <div class="media-body media-middle">
-                                 <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                             </div>
-                         </td>
-                         <td class="text-center">
-                             Signal
-                         </td>
-                         <td class="text-center">
-                             234
-                         </td>
-                     </tr>
-                     <tr>
-                         <td class="text-center">
-                             <div class="media np">
-                                 <div class="media-left">
-                                   <span class="img-wrapper img-rounded">
-                                     <img src="/assets/images/avatar/avatar9.jpg">
-                                   </span>
-                                 </div>
-                             </div>
-                         </td>
-                         <td class="text-center">
-                             <div class="media-body media-middle">
-                                 <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                             </div>
-                         </td>
-                         <td class="text-center">
-                             Signal
-                         </td>
-                         <td class="text-center">
-                             234
-                         </td>
-                     </tr>
-                     <tr>
-                         <td class="text-center">
-                             <div class="media np">
-                                 <div class="media-left">
-                                   <span class="img-wrapper img-rounded">
-                                     <img src="/assets/images/avatar/avatar9.jpg">
-                                   </span>
-                                 </div>
-                             </div>
-                         </td>
-                         <td class="text-center">
-                             <div class="media-body media-middle">
-                                 <h5 class="media-heading mb-0 fw-sb"><a href="">92003</a></h5>
-                             </div>
-                         </td>
-                         <td class="text-center">
-                             Signal
-                         </td>
-                         <td class="text-center">
-                             234
-                         </td>
-                     </tr>
                     </tbody>
                 </table>
+                <!-- /Product total template -->
             </div>
 
             <form role="form">
