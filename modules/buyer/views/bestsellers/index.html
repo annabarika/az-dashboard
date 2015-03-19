@@ -5,12 +5,12 @@
             <div class="page-header clearfix">
                 <div class="row ">
                     <div class="col-md-12">
-                            <span class="fc-header-title">
-                               <h2><button class="btn btn-default" ng-click="changeYear(-1)"><i class="fa fa-chevron-left"></i></button>
-                                   {{currentYear}}
-                                   <button class="btn btn-default" ng-click="changeYear(1)"><i class="fa fa-chevron-right"></i></button>
-                               </h2>
-                            </span>
+                        <span class="fc-header-title">
+                           <h2><button class="btn btn-default" ng-click="changeYear(-1)"><i class="fa fa-chevron-left"></i></button>
+                               {{currentYear}}
+                               <button class="btn btn-default" ng-click="changeYear(1)"><i class="fa fa-chevron-right"></i></button>
+                           </h2>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -20,12 +20,24 @@
                     <p class="fc-widget-header">
                         {{months[key]}}
                     </p>
-                    <a class="fc-day-grid-event fc-event mr-5 ml-5" ng-click="currentMonth(months[key])">
+                    <a class="fc-day-grid-event fc-event mr-5 ml-5" ng-click="currentMonth(key)">
                         <!-- fc-event-success || fc-event-warning || fc-event-danger -->
                         <div class="fc-content">
                             <span class="fc-title pull-right">{{value}}</span>
                         </div>
                     </a>
+                </div>
+            </div>
+            <!-- end: panel -->
+        </div>
+    </div>
+<div  class="col-md-3 bg-auto height-auto bdr-b-sm bdr-b-xs">
+    <div class="scroll">
+        <!-- start page header -->
+        <div class="page-header clearfix">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="mb-sm">{{currentMonth}} {{currentYear}}</h3>
                 </div>
             </div>
             <!-- end: panel -->
@@ -197,5 +209,6 @@
 
         </div>
     </div>
+</div>
 </div>
 <!--/ end box-layout -->

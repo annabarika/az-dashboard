@@ -2,51 +2,51 @@ var app = angular.module("modules.buyer.bestsellers", []);
 
 // Bestseller's representation
 
-app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',"RestFactory",
-    function ($scope, $rootScope, $modal, BestsellersService,RestFactory) {
+app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',
+    function ($scope, $rootScope, $modal, BestsellersService) {
 
         // Document header title
         $rootScope.documentTitle = "Bestsellers";
 
         // Get current state of date
-        $scope.currentYear = moment().year();
+        $scope.currentYear  = moment().year();
         $scope.currentMonth = moment.utc(new Date()).format("MMMM");
 
+        // Get months
         $scope.months = BestsellersService.getMonths();
 
         // Get bestsellers data
         BestsellersService.getCalendarData().then(function(response) {
 
-            $scope.bestsellers = BestsellersService.resolveCalendarData(response, $scope.months);
+            console.log(response);
+            $scope.bestsellers = BestsellersService.resolveCalendarData(response);
             console.log('Bestsellers', $scope.bestsellers);
         });
 
-        // Change year navigation
+        /**
+         * Select year navigation
+         *
+         * @param int index
+         */
         $scope.changeYear = function (index) {
-            $scope.currentYear = $scope.currentYear + index;
-        };
+            $scope.currentYear = $scope.currentYear + parseInt(index);
+            console.log('Selected year:', $scope.currentYear);
+        }
 
-        $scope.currentMonth = function (monthName) {
-            $scope.currentMonth = monthName;
+        /**
+         * Select month navigation
+         *
+         * @param int monthISO eg. 02
+         */
+        $scope.currentMonth = function (monthISO) {
 
-            angular.forEach($scope.months, function (value, key) {
-                if (value == monthName) {
-                    month = key;
-                }
+            // get mont name eg. February
+            $scope.currentMonth = BestsellersService.getMonths(monthISO);
+
+            BestsellersService.getDetailed($scope.currentYear, monthISO).then(function(response) {
+                console.log(response);
+                $scope.bests_orders = response;
             });
-            monthBegin = $scope.current_year + "-" + month + "-01";
-            monthEnd = $scope.current_year + "-" + month + "-31";
-            url = config.API.host + "bestseller/load-detailed/status/1/orderDate/" + monthBegin + "," + monthEnd;
-            console.log(url);
-            RestFactory.request(url)
-                .then(function (response) {
-                    console.log(response);
-                    $scope.bests_orders = response;
-                    console.log($scope.bests_orders);
-
-                }, function (error) {
-                    console.log(error)
-                });
         };
         /**
          * Datepickers functions
