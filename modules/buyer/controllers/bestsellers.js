@@ -12,14 +12,14 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         $scope.currentYear  = moment().year();
         $scope.currentMonth = moment.utc(new Date()).format("MMMM");
 
-        console.log($scope.currentMonth);
-
+        // Get months
         $scope.months = BestsellersService.getMonths();
 
         // Get bestsellers data
         BestsellersService.getCalendarData().then(function(response) {
 
-            $scope.bestsellers = BestsellersService.resolveCalendarData(response, $scope.months);
+            console.log(response);
+            $scope.bestsellers = BestsellersService.resolveCalendarData(response);
             console.log('Bestsellers', $scope.bestsellers);
         });
 
@@ -43,19 +43,10 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
             // get mont name eg. February
             $scope.currentMonth = BestsellersService.getMonths(monthISO);
 
-            var range = BestsellersService.getMonthDayRange($scope.currentYear, monthISO);
-
-            url = config.API.host + "bestseller/load-detailed/status/1/orderDate/" + monthBegin + "," + monthEnd;
-            console.log(url);
-            RestFactory.request(url)
-                .then(function (response) {
-                    console.log(response);
-                    $scope.bests_orders = response;
-                    console.log($scope.bests_orders);
-
-                }, function (error) {
-                    console.log(error)
-                });
+            BestsellersService.getDetailed($scope.currentYear, monthISO).then(function(response) {
+                console.log(response);
+                $scope.bests_orders = response;
+            });
         };
     }
 ]);

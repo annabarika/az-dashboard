@@ -4,7 +4,8 @@
 
         // create config API ROUTES
         .constant('API', {
-            "LOAD": config.API.host + 'bestseller/calendar/createDate/'
+            "LOAD": config.API.host + 'bestseller/calendar/status/1/createDate/',
+            "LOADDETAILS" : config.API.host + 'bestseller/load-detailed/status/1/orderDate/'
         })
 
         // create config  Templates
@@ -20,8 +21,9 @@
                 /**
                  * Create calendar
                  *
+                 * @access private
                  * @param year
-                 * @returns {{}}
+                 * @return array
                  */
                 var generateMonths = function (year) {
 
@@ -44,6 +46,24 @@
                     return calendar;
                 };
 
+                /**
+                 * Get month first and last days
+                 *
+                 * @param int year
+                 * @param int iso month iso
+                 * @access private
+                 * @returns object
+                 */
+                var getMonthDayRange = function (year, iso) {
+
+                    var range = {
+                        start : moment().subtract(iso, 'months').startOf('month').format(year+'-'+iso+'-DD'),
+                        end   : year+'-'+iso+'-'+new Date(year, iso, 0).getDate()
+                    }
+
+                    return range;
+                };
+
                 return {
 
                     /**
@@ -57,21 +77,6 @@
                     },
 
                     /**
-                     * Get month first and last days
-                     *
-                     * @returns {*}
-                     */
-                    getMonthDayRange: function (year, iso) {
-
-                        var range = {
-                            start : moment().subtract(iso, 'months').startOf('month').format(year+'-'+iso+'-DD'),
-                            end   : year+'-'+iso+'-'+new Date(year, iso, 0).getDate()
-                        }
-
-                        return range;
-                    },
-
-                    /**
                      * Get calendar data by date range params
                      *
                      * @param dateRange
@@ -80,30 +85,43 @@
                     getCalendarData: function (dateRange) {
 
                         var range = [];
-
                         if (_.isUndefined(dateRange)) {
+
                             // format date range by default
-                            range.push((new Date().getFullYear() + '-01-01').toString())
+                            range.push((new Date().getFullYear() + '-01-01').toString());
                             range.push(moment().format('YYYY-MM-DD'));
                         }
                         else {
-
-
                             console.log('Selected date range');
                         }
+
                         return RestFactory.request(API.LOAD + range.join(','));
+                    },
+
+                    /**
+                     * Get calendar data by date range params
+                     *
+                     * @param int year
+                     * @param int iso month iso
+                     * @returns {*}
+                     */
+                    getDetailed: function (year, iso) {
+
+                        var range = getMonthDayRange(year, iso);
+                        return RestFactory.request(API.LOADDETAILS + range.start+','+range.end);
                     },
 
                     /**
                      * Resolve calendar data
                      *
-                     * @param dateRange
+                     * @param object responseDateRange
                      * @returns {*}
                      */
-                    resolveCalendarData: function (responseDateRange, months) {
+                    resolveCalendarData: function (responseDateRange) {
 
-                        var result = [], year, month, cnt = [], merged;
+                        var result = [], year, month, cnt = [];
                         if (!_.isUndefined(responseDateRange)) {
+
 
                             angular.forEach(responseDateRange, function (value) {
 

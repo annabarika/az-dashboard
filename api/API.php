@@ -117,6 +117,9 @@ class API {
 		$options = $options + $this->options;
 		curl_setopt_array($this->getHandle(), $options );
 		$result = curl_exec($this->getHandle());
+
+
+        print($result);
 		if(curl_errno($this->getHandle())){
 			throw new \Exception(curl_error($this->getHandle()));
 		}
