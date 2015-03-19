@@ -21,8 +21,6 @@
 <div class="container-fluid pt-md">
     <div class="row">
         <div class="col-md-12">
-            <tabset>
-                <tab heading="Info">
                     <div class="tab-pane active">
                         <div class="row">
                             <div class="col-md-6">
@@ -73,21 +71,33 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-                <tab heading="Products">Short Labeled Justified content</tab>
-                <tab heading="Cargo">Long Labeled Justified content</tab>
-</tabset>
 </div>
-        <table class="table">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th ng-repeat="column in tableHeader">{{column.title}}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
+                <tr ng-repeat="(key,value) in orderProducts track by $index">
+                    <td>{{$index+1}}</td>
+                    <td>
+                        <img ng-src="http://back95.ru/f/catalogue/{{value.id}}/{{value.preview[1]}}"/>
+
+                    </td>
+                    <td>{{value.articul}}</td>
+                    <td>{{value.title}}</td>
+                    <td>{{value.sizes}}</td>
+                    <td>{{value.sizes_count}}</td>
+                    <td>{{value.price}}</td>
+                    <td ng-if="value.sizes_count!=undefined">{{value.sizes_count*value.price}}</td>
+                    <td ng-if="value.sizes_count==undefined">{{value.price}}</td>
                 </tr>
+            <tr>
+                <td>TOTAL</td>
+                <td colspan="8"></td>
+            </tr>
             </tbody>
         </table>
 

@@ -265,7 +265,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
 
     $scope.$watch('uploadFiles',function(newVal){
         console.log("this",newVal);
-         if($rootScope.uploadFiles){
+        /* if($rootScope.uploadFiles){
 
             var i=1;
             var fd = new FormData();
@@ -277,64 +277,18 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             console.log(fd);
 
             var url = config.API.host + "order/loadfiles",
-           // var url = "http://lex.b.compass/order/loadfiles",
-                id= 5,
-                data={
-                    id:id,
-                    jpg:fd[0],
-                    pdf:fd[1]
-                },
-                method="POST";
+                id= 5;
 
-            RestFactory.request(url,method,fd,"multipart")
-                .then(function(response){
-                    console.log(response);
-                },
-                function(error){
-                    console.log(error);
-                });
-
-
-               // $scope.upload($rootScope.files);
-               /* $http.post(url,fd,
+                $http.post(url,fd,
                     {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}
                     })
                     .success(function(data){
                         console.log(data);
-                    });*/
-        }
-
-
+                    });
+        }*/
     });
-
-   /* $scope.upload = function (files) {
-        var url = config.API.host + "order/loadfiles";
-        if (files && files.length) {
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                $upload.upload({
-                    url: url,
-                    fields: {
-                        'id': 5
-                    },
-                    file: file
-                }).progress(function (evt) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    console.log('progress: ' + progressPercentage + '% ' +
-                    evt.config.file.name);
-                }).success(function (data, status, headers, config) {
-                    console.log('file ' + config.file.name + 'uploaded. Response: ' +
-                    JSON.stringify(data));
-                });
-            }
-        }
-    };*/
-
-
-
-
 
     $scope.saveOrder = function ( data ) {
         console.log(data);
@@ -414,17 +368,34 @@ app.controller("OrderController",
 
 			RestFactory.request(config.API.host + "order/get/id/"+id)
 				.then(function(response){
-					$scope.order = response;
-                    console.log($scope.order);
+                    console.log(response);
+                    $scope.order=response;
 				});
-
+            $scope.orderProducts=[];
             RestFactory.request(config.API.host+"order/get-rows/id/"+id).then(
                 function(response){
-                    console.log(response);
+
+                    if(_.isArray(response)){
+                        var url;
+
+                        angular.forEach(response,function(value){
+                            url=config.API.getproducts+'?params[tokien_id]=5f77e685beaa564fd3585738d65108c4&params[id]='+value.productId;
+
+                            RestFactory.request(url).then(
+                                function(data){
+                                    var result=angular.fromJson(data.result);
+                                    var key=_.keys(result.products);
+
+                                    $scope.orderProducts.push(result.products[key]);
+                                    console.log($scope.orderProducts);
+                                }
+                            )
+                        });
+
+                    }
                 }
             );
-
-
+            $scope.imagePath=config.API.imagehost+'/files/factory/attachments/';
             $scope.showPayment=function(){
                 $location.path('/buyer/payments/by-order/'+id);
             };
