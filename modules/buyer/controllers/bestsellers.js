@@ -44,10 +44,16 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         $scope.months = BestsellersService.getMonths();
 
         // Get bestsellers data
-        BestsellersService.getCalendarOrderedData().then(function(response) {
+        $scope.bestsellers = {};
 
-            $scope.bestsellers = BestsellersService.resolveCalendarData(response);
-            console.log('Bestsellers', $scope.bestsellers);
+        BestsellersService.getCalendarData('ordered').then(function(response) {
+            $scope.bestsellers.ordered = BestsellersService.resolveCalendarData(response);
+            console.log('Bestsellers ordered', $scope.bestsellers.ordered);
+        });
+
+        BestsellersService.getCalendarData('total').then(function(response) {
+            $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
+            console.log('Bestsellers total', $scope.bestsellers.total);
         });
 
         /**
@@ -70,9 +76,14 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
             // get mont name eg. February
             $scope.currentMonth = BestsellersService.getMonths(monthISO);
 
-            BestsellersService.getOrderedDetailed($scope.currentYear, monthISO).then(function(response) {
+            BestsellersService.getDetailed('ordered', $scope.currentYear, monthISO).then(function(response) {
                 $scope.bestsellersOrdered = response;
+
+                BestsellersService.getDetailed('total', $scope.currentYear, monthISO).then(function(response) {
+                    $scope.bestsellersTotal = response;
+                });
             });
+
         };
 
         /**

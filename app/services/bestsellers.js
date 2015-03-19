@@ -4,8 +4,11 @@
 
         // create config API ROUTES
         .constant('API', {
-            "LOAD_ORDERER": config.API.host + 'bestseller/calendar/status/1/orderDate/',
-            "LOAD_ORDERED_DETAILS" : config.API.host + 'bestseller/load-detailed/status/1/orderDate/'
+            "LOAD_ORDERED": config.API.host + 'bestseller/calendar/status/1/orderDate/',
+            "LOAD_ORDERED_DETAILS" : config.API.host + 'bestseller/load-detailed/status/1/orderDate/',
+
+            "LOAD_TOTAL": config.API.host + 'bestseller/calendar/status/0,1/createDate/',
+            "LOAD_TOTAL_DETAILS" : config.API.host + 'bestseller/load-detailed/status/0,1/createDate/'
         })
 
         // create config  Templates
@@ -77,14 +80,15 @@
                     },
 
                     /**
-                     * Get calendar ordered data by date range params
+                     * Get calendar data by date range params
                      *
-                     * @param dateRange
+                     * @param dateRange date range object
+                     * @param string type ordered | total
                      * @returns {*}
                      */
-                    getCalendarOrderedData: function (dateRange) {
+                    getCalendarData: function (type, dateRange) {
 
-                        var range = [];
+                        var range = [], url = (type == 'ordered') ? API.LOAD_ORDERED : API.LOAD_TOTAL;
                         if (_.isUndefined(dateRange)) {
 
                             // format date range by default
@@ -95,20 +99,21 @@
                             console.log('Selected date range');
                         }
 
-                        return RestFactory.request(API.LOAD_ORDERER + range.join(','));
+                        return RestFactory.request(url + range.join(','));
                     },
 
                     /**
-                     * Get calendar ordered items by date range params
+                     * Get calendar items by clicking month date
                      *
+                     * @param string type ordered | total
                      * @param int year
                      * @param int iso month iso
                      * @returns {*}
                      */
-                    getOrderedDetailed: function (year, iso) {
+                    getDetailed: function (type, year, iso) {
 
-                        var range = getMonthDayRange(year, iso);
-                        return RestFactory.request(API.LOAD_ORDERED_DETAILS + range.start+','+range.end);
+                        var range = getMonthDayRange(year, iso), url = (type == 'ordered') ? API.LOAD_ORDERED_DETAILS : API.LOAD_TOTAL_DETAILS;
+                        return RestFactory.request(url + range.start+','+range.end);
                     },
 
                     /**

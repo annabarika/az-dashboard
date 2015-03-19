@@ -19,14 +19,14 @@
         </div>
 
         <div class="panel fullcalendar box-layout">
-            <div  class="col-md-2 col-sm-2 fc" ng-repeat="(key,value) in bestsellers[currentYear]">
+            <div  class="col-md-2 col-sm-2 fc" ng-repeat="(key,value) in bestsellers.total[currentYear]">
                 <p class="fc-widget-header">
                     {{months[key]}}
                 </p>
                 <a class="fc-day-grid-event fc-event mr-5 ml-5" ng-click="selectMonth(key)">
                     <!-- fc-event-success || fc-event-warning || fc-event-danger -->
                     <div class="fc-content">
-                        <span class="fc-title pull-right">{{value}}</span>
+                        <span class="fc-title pull-right">Total: {{value}} / Ordered {{bestsellers.ordered[currentYear][key]}}</span>
                     </div>
                 </a>
             </div>
