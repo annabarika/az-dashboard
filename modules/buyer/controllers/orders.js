@@ -303,9 +303,9 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             'factoryId'     :   data.factory.id,
             'type'          :   data.type.id,
             'currencyId'    :   5
-            ,'amount'        :   data.amount
+            /*,'amount'        :   data.amount*/
         };
-        console.log(params);
+        console.log("params",params);
             var url = config.API.host + "order/create";
 
              RestFactory.request(url,"POST",params)
@@ -316,16 +316,28 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                     }
                     else{
                         if(_.isObject(response)){
-                           url = config.API.host + "order/loadfiles";
+                            url=config.API.host+"order/create-manual-row";
+                            params={
+                                orderId: response.id,
+                                price: data.amount
+                            };
+                            console.log(params);
+                            RestFactory.request(url,"POST",params).then(
+                                function(resp){
+                                    console.log("resp",resp);
+                                }
+                            );
+
+                            url = config.API.host + "order/loadfiles";
                             fd.append("id",response.id);
-                           /* console.log(fd);*/
+                            console.log(fd);
                             $http.post(url,fd,
                                 {
                                     transformRequest: angular.identity,
                                     headers: {'Content-Type': undefined}
                                 })
                                 .success(function(data){
-                                    console.log(data);
+                                    console.log("fileData",data);
 
                                 })
                                 .error(function(data,status){
@@ -333,7 +345,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                                 })
                         }
                        // console.log(response);
-                       // $rootScope.changeAlert=1;
+
                         messageCenterService.add('success', 'Order is created', {timeout: 3000});
                         $location.path( '/buyer/orders/id/'+ response.id );
                         $modalInstance.close();

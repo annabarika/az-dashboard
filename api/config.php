@@ -1,6 +1,6 @@
 <?php
 $API = array(
-	'host' => 'wwoman.b.compass',
+	'host' => 'lex.b.compass',
 	'jsonp'     => 'back95.ru/legacy/jsonrpc?method=catalogue.getProducts&',
 	'jsoncreate' => 'b.dev95.ru/legacy/jsonrpc?method=catalogue.createProduct&params[tokien_id]=5f77e685beaa564fd3585738d65108c4&',
 	'createproducts' => 'b.dev95.ru/legacy/jsonrpc?method=catalogue.createProductBatch&params[tokien_id]=5f77e685beaa564fd3585738d65108c4&'

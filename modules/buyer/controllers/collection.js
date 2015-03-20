@@ -225,6 +225,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
          */
         $scope.nextStep = function () {
             //show error window
+
             if ($rootScope.photo == undefined) {
 
                 $rootScope.message = "You are forgot upload photo";
@@ -237,9 +238,9 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             }
 
             if ($scope.step == 0) {
-
+                console.log($scope.step);
                 CollectionService.uploadFiles($rootScope.photo).success(function (data) {
-
+                        console.log(data);
                     if (_.isArray(data)) {
                         $scope.items = [];
 
@@ -251,7 +252,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
                         $scope.imagePath = CollectionService.getImagePath();
                         $scope.step++;
-
+                        console.log( $scope.step,$scope.items);
                     }
                 });
             }
