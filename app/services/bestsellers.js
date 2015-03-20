@@ -80,21 +80,21 @@
                     /**
                      * Get calendar data by date range params
                      *
-                     * @param dateRange date range object
                      * @param string type ordered | total
                      * @returns {*}
                      */
-                    getCalendarData: function (type, dateRange) {
+                    getCalendarData: function (type, year) {
 
                         var range = [], url = (type == 'ordered') ? API.LOAD_ORDERED : API.LOAD_TOTAL;
-                        if (_.isUndefined(dateRange)) {
+                        if (_.isUndefined(year)) {
 
                             // format date range by default
                             range.push((new Date().getFullYear() + '-01-01').toString());
                             range.push(moment().format('YYYY-MM-DD HH:mm:ss'));
                         }
                         else {
-                            console.log('Selected date range');
+                            range.push(year + '-01-01');
+                            range.push(moment().format(year+'-MM-DD HH:mm:ss'));
                         }
 
                         return RestFactory.request(url + range.join(','));

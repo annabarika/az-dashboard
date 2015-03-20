@@ -18,11 +18,11 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         // Get bestsellers data
         $scope.bestsellers = {};
 
-        BestsellersService.getCalendarData('ordered').then(function(response) {
+        BestsellersService.getCalendarData('ordered', $scope.currentYear).then(function(response) {
             $scope.bestsellers.ordered = BestsellersService.resolveCalendarData(response);
         });
 
-        BestsellersService.getCalendarData('total').then(function(response) {
+        BestsellersService.getCalendarData('total', $scope.currentYear).then(function(response) {
             $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
         });
 
@@ -33,6 +33,14 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
          */
         $scope.changeYear = function (index) {
             $scope.currentYear = $scope.currentYear + parseInt(index);
+
+            BestsellersService.getCalendarData('ordered', $scope.currentYear).then(function(response) {
+                $scope.bestsellers.ordered = BestsellersService.resolveCalendarData(response);
+            });
+
+            BestsellersService.getCalendarData('total', $scope.currentYear).then(function(response) {
+                $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
+            });
         }
 
         /**
