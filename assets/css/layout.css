@@ -183,6 +183,43 @@ body > #app-wrapper {
     .app-sidebar.sidebar-left{
         border: none!important;
     }
+    .app-sidebar.sidebar-left.sidebar-left-collapse {
+        min-height: 50px!important;
+        top: 56px!important;
+        width: 100%!important;
+    }
+    .app-sidebar .sidebar-content {
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    .app-sidebar .sidebar-header ~ .sidebar-content{
+        padding-top: 45px!important;
+        overflow: scroll;
+        z-index: 10000;
+    }
+    #app-footer{
+        z-index: 0;
+    }
+    .nav-sidebar > .nav-group > .nav-submenu{
+        display: none;
+    }
+    .sidebar-left-collapse .app-sidebar.sidebar-left{
+        width:100%!important;
+    }
+    .sidebar-left-collapse .app-sidebar.sidebar-left .sidebar-header{
+        width: 100%;
+    }
+    .sidebar-left-collapse .nav-sidebar > .nav-group > .nav-submenu{
+        width: 100%!important;
+        position: relative!important;
+        top: 0;
+        left: 0;
+    }
+    .sidebar-left-collapse .nav-sidebar > .nav-group > .nav-submenu > li{
+        padding-top: 20px;
+        font-size: large;
+    }
 }
 #app-header.navbar .navbar-nocollapse .navbar-nav .open .dropdown-menu {
     position: absolute;
