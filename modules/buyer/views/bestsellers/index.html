@@ -58,26 +58,26 @@
                 <div ng-if="!bestsellersOrdered">Click on the calendar on the number of ordered items to see them</div>
                 <table class="table table-bordered">
                     <tbody>
-                    <tr ng-repeat="bestseller in bestsellersOrdered">
+                    <tr ng-repeat="ordered in bestsellersOrdered">
                         <td class="text-center">
                             <div class="media np">
                                 <div class="media-left">
                                       <span class="img-wrapper img-rounded">
-                                          <img ng-src="http://back95.ru/f/catalogue/{{bestseller.product.id}}/{{bestseller.product.photos[0]}}"/>
+                                          <img ng-src="http://back95.ru/f/catalogue/{{ordered.product.id}}/{{ordered.product.photos[0]}}"/>
                                       </span>
                                 </div>
                             </div>
                         </td>
                         <td class="text-center">
                             <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestseller/id/{{bestseller.product.id}}">{{bestseller.product.articul}}</a> {{bestseller.product.title}} {{bestseller.product.brand}}</h5>
+                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestseller/id/{{ordered.product.id}}">{{ordered.product.articul}}</a> {{ordered.product.title}} {{ordered.product.brand}}</h5>
                             </div>
                         </td>
                         <td class="text-center">
-                            <a href="/buyer/orders/id/{{bestseller.bestseller.orderId}}">{{bestseller.bestseller.orderId}}</a>
+                            <a href="/buyer/orders/id/{{ordered.bestseller.orderId}}">{{ordered.bestseller.orderId}}</a>
                         </td>
                         <td class="text-center">
-                            {{bestseller.bestseller.orderDate}}
+                            {{ordered.bestseller.orderDate}}
                         </td>
                     </tr>
                     </tbody>
@@ -89,21 +89,23 @@
                 <div ng-if="!bestsellersTotal">Click on the calendar on the number of total items to see them</div>
                 <table class="table table-bordered">
                     <tbody>
-                    <tr ng-repeat="bestseller in bestsellersTotal">
+                    <tr ng-repeat="total in bestsellersTotal">
                         <td class="text-center">
                             <div class="media np">
                                 <div class="media-left">
                                       <span class="img-wrapper img-rounded">
-                                        <!--<img src={{img}}> {{bestseller}}-->
-                                          <img ng-src="http://back95.ru/f/catalogue/{{bestseller.productId}}/{{bestseller.product.photos[0]}}"/>
+                                          <img ng-src="http://back95.ru/f/catalogue/{{total.product.id}}/{{total.product.photos[0]}}"/>
                                       </span>
                                 </div>
                             </div>
                         </td>
                         <td class="text-center">
                             <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestseller/id/{{bestseller.id}}">{{bestseller.articul}}</a> {{bestseller.title}} {{bestseller.brand}}</h5>
+                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestseller/id/{{total.product.id}}">{{total.product.articul}}</a> {{total.product.title}} {{total.product.brand}}</h5>
                             </div>
+                        </td>
+                        <td class="text-center">
+                            {{total.bestseller.orderDate}}
                         </td>
                     </tr>
                     </tbody>

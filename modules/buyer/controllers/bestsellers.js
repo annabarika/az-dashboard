@@ -102,12 +102,13 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
 ]);
 
 // Bestseller's add items
-app.controller('BestsellersAddController', ['$scope','$rootScope', 'BestsellersService',
-    function ($scope, $rootScope, BestsellersService) {
+app.controller('BestsellersAddController', function ($scope, $rootScope, BestsellersService) {
 
-         $scope.bestseller = {};
+        //BestsellersService.getProductsByArticle()
+
+        //$scope.articles = articles;
     }
-]);
+);
 
 app.controller('BestsellerItemController',[
         '$scope',
