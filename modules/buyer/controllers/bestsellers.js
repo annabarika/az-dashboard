@@ -2,8 +2,8 @@
 var app = angular.module("modules.buyer.bestsellers", ['angucomplete']);
 
 // Bestseller's representation
-app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',
-    function ($scope, $rootScope, $modal, BestsellersService) {
+app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
+    function ($scope, $rootScope, $modal, BestsellersService, messageCenterService, $location) {
 
         // Document header title
         $rootScope.documentTitle = "Bestsellers";
@@ -11,35 +11,6 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         // Get current state of date
         $scope.currentYear  = moment().year();
         $scope.currentMonth = moment.utc(new Date()).format("MMMM");
-
-        // Datepickers functions
-        $scope.dt = new Date();
-
-        $scope.clear = function () {
-            $scope.dt = null;
-        };
-
-        // Disable weekend selection
-        $scope.disabled = function(date, mode) {
-            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-        };
-        $scope.$watch('dt',function(newVal){
-            console.log('dt',newVal);
-        });
-
-        $scope.open = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            $scope.opened = true;
-        };
-        $scope.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
-
-        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        $scope.format = $scope.formats[0];
 
         // Get months
         $scope.months = BestsellersService.getMonths();
@@ -49,12 +20,10 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
 
         BestsellersService.getCalendarData('ordered').then(function(response) {
             $scope.bestsellers.ordered = BestsellersService.resolveCalendarData(response);
-            console.log('Bestsellers ordered', $scope.bestsellers.ordered);
         });
 
         BestsellersService.getCalendarData('total').then(function(response) {
             $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
-            console.log('Bestsellers total', $scope.bestsellers.total);
         });
 
         /**
@@ -64,7 +33,6 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
          */
         $scope.changeYear = function (index) {
             $scope.currentYear = $scope.currentYear + parseInt(index);
-            console.log('Selected year:', $scope.currentYear);
         }
 
         /**
@@ -72,184 +40,255 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
          *
          * @param int monthISO eg. 02
          */
-        $scope.selectMonth = function (monthISO) {
+        $scope.selectMonth = function (type, monthISO) {
 
             // get mont name eg. February
             $scope.currentMonth = BestsellersService.getMonths(monthISO);
 
-            BestsellersService.getDetailed('ordered', $scope.currentYear, monthISO).then(function(response) {
-                $scope.bestsellersOrdered = response;
+            BestsellersService.getMonthDetailed(type, $scope.currentYear, monthISO).then(function(response) {
 
-                BestsellersService.getDetailed('total', $scope.currentYear, monthISO).then(function(response) {
+                if(type == 'ordered') {
+                    $scope.bestsellersOrdered = response;
+                }
+                else {
                     $scope.bestsellersTotal = response;
-                });
+                }
             });
-
         };
 
         /**
-         * Create bestseller modal autocomplete search
+         * Get bestsellers by choosed selected date
+         * @param date
          */
-        $scope.createBestseller = function() {
+        $scope.selectDate = function(date) {
 
-            $rootScope.modalInstance = $modal.open({
-                templateUrl: "/modules/buyer/views/bestsellers/create.html",
-                controller: 'BestsellersAddController',
-                backdrop:'static',
-                size: 'sm'
+            $scope.currentYear = moment(date).year();
+
+            BestsellersService.getDayDetailed('ordered', date).then(function(response) {
+                $scope.bestsellersOrdered = response;
+
+                BestsellersService.getDayDetailed('total', date).then(function(response) {
+                    $scope.bestsellersTotal = response;
+                });
             });
         };
+
+        /**
+         * Create bestseller
+         * @uses autocomplete search
+         */
+        $scope.createBestseller = function(product) {
+
+            if(_.isUndefined(product)) {
+
+                $rootScope.modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/bestsellers/create.html",
+                    controller: 'BestsellersAddController',
+                    backdrop:'static',
+                    size: 'sm',
+                    resolve :  {
+                        searchUri : function() {
+                            // resolve the search uri to autocomplete directive
+                            return BestsellersService.searchArticulUri()
+                        }
+                    }
+                });
+            }
+            else {
+                if('originalObject' in product) {
+                    BestsellersService.addToBestseller(product.originalObject).then(function(response) {
+
+                        if(response.id) {
+
+                            $rootScope.modalInstance.close();
+                            $location.path('/buyer/bestsellers/item/'+response.id)
+                        }
+                        else {
+                            messageCenterService.add('danger', 'Product does not created. Undefined error', {timeout: 3000});
+                        }
+                    });
+                }
+                else {
+                    messageCenterService.add('danger', 'Try to add unfounded product', {timeout: 3000});
+                }
+            }
+        };
+
+        /**
+         * Datepickers functions
+         */
+
+        $scope.date = new Date();
+
+        $scope.clear = function () {
+            $scope.date = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+        };
+
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        };
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+        $scope.format = 'EEE MMM dd yyyy HH:mm:ss Z';
     }
 ]);
 
-// Bestseller's add items
-app.controller('BestsellersAddController', function ($scope, $rootScope, BestsellersService) {
-
-        $scope.searchUri = BestsellersService.searchArticulUri();
-        //BestsellersService.findProductsByArticle(64975).then(function(response) {
-        //    //$scope.articles = articles;
-        //    console.log('Response', response);
-        //});
+// Bestseller's add item
+app.controller('BestsellersAddController', function ($scope, $rootScope, searchUri) {
+        // provide search action to autocomplete
+        $scope.searchUri = searchUri;
     }
 );
 
-app.controller('BestsellerItemController',[
-        '$scope',
-        '$rootScope',
-        "$modal",
-        "$location",
-        "$route",
-        "RestFactory",
-
-
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory){
-
-            $scope.$route = $route;
-            $scope.$location = $location;
-
-            /* Getting cargo */
-            $scope.summaryCart = [
-                {
-                    "a_photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"3234555",
-                    "size":"M",
-                    "count":"3x",
-                    "curency":"100"
-                },
-
-                {
-                    "a_photo":"/assets/images/avatar/avatar17.jpg",
-                    "article":"8676",
-                    "size":"S",
-                    "count":"3x",
-                    "curency":"100"
-                },
-
-                {
-                    "a_photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"4435",
-                    "size":"L",
-                    "count":"3x",
-                    "curency":"100"
-                },
-
-                {
-                    "a_photo":"/assets/images/avatar/avatar3.jpg",
-                    "article":"35356",
-                    "size":"M",
-                    "count":"3x",
-                    "curency":"100"
-                },
-                {
-                    "a_photo":"/assets/images/avatar/avatar8.jpg",
-                    "article":"995453",
-                    "size":"M",
-                    "count":"3x",
-                    "curency":"100"
-                },
-                {
-                    "a_photo":"/assets/images/avatar/avatar1.jpg",
-                    "article":"344657",
-                    "size":"M",
-                    "count":"3x",
-                    "curency":"100"
-                },
-                {
-                    "a_photo":"/assets/images/avatar/avatar16.jpg",
-                    "article":"233567",
-                    "size":"M",
-                    "count":"3x",
-                    "curency":"100"
-                },
-                {
-                    "a_photo":"/assets/images/avatar/avatar18.jpg",
-                    "article":"9799898",
-                    "size":"M",
-                    "count":"3x",
-                    "curency":"100"
-                }
-            ];
-
-            $scope.edit = function (obj) {
-                console.log(obj);
-                $location.path( '/buyer/bestsellers/bestseller_cart');
-            };
-
-            $scope.tableHeader = [
-                { name: "size", title: 'Size' },
-                { name: "count", title: 'Count' },
-                { name: "speed", title: 'Sales speed' },
-                { name: "sales", title: 'Sales' },
-                { name: "returns", title: 'Returns' }
-            ];
-            $scope.buttonsCart=[{
-                class:"btn btn-default",
-                icon:"fa fa-trash-o"
-            }];
-            $scope.buttonAction=function(){
-                alert("delete");
-            };
-            RestFactory.request('data/cartProduct.json')
-                .then(function(response){
-                    //$scope.cartProduct =response;
-                    //var l=$scope.cartProduct.length;
-                    //for(var i=0;i<l;i++){
-                    //    angular.forEach($scope.cartProduct[i],function(v,k){
-                    //        if(k=='returns'){
-                    //            //v=v+'%';
-                    //            console.log(v);
-                    //            console.log(typeof v);
-                    //        }
-                    //        if(k=='sales'){
-                    //            //v=v+'%';
-                    //            console.log(v);
-                    //            console.log(typeof v);
-                    //        }
-                    //    });
-                    //}
-
-                    $scope.cartProduct =response;
-                    console.log($scope.cartProduct);
-                });
-
-            $scope.tableHeaderHistoryCart = [
-                { name: "date", title: 'Re buying date' },
-                { name: "size", title: 'Size&count' }
-            ];
-            RestFactory.request('data/historyCart.json')
-                .then(function(response){
-                    $scope.historyCart =response;
-                });
-
-            $scope.tableHeaderLogOperations = [
-                { name: "type", title: 'Operations type' },
-                { name: "time", title: 'Time' },
-                { name: "date", title: 'Date' }
-            ];
-            RestFactory.request('data/logOperations.json')
-                .then(function(response){
-                    $scope.logOperations =response;
-                });
-        }]);/**
- * Created by kostyan on 3/17/15.
+/**
+ * Bestseller item management
  */
+app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$location",'$routeParams', 'BestsellersService', 'messageCenterService',
+    function ($scope, $rootScope, $modal, $location, $routeParams, BestsellersService, messageCenterService){
+
+        BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
+
+            if(response.bestseller) {
+
+                $scope.bestseller = response;
+                console.log('Bestseller', $scope.bestseller);
+                //@TODO Bestseller resolver
+
+                ///* Getting cargo */
+                //$scope.summaryCart = [
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar18.jpg",
+                //        "article":"3234555",
+                //        "size":"M",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    },
+                //
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar17.jpg",
+                //        "article":"8676",
+                //        "size":"S",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    },
+                //
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar18.jpg",
+                //        "article":"4435",
+                //        "size":"L",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    },
+                //
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar3.jpg",
+                //        "article":"35356",
+                //        "size":"M",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    },
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar8.jpg",
+                //        "article":"995453",
+                //        "size":"M",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    },
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar1.jpg",
+                //        "article":"344657",
+                //        "size":"M",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    },
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar16.jpg",
+                //        "article":"233567",
+                //        "size":"M",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    },
+                //    {
+                //        "a_photo":"/assets/images/avatar/avatar18.jpg",
+                //        "article":"9799898",
+                //        "size":"M",
+                //        "count":"3x",
+                //        "curency":"100"
+                //    }
+                //];
+                //
+                //$scope.edit = function (obj) {
+                //    console.log(obj);
+                //    $location.path( '/buyer/bestsellers/bestseller_cart');
+                //};
+                //
+                //$scope.tableHeader = [
+                //    { name: "size", title: 'Size' },
+                //    { name: "count", title: 'Count' },
+                //    { name: "speed", title: 'Sales speed' },
+                //    { name: "sales", title: 'Sales' },
+                //    { name: "returns", title: 'Returns' }
+                //];
+                //$scope.buttonsCart=[{
+                //    class:"btn btn-default",
+                //    icon:"fa fa-trash-o"
+                //}];
+                //$scope.buttonAction=function(){
+                //    alert("delete");
+                //};
+                //RestFactory.request('data/cartProduct.json')
+                //    .then(function(response){
+                //        //$scope.cartProduct =response;
+                //        //var l=$scope.cartProduct.length;
+                //        //for(var i=0;i<l;i++){
+                //        //    angular.forEach($scope.cartProduct[i],function(v,k){
+                //        //        if(k=='returns'){
+                //        //            //v=v+'%';
+                //        //            console.log(v);
+                //        //            console.log(typeof v);
+                //        //        }
+                //        //        if(k=='sales'){
+                //        //            //v=v+'%';
+                //        //            console.log(v);
+                //        //            console.log(typeof v);
+                //        //        }
+                //        //    });
+                //        //}
+                //
+                //        $scope.cartProduct =response;
+                //        console.log($scope.cartProduct);
+                //    });
+                //
+                //$scope.tableHeaderHistoryCart = [
+                //    { name: "date", title: 'Re buying date' },
+                //    { name: "size", title: 'Size&count' }
+                //];
+                //RestFactory.request('data/historyCart.json')
+                //    .then(function(response){
+                //        $scope.historyCart =response;
+                //    });
+                //
+                //$scope.tableHeaderLogOperations = [
+                //    { name: "type", title: 'Operations type' },
+                //    { name: "time", title: 'Time' },
+                //    { name: "date", title: 'Date' }
+                //];
+                //RestFactory.request('data/logOperations.json')
+                //    .then(function(response){
+                //        $scope.logOperations =response;
+                //    });
+            }
+            else {
+                messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
+            }
+        });
+    }]);

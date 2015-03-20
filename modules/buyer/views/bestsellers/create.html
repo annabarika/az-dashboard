@@ -11,9 +11,9 @@
                           pause="400"
                           selectedobject="products"
                           url="{{searchUri}}"
-                          minlength="3"
+                          minlength="4"
                           titlefield="articul,title,brand"
-                          descriptionfield="id,articul,title,brand"
+                          descriptionfield="articul,title,brand"
                           imagefield="preview"
                           inputclass="form-control form-control-small"/>
             <span class="input-group-btn autocomplete_btn">
@@ -22,7 +22,7 @@
     </div>
     <!--footer-->
     <div class="modal-footer">
-        <button type="button" class="btn btn-green" ng-click="create()">Create</button>
+        <button type="button" class="btn btn-green" data-ng-controller="BestsellersController" ng-click="createBestseller(products)">Create</button>
         <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
     </div>
 </div>
