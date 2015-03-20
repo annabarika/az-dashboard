@@ -1,4 +1,5 @@
-var app = angular.module("modules.buyer.bestsellers", []);
+// Create module @require angucomple for remote search
+var app = angular.module("modules.buyer.bestsellers", ['angucomplete']);
 
 // Bestseller's representation
 app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService',
@@ -104,9 +105,11 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
 // Bestseller's add items
 app.controller('BestsellersAddController', function ($scope, $rootScope, BestsellersService) {
 
-        //BestsellersService.getProductsByArticle()
-
-        //$scope.articles = articles;
+        $scope.searchUri = BestsellersService.searchArticulUri();
+        //BestsellersService.findProductsByArticle(64975).then(function(response) {
+        //    //$scope.articles = articles;
+        //    console.log('Response', response);
+        //});
     }
 );
 

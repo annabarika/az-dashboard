@@ -6,7 +6,16 @@
     </div>
     <div class="modal-body">
         <form>
-            <autocomplete input-model="articles" output-model="bestseller"></autocomplete>
+            <angucomplete id="articul"
+                          placeholder="Search by articul"
+                          pause="400"
+                          selectedobject="products"
+                          url="{{searchUri}}"
+                          minlength="3"
+                          titlefield="articul,title,brand"
+                          descriptionfield="id,articul,title,brand"
+                          imagefield="preview"
+                          inputclass="form-control form-control-small"/>
             <span class="input-group-btn autocomplete_btn">
             </span>
         </form>

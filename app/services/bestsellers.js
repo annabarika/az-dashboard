@@ -8,18 +8,13 @@
             "LOAD_ORDERED_DETAILS" : config.API.host + 'bestseller/load-detailed/status/1/orderDate/',
 
             "LOAD_TOTAL": config.API.host + 'bestseller/calendar/status/0,1/createDate/',
-            "LOAD_TOTAL_DETAILS" : config.API.host + 'bestseller/load-detailed/status/0,1/createDate/'
+            "LOAD_TOTAL_DETAILS" : config.API.host + 'bestseller/load-detailed/status/0,1/createDate/',
+
+            "FIND_BY_ARTICUL" : config.API.host + 'product/search/query/'
         })
 
-        // create config  Templates
-        .constant('TEMPLATE', (function () {
-
-            return {};
-
-        })())
-
-        .factory("BestsellersService", ['API', 'TEMPLATE', 'RestFactory',
-            function (API, TEMPLATE, RestFactory) {
+        .factory("BestsellersService", ['API', 'RestFactory',
+            function (API, RestFactory) {
 
                 /**
                  * Create calendar
@@ -53,7 +48,7 @@
                  * Get month first and last days
                  *
                  * @param int year
-                 * @param int iso month iso
+                 * @param int iso month iso code
                  * @access private
                  * @returns object
                  */
@@ -154,6 +149,24 @@
                             });
                         }
                         return result;
+                    },
+
+                    /**
+                     * Get find articul uri
+                     */
+                    searchArticulUri: function() {
+                        return API.FIND_BY_ARTICUL;
+                    },
+
+                    /**
+                     * Find products by articul
+                     *
+                     * @param string article
+                     */
+                    findProductsByArticle: function(articul) {
+
+                        return RestFactory.request(API.FIND_BY_ARTICUL+articul);
+
                     }
                 }
             }]);
