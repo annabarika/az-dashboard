@@ -400,7 +400,7 @@
                  * @returns {*}
                  */
                 productsCreate: function (data) {
-
+                    console.log(data);
                     // Query String to backend create product
                     //+'?params[params][vendor_id]='+1+'
                     // &params[params][vendor_articul]='+obj.factory_articul+'
@@ -419,7 +419,7 @@
 
                             if (response.hasOwnProperty('products')) {
 
-                                // Good Job!
+
                                 var products = [];
 
                                 //if (data.items.length == Object.keys(response.products).length) {

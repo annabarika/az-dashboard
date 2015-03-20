@@ -195,7 +195,6 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
         $scope.upload = function () {
             fileinput = document.getElementById("fileUpload");
-            console.log(fileinput);
             fileinput.click();
         };
 
@@ -332,7 +331,8 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
                         messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
                         $timeout(function () {
-                            $location.path("buyer/collection");
+                            $location.path("buyer/co  " +
+                            " llection");
                         }, 2000);
                     }
                     else {

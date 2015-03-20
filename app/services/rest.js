@@ -34,7 +34,6 @@
 					data: data
                     ,headers : headers
 				};
-				//console.log(req);
 				$http(req)
                     .success(function (response) {
                         if (response) {

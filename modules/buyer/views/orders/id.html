@@ -35,8 +35,9 @@
                                             <tr>
                                                 <td>Type</td>
                                                 <td>
-                                                    <select class="form-control" ng-model="order.type" ng-options="row.name for row in msk">
-                                                        <option value="">-- Choose type --</option>
+                                                 <!--   {{order.order.type}}-->
+                                                    <select class="form-control" ng-model="currentType" ng-options="row.name for row in type" ng-change="changeType()">
+                                                       <!-- <option value="">-- Choose  --</option>-->
                                                     </select>
                                                 </td>
                                             </tr>
@@ -62,7 +63,14 @@
                                             </tr>
                                             <tr>
                                                 <td>Cargo</td>
-                                                <td></td>
+                                                <td>
+                                                    <ul class="list-inline" ng-if="cargo==array">
+                                                        <li ng-repeat="item in cargo">
+                                                            #<a href=""  ng-click="goToCargo(item.cargo.id)">{{item.cargo.id}}</a>;
+                                                        </li>
+                                                    </ul>
+                                                    <span ng-if="cargo!=array">Cargo is not create</span>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>

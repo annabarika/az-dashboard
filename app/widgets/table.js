@@ -120,13 +120,16 @@
                 ,buttonAction:"&"
                 ,caption:"@"
                 ,cellsButton:"&"
+                ,useBadge:"@"
             },
 
             link:function($scope){
 
-                $scope.sortBy = function() {
+                if($scope.useBadge==undefined){
+                    $scope.useBadge=false;
+                }
 
-                    //console.log($scope.dataheader);
+                $scope.sortBy = function() {
 
                     var order = [];
                     angular.forEach($scope.dataheader, function(h){
