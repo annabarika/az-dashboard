@@ -96,7 +96,13 @@
                 </tr>
             <tr>
                 <td>TOTAL</td>
-                <td colspan="8"></td>
+                <td colspan="3">
+                    <h5 ng-if="totalCount==number">count: {{totalCount}}</h5>
+                    <h5 ng-if="totalCount!=number">count: 0</h5>
+                </td>
+                <td colspan="5">
+                    <h5>price: {{totalPrice}}</h5>
+                </td>
             </tr>
             </tbody>
         </table>

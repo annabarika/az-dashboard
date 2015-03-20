@@ -195,8 +195,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
         $scope.upload = function () {
             fileinput = document.getElementById("fileUpload");
+            console.log(fileinput);
             fileinput.click();
-
         };
 
         $scope.back = function () {

@@ -370,7 +370,7 @@
                  * Create order
                  */
                 orderCreate: function (order) {
-
+                    console.log(order);
                     var params = {
                         'buyerId'       :   order.buyerId,
                         'factoryId'     :   order.collection.factoryId,
