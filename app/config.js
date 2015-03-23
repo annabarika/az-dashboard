@@ -1,8 +1,8 @@
 var config = {
     API: {
-        host:"http://green.f.compass/api/",
+        host: "http://lex.f.azimuth/api/",
         key: 'test',
-        imagehost:"http://lex.b.compass",
+        imagehost: 'http://lex.b.compass',
         getproducts:"http://green.f.compass/api/jsonp.php"
     },
     monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
