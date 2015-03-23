@@ -437,10 +437,10 @@ app.controller("OrderController",
             ];
 
             $scope.statusTemplates = {
-                1:'<span class="label label-info">Draft</span>',
-                2:'<span class="label label-danger">Send to factory</span>',
-                3:'<span class="label label-success">Cancelled</span>',
-                4:'<span class="label label-warning">Finished</span>'
+                0:'<span class="label label-info">Draft</span>',
+                1:'<span class="label label-danger">Send to factory</span>',
+                2:'<span class="label label-success">Cancelled</span>',
+                3:'<span class="label label-warning">Finished</span>'
             };
 
 			$rootScope.documentTitle = 'Order #'+ id;
