@@ -107,6 +107,7 @@ app.controller('OrderListController',
 
                 RestFactory.request(config.API.host + "order/load")
                     .then(function(response){
+                        console.log(response);
                         var data = [];
 
                         for( var i in response ){
@@ -602,7 +603,7 @@ app.controller("OrderController",
 
                     RestFactory.request(url,"POST",data).then(
                         function(response){
-                            console.log(response);
+                            console.log("payment",response);
                             if(_.isObject(response)){
                                 messageCenterService.add('success', 'Payment created', {timeout: 3000});
                             }
