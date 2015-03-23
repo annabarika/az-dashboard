@@ -40,6 +40,11 @@ app.config(function($routeProvider){
             controller:"PaymentListController"
         }
     )
+        .when('/buyer/payments/by-order/:id',
+        {
+            templateUrl:"/modules/buyer/views/payments/by-order.html",
+            controller:"PaymentOrderController"
+        })
         .when('/buyer/collection',
         {
             templateUrl:"/modules/buyer/views/collection/index.html",
@@ -114,10 +119,10 @@ app.controller('DatepickerCtrl', function ($scope) {
 
      $scope.$watch('dtMax',function(newVal){
      console.log(newVal);
-     });
+     });*/
 
-     $scope.$watch('dt',function(newVal){
-     console.log(newVal);
+    /* $scope.$watch('dt',function(newVal){
+     console.log('dt',newVal);
      });*/
 
     $scope.open = function($event) {

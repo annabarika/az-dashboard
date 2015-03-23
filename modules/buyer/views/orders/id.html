@@ -2,16 +2,12 @@
     <div class="box-layout">
         <div class="row mb-xs">
             <div class="col-sm-3">
-                <span class="label label-success">Complete</span>
-                <span class="label label-warning">In process</span>
-                <span class="label label-danger">In Complete</span>
-                <span class="label label-info">On Hold</span>
-                <span class="label label-primary">Others</span>
+                <span ng-bind-html="statusTemplates[order.order.status]"></span>
             </div>
             <div class="col-md-9">
                 <div class="pull-right">
-                    <div class="btn btn-warning"><i class="fa fa-check"></i> Send to Factory</div>
-                    <div class="btn btn-info"><i class="fa fa-plus"></i> Make Payment</div>
+                    <div class="btn btn-warning" ng-click="sendToFactory()"><i class="fa fa-check"></i> Send to Factory</div>
+                    <div class="btn btn-info" ng-click="makePayment()"><i class="fa fa-plus"></i> Make Payment</div>
                     <div class="btn btn-default" ng-click="back()"><i class="fa fa-ban"></i> Cancel</div>
                 </div>
             </div>
@@ -21,8 +17,6 @@
 <div class="container-fluid pt-md">
     <div class="row">
         <div class="col-md-12">
-            <tabset>
-                <tab heading="Info">
                     <div class="tab-pane active">
                         <div class="row">
                             <div class="col-md-6">
@@ -37,8 +31,9 @@
                                             <tr>
                                                 <td>Type</td>
                                                 <td>
-                                                    <select class="form-control" ng-model="order.type" ng-options="row.name for row in msk">
-                                                        <option value="">-- Choose type --</option>
+                                                 <!--   {{order.order.type}}-->
+                                                    <select class="form-control" ng-model="currentType" ng-options="row.name for row in type" ng-change="changeType()">
+                                                       <!-- <option value="">-- Choose  --</option>-->
                                                     </select>
                                                 </td>
                                             </tr>
@@ -54,105 +49,69 @@
                                                 <td>
                                                     Paid total
                                                 </td>
-                                                <td>
-                                                    {{order.order.paidTotal}} {{order.currency.ISOCode}}
+                                                <td ng-click="showPayment()">
+                                                   {{order.order.paidTotal}}{{order.currency.ISOCode}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Create date</td>
                                                 <td>{{order.order.createDate|date:'medium'}}</td>
                                             </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                           <!-- <div class="col-md-6">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="panel-title">Striped Row</div>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered">
-                                            <tbody>
                                             <tr>
-                                                <td>Norman Harmon</td>
+                                                <td>Cargo</td>
                                                 <td>
-                                                    <label>
-                                                        <multi-select
-                                                                input-model="test_list"
-                                                                output-model="resultData"
-                                                                button-label="icon name"
-                                                                item-label="icon name maker"
-                                                                tick-property="ticked"
-                                                                max-labels="2">
-                                                        </multi-select>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Plato Pickett</td>
-                                                <td>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nathan Paul</td>
-                                                <td><div class="radio custom">
-                                                    <label>
-                                                        <input type="radio" name="group2" value=""><span></span> Apr 5, 2015
-                                                    </label>
-                                                </div>
-                                                    <div class="radio custom">
-                                                        <label>
-                                                            <input type="radio" name="group2" value=""><span></span> Feb 4, 2013
-                                                        </label>
-                                                    </div>
-                                                    <div class="radio custom disabled">
-                                                        <label>
-                                                            <input type="radio" value="" disabled><span></span> Option two is disabled
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nasim Larson</td>
-                                                <td>
-                                                    <div class="checkbox custom-info">
-                                                        <label>
-                                                            <input type="checkbox">
-                                                            <span></span>$11.28
-                                                        </label>
-                                                    </div>
-                                                    <div class="checkbox custom-info">
-                                                        <label>
-                                                            <input type="checkbox">
-                                                            <span></span>$60.18
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" readonly="">
-                                                        <span class="btn btn-default btn-file" data-flow-btn=""><i class="fa fa-folder-open"></i>
-                                                            <input type="file" name="files[]" id="js-upload-files" multiple>
-                                                        </span>
-                                                    </div>
+                                                    <ul class="list-inline" ng-if="cargo==array">
+                                                        <li ng-repeat="item in cargo">
+                                                            #<a href=""  ng-click="goToCargo(item.cargo.id)">{{item.cargo.id}}</a>;
+                                                        </li>
+                                                    </ul>
+                                                    <span ng-if="cargo!=array">&mdash;</span>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
                         </div>
                     </div>
-                </tab>
-                <tab heading="Products">Short Labeled Justified content</tab>
-                <tab heading="Cargo">Long Labeled Justified content</tab>
-</tabset>
 </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th ng-repeat="column in tableHeader">{{column.title}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key,value) in orderProducts track by $index">
+                    <td>{{$index+1}}</td>
+                    <td>
+                        <img ng-src="http://back95.ru/f/catalogue/{{value.id}}/{{value.preview[1]}}"/>
+
+                    </td>
+                    <td>{{value.articul}}</td>
+                    <td>{{value.title}}</td>
+                    <td>{{value.sizes}}</td>
+                    <td>{{value.sizes_count}}</td>
+                    <td>{{value.price}}</td>
+                    <td ng-if="value.sizes_count!=undefined">{{value.sizes_count*value.price}}</td>
+                    <td ng-if="value.sizes_count==undefined">{{value.price}}</td>
+                </tr>
+            <tr>
+                <td>TOTAL</td>
+                <td colspan="3">
+                    <h5 ng-if="totalCount==number">count: {{totalCount}}</h5>
+                    <h5 ng-if="totalCount!=number">count: 0</h5>
+                </td>
+                <td colspan="5">
+                    <h5>price: {{totalPrice}}</h5>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+
         </div>
     </div>

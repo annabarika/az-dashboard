@@ -3493,7 +3493,7 @@ tbody.collapse.in {
   position: relative;
   display: table;
   border-collapse: separate;
-    display: flex;
+    /*display: flex;*/
 }
 .input-group[class*="col-"] {
   float: none;

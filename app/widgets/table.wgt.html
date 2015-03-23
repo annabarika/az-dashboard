@@ -34,7 +34,15 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() track by $index" ng-class="row.active">
-                            <td>{{$index+1}}</td>
+                            <td class="status_{{row.status}}">{{$index+1}}
+                               <!-- <span ng-show="useBadge">
+                                    <span class="label label-info" ng-if="row.status==0">Draft</span>
+                                    <span class="label label-warning" ng-if="row.status==1">Sent to factory</span>
+                                    <span class="label label-danger" ng-if="row.status==2">Cancelled</span>
+                                    <span class="label label-success" ng-if="row.status==3">Finished</span>
+                                </span>-->
+
+                            </td>
 
                             <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
 

@@ -3,3 +3,5 @@ npm-debug.log
 logs
 tmp
 f
+api/config.php
+app/config.js

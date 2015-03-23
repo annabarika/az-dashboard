@@ -10,24 +10,11 @@
         "services",
         "modules.buyer",
         'MessageCenterModule',
-        "ang-drag-drop"
+        "ang-drag-drop",
+        "ngSanitize"
     ])
 
         .config(function ($routeProvider, $locationProvider, $httpProvider) {
-
-            //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-
-            // Intercept POST requests, convert to standard form encoding
-            /*$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-             $httpProvider.defaults.transformRequest.unshift(function (data, headersGetter) {
-             var key, result = [];
-             for (key in data) {
-             if (data.hasOwnProperty(key)) {
-             result.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
-             }
-             }
-             return result.join("&");
-             });*/
 
             $locationProvider.html5Mode(true);
 

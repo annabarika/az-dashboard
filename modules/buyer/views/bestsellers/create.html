@@ -1,0 +1,28 @@
+<div>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Please, type the articul</h4>
+    </div>
+    <div class="modal-body">
+        <form>
+            <angucomplete id="articul"
+                          placeholder="Search by articul"
+                          pause="400"
+                          selectedobject="products"
+                          url="{{searchUri}}"
+                          minlength="4"
+                          titlefield="articul,title,brand"
+                          descriptionfield="articul,title,brand"
+                          imagefield="preview"
+                          inputclass="form-control form-control-small"/>
+            <span class="input-group-btn autocomplete_btn">
+            </span>
+        </form>
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-green" data-ng-controller="BestsellersController" ng-click="createBestseller(products)">Create</button>
+        <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
+    </div>
+</div>
