@@ -10,11 +10,12 @@ try {
 	$host = (isset($_GET['host'])) ? $_GET['host'] : $API['create'];
 	$APIService = new API($host);
 
-    print_r($_REQUEST);
-	$APIService->setMethod('GET');
+    $data = array_shift($_REQUEST['data']);
 
-	$response = $APIService->setURL(http_build_query($_REQUEST))->call();
 
+	$APIService->setMethod('POST');
+    $APIService->setData($data);
+	$response = $APIService->call();
 
 	echo json_encode($response);
 

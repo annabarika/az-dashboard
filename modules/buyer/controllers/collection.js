@@ -443,7 +443,6 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 if (_.isEmpty($rootScope.items)) {
                     messageCenterService.add('warning', 'Products not found in this collection', {timeout: 3000});
                 }
-                console.log('Collections items this', $rootScope.items);
             }
         });
 

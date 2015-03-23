@@ -19,10 +19,10 @@
         ORDERCREATE         :   config.API.host+'order/create',
         PRODUCTSCREATE      :   config.API.host+'create.php',
         PRODUCTUPDATE       :   config.API.host+'catalogue/update',
-        ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
-        CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
-        LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue',
-        LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/"
+        ADDORDERTOCOLLECTION  : config.API.host+'catalogue-collection/add-order-collection',
+        CREATEPRODUCTFACTORY  : config.API.host+'order/create-factory-row',
+        LOADSTATUSES          : config.API.host+'status/load/type/factoryCatalogue',
+        LOADONECOLLECTION     : config.API.host+"catalogue-collection/load/id/"
     });
 
         app.factory("CollectionService", ["PATH", 'RestFactory', '$modal', "$http",
@@ -403,14 +403,20 @@
                 productsCreate: function (data) {
 
                     var create = [];
+                        create.push({
+                            'method' : 'catalogue.createProductsBatch',
+                            'params'  : {
+                                'tokien_id'  : config.API.tokien_id,
+                                'products'   : []
+                            }
+                        });
 
                     if(_.keys(data,'items')){
 
                         angular.forEach(data.items, function(item) {
 
-                            var product = {}, photos = []; product.params = {};
-
-                            product.params.tmpPhotos       = (function(item) {
+                            var product = {}, photos = [];
+                            product.tmpPhotos       = (function(item) {
 
                                 angular.forEach(item.files, function(file) {
                                     photos.push(file.path);
@@ -418,29 +424,14 @@
                                 return JSON.stringify(photos);
                             })(item);
 
-                            product.params.factoryArticul  = parseInt(item.catalogueProduct.articul);
-                            product.params.factoryId       = item.catalogueProduct.name;
-                            product.params.price           = item.catalogueProduct.price;
-
-                            create.push(product);
+                            product.factoryArticul  = parseInt(item.catalogueProduct.articul);
+                            product.factoryId       = item.catalogueProduct.factoryId;
+                            product.price           = item.catalogueProduct.price;
+                            create[0].params.products.push(product);
                         });
                     }
 
-                    console.log('Created line', create);
-                    // Query String to backend create product
-                    //+'?params[params][vendor_id]='+1+'
-                    // &params[params][vendor_articul]='+obj.factory_articul+'
-                    // &params[params][cat_title]=Test
-                    // &params[params][brand_id]='+1+'
-                    // &params[params][category]='+1+'
-                    // &params[params][weight]='+0+'
-                    // &params[params][price]='+obj.price+'
-                    // &params[params][status]=1
-                    RestFactory.request(PATH.PRODUCTSCREATE+'?'+ $.param(create), "POST");
-                    return false;
-
-
-                    return RestFactory.request('/testing/mocks/products.json', "POST").then(function(backend) {
+                    RestFactory.request(PATH.PRODUCTSCREATE, "POST", $.param({'data' : create})).then(function(backend) {
 
                         if (backend.result) {
                             var response = JSON.parse(backend.result);
@@ -449,7 +440,7 @@
 
                                 var products = [];
 
-                                //if (data.items.length == Object.keys(response.products).length) {
+                               if (data.items.length == Object.keys(response.products).length) {
 
                                     // Compared front <-> backend created products
 
@@ -490,7 +481,7 @@
                                     });
 
                                     return RestFactory.request(PATH.CREATEPRODUCTFACTORY,"POST", products);
-                                //}
+                                }
                             }
                         }
                     });

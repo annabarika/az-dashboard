@@ -3,7 +3,9 @@ var config = {
         host: "http://lex.f.azimuth/api/",
         key: 'test',
         imagehost: 'http://lex.b.compass',
-        getproducts:"http://lex.f.azimuth/api/jsonp.php"
+        getproducts:"http://lex.f.azimuth/api/jsonp.php",
+        tokien_id : "5f77e685beaa564fd3585738d65108c4"
+
     },
     monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 
