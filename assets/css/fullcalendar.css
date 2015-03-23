@@ -88,3 +88,8 @@
     background-color: #4caf50;
 }
 
+.fc-content a.label.hover:hover {
+    color: aliceblue;
+    background-color: darkolivegreen;
+}
+

@@ -4,19 +4,20 @@
 
         // create config API ROUTES
         .constant('API', {
-            "LOAD": config.API.host + 'bestseller/calendar/status/1/createDate/',
-            "LOADDETAILS" : config.API.host + 'bestseller/load-detailed/status/1/orderDate/'
+            "LOAD_ORDERED"          : config.API.host + 'bestseller/calendar/status/1/orderDate/',
+            "LOAD_ORDERED_DETAILS"  : config.API.host + 'bestseller/load-detailed/status/1/orderDate/',
+
+            "LOAD_TOTAL"            : config.API.host + 'bestseller/calendar/status/0,1/createDate/',
+            "LOAD_TOTAL_DETAILS"    : config.API.host + 'bestseller/load-detailed/status/0,1/createDate/',
+
+            "FIND_BY_ARTICUL"       : config.API.host + 'product/search/query/',
+            "ADD_TO_BESTSELLER"     : config.API.host + 'bestseller/create/',
+
+            "GET_BESTSELLER_BY_ID"  : config.API.host + 'bestseller/get/id/'
         })
 
-        // create config  Templates
-        .constant('TEMPLATE', (function () {
-
-            return {};
-
-        })())
-
-        .factory("BestsellersService", ['API', 'TEMPLATE', 'RestFactory',
-            function (API, TEMPLATE, RestFactory) {
+        .factory("BestsellersService", ['API', 'RestFactory',
+            function (API, RestFactory) {
 
                 /**
                  * Create calendar
@@ -50,7 +51,7 @@
                  * Get month first and last days
                  *
                  * @param int year
-                 * @param int iso month iso
+                 * @param int iso month iso code
                  * @access private
                  * @returns object
                  */
@@ -58,7 +59,7 @@
 
                     var range = {
                         start : moment().subtract(iso, 'months').startOf('month').format(year+'-'+iso+'-DD'),
-                        end   : year+'-'+iso+'-'+new Date(year, iso, 0).getDate()
+                        end   : moment(new Date(year, iso, 0)).format('YYYY-MM-DD HH:mm:ss')
                     }
 
                     return range;
@@ -79,36 +80,54 @@
                     /**
                      * Get calendar data by date range params
                      *
-                     * @param dateRange
+                     * @param string type ordered | total
                      * @returns {*}
                      */
-                    getCalendarData: function (dateRange) {
+                    getCalendarData: function (type, year) {
 
-                        var range = [];
-                        if (_.isUndefined(dateRange)) {
+                        var range = [], url = (type == 'ordered') ? API.LOAD_ORDERED : API.LOAD_TOTAL;
+                        if (_.isUndefined(year)) {
 
                             // format date range by default
                             range.push((new Date().getFullYear() + '-01-01').toString());
-                            range.push(moment().format('YYYY-MM-DD'));
+                            range.push(moment().format('YYYY-MM-DD HH:mm:ss'));
                         }
                         else {
-                            console.log('Selected date range');
+                            range.push(year + '-01-01');
+                            range.push(moment().format(year+'-MM-DD HH:mm:ss'));
                         }
 
-                        return RestFactory.request(API.LOAD + range.join(','));
+                        return RestFactory.request(url + range.join(','));
                     },
 
                     /**
-                     * Get calendar data by date range params
+                     * Get calendar items by clicking month date
                      *
+                     * @param string type ordered | total
                      * @param int year
                      * @param int iso month iso
                      * @returns {*}
                      */
-                    getDetailed: function (year, iso) {
+                    getMonthDetailed: function (type, year, iso) {
 
-                        var range = getMonthDayRange(year, iso);
-                        return RestFactory.request(API.LOADDETAILS + range.start+','+range.end);
+                        var range = getMonthDayRange(year, iso), url = (type == 'ordered') ? API.LOAD_ORDERED_DETAILS : API.LOAD_TOTAL_DETAILS;
+                        return RestFactory.request(url + range.start+','+range.end);
+                    },
+
+                    /**
+                     * Get calendar items by clicking month date
+                     *
+                     * @param string type ordered | total
+                     * @param int year
+                     * @param int iso month iso
+                     * @returns {*}
+                     */
+                    getDayDetailed: function (type, date) {
+
+                        var date = moment(date).format('YYYY-MM-DD HH:mm:ss'),
+                            url = (type == 'ordered') ? API.LOAD_ORDERED_DETAILS : API.LOAD_TOTAL_DETAILS;
+
+                        return RestFactory.request(url + date);
                     },
 
                     /**
@@ -149,6 +168,42 @@
                             });
                         }
                         return result;
+                    },
+
+                    /**
+                     * Get find articul uri
+                     */
+                    searchArticulUri: function() {
+                        return API.FIND_BY_ARTICUL;
+                    },
+
+                    /**
+                     * Add product to bestseller
+                     *
+                     * @param json product
+                     * @param string date
+                     * @returns {*}
+                     */
+                    addToBestseller: function(product, date) {
+
+                        var params = {
+                            "status": "0",
+                            "productId": product.id,
+                            "name": product.title +' '+product.brand,
+                            "createDate": (!_.isUndefined(date)) ? date : moment().format('YYYY-MM-DD HH:mm:ss')
+                        };
+
+                        return RestFactory.request(API.ADD_TO_BESTSELLER, 'POST', params);
+                    },
+
+                    /**
+                     * Get bestseller by id
+                     *
+                     * @param int id
+                     * @returns {*}
+                     */
+                    getBestseller: function(id) {
+                        return RestFactory.request(API.GET_BESTSELLER_BY_ID+parseInt(id));
                     }
                 }
             }]);
