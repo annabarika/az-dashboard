@@ -93,6 +93,7 @@
                             range.push(moment().format('YYYY-MM-DD HH:mm:ss'));
                         }
                         else {
+                            // format date range by default
                             range.push(year + '-01-01');
                             range.push(moment().format(year+'-MM-DD HH:mm:ss'));
                         }

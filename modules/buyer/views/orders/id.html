@@ -2,16 +2,12 @@
     <div class="box-layout">
         <div class="row mb-xs">
             <div class="col-sm-3">
-                <span class="label label-success">Complete</span>
-                <span class="label label-warning">In process</span>
-                <span class="label label-danger">In Complete</span>
-                <span class="label label-info">On Hold</span>
-                <span class="label label-primary">Others</span>
+                <span ng-bind-html="statusTemplates[order.order.status]"></span>
             </div>
             <div class="col-md-9">
                 <div class="pull-right">
-                    <div class="btn btn-warning"><i class="fa fa-check"></i> Send to Factory</div>
-                    <div class="btn btn-info"><i class="fa fa-plus"></i> Make Payment</div>
+                    <div class="btn btn-warning" ng-click="sendToFactory()"><i class="fa fa-check"></i> Send to Factory</div>
+                    <div class="btn btn-info" ng-click="makePayment()"><i class="fa fa-plus"></i> Make Payment</div>
                     <div class="btn btn-default" ng-click="back()"><i class="fa fa-ban"></i> Cancel</div>
                 </div>
             </div>
@@ -69,7 +65,7 @@
                                                             #<a href=""  ng-click="goToCargo(item.cargo.id)">{{item.cargo.id}}</a>;
                                                         </li>
                                                     </ul>
-                                                    <span ng-if="cargo!=array">Cargo is not create</span>
+                                                    <span ng-if="cargo!=array">&mdash;</span>
                                                 </td>
                                             </tr>
                                             </tbody>

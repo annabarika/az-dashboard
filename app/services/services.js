@@ -4,5 +4,6 @@ angular.module("services",
     "services.cargo",
     "services.collections",
     "services.bestsellers",
+    "services.payments",
     "services.fileReader"
 ]);

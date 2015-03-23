@@ -1,6 +1,6 @@
 <?php
-require __DIR__ . '/config.php';
-require __DIR__ . '/API.php';
+require __DIR__.'/config.php';
+require __DIR__.'/API.php';
 
 try {
     $host = (isset($_GET['host'])) ? $_GET['host'] : $API['host'];
@@ -8,33 +8,36 @@ try {
     $APIService = new API($host);
     $APIService->setMethod('GET');
 
-    $request = str_replace('api/', '', $_GET['_request']);
+    $request = str_replace( 'api/', '', $_GET['_request']);
     unset($_GET['_request']);
     unset($_GET['host']);
 
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $APIService->setParams($_GET);
-    } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    }
+
+    else if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!empty($_FILES)) {
             $post = [];
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . 'tmp')) {
-                mkdir($_SERVER['DOCUMENT_ROOT'] . 'tmp', 0777);
+            if(!file_exists($_SERVER['DOCUMENT_ROOT'].'tmp')) {
+                mkdir($_SERVER['DOCUMENT_ROOT'].'tmp', 0777);
             }
             foreach ($_FILES as $files) {
                 $file_count = count($files['name']);
 
-                for ($i = 0; $i < $file_count; $i++) {
-                    $file = $_SERVER['DOCUMENT_ROOT'] . 'tmp/' . $files['name'][$i];
+                for($i = 0; $i < $file_count; $i++) {
+                    $file = $_SERVER['DOCUMENT_ROOT'].'/tmp/'.$files['name'][$i];
 
-                    if (move_uploaded_file($files['tmp_name'][$i], $file)) {
-                        $post['file[' . $i . ']'] = new CURLFile($file, $files['type'][$i]);
-                    } else {
-                        throw new Exception('Could not move file to ' . $file . ' see ' . __FILE__);
+                    if(move_uploaded_file($files['tmp_name'][$i], $file)){
+                        $post['file['.$i.']'] = new CURLFile($file, $files['type'][$i]);
+                    }
+                    else {
+                        throw new Exception('Could not move file to '.$file.' see '.__FILE__);
                     }
                 }
 
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'http://' . $API['host'] . '/catalogue/loadfiles');
+                curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].'/catalogue/loadfiles');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
@@ -46,18 +49,19 @@ try {
                 echo $response;
                 die;
             }
-        } else {
+        }else {
 
             $APIService->setMethod('POST');
             $_POST = json_decode(file_get_contents("php://input"), true);
             $APIService->setData($_POST);
         }
-    } else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    }
+    else if($_SERVER['REQUEST_METHOD'] == 'PUT') {
         $params = json_decode(file_get_contents('php://input'), true);
-
         $APIService->setMethod('PUT');
         $APIService->setData($params);
-    } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    }
+    else if($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         $input = file_get_contents('php://input');
         parse_str($input, $params);
 
@@ -68,7 +72,7 @@ try {
     $response = $APIService->setURL($request)->call();
     echo json_encode($response);
 
-} catch (\Exception $e) {
+}catch( \Exception $e ){
     echo $e->getMessage();
 }
 

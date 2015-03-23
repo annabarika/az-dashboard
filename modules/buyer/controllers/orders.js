@@ -2,6 +2,41 @@ var app = angular.module("modules.buyer.orders", [
 
 ]);
 
+/*app.run(function($rootScope,RestFactory,$http){
+
+    var tableOrders = [
+        { name: "id", title: 'ID' },
+        { name: "type", title: 'Type' },
+        { name: "status", title: 'Status' },
+        { name: "factoryName", title: "Factory"},
+        { name: "orderedTotal", title: 'Ordered total' },
+        { name: "paymentStatus", title: 'Payment status' },
+        { name: "createDate", title: 'Create date' },
+        { name: "deliveryDate", title: 'Production date' }
+    ];
+
+    RestFactory.request(config.API.host + "order/load").then(
+        function(response){
+            var data = [];
+            for( var i in response ){
+                data[i] = {};
+                for( var n in tableOrders) {
+                    var key = tableOrders[n].name;
+                    if( response[i][key]  ) {
+                        data[i][key] = response[i][key]
+                    }else{
+                        data[i][key] = '';
+                    }
+                }
+            }
+            $rootScope.data = data;
+           // $rootScope.orders = $scope.data;
+            console.log("run", $rootScope.data);
+        }
+    )
+});*/
+
+
 app.controller('OrderListController',
 
     [
@@ -16,6 +51,13 @@ app.controller('OrderListController',
 
             $scope.$route = $route;
             $scope.$location = $location;
+
+
+            if(_.isUndefined($scope.orders)){
+                $scope.orders=$rootScope.data;
+                console.log("ctrl",$scope.orders);
+            }
+
 
             var modalWindow,
                 url,
@@ -65,6 +107,7 @@ app.controller('OrderListController',
 
                 RestFactory.request(config.API.host + "order/load")
                     .then(function(response){
+                        console.log(response);
                         var data = [];
 
                         for( var i in response ){
@@ -80,7 +123,7 @@ app.controller('OrderListController',
                         }
                         $scope.data = data;
                         $scope.orders = $scope.data;
-                      /*  console.log($scope.orders);*/
+                        //console.log($scope.orders);
 
                         $scope.buttons = [
                             {
@@ -373,11 +416,13 @@ app.controller("OrderController",
         "$location",
         "$route",
 		"RestFactory",
-
-        function($scope,$rootScope,$location, $route,RestFactory){
+        "$modal",
+        "messageCenterService",
+        function($scope,$rootScope,$location, $route,RestFactory,$modal,messageCenterService){
 
             $scope.$route = $route;
-			var id = $route.current.params.orderId;
+			var id = $route.current.params.orderId,
+                url,data;
 
 
             $scope.type=[
@@ -391,7 +436,12 @@ app.controller("OrderController",
                 }
             ];
 
-
+            $scope.statusTemplates = {
+                0:'<span class="label label-info">Draft</span>',
+                1:'<span class="label label-danger">Send to factory</span>',
+                2:'<span class="label label-success">Cancelled</span>',
+                3:'<span class="label label-warning">Finished</span>'
+            };
 
 			$rootScope.documentTitle = 'Order #'+ id;
 
@@ -412,7 +462,6 @@ app.controller("OrderController",
 				});
 
             $scope.changeType=function(){
-               /* console.log($scope.currentType);*/
                 $scope.order.order.type=$scope.currentType.id;
             };
 
@@ -445,10 +494,13 @@ app.controller("OrderController",
                                     var key=_.keys(result.products);
 
                                     $scope.orderProducts.push(result.products[key]);
-                                   /* console.log($scope.orderProducts);*/
-                                    $scope.totalCount+=parseInt(result.products[key].sizes_count);
-                                    $scope.totalPrice+=parseInt(result.products[key].price);
-
+                                       // console.log(result.products[key]);
+                                    if(_.has(result.products[key], 'sizes_count')){
+                                        $scope.totalCount+=parseInt(result.products[key].sizes_count);
+                                    }
+                                    if(_.has(result.products[key], 'price')) {
+                                        $scope.totalPrice += parseInt(result.products[key].price);
+                                    }
                                 }
                             )
                         });
@@ -477,4 +529,88 @@ app.controller("OrderController",
                 { name: "subtotal", title: 'Subtotal' }
 
             ];
+
+            $scope.sendToFactory=function(){
+                var modalInstance=$modal.open({
+                    templateUrl:"/modules/buyer/views/orders/send_to_factory.html",
+                    controller:function($scope,orderId){
+                        $scope.id=orderId;
+                    },
+                    backdrop:'static',
+                    size:"sm",
+                    resolve:{
+                        orderId:function(){
+                            return id;
+                        }
+                    }
+                });
+                modalInstance.result.then(function(){
+
+                    url=config.API.host+'order/send/id/'+id;
+                    console.log(url);
+                    RestFactory.request(url).then(
+                        function(response){
+                            console.log(response);
+
+                        }
+                    )
+                });
+            };
+
+            $scope.makePayment=function(){
+                var modalInstance=$modal.open({
+                    templateUrl: "/modules/buyer/views/orders/make_payment.html",
+                    controller: function($scope,messageCenterService){
+                        $scope.methods=[
+                            {name:'cash'},
+                            {name:'bank'}
+                        ];
+                        $scope.make=function(payment){
+                            if(_.isUndefined(payment)){
+                                messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
+                                return;
+                            }
+                            if(_.isUndefined(payment.amount)||payment.amount==0){
+                                messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
+                                return;
+                            }
+                            if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
+                                messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+                                return;
+                            }
+                            else{
+                                modalInstance.close(payment);
+                            }
+                        }
+                    },
+                    backdrop:'static',
+                    size:"sm"
+                });
+
+                modalInstance.result.then(function(payment){
+
+                     url=config.API.host+"payment/create";
+                     data={
+                            'currencyId'    :   $scope.order.currency.id,
+                            //@TODO Узнать cashierId от авторизации
+                            'cashierId'     :   1,
+                            'orderId'       :   id,
+                            'paymentMethod' :   payment.method.name,
+                            'paymentType'   :   "payment",
+                            'amount'        :   payment.amount
+                     };
+                    //console.log(data);
+
+                    RestFactory.request(url,"POST",data).then(
+                        function(response){
+                            console.log("payment",response);
+                            if(_.isObject(response)){
+                                messageCenterService.add('success', 'Payment created', {timeout: 3000});
+                            }
+                        }
+                    );
+
+                })
+            }
+
 }]);
