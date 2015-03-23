@@ -22,7 +22,7 @@ app.config(function($routeProvider){
             controller:"OrderController"
         }
     )
-        .when('/buyer/bestsellers',
+        .when('/buyer/bestsellers/',
         {
             templateUrl:"/modules/buyer/views/bestsellers/index.html",
             controller:"BestsellersController"
