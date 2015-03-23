@@ -34,7 +34,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() track by $index" ng-class="row.active">
-                            <td class="status_{{row.status}}">{{$index+1}} status_{{row.status}}
+                            <td class="status_1">{{$index+1}}
                                <!-- <span ng-show="useBadge">
                                     <span class="label label-info" ng-if="row.status==0">Draft</span>
                                     <span class="label label-warning" ng-if="row.status==1">Sent to factory</span>

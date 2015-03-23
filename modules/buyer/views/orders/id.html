@@ -2,11 +2,7 @@
     <div class="box-layout">
         <div class="row mb-xs">
             <div class="col-sm-3">
-                <!--<span class="label label-success">Complete</span>
-                <span class="label label-warning">In process</span>
-                <span class="label label-danger">In Complete</span>
-                <span class="label label-info">On Hold</span>
-                <span class="label label-primary">Others</span>-->
+                <span ng-bind-html="statusTemplates[order.order.status]"></span>
             </div>
             <div class="col-md-9">
                 <div class="pull-right">

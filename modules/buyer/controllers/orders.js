@@ -435,7 +435,12 @@ app.controller("OrderController",
                 }
             ];
 
-
+            $scope.statusTemplates = {
+                1:'<span class="label label-info">Draft</span>',
+                2:'<span class="label label-danger">Send to factory</span>',
+                3:'<span class="label label-success">Cancelled</span>',
+                4:'<span class="label label-warning">Finished</span>'
+            };
 
 			$rootScope.documentTitle = 'Order #'+ id;
 
@@ -456,7 +461,6 @@ app.controller("OrderController",
 				});
 
             $scope.changeType=function(){
-               /* console.log($scope.currentType);*/
                 $scope.order.order.type=$scope.currentType.id;
             };
 
@@ -489,10 +493,13 @@ app.controller("OrderController",
                                     var key=_.keys(result.products);
 
                                     $scope.orderProducts.push(result.products[key]);
-                                   /* console.log($scope.orderProducts);*/
-                                    $scope.totalCount+=parseInt(result.products[key].sizes_count);
-                                    $scope.totalPrice+=parseInt(result.products[key].price);
-
+                                       // console.log(result.products[key]);
+                                    if(_.has(result.products[key], 'sizes_count')){
+                                        $scope.totalCount+=parseInt(result.products[key].sizes_count);
+                                    }
+                                    if(_.has(result.products[key], 'price')) {
+                                        $scope.totalPrice += parseInt(result.products[key].price);
+                                    }
                                 }
                             )
                         });
@@ -543,6 +550,7 @@ app.controller("OrderController",
                     RestFactory.request(url).then(
                         function(response){
                             console.log(response);
+
                         }
                     )
                 });
