@@ -17,7 +17,7 @@
         LOADSIZES           :   config.API.host+'size/load',
         LOADORDERTYPES      :   config.API.host+'order-type/load/',
         ORDERCREATE         :   config.API.host+'order/create',
-        PRODUCTSCREATE      :   config.API.host+'jsoncreate.php',
+        PRODUCTSCREATE      :   config.API.host+'create.php',
         PRODUCTUPDATE       :   config.API.host+'catalogue/update',
         ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
         CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
@@ -401,7 +401,32 @@
                  * @returns {*}
                  */
                 productsCreate: function (data) {
-                    console.log(data);
+
+                    var create = [];
+
+                    if(_.keys(data,'items')){
+
+                        angular.forEach(data.items, function(item) {
+
+                            var product = {}, photos = []; product.params = {};
+
+                            product.params.tmpPhotos       = (function(item) {
+
+                                angular.forEach(item.files, function(file) {
+                                    photos.push(file.path);
+                                })
+                                return JSON.stringify(photos);
+                            })(item);
+
+                            product.params.factoryArticul  = parseInt(item.catalogueProduct.articul);
+                            product.params.factoryId       = item.catalogueProduct.name;
+                            product.params.price           = item.catalogueProduct.price;
+
+                            create.push(product);
+                        });
+                    }
+
+                    console.log('Created line', create);
                     // Query String to backend create product
                     //+'?params[params][vendor_id]='+1+'
                     // &params[params][vendor_articul]='+obj.factory_articul+'
@@ -411,7 +436,9 @@
                     // &params[params][weight]='+0+'
                     // &params[params][price]='+obj.price+'
                     // &params[params][status]=1
-                    //RestFactory.request(PATH.PRODUCTSCREATE+'?'+Object.toQueryString(products), "GET");
+                    RestFactory.request(PATH.PRODUCTSCREATE+'?'+ $.param(create), "POST");
+                    return false;
+
 
                     return RestFactory.request('/testing/mocks/products.json', "POST").then(function(backend) {
 
@@ -419,7 +446,6 @@
                             var response = JSON.parse(backend.result);
 
                             if (response.hasOwnProperty('products')) {
-
 
                                 var products = [];
 

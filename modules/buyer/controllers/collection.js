@@ -76,7 +76,6 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             }
             url = config.API.host + "catalogue-collection/load/status/0,1/";
 
-            //console.log(filter);
             if (!$.isEmptyObject(filter)) {
 
 
@@ -144,7 +143,6 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal",
     function ($scope, $rootScope, $location, CollectionService, $modal) {
         var fileinput;
-        /*console.log("current",$rootScope.collection);*/
         $scope.$watch("photo", function (value) {
             $rootScope.photo = value;
         });
@@ -153,7 +151,6 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             $location.path("/buyer/collection");
         }
         else {
-            console.log($rootScope.collection);
             $rootScope.documentTitle = "Collection name: " + $rootScope.collection.name;
         }
 

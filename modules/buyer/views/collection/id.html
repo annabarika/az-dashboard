@@ -37,7 +37,7 @@
                         </div>
                     </td>
                     <td>
-                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" value="{{product.catalogueProduct.articul}}" ng-disabled="product.inOrder"/>
+                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" numbers-only value="{{product.catalogueProduct.articul}}" ng-disabled="product.inOrder"/>
                     </td>
                     <td>
                         <input type="text" class="md form-control" ng-model="product.catalogueProduct.name" value="{{product.catalogueProduct.name}}" ng-disabled="product.inOrder"/>
@@ -63,7 +63,7 @@
                                 <td>
                                     <ul ng-if="product.sizes[0]" class="media-list mb-sm sm">
                                         <li ng-repeat="size in product.sizes" class="media">
-                                            <input type="text" class="sm form-control" ng-model="size.count" ng-disabled="product.inOrder"/>
+                                            <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="product.inOrder"/>
                                         </li>
                                     </ul>
                                 </td>
