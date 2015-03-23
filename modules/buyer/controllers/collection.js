@@ -196,7 +196,6 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         $scope.upload = function () {
             fileinput = document.getElementById("fileUpload");
             fileinput.click();
-
         };
 
         $scope.back = function () {
@@ -226,6 +225,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
          */
         $scope.nextStep = function () {
             //show error window
+
             if ($rootScope.photo == undefined) {
 
                 $rootScope.message = "You are forgot upload photo";
@@ -238,9 +238,9 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             }
 
             if ($scope.step == 0) {
-
+                console.log($scope.step);
                 CollectionService.uploadFiles($rootScope.photo).success(function (data) {
-
+                        console.log(data);
                     if (_.isArray(data)) {
                         $scope.items = [];
 
@@ -252,7 +252,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
                         $scope.imagePath = CollectionService.getImagePath();
                         $scope.step++;
-
+                        console.log( $scope.step,$scope.items);
                     }
                 });
             }
@@ -332,7 +332,8 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
                         messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
                         $timeout(function () {
-                            $location.path("buyer/collection");
+                            $location.path("buyer/co  " +
+                            " llection");
                         }, 2000);
                     }
                     else {
