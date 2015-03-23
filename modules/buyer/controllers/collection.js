@@ -321,21 +321,15 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
             if (response.id) {
 
                 CollectionService.productsCreate($rootScope.order).then(function (response) {
+                    console.log(response);
 
-                    if (response) {
+                    messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
-                        $modalInstance.close();
+                    $timeout(function () {
+                        $location.path("buyer/collection");
+                    }, 2000);
 
-                        messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
-
-                        $timeout(function () {
-                            $location.path("buyer/co  " +
-                            " llection");
-                        }, 2000);
-                    }
-                    else {
-                        messageCenterService.add('danger', 'Order create failed', {timeout: 3000});
-                    }
+                    $modalInstance.close();
                 });
             }
             else {
@@ -522,29 +516,23 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                             // Add to existing order $rootScope.order.collection.orderId
                             CollectionService.productsCreate($rootScope.order).then(function (response) {
 
-                                if (response) {
-                                    console.log(response);
-                                    messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
+                                messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
-                                    $timeout(function () {
+                                $timeout(function () {
 
-                                        if (_.isUndefined(position)) {
-                                            // ordered all position -> move to collections
-                                            $location.path('/buyer/collection');
-                                        }
-                                        else {
-                                              $rootScope.items[position].inOrder=true;
-                                        }
-                                    }, 1000);
-                                }
-                                else {
-                                    messageCenterService.add('danger', 'Order create failed', {timeout: 3000});
-                                }
+                                    if (_.isUndefined($scope.position)) {
+                                        // ordered all position -> move to collections
+                                        $location.path('/buyer/collection');
+                                    }
+                                    else {
+                                        $rootScope.items[$scope.position].inOrder=true;
+                                    }
+                                }, 1000);
+
                             });
                         }
                     });
                 }
-
             });
         };
 

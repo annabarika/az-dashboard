@@ -371,7 +371,7 @@
                  * Create order
                  */
                 orderCreate: function (order) {
-                    console.log(order);
+
                     var params = {
                         'buyerId'       :   order.buyerId,
                         'factoryId'     :   order.collection.factoryId,
@@ -381,16 +381,16 @@
 
                     return RestFactory.request(PATH.ORDERCREATE,"POST", params).then(function(response) {
 
-                        console.log(response);
-                            if(response.id) {
-                                var params = {
-                                    'id'        :   parseInt(order.collection.id),
-                                    'orderId'   :   parseInt(response.id)
-                                };
+                        if(response.id) {
+                            var params = {
+                                'id'        :   parseInt(order.collection.id),
+                                'orderId'   :   parseInt(response.id)
+                            };
 
-                                return RestFactory.request(PATH.ADDORDERTOCOLLECTION,"PUT", $.param(params));
-                            }
-                            else return false;
+                            return RestFactory.request(PATH.ADDORDERTOCOLLECTION,"PUT", params);
+                        }
+                        else return false;
+
                     });
                 },
 
@@ -431,36 +431,36 @@
                         });
                     }
 
-                    RestFactory.request(PATH.PRODUCTSCREATE, "POST", $.param({'data' : create})).then(function(backend) {
+                    return RestFactory.request(PATH.PRODUCTSCREATE, "POST", $.param({'data' : create})).then(function(backend) {
 
                         if (backend.result) {
-                            var response = JSON.parse(backend.result);
 
-                            if (response.hasOwnProperty('products')) {
+                            var response = JSON.parse(backend.result), products = [];
 
-                                var products = [];
+                            if(data.items.length == Object.keys(response).length) {
 
-                               if (data.items.length == Object.keys(response.products).length) {
+                                // Compared front <-> backend created products
 
-                                    // Compared front <-> backend created products
+                                angular.forEach(data.items, function (frontendProduct) {
 
-                                    angular.forEach(data.items, function (frontendProduct) {
+                                    if(!_.isEmpty(frontendProduct.sizes)) {
 
                                         angular.forEach(frontendProduct.sizes, function (size) {
                                             var tmp = {};
-                                            tmp.id = frontendProduct.catalogueProduct.id,
-                                            tmp.articul =   (function() {
-                                                return _.pluck(_.filter(response.products, function(backProduct) {
 
-                                                    // compare products
-                                                    if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
-                                                        return backProduct.articul;
-                                                    }
-                                                }), 'articul').toString();
-                                            })(frontendProduct.catalogueProduct);
+                                            tmp.id = frontendProduct.catalogueProduct.id,
+                                                tmp.articul =   (function() {
+                                                    return _.pluck(_.filter(response, function(backProduct) {
+
+                                                        // compare products
+                                                        if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
+                                                            return backProduct.articul;
+                                                        }
+                                                    }), 'articul').toString();
+                                                })(frontendProduct.catalogueProduct);
 
                                             tmp.productId = (function() {
-                                                return _.pluck(_.filter(response.products, function(backProduct) {
+                                                return _.pluck(_.filter(response, function(backProduct) {
 
                                                     // compare products
                                                     if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
@@ -478,10 +478,10 @@
 
                                             products.push(tmp);
                                         });
-                                    });
+                                        return RestFactory.request(PATH.CREATEPRODUCTFACTORY,"POST", products);
 
-                                    return RestFactory.request(PATH.CREATEPRODUCTFACTORY,"POST", products);
-                                }
+                                    }
+                                });
                             }
                         }
                     });
