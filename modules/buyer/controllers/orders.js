@@ -2,6 +2,68 @@ var app = angular.module("modules.buyer.orders", [
 
 ]);
 
+app.run(function($rootScope,RestFactory,$http){
+
+    var tableOrders = [
+        { name: "id", title: 'ID' },
+        { name: "type", title: 'Type' },
+        { name: "status", title: 'Status' },
+        { name: "factoryName", title: "Factory"},
+        { name: "orderedTotal", title: 'Ordered total' },
+        { name: "paymentStatus", title: 'Payment status' },
+        { name: "createDate", title: 'Create date' },
+        { name: "deliveryDate", title: 'Production date' }
+    ];
+
+    /*RestFactory.request(config.API.host + "order/load").then(
+        function(response){
+            var data = [];
+            for( var i in response ){
+                data[i] = {};
+                for( var n in tableOrders) {
+                    var key = tableOrders[n].name;
+                    if( response[i][key]  ) {
+                        data[i][key] = response[i][key]
+                    }else{
+                        data[i][key] = '';
+                    }
+                }
+            }
+            $rootScope.data = data;
+           // $rootScope.orders = $scope.data;
+            console.log("run", $rootScope.data);
+        }
+    )*/
+
+    $http.get(config.API.host + "order/load")
+        .success(function(data){
+            var array = [];
+            for( var i in data ){
+                array[i] = {};
+                for( var n in tableOrders) {
+                    var key = tableOrders[n].name;
+                    if( data[i][key]  ) {
+                        array[i][key] = data[i][key]
+                    }else{
+                        array[i][key] = '';
+                    }
+                }
+            }
+            $rootScope.data = array;
+             $rootScope.orders = $rootScope.data;
+            console.log("run", $rootScope.data);
+            /*console.time("Array initialize");
+            var array=$rootScope.data;
+            for (var i = array.length - 1; i >= 0; i--) {
+                array[i] = new Object();
+            };
+            console.timeEnd("Array initialize");*/
+
+        });
+
+});
+
+
 app.controller('OrderListController',
 
     [
@@ -16,6 +78,16 @@ app.controller('OrderListController',
 
             $scope.$route = $route;
             $scope.$location = $location;
+
+
+            /*if(_.isUndefined($scope.orders)){
+                $scope.orders=$rootScope.data;
+                console.log("ctrl",$scope.orders);
+            }*/
+
+
+
+
 
             var modalWindow,
                 url,
@@ -49,7 +121,7 @@ app.controller('OrderListController',
 				{ name: "deliveryDate", title: 'Production date' }
 			];
 
-            $scope.tableOrders = [
+            /*$scope.tableOrders = [
                 { name: "id", title: 'ID' },
                 { name: "type", title: 'Type' },
                 { name: "status", title: 'Status' },
@@ -58,12 +130,12 @@ app.controller('OrderListController',
                 { name: "paymentStatus", title: 'Payment status' },
                 { name: "createDate", title: 'Create date' },
                 { name: "deliveryDate", title: 'Production date' }
-            ];
+            ];*/
 
 
 
 
-                RestFactory.request(config.API.host + "order/load")
+               /* RestFactory.request(config.API.host + "order/load")
                     .then(function(response){
                         var data = [];
 
@@ -80,7 +152,7 @@ app.controller('OrderListController',
                         }
                         $scope.data = data;
                         $scope.orders = $scope.data;
-                      /*  console.log($scope.orders);*/
+                      *//*  console.log($scope.orders);*//*
 
                         $scope.buttons = [
                             {
@@ -95,7 +167,7 @@ app.controller('OrderListController',
                     },
                     function(error){
                         console.log(error);
-                    });
+                    });*/
 
 
              //Loading factories

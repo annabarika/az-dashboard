@@ -26,7 +26,7 @@
 
                             <th class="sorting" ng-repeat="headerRow in dataheader"
                                 ng-click="sortReorder(headerRow.name, $event)"
-                                ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
+                                ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{::headerRow.title}}</a>
                             </th>
                             <!--<th ng-repeat="th in toolbarInputs"></th>-->
                             <th ng-repeat="th in toolbarButtons"></th>
@@ -49,20 +49,20 @@
                                 <div class="media np" ng-if="headerRow.name=='photo'">
                                     <div class="media-left">
                                       <span class="img-wrapper img-rounded">
-                                        <img ng-src="{{row.photo}}"/>
+                                        <img ng-src="{{::row.photo}}"/>
                                         </span>
                                     </div>
                                 </div>
 
 
 
-                                <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">{{row[headerRow.name]}}</div>
+                                <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">{{::row[headerRow.name]}}</div>
 
                                 <ul class="media-list mb-sm sm" ng-if="headerRow.name=='size_list'">
                                     <li class="media" ng-repeat="item in row.size_list">
-                                        <p class="mt-5">{{item.value}}</p>
+                                        <p class="mt-5">{{::item.value}}</p>
                                     </li>
-                                    <li><button class="btn btn-success" ng-click="addItem(row)"><i class="fa fa-plus"></i> {{headerRow.title}}</button></li>
+                                    <li><button class="btn btn-success" ng-click="addItem(row)"><i class="fa fa-plus"></i> {{::headerRow.title}}</button></li>
                                 </ul>
 
                                 <ul class="media-list mb-sm sm" ng-if="headerRow.name=='count_list'">
@@ -73,7 +73,7 @@
                             </td>
 
                             <td ng-repeat="b in toolbarButtons" class="text-center">
-                                <button class={{b.class}} ng-click="buttons(row,b.value)"><i class="{{b.icon}}"></i> {{b.value}}</button>
+                                <button class={{b.class}} ng-click="buttons(row,b.value)"><i class="{{b.icon}}"></i> {{::b.value}}</button>
                             </td>
                         </tr>
 
