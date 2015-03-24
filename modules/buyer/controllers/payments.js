@@ -10,8 +10,8 @@ app.controller('PaymentListController',
 		"$location",
 		"$route",
 		"PaymentService",
-
-		function ($scope, $rootScope, $location, $route, PaymentService){
+		"$modal",
+		function ($scope, $rootScope, $location, $route, PaymentService,$modal){
 
 			$scope.$route = $route;
 			$scope.$location = $location;
@@ -23,7 +23,7 @@ app.controller('PaymentListController',
 				{ name: "orderId", title: 'Order' },
 				{ name: "factory", title: 'Factory' },
 				{ name: "date", title: 'Payment date' },
-				{ name: "method", title: 'Payment method' },
+				{ name: "method", title: 'Payment method'},
 				{ name: "amount", title: 'Payment' },
 				{ name: "refund", title: 'Refund' }
 			];
@@ -31,7 +31,7 @@ app.controller('PaymentListController',
 			PaymentService.getPayments().then(
 
 				function(response){
-
+					//console.log(response);
 					if(_.isArray(response)){
 
 						$scope.data = PaymentService.parseData(response,$scope.tableHeader);
@@ -40,6 +40,41 @@ app.controller('PaymentListController',
 				}
 			);
 
+			PaymentService.getStatuses().then(
+				function(response){
+					//console.log(response);
+					$scope.status=response;
+				}
+			);
+
+			PaymentService. getCashierOfficies().then(
+				function(response){
+					//console.log(response);
+					$scope.cashierOfficies=response;
+				}
+			);
+
+			$scope.paymentType=[
+				{name:'payment'},
+				{name:'refund'}
+			];
+
+			$scope.$watchCollection('resultData',function(value){
+				if(value){
+					console.log(value);
+				}
+			});
+
+			$scope.addNewPayment=function(){
+				var modalInstance=$modal.open({
+					templateUrl:"/modules/buyer/views/payments/new_payment.html",
+					controller:function($scope){
+
+					},
+					backdrop:'static',
+					size:"sm"
+				})
+			}
 		}]);
 
 app.controller("PaymentOrderController",[
