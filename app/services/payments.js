@@ -130,10 +130,10 @@
                  */
                 createNewPayment:function(obj){
                     var data={
-                        'currencyId'        : obj.id.currencyId,
+                        'currencyId'        : (obj.id)?obj.id.currencyId:1,
                         'cashierId'         : 3,
                         'amount'            : obj.amount,
-                        'orderId'           : obj.id.id,
+                        'orderId'           : (obj.id)?obj.id.id:0,
                         'paymentType'       : "payment",
                         'paymentMethod'     : "cash",
                         'cashierOfficeId'   : 3,
