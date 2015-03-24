@@ -135,11 +135,11 @@
                         'amount'            : obj.amount,
                         'orderId'           : (obj.id)?obj.id.id:0,
                         'paymentType'       : "payment",
-                        'paymentMethod'     : "cash",
+                        'paymentMethod'     : obj.method.name,
                         'cashierOfficeId'   : 3,
                         "note"              : (obj.note)?obj.note:""
                     };
-                    console.log(data);
+                    //console.log(data);
 
                     return RestFactory.request(PATH.NEWPAYMENT,"POST",data);
                 }

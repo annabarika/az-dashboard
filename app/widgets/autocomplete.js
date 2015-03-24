@@ -17,7 +17,6 @@ angular.module('widgets.autocomplete', [])
 
                 $scope.$watch('search',function(val){
                     if(val){
-                        console.log(val);
                         $scope.flag=false;
                     }
                     else{

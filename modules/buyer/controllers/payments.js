@@ -118,8 +118,31 @@ app.controller('PaymentListController',
 								$scope.orders=response;
 							}
 						);
-
+						$scope.paymentMethod=[
+							{name:"cash"},
+							{name:"bank"}
+						];
 						$scope.create=function(payment){
+
+							if(_.isUndefined(payment)){
+								messageCenterService.add('danger', 'Not entered fields', {timeout: 3000});
+								return;
+							}
+							if(_.isNull(payment.amount)||_.isUndefined(payment.amount)||payment.amount<0){
+								messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
+								return;
+							}
+							if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
+								messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+								return;
+							}
+							else{
+								modalInstance.close(payment);
+							}
+
+
+
+
 							modalInstance.close(payment)
 						}
 					},
@@ -149,8 +172,7 @@ app.controller('PaymentListController',
 				var modalInstance=$modal.open({
 					templateUrl:"/modules/buyer/views/payments/new_cash_office.html",
 					controller:function($scope,PaymentService){
-						//$scope.type=type;
-					PaymentService.getOrderType().then(
+						PaymentService.getOrderType().then(
 						function(response){
 							$scope.type=response;
 						}
