@@ -3,17 +3,17 @@
     <h4 class="modal-title" id="myModalLabel">New payment</h4>
 </div>
 <div class="modal-body">
-    <label>Amount:</label>
-    <input type="number" data-ng-model="payment.amount" class="form-control"/>
+    <label>Order id:</label>
+   <!-- <input type="number" data-ng-model="payment.amount" class="form-control"/>-->
+    <autocomplete input-model="orders" output-model="payment.id"></autocomplete>
     <br>
-    <label>Method:</label>
+    <label>Price:</label>
+    <input type="number" data-ng-model="payment.amount" class="form-control"/>
+    <label>Note:</label>
+    <textarea ng-model="payment.note" class="form-control" style="resize:none"></textarea>
 
-    <select class="form-control" data-ng-model="payment.method"
-            ng-options="opt as opt.name for opt in methods">
-        <option value="">Choose type</option>
-    </select>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="make(payment)">Make</button>
+    <button type="button" class="btn btn-primary" ng-click="create(payment)">Create</button>
     <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
 </div>

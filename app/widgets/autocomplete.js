@@ -17,6 +17,7 @@ angular.module('widgets.autocomplete', [])
 
                 $scope.$watch('search',function(val){
                     if(val){
+                        console.log(val);
                         $scope.flag=false;
                     }
                     else{
@@ -25,7 +26,7 @@ angular.module('widgets.autocomplete', [])
                 });
 
                 $scope.getRow=function(obj){
-                    $scope.search = obj.name;
+                    $scope.search = obj.name||obj.id;
                     $scope.outputModel = obj;
                 };
 
