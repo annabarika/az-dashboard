@@ -107,7 +107,7 @@ app.controller('OrderListController',
 
                 RestFactory.request(config.API.host + "order/load")
                     .then(function(response){
-                        console.log(response);
+                        //console.log(response);
                         var data = [];
 
                         for( var i in response ){

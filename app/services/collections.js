@@ -3,11 +3,11 @@
     var app=angular.module("services.collections",[]);
 
 
-    app.constant("PATH",{
+    app.constant("PATHC",{
         FACTORIES           :   config.API.host+'factory/load',
         COLLECTIONS         :   config.API.host+'catalogue-collection/load/status/0,1',
         COLLECTION_CARD     :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
-        IMAGES_PATH         :   config.API.imagehost+'/files/factory/attachments/',
+        IMAGES_PATH        :   config.API.imagehost+'/files/factory/attachments/',
         FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
         CREATECOLLECTION    :   config.API.host+"catalogue-collection/create",
         LOADFILES           :   config.API.host+'catalogue/loadfiles',
@@ -21,13 +21,12 @@
         PRODUCTUPDATE       :   config.API.host+'catalogue/update',
         ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
         CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
-        LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue',
+        "LOADSTATUSES"          :     config.API.host+'status/load/type/factoryCatalogue',
         LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/"
     });
 
-        app.factory("CollectionService", ["PATH", 'RestFactory', '$modal', "$http",
-            function(PATH, RestFactory, $modal, $http) {
-
+        app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
+            function(PATHC, RestFactory, $modal, $http) {
             return {
 
                 /**
@@ -36,7 +35,7 @@
                  * @returns {*}
                  */
                 getFactories: function () {
-                    return RestFactory.request(PATH.FACTORIES);
+                    return RestFactory.request(PATHC.FACTORIES);
                 },
 
                 /**
@@ -46,7 +45,7 @@
                  */
                 getCollectionStatuses: function () {
 
-                    return RestFactory.request(PATH.LOADSTATUSES);
+                    return RestFactory.request(PATHC.LOADSTATUSES);
                 },
 
                 /**
@@ -57,13 +56,13 @@
                  */
                 getCollections: function (params) {
 
-                    //var url = (_.isUndefined(params) == false) ? PATH.COLLECTIONS+params : PATH.COLLECTIONS;
+                    //var url = (_.isUndefined(params) == false) ? PATHC.COLLECTIONS+params : PATHC.COLLECTIONS;
 
                     return RestFactory.request(params);
                 },
 
                 getCurrentCollection:function(id){
-                    var url= PATH.LOADONECOLLECTION + id;
+                    var url= PATHC.LOADONECOLLECTION + id;
                     return RestFactory.request(url);
                 },
 
@@ -110,7 +109,7 @@
                  */
                 getFactoryCollections : function(id){
 
-                    var url = PATH.FACTORYCOLLECTIONS+id;
+                    var url = PATHC.FACTORYCOLLECTIONS+id;
 
                     return RestFactory.request(url);
                 },
@@ -122,7 +121,7 @@
                  */
                 getCollectionCard: function (id) {
 
-                    var url = PATH.COLLECTION_CARD+id;
+                    var url = PATHC.COLLECTION_CARD+id;
                     return RestFactory.request(url);
                 },
 
@@ -194,7 +193,7 @@
                     });
                     var query= $.param(params);
 
-                    return RestFactory.request(PATH.LOADPRODUCTS,"POST", products);
+                    return RestFactory.request(PATHC.LOADPRODUCTS,"POST", products);
                 },
                 /**
                  * Extract server response data requested by collectionId
@@ -233,7 +232,7 @@
                  */
                 cancelCollection: function (collectionId) {
 
-                    return RestFactory.request(PATH.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
+                    return RestFactory.request(PATHC.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
                 },
 
                 /**
@@ -241,7 +240,7 @@
                  */
                 deleteProduct: function (collectionId, productId) {
 
-                    var url = PATH.CANCELPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
+                    var url = PATHC.CANCELPRODUCT+'collectionId/'+collectionId+'/productId/'+productId;
 
                     return RestFactory.request(url, 'DELETE');
                 },
@@ -270,7 +269,7 @@
                         })(product)
                     };
 
-                    return RestFactory.request(PATH.PRODUCTUPDATE, 'PUT', params);
+                    return RestFactory.request(PATHC.PRODUCTUPDATE, 'PUT', params);
                 },
 
                 /**
@@ -280,7 +279,7 @@
                  */
                 getImagePath: function() {
 
-                    return PATH.IMAGES_PATH;
+                    return PATHC.IMAGES_PATH;
                 },
 
                 /**
@@ -290,7 +289,7 @@
                  */
                 loadSizes: function () {
 
-                    return RestFactory.request(PATH.LOADSIZES);
+                    return RestFactory.request(PATHC.LOADSIZES);
                 },
 
                 /**
@@ -300,7 +299,7 @@
                  */
                 loadOrderTypes: function () {
 
-                    return RestFactory.request(PATH.LOADORDERTYPES);
+                    return RestFactory.request(PATHC.LOADORDERTYPES);
                 },
 
                 /**
@@ -343,7 +342,7 @@
                         name:"collection"
                     };
 
-                    return RestFactory.request(PATH.CREATECOLLECTION,"POST",data);
+                    return RestFactory.request(PATHC.CREATECOLLECTION,"POST",data);
                 },
 
                 /**
@@ -360,7 +359,7 @@
 
                     });
 
-                    return $http.post(PATH.LOADFILES,fd,
+                    return $http.post(PATHC.LOADFILES,fd,
                         {
                             transformRequest: angular.identity,
                             headers: {'Content-Type': undefined}
@@ -379,7 +378,7 @@
                         'currencyId'    :   order.currencyId
                     };
 
-                    return RestFactory.request(PATH.ORDERCREATE,"POST", params).then(function(response) {
+                    return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response) {
 
                         console.log(response);
                             if(response.id) {
@@ -388,7 +387,7 @@
                                     'orderId'   :   parseInt(response.id)
                                 };
 
-                                return RestFactory.request(PATH.ADDORDERTOCOLLECTION,"PUT", $.param(params));
+                                return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", $.param(params));
                             }
                             else return false;
                     });
@@ -463,7 +462,7 @@
                                         });
                                     });
 
-                                    return RestFactory.request(PATH.CREATEPRODUCTFACTORY,"POST", products);
+                                    return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                                 //}
                             }
                         }

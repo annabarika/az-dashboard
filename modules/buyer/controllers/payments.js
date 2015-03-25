@@ -12,11 +12,14 @@ app.controller('PaymentListController',
 		"PaymentService",
 		"$modal",
 		"messageCenterService",
+
 		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService){
 
 			$scope.$route = $route;
 			$scope.$location = $location;
-			var filter={},url;
+			var filter={},
+				url;
+
 			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
@@ -28,6 +31,7 @@ app.controller('PaymentListController',
 				{ name: "amount", title: 'Payment' },
 				{ name: "refund", title: 'Refund' }
 			];
+
 			function getPayments(){
 				PaymentService.getPayments().then(
 

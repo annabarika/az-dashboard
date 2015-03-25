@@ -17,7 +17,8 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             {name: "name", title: 'Collection'},
             {name: "factoryName", title: "Factory"},
             {name: "statusName", title: "Status"},
-            {name: "createDate", title: 'Create date'}
+            {name: "createDate", title: 'Create date'},
+            {name:"orderId",title:"Order"}
         ];
         $scope.filteredFactory = [];
 
