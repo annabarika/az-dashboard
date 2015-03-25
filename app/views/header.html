@@ -2,6 +2,16 @@
 
     <!-- start: left nav -->
 
+    <div ng-if="Auth.isLoggedIn()">
+        Hello, {{Auth.get('name')}} <a ng-href="/login" ng-click="logoff()">logoff</a>
+    </div>
+    <!--<div ng-if="!Auth.isLoggedIn()">
+        <a ng-href="/login">Login</a>
+    </div>-->
+
+
+
+
     <ul class="nav navbar-nav navbar-left">
 
         <li class="visible-xs" ng-init="index=0; classes=['app-sidebar', 'sidebar-open-ltr app-sidebar sidebar-left']" ng-click="index = index + 1">

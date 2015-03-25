@@ -14,71 +14,105 @@
         "ngSanitize"
     ])
 
-        .config(function ($routeProvider, $locationProvider, $httpProvider) {
+       /* .run(function (Authentication,Application) {
+
+        Authentication.requestUser().then(
+
+            function(){
+                Application.makeReady()
+            });
+        })*/
+
+
+        .config(function ($routeProvider, $locationProvider, $httpProvider){
 
             $locationProvider.html5Mode(true);
 
             $routeProvider
 
-                .when("/",
+                .when("/login",
+                {
+                    templateUrl: "/app/views/login.html",
+                    controller: "MainController"
+                }
+            )
+                .when("/index",
                 {
                     templateUrl: "/app/views/startpage.html",
                     controller:"MainController"
                 }
             )
+
                 .otherwise(
                 {
-                    redirectTo:'/'
+                    redirectTo:'/login'
                 }
             );
+
+            $httpProvider.interceptors.push('AuthInterceptor');
+            //console.log($httpProvider.interceptors);
         })
 
-        .controller("MainController", function($scope, NavigationModel){
+        .controller("MainController",
+        function($scope,$rootScope, NavigationModel,Auth,$location,messageCenterService,RestFactory){
+
             NavigationModel.get().then(function(result){ $scope.Navigation = result.data; });
+
+            $scope.$on("auth-required", function(event, reason) {
+                $rootScope.authFlag=false;
+                $location.url("/login?redir=" + encodeURIComponent(reason.route.originalPath) );
+
+            });
+            /**
+             *  logIn
+             * @param user
+             */
+            $scope.auth=function(user){
+
+                if(_.isObject(user)){
+
+                    var data={
+                        name:user.login,
+                        password:user.pass
+                    };
+                    var url="/testing/mocks/user.json";
+                    RestFactory.request(url).then(
+                        function(response){
+
+                            if(_.isArray(response)){
+
+                                angular.forEach(response, function(item){
+
+                                    if(item.name==data.name && item.password==data.password){
+                                       // console.log(item);
+                                        Auth.create(item);
+                                        $rootScope.authFlag=true;
+                                        //$location.path($location.search().redir);
+                                        $location.path("/index");
+                                        return;
+                                    }
+                                })
+                            }
+                        },function(error){
+                            messageCenterService.add('danger', 'error', {timeout: 3000});
+                        }
+                    )
+                }
+                else{
+                    messageCenterService.add('danger', "Invalid username or password", {timeout: 3000});
+                }
+            };
+            /**
+             *  logout
+             */
+            $scope.logoff = function() {
+                $rootScope.authFlag=false;
+                Auth.destroy();
+            }
         })
 
         .controller('BsAlertCtrl', ["$rootScope","$scope", function ($rootScope,$scope) {
-            var alerts = [
-                {
-                    type: 'danger',
-                    msg: 'Oh snap! Change a few things up and try submitting again.'
-                },
-                {
-                    type: 'success',
-                    msg: 'Well done! You successfully read this important alert message.'
-                },
-                {
-                    type: 'info',
-                    msg: 'Heads up! This alert needs your attention, but it\'s not super important.'
-                },
-                {
-                    type: 'warning',
-                    msg: 'Warning! Better check yourself, you\'re not looking too good.'
-                }];
 
-            /*	$scope.$watch('message',function(value){
-             $scope.msg=value;
-             });*/
-            /*$rootScope.addAlert = function() {
-             $rootScope.alerts.push({
-             msg: 'Another alert!'
-             });
-             };*/
-            $rootScope.changeAlert=2;
-
-            $scope.$watch('changeAlert',function(newVal){
-
-                $scope.alert=alerts[newVal];
-                $scope.alertFlag=false;
-            });
-
-            $scope.alertFlag=true;
-
-            $scope.alert=alerts[$rootScope.changeAlert];
-
-            /*$rootScope.closeAlert = function(index) {
-             $scope.alert=null;
-             };*/
         }]);
 
 })();

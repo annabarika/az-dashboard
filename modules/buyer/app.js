@@ -13,75 +13,88 @@ app.config(function($routeProvider){
         .when('/buyer/orders',
         {
             templateUrl:"/modules/buyer/views/orders/index.html",
-            controller:"OrderListController"
+            controller:"OrderListController",
+            authRequired: ['developer','admin']
         }
     )
         .when('/buyer/orders/id/:orderId',
         {
             templateUrl:"/modules/buyer/views/orders/id.html",
-            controller:"OrderController"
+            controller:"OrderController",
+            authRequired: 'developer'
         }
     )
         .when('/buyer/bestsellers/',
         {
             templateUrl:"/modules/buyer/views/bestsellers/index.html",
-            controller:"BestsellersController"
+            controller:"BestsellersController",
+            authRequired: 'developer'
         }
     )
         .when('/buyer/bestsellers/item/:bestsellerId',
         {
             templateUrl:"/modules/buyer/views/bestsellers/item.html",
-            controller:"BestsellerItemController"
+            controller:"BestsellerItemController",
+            authRequired: 'developer'
         }
     )
         .when('/buyer/payments',
         {
             templateUrl:"/modules/buyer/views/payments/index.html",
-            controller:"PaymentListController"
+            controller:"PaymentListController",
+            authRequired: 'developer'
         }
     )
         .when('/buyer/payments/by-order/:id',
         {
             templateUrl:"/modules/buyer/views/payments/by-order.html",
-            controller:"PaymentOrderController"
+            controller:"PaymentOrderController",
+            authRequired: 'developer'
         })
         .when('/buyer/collection',
         {
             templateUrl:"/modules/buyer/views/collection/index.html",
-            controller:"CollectionsController"
+            controller:"CollectionsController",
+            authRequired: 'developer'
         })
         .when('/buyer/collection/upload',
         {
             templateUrl:"/modules/buyer/views/collection/collection.html",
-            controller:"UploadController"
+            controller:"UploadController",
+            authRequired: 'developer'
         })
         .when('/buyer/collection/id/:collectionId',
         {
             templateUrl:"/modules/buyer/views/collection/id.html",
-            controller:"CollectionCardController"
+            controller:"CollectionCardController",
+            authRequired: 'developer'
         })
         .when('/buyer/cargo',
         {
             templateUrl:"/modules/buyer/views/cargo/index.html",
-            controller:"CargoController"
+            controller:"CargoController",
+            authRequired: 'developer'
         }
     )
         .when('/buyer/cargo/id/:id',
         {
             templateUrl:"/modules/buyer/views/cargo/cargo_document.html",
-            controller:"CargoDocumentController"
+            controller:"CargoDocumentController",
+            authRequired: 'developer'
         }
     )
         .when('/buyer/cargo/id/:id/choose-order',
         {
             templateUrl:"/modules/buyer/views/cargo/choose_order.html",
-            controller:"CargoOrderController"
+            controller:"CargoOrderController",
+            authRequired: 'developer'
         }
     )
         .when('/buyer/cargo/id/:id/order/:orderId',
         {
             templateUrl:"/modules/buyer/views/cargo/cargo_order_products.html",
-            controller:"CargoOrderProductsController"
+            controller:"CargoOrderProductsController",
+            authRequired: 'developer'
         }
     )
     ;
