@@ -58,7 +58,7 @@
                                 <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">
                                     <span ng-if="headerRow.name!='orderId'">{{row[headerRow.name]}}</span>
                                     <span ng-if="headerRow.name=='orderId'">
-                                        <a ng-if="path!=undefined" href="{{path}}{{row[headerRow.name]}}">{{row[headerRow.name]}}</a>
+                                        <a href="" ng-if="path!=undefined" ng-click="go(row[headerRow.name])">{{row[headerRow.name]}}</a>
                                         <span ng-if="path==undefined">{{row[headerRow.name]}}</span>
                                     </span>
 
