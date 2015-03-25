@@ -2,7 +2,8 @@
     <input type='text' placeholder='search' ng-model='search'/>
     <ul ng-hide="flag">
         <li ng-repeat='row in inputModel|filter:search' ng-click='getRow(row)'>
-            {{row.name}}
+            <span ng-if="row.name!=undefined">{{row.name}}</span>
+            <span ng-if="row.name==undefined">{{row.id}}</span>
         </li>
     </ul>
 </div>

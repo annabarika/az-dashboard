@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$dismiss(reason)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">New Cashier Office</h4>
+</div>
+<div class="modal-body">
+    <label>Name:</label>
+    <input type="text" ng-model="cash.name" class="form-control"/>
+    <br>
+    <label>Type:</label>
+    <select class="form-control" data-ng-model="cash.type"
+            ng-options="opt as opt.name for opt in type">
+        <option value="">Choose type</option>
+    </select>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" ng-click="create(cash)">Create</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+</div>

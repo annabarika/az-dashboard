@@ -121,6 +121,7 @@
                 ,caption:"@"
                 ,cellsButton:"&"
                 ,useBadge:"@"
+                ,path:"@"
             },
 
             link:function($scope){
