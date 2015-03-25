@@ -435,6 +435,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             if (_.isUndefined(response) == false) {
 
                 $rootScope.items = CollectionService.extractProducts(response);
+
                 if (_.isEmpty($rootScope.items)) {
                     messageCenterService.add('warning', 'Products not found in this collection', {timeout: 3000});
                 }

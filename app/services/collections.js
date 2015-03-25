@@ -211,6 +211,8 @@
 
                             angular.forEach(collections, function(product) {
 
+                                product.inOrder = false;
+
                                 // assign sizes count to product
                                 if(product.hasOwnProperty('sizes') && _.isEmpty(product.sizes) == false) {
                                     angular.forEach(product.sizes, function(value, index) {
@@ -218,7 +220,10 @@
                                         product.sizes[index].count = '0';
                                     });
                                 }
-                                product.inOrder=false;
+
+                                if(product.catalogueProduct.status == 1) {
+                                    product.inOrder = true;
+                                }
                                 res.push(product);
                             });
                         });
@@ -384,7 +389,7 @@
                                     'orderId'   :   parseInt(response.id)
                                 };
 
-                                return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", $.param(params));
+                                return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", params);
                             }
                             else return false;
                     });
