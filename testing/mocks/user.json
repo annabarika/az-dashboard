@@ -3,14 +3,14 @@
         "id": "1",
         "email": "kostyanuch87@gmail.com",
         "name": "Green Lantern",
-        "roles": "developer",
+        "type": "developer",
         "password":"123"
     },
     {
         "id": "2",
         "email": "kostyanuch87@gmail.com",
         "name": "test",
-        "roles": "admin",
+        "type": "admin",
         "password":"123"
     }
 ]

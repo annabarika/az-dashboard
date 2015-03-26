@@ -2,15 +2,14 @@
 
     <!-- start: left nav -->
 
-    <div ng-if="Auth.isLoggedIn()">
-        Hello, {{Auth.get('name')}} <a ng-href="/login" ng-click="logoff()">logoff</a>
+    <div class="col-sm-3">
+        <label>Hello, {{username}}</label>
+        <br>
+        <a ng-href="/login" ng-click="logout()">logoff</a>
     </div>
     <!--<div ng-if="!Auth.isLoggedIn()">
         <a ng-href="/login">Login</a>
     </div>-->
-
-
-
 
     <ul class="nav navbar-nav navbar-left">
 

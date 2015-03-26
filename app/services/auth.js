@@ -96,14 +96,13 @@ angular.module("services.authentication",[])
                 var role = $route.current &&
                     $route.current.$$route &&
                     $route.current.$$route.authRequired;
-                console.log($route.current.$$route.authRequired);
-                console.log(role);
                 if (role && !Auth.permittedTo(role)) {
                     $rootScope.$broadcast('auth-required', {
                         reason: 'route',
                         route: $route.current.$$route
                     });
                 }
+
             });
         }
     ]);

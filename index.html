@@ -53,14 +53,14 @@
 </head>
 
 <body ng-controller="MainController">
-<section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }" class="ng-scope">
+<section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }">
     <sidebar ng-class="classes[index % classes.length]" ng-show="authFlag">111</sidebar>
 
     <header id="app-header" class="navbar" ng-show="authFlag"></header>
 
     <footer id="app-footer" ></footer>
 
-    <section id="app-content" class="clearfix ng-scope">
+    <section id="app-content" class="clearfix">
 
         <div class="spinner-wrapper"><div data-indicator=""></div></div>
 
@@ -104,7 +104,7 @@
 <script src="/app/services/bestsellers.js"></script>
 <script src="/app/services/payments.js"></script>
 <script src="/app/services/filereader.js"></script>
-<script src="/app/services/auth.js"></script>
+<script src="/app/services/authentication.js"></script>
 <!--<script src="/app/services/application.js"> </script>-->
 
 <!--Loading widgets-->

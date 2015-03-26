@@ -22,7 +22,12 @@
                 Application.makeReady()
             });
         })*/
+        .run(["$rootScope","$route","AuthFactory",function($rootScope,$route,AuthFactory){
 
+            console.log($route);
+            AuthFactory.getUser();
+
+        }])
 
         .config(function ($routeProvider, $locationProvider, $httpProvider){
 
@@ -30,7 +35,7 @@
 
             $routeProvider
 
-                .when("/login",
+                .when("/",
                 {
                     templateUrl: "/app/views/login.html",
                     controller: "MainController"
@@ -45,7 +50,7 @@
 
                 .otherwise(
                 {
-                    redirectTo:'/login'
+                    redirectTo:'/'
                 }
             );
 
@@ -54,20 +59,71 @@
         })
 
         .controller("MainController",
-        function($scope,$rootScope, NavigationModel,Auth,$location,messageCenterService,RestFactory){
+        function($scope,$rootScope, NavigationModel,AuthFactory,$location,messageCenterService,RestFactory){
 
             NavigationModel.get().then(function(result){ $scope.Navigation = result.data; });
+            /**
+             *
+             * @param user
+             */
+            $scope.auth=function(user){
+                if(_.isObject(user)){
 
-            $scope.$on("auth-required", function(event, reason) {
+                    var data={
+                        name:user.login,
+                        password:user.pass
+                    };
+
+                        AuthFactory.runAuth(user).then(
+
+                            function(response){
+
+                                if(_.isArray(response)){
+
+                                    angular.forEach(response, function(item){
+
+                                        if(item.name==data.name && item.password==data.password){
+
+                                            AuthFactory.create(item);
+
+
+                                            $rootScope.username=data.name;
+                                            console.log($scope.username);
+                                            $location.path("/index");
+                                            return;
+                                        }
+                                    })
+                                }
+                            }
+                        )
+                }
+                else{
+                    messageCenterService.add('danger', "Invalid username or password", {timeout: 3000});
+                }
+            };
+            /**
+             * logout
+             */
+            $scope.logout=function(){
+
+                AuthFactory.destroy();
+                $location.path("/");
+            };
+
+
+
+            /*$scope.$on("auth-required", function(event, reason) {
+                console.log(event,reason);
                 $rootScope.authFlag=false;
-                $location.url("/login?redir=" + encodeURIComponent(reason.route.originalPath) );
+               // $location.url("/login?redir=" + encodeURIComponent(reason.route.originalPath) );
+                $location.path("/login");
+            });*/
 
-            });
             /**
              *  logIn
              * @param user
              */
-            $scope.auth=function(user){
+            /*$scope.auth=function(user){
 
                 if(_.isObject(user)){
 
@@ -101,14 +157,14 @@
                 else{
                     messageCenterService.add('danger', "Invalid username or password", {timeout: 3000});
                 }
-            };
+            };*/
             /**
              *  logout
              */
-            $scope.logoff = function() {
+            /*$scope.logoff = function() {
                 $rootScope.authFlag=false;
                 Auth.destroy();
-            }
+            }*/
         })
 
         .controller('BsAlertCtrl', ["$rootScope","$scope", function ($rootScope,$scope) {
