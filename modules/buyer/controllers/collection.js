@@ -7,6 +7,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
     function ($scope, $rootScope, CollectionService, $location) {
 
         var filter = {}, url;
+		var DRAFT = 0, ACTIVE = 1 ;
 
         // set title
         $rootScope.documentTitle = "Collection";
@@ -28,11 +29,11 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             var statuses = [];
             for (var i in response) {
 
-                if (response[i].statusId == 2) {
-                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: false});
+                if (response[i].statusId == DRAFT || response[i].statusId == ACTIVE ) {
+                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: true });
                 }
                 else {
-                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: true});
+                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: false });
                 }
             }
 
