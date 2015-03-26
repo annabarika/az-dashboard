@@ -24,8 +24,10 @@
         })*/
         .run(["$rootScope","$route","AuthFactory",function($rootScope,$route,AuthFactory){
 
-            console.log($route);
-            AuthFactory.getUser();
+            $rootScope.username=AuthFactory.getUser('name');
+            if(!_.isUndefined($rootScope.username)){
+                $rootScope.authFlag=true;
+            }
 
         }])
 
@@ -59,9 +61,12 @@
         })
 
         .controller("MainController",
-        function($scope,$rootScope, NavigationModel,AuthFactory,$location,messageCenterService,RestFactory){
+        function($scope,$rootScope, NavigationModel,AuthFactory,$location,messageCenterService,RestFactory,$route){
 
-            NavigationModel.get().then(function(result){ $scope.Navigation = result.data; });
+                NavigationModel.get().then(function(result){
+                    $scope.Navigation = AuthFactory.permissions(result.data);
+                });
+
             /**
              *
              * @param user
@@ -85,10 +90,6 @@
                                         if(item.name==data.name && item.password==data.password){
 
                                             AuthFactory.create(item);
-
-
-                                            $rootScope.username=data.name;
-                                            console.log($scope.username);
                                             $location.path("/index");
                                             return;
                                         }

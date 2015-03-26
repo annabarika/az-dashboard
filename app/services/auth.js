@@ -3,7 +3,7 @@
 angular.module("services.authentication",[])
     .factory('AuthInterceptor', ['$q', '$window', '$rootScope',
         function ($q, $window, $rootScope) {
-            var authHeaderName = 'x-access-token';
+            var token = 'x-access-token';
             return {
 
                 /**
@@ -13,7 +13,7 @@ angular.module("services.authentication",[])
                 request: function (config) {
                     config.headers = config.headers || {};
                     if($window.sessionStorage.token) {
-                        config.headers[authHeaderName] = $window.sessionStorage.token;
+                        config.headers[token] = $window.sessionStorage.token;
                     }
                     return config;
                 },

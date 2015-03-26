@@ -10,20 +10,14 @@
             function ($q, $window, $rootScope) {
                 var authHeaderName = 'x-access-token';
                 return {
-
-                    /**
-                     * For every single http request, we add access token to the header
-                     * so that, the server-side read this token to authorize the access to resource
-                     */
                     request: function (config) {
                         config.headers = config.headers || {};
                         if($window.sessionStorage.token) {
                             config.headers[authHeaderName] = $window.sessionStorage.token;
                         }
                         return config;
-                    },
-
-                    responseError: function(rejection) {
+                    }
+                    /*,responseError: function(rejection) {
                         if (rejection.status === 401) {
                             $rootScope.$broadcast('auth-required', {
                                 reason: 'http-response-401',
@@ -31,7 +25,7 @@
                             });
                         }
                         return $q.reject(rejection);
-                    }
+                    }*/
                 };
             }
         ])
@@ -70,6 +64,7 @@
                     }
                     $window.sessionStorage['auth-type'] = JSON.stringify(type);
                     $rootScope.authFlag=true;
+                    $rootScope.username=data.name;
                 },
                 /**
                  * logout
@@ -82,10 +77,53 @@
                         }
                     }
                     $rootScope.authFlag=false;
+                    delete $rootScope.username;
                 },
+                /**
+                 *
+                 * @param key
+                 * @returns {*}
+                 */
+                getUser : function(key){
 
-                getUser : function(){
+                        return $window.sessionStorage["auth-" + key];
+                },
+                permissions:function(data){
+                    //console.log(data);
+                    var array=[],menu=[];
 
+                    var type=JSON.parse($window.sessionStorage["auth-type"]);
+
+                    angular.forEach(data,function(item,i){
+
+                        array.push({
+                            "title":item.title,
+                            "icon":item.icon,
+                            "menu":[]
+                        });
+
+                        angular.forEach(item.menu,function(value,key){
+
+                            if(value.access==type){
+                                array[i].menu.push(value);
+
+                            }
+
+                        });
+
+                    });
+
+                    angular.forEach(array,function(item){
+                        if(item.menu.length!=0){
+                            menu.push(item);
+                        }
+                    });
+
+
+
+                    console.log(menu);
+
+                    return menu;
                 }
             }
         }])

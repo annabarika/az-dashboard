@@ -52,13 +52,6 @@ app.controller('OrderListController',
             $scope.$route = $route;
             $scope.$location = $location;
 
-
-            if(_.isUndefined($scope.orders)){
-                $scope.orders=$rootScope.data;
-                console.log("ctrl",$scope.orders);
-            }
-
-
             var modalWindow,
                 url,
                 method,

@@ -5,23 +5,28 @@
     [
       {"title": "Orders",
         "count": "2",
-        "url":"buyer/orders"
+        "url":"buyer/orders",
+        "access":"admin"
       },
       {"title": "Payments",
         "count": "0",
-        "url":"buyer/payments"
+        "url":"buyer/payments",
+        "access":"admin"
       },
       {"title": "Bestsellers",
         "count": "0",
-        "url":"buyer/bestsellers"
+        "url":"buyer/bestsellers",
+        "access":"developer"
       },
       {"title": "New collection",
         "count": "2",
         "url":"buyer/collection"
+        ,"access":"admin"
       },
       {"title": "Cargo",
         "count": "3",
         "url":"buyer/cargo"
+        ,"access":"admin"
       }
     ]
   },
@@ -30,8 +35,14 @@
     "icon":"ai ai-email",
     "menu":
             [
-              {"title":"Test1"},
-              {"title":"Test2"}
+              {
+                "title":"Test1"
+                ,"access":"developer"
+              },
+              {
+                "title":"Test2"
+                ,"access":"developer"
+              }
             ]
   }
 ]
