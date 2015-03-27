@@ -19,14 +19,25 @@
         <div class="form-group">
             <li ng-repeat="file in files">
                 {{file.name}}
-                <!--<button ng-click="removeFiles($index)" class="btn btn-link">
-                    <i class="fa fa-check"></i>
-                </button>-->
+
                 <button ng-click="removeFiles(file.name)" class="btn btn-link">
                     <i class="fa fa-remove"></i>
                 </button>
             </li>
         </div>
+
+        <!--<div class="row">
+            <div class="col-sm-2 col-md-2" ng-repeat="file in files">
+                <button ng-click="removeFiles(file.name)" class="btn btn-link">
+                    <i class="fa fa-remove"></i>
+                </button>
+                <div class="thumbnail">
+                    <img file-preview="file" style="height:120px;"/>
+                </div>
+            </div>
+        </div>-->
+
+
     </div>
 </div>
 <div class="container-fluid pt-md">

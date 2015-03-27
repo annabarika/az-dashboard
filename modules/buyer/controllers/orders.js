@@ -629,7 +629,7 @@ app.controller("OrderController",
             };
 
             $scope.$watch("files",function(value){
-
+                console.log(value);
                 if(!_.isUndefined(value) && $scope.uploadFlag){
 
                     runUpload();
