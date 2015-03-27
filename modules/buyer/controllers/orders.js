@@ -221,7 +221,7 @@ app.controller('OrderListController',
             };*/
 
             $scope.$watchCollection('resultData',function(newVal){
-
+                    console.log(newVal);
                     for(item in newVal){
                         var arr=[];
 
@@ -233,6 +233,12 @@ app.controller('OrderListController',
                             angular.forEach(newVal[item],function(value,key){
 
 
+                                if(key=="startDate"||key=="endDate"){
+
+                                    arr.push(moment(value).format('YYYY-MM-DD'));
+                                    filter[item]=arr;
+                                }
+
                                 if(value.ticked ===true){
 
                                     arr.push(value.id);
@@ -242,7 +248,8 @@ app.controller('OrderListController',
                             });
                         }
                     }
-                    //console.log(filter);
+                    console.log(filter);
+
                     if(!$.isEmptyObject(filter)){
 
                         url=config.API.host+"order/load/";
@@ -259,6 +266,10 @@ app.controller('OrderListController',
                         if(filter.factory){
 
                             url+="factoryId/"+filter.factory.join()+"/";
+                        }
+                        if(filter.createDate){
+
+                            url+="createDate/"+filter.createDate.join(',')+"/";
                         }
 
                         console.log(url);
@@ -318,6 +329,59 @@ app.controller('OrderListController',
                     $rootScope.uploadFiles=$scope.files;
                 }
             });*/
+
+            /**
+             * datepicker controller
+             */
+
+            /*$scope.today = function() {
+                $scope.dt = new Date();
+            };
+            $scope.today();
+
+            $scope.clear = function () {
+                $scope.dt = null;
+            };
+
+            // Disable weekend selection
+            $scope.disabled = function(date, mode) {
+                return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+            };
+
+
+            $scope.$watch('dtMin',function(newVal){
+             console.log(newVal);
+             });
+
+             $scope.$watch('dtMax',function(newVal){
+             console.log(newVal);
+             });
+
+
+            $scope.openMin = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.openedMin = true;
+            };
+
+            $scope.openMax = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.openedMax = true;
+            };
+
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+            $scope.format = $scope.formats[3];*/
+
+
 
 
 }]);
