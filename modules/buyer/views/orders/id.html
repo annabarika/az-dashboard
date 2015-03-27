@@ -16,15 +16,6 @@
                 </div>
             </div>
         </div>
-        <!--<div>
-            <div class="form-control" >
-                <input type="file" file-input="files" multiple/>
-            </div>
-            <div class="btn btn-default" ng-click="upload()">Upload</div>
-            <div class="form-group">
-                <li ng-repeat="file in files">{{file.name}}</li>
-            </div>
-        </div>-->
         <div class="form-group">
             <li ng-repeat="file in files">
                 {{file.name}}
@@ -105,7 +96,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!--<tr ng-repeat="(key,value) in orderProducts track by $index">-->
                 <tr ng-repeat="item in orderProducts track by $index">
                     <td>{{$index+1}}</td>
                     <td>
@@ -117,8 +107,8 @@
                     <td>{{item.size}}</td>
                     <td>{{item.count}}</td>
                     <td>{{item.product.price}}</td>
-                    <td ng-if="item.count !=undefined">{{item.count *item.product.price}}</td>
-                    <td ng-if="item.count ==undefined">{{item.product.price}}</td>
+                    <td>{{item.count *item.product.price||0}}</td>
+
                 </tr>
             <tr>
                 <td>TOTAL</td>

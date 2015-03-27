@@ -645,7 +645,6 @@ app.controller("OrderController",
                 angular.forEach($scope.files, function(file){
                     fd.append('file[]', file);
                 });
-                //console.log("upload");
 
                 url = config.API.host + "order/loadfiles";
                 fd.append("id",id);
