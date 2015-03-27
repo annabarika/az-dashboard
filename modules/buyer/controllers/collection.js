@@ -345,8 +345,7 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
                         $rootScope.items[$scope.position].inOrder=true;
                     }
 
-                    $rootScope.isOrdered = true;
-                    $modalInstance.close(orderResponse.orderId);
+                    $modalInstance.close(orderResponse.orderId, true);
                 });
             }
             else {
@@ -466,6 +465,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                         if(!_.isNull($scope.orderId)) {
                             CollectionService.getOrderRows($scope.orderId).then(function(response) {
 
+                                //@TODO NEED Collection `productId` for compare with CollectionProduct Rows `productId`
                                 CollectionService.fetchSizesCount(response, $rootScope.items);
                             });
                         }
@@ -551,8 +551,9 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                         // Create new order
                         $rootScope.position = $scope.position;
                         var modal=CollectionService.showModal("ADDORDER");
-                        modal.result.then(function(orderId) {
+                        modal.result.then(function(orderId, ordered) {
                                 $scope.orderId = orderId;
+                                $scope.isOrdered = ordered;
                             }
                         )
                     }
