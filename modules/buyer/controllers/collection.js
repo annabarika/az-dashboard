@@ -462,13 +462,13 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
                         $scope.orderId = _.first(response).orderId;
 
-                        if(!_.isNull($scope.orderId)) {
-                            CollectionService.getOrderRows($scope.orderId).then(function(response) {
+                        //if(!_.isNull($scope.orderId)) {
+                        //    CollectionService.getOrderRows($scope.orderId).then(function(response) {
 
-                                //@TODO NEED Collection `productId` for compare with CollectionProduct Rows `productId`
-                                CollectionService.fetchSizesCount(response, $rootScope.items);
-                            });
-                        }
+                        //        //@TODO NEED Collection `productId` for compare with CollectionProduct Rows `productId`
+                        //       CollectionService.fetchSizesCount(response, $rootScope.items);
+                        //    });
+                        //}
                     });
                 }
             }
