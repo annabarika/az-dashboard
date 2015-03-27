@@ -436,6 +436,19 @@ app.controller("OrderController",
                 }
             ];
 
+            $scope.currentType=function currentType(){
+
+                angular.forEach($scope.type,function(value){
+
+                    if(value.id==$scope.order.order.type){
+                        return value;
+                    }
+                });
+            };
+
+
+
+
             $scope.statusTemplates = {
                 0:'<span class="label label-info">Draft</span>',
                 1:'<span class="label label-danger">Send to factory</span>',
@@ -461,9 +474,9 @@ app.controller("OrderController",
                     });
 				});
 
-            $scope.changeType=function(){
+            /*$scope.changeType=function(){
                 $scope.order.order.type=$scope.currentType.id;
-            };
+            };*/
 
 
             RestFactory.request(config.API.host +"cargo/load/orderId/"+id).then(
