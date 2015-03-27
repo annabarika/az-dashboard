@@ -464,8 +464,9 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
                         //if(!_.isNull($scope.orderId)) {
                         //    CollectionService.getOrderRows($scope.orderId).then(function(response) {
-
+                        //
                         //        //@TODO NEED Collection `productId` for compare with CollectionProduct Rows `productId`
+                        //        // Resolve by connect to create - get server
                         //       CollectionService.fetchSizesCount(response, $rootScope.items);
                         //    });
                         //}
