@@ -63,9 +63,12 @@
         .controller("MainController",
         function($scope,$rootScope, NavigationModel,AuthFactory,$location,messageCenterService,RestFactory,$route){
 
+            if(AuthFactory.getUser('type')){
                 NavigationModel.get().then(function(result){
                     $scope.Navigation = AuthFactory.permissions(result.data);
                 });
+            }
+
 
             /**
              *
