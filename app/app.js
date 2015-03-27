@@ -62,14 +62,21 @@
 
         .controller("MainController",
         function($scope,$rootScope, NavigationModel,AuthFactory,$location,messageCenterService,RestFactory,$route){
-
+            //console.log($scope.Navigation);
+            $scope.tmpMenu;
             if(AuthFactory.getUser('type')){
                 NavigationModel.get().then(function(result){
-                    $scope.Navigation = AuthFactory.permissions(result.data);
+                    $scope.tmpMenu = AuthFactory.permissions(result.data);
+
                 });
             }
-
-
+            $scope.$watch("tmpMenu",function(value){
+                console.log("tmpMenu",value);
+                if(_.isArray(value)){
+                    $scope.Navigation = value;
+                    console.log($scope.Navigation);
+                }
+            });
             /**
              *
              * @param user
@@ -109,6 +116,7 @@
              * logout
              */
             $scope.logout=function(){
+                delete $scope.Navigation;
 
                 AuthFactory.destroy();
                 $location.path("/");
