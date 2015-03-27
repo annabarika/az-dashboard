@@ -13,7 +13,8 @@
             "FIND_BY_ARTICUL"       : config.API.host + 'product/search/query/',
             "ADD_TO_BESTSELLER"     : config.API.host + 'bestseller/create/',
 
-            "GET_BESTSELLER_BY_ID"  : config.API.host + 'bestseller/get/id/'
+            "GET_BESTSELLER_BY_ID"  : config.API.host + 'bestseller/get/id/',
+            "GET_HISTORY"           : config.API.host + '/bestseller/load/status/1/productId/'
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
@@ -204,7 +205,17 @@
                      */
                     getBestseller: function(id) {
                         return RestFactory.request(API.GET_BESTSELLER_BY_ID+parseInt(id));
-                    }
+                    },
+
+                    /**
+                     * Get bestseller history by productId
+                     *
+                     * @param int id
+                     * @returns {*}
+                     */
+					getBestsellerHistory: function(productId) {
+						return RestFactory.request(API.GET_HISTORY + parseInt(productId));
+					}
                 }
             }]);
 })();
