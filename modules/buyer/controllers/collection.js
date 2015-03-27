@@ -109,7 +109,6 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         });
 
         $scope.edit = function () {
-            //$scope.testId=$rootScope.row.id;
             $location.path('/buyer/collection/id/' + $rootScope.row.id)
         };
 
@@ -329,7 +328,7 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
 
             if (response.id) {
 
-                CollectionService.productsCreate($rootScope.order, response.orderId).then(function (response) {
+                CollectionService.productsCreate($rootScope.order, response.orderId).then(function () {
 
                     messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
@@ -346,9 +345,8 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
                         $rootScope.items[$scope.position].inOrder=true;
                     }
 
-                    $rootScope.orderId = orderResponse.orderId;
                     $rootScope.isOrdered = true;
-                    $modalInstance.close();
+                    $modalInstance.close(orderResponse.orderId);
                 });
             }
             else {
@@ -459,24 +457,19 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                     messageCenterService.add('warning', 'Products not found in this collection', {timeout: 3000});
                 }
                 else {
-                    if(_.isUndefined($rootScope.collections)) {
 
-                        // get collection
-                        CollectionService.getCurrentCollection($routeParams.collectionId).then(function (response) {
+                    // get collection
+                    CollectionService.getCurrentCollection($routeParams.collectionId).then(function (response) {
 
-                            $scope.orderId = _.first(response).orderId;
+                        $scope.orderId = _.first(response).orderId;
 
-                            if(!_.isNull($scope.orderId)) {
-                                CollectionService.getOrderRows($scope.orderId).then(function(response) {
-                                    console.log(response);
-                                    console.log($rootScope.items);
-                                });
-                            }
-                        });
-                    }
-                    else {
-                        $scope.orderId = _.first($rootScope.collections).orderId;
-                    }
+                        if(!_.isNull($scope.orderId)) {
+                            CollectionService.getOrderRows($scope.orderId).then(function(response) {
+
+                                CollectionService.fetchSizesCount(response, $rootScope.items);
+                            });
+                        }
+                    });
                 }
             }
         });
@@ -557,8 +550,11 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                     if (_.isNull($rootScope.order.collection.orderId)) {
                         // Create new order
                         $rootScope.position = $scope.position;
-
-                        CollectionService.showModal("ADDORDER");
+                        var modal=CollectionService.showModal("ADDORDER");
+                        modal.result.then(function(orderId) {
+                                $scope.orderId = orderId;
+                            }
+                        )
                     }
                     else
                     {
@@ -599,6 +595,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                                     }
                                 });
                             }
+                            $scope.orderId = $rootScope.order.collection.orderId;
                         });
                     }
                 });

@@ -126,6 +126,17 @@
                 },
 
                 /**
+                 * Get order rows by OrderId
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                fetchSizesCount : function(sizes, rows){
+                    console.log('Response rows', _.first(rows).catalogueProduct);
+                    console.log('Items sizes', sizes);
+                },
+
+                /**
                  * Get collections by factory
                  *
                  * @param id
@@ -562,9 +573,6 @@
                                             products.push(tmp);
                                         });
 
-
-                                        console.log(PATHC.CREATEPRODUCTFACTORY);
-                                        console.log(products);
                                         return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                                     }
                                 });
