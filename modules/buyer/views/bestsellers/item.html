@@ -127,6 +127,30 @@
             </div>
             <div class="col-md-6">
                 <div style="padding-left:20px;">
+                    <h3>Buying history (new)</h3>
+                </div>
+                <table class="table" style="background:white;">
+                    <tr>
+                        <th>Buying date</th>
+                        <th>Sizes = Count</th>
+                        <th>Notes</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="item in bestsellerHistory">
+                        <td>
+                            <a ng-href="/buyer/bestseller/item/{{item.id}}" target="_blank">{{item.orderDate}}</a>
+                        </td>
+                        <td>
+                            <div ng-repeat="(size, count) in data.sizes">
+                                {{size}}=<b>{{count}}</b>
+                            </div>
+                        </td>
+                        <td>{{item.notes}}</td>
+                        <td>{{item.status}}</td>
+                    </tr>
+                </table>
+
+                <div style="padding-left:20px;">
                     <h3>Buying history</h3>
                 </div>
                 <table class="table" style="background:white;">
