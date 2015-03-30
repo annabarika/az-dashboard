@@ -191,7 +191,7 @@
                     var size = [];
                     angular.forEach(sizes, function(sizeObj) {
 
-                        if(sizeObj.count != '0') {
+                        if(parseInt(sizeObj.count) != 0 && sizeObj.count != '') {
                             size.push(sizeObj);
                         }
                     });
@@ -211,7 +211,7 @@
                     angular.forEach(items, function(item) {
 
                         angular.forEach(item.sizes, function(size) {
-                            if(size.count != '0') {
+                            if(parseInt(size.count) != 0 && size.count != '') {
                                 sizes.push(1);
                             }
                         });
