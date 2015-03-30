@@ -539,7 +539,8 @@
 
                         if (backend.result) {
 
-                            var response = JSON.parse(backend.result), products = [];
+                            var response = JSON.parse(backend.result),
+                                products = [];
 
                             if(data.items.length == Object.keys(response).length) {
 
@@ -585,10 +586,9 @@
 
                                             products.push(tmp);
                                         });
-
-                                        return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                                     }
                                 });
+                                return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                             }
                         }
                     });

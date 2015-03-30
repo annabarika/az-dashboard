@@ -434,7 +434,6 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
         $scope.tableHeader = [
             {name: "preview", title: 'Preview'},
             {name: "articul", title: 'Articul'},
-            {name: "name", title: 'Name'},
             {name: "price", title: 'Price'},
             {name: "factory", title: 'Factory'},
             {name: "sizes", title: 'Sizes'},
