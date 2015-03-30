@@ -22,11 +22,14 @@
                 Application.makeReady()
             });
         })*/
-        .run(["$rootScope","$route","AuthFactory",function($rootScope,$route,AuthFactory){
+        .run(["$rootScope","$route","AuthFactory","$location",function($rootScope,$route,AuthFactory,$location){
 
             $rootScope.username=AuthFactory.getUser('name');
             if(!_.isUndefined($rootScope.username)){
                 $rootScope.authFlag=true;
+            }
+            else{
+                $location.path("/");
             }
 
         }])
@@ -70,7 +73,7 @@
 
                 });
             }
-            $scope.$watch("tmpMenu",function(value){
+            $s cope.$watch("tmpMenu",function(value){
                 console.log("tmpMenu",value);
                 if(_.isArray(value)){
                     $scope.Navigation = value;

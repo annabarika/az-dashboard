@@ -6,27 +6,27 @@
       {"title": "Orders",
         "count": "2",
         "url":"buyer/orders",
-        "access":"admin"
+        "access":["admin"]
       },
       {"title": "Payments",
         "count": "0",
         "url":"buyer/payments",
-        "access":"admin"
+        "access":["admin"]
       },
       {"title": "Bestsellers",
         "count": "0",
         "url":"buyer/bestsellers",
-        "access":"developer"
+        "access":["admin","developer"]
       },
       {"title": "New collection",
         "count": "2",
         "url":"buyer/collection"
-        ,"access":"admin"
+        ,"access":["admin"]
       },
       {"title": "Cargo",
         "count": "3",
         "url":"buyer/cargo"
-        ,"access":"admin"
+        ,"access":["admin"]
       }
     ]
   },
@@ -37,12 +37,35 @@
             [
               {
                 "title":"Test1"
-                ,"access":"developer"
+                ,"access":["admin","developer"]
               },
               {
                 "title":"Test2"
-                ,"access":"developer"
+                ,"access":["developer"]
               }
             ]
+  },
+  {
+    "title":"Testing",
+    "icon":"ai ai-email",
+    "menu":
+    [
+      {
+        "title":"Test3"
+      ,"access":["developer"]
+      },
+      {
+        "title":"Test4"
+      ,"access":["developer"]
+      },
+      {
+        "title":"Test5"
+      ,"access":["developer"]
+      },
+      {
+        "title":"Test6"
+      ,"access":["developer"]
+      }
+    ]
   }
 ]
