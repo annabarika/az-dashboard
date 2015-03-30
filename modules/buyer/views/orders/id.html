@@ -12,11 +12,11 @@
                     <div class="btn btn-success" ng-click="upload()">Upload</div>
                     <div class="btn btn-warning" ng-click="sendToFactory()"><i class="fa fa-check"></i> Send to Factory</div>
                     <div class="btn btn-info" ng-click="makePayment()"><i class="fa fa-plus"></i> Make Payment</div>
-                    <div class="btn btn-default" ng-click="cancel()"><i class="fa fa-ban"></i> Cancel</div>
+                    <div class="btn btn-default" ng-click="cancel()" ng-disabled="orderFlag"><i class="fa fa-ban"></i> Cancel</div>
                 </div>
             </div>
         </div>
-        <!--<div class="form-group">
+        <div class="form-group">
             <li ng-repeat="file in files">
                 {{file.name}}
 
@@ -24,25 +24,7 @@
                     <i class="fa fa-remove"></i>
                 </button>
             </li>
-        </div>-->
-
-        <div class="row">
-            <div class="col-sm-2 col-md-2" ng-repeat="file in files">
-                <!--<button ng-click="removeFiles(file.name)" class="btn btn-link">
-                    <i class="fa fa-remove"></i>
-                </button>
-                <div class="thumbnail">
-                    <img file-preview="file" style="height:120px;"/>
-
-                </div>-->
-                <!--{{file}}
-                <object data="{{file.webkitRelativePath}}" type="{{file.type}}"></object>-->
-
-            </div>
-
         </div>
-
-
     </div>
 </div>
 <div class="container-fluid pt-md">
@@ -109,6 +91,7 @@
                 <tr>
                     <th>#</th>
                     <th ng-repeat="column in tableHeader">{{column.title}}</th>
+                    <th ng-hide="orderFlag"></th>
                 </tr>
             </thead>
             <tbody>
@@ -119,11 +102,17 @@
 
                     </td>
                     <td>{{item.product.articul}}</td>
+                    <td>{{item.product.factoryArticul}}</td>
                     <td>{{item.product.title}}</td>
                     <td>{{item.size}}</td>
                     <td>{{item.count}}</td>
-                    <td>{{item.product.price}}</td>
-                    <td>{{item.count *item.product.price||0}}</td>
+                    <td>{{item.price}}</td>
+                    <td>{{item.count *item.price||0}}</td>
+                    <td ng-hide="orderFlag">
+                        <button class="btn-default" ng-click="deleteProduct($index)">
+                            <i class="fa fa-ban"></i>
+                        </button>
+                    </td>
 
                 </tr>
             <tr>

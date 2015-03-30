@@ -13,7 +13,11 @@
             "FIND_BY_ARTICUL"       : config.API.host + 'product/search/query/',
             "ADD_TO_BESTSELLER"     : config.API.host + 'bestseller/create/',
 
-            "GET_BESTSELLER_BY_ID"  : config.API.host + 'bestseller/get/id/'
+            "GET_BESTSELLER_BY_ID"  : config.API.host + 'bestseller/get/id/',
+            "GET_HISTORY"           : config.API.host + '/bestseller/load/status/1/productId/',
+
+            "CREATE_ORDER"          : config.API.host + "order/create",
+            "ADD_ORDER_PRODUCT_ROW" : config.API.host + "order/create-bestseller-row"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
@@ -204,6 +208,56 @@
                      */
                     getBestseller: function(id) {
                         return RestFactory.request(API.GET_BESTSELLER_BY_ID+parseInt(id));
+                    },
+
+                    /**
+                     * Get bestseller history by productId
+                     *
+                     * @param int id
+                     * @returns {*}
+                     */
+					getBestsellerHistory: function(productId) {
+						return RestFactory.request(API.GET_HISTORY + parseInt(productId));
+					},
+
+                    createOrder: function(factoryId){
+                        // Creating order
+                        var order = {
+                            factoryId: factoryId,
+                            buyerId: 328,
+                            type: 1
+                        };
+
+                        return RestFactory.request(API.CREATE_ORDER, 'POST', order);
+                    },
+
+                    prepareProducts: function(orderId, bestsellerId, product, sizes){
+                        var products = [];
+                        var size = '';
+                        if( sizes.add ){
+                            for( var i in sizes.add ){
+                                size = sizes.add[i].size;
+                                sizes[size] = { count : sizes.add[i].count };
+                            }
+                        }
+                        for( var size in sizes){
+                            if( size != 'add' ){
+                                products.push({
+                                    size: size,
+                                    productId: product.id,
+                                    count: sizes[size].count,
+                                    price: product.price,
+                                    factoryArticul: product.factoryArticul,
+                                    bestsellerId: bestsellerId
+                                });
+                            }
+                        }
+                        return products;
+                    },
+
+                    addOrderProductRow: function(orderId, product){
+                        product.orderId = orderId;
+                        return RestFactory.request(API.ADD_ORDER_PRODUCT_ROW, 'POST', product);
                     }
                 }
             }]);

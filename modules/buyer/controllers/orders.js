@@ -389,6 +389,25 @@ app.controller("OrderController",
                 )
             }
 
+            /**
+             *
+             * @param status
+             * @param amount
+             */
+            function setFlag(status,amount){
+                console.log("this", status,amount);
+                if(status!=0||amount>0){
+                    $scope.orderFlag=true;
+                }
+                else{
+                    $scope.orderFlag=false;
+                }
+            }
+
+
+
+
+
             $scope.currentType=function (){
 
                 angular.forEach($scope.type,function(value){
@@ -447,7 +466,7 @@ app.controller("OrderController",
                 .then(function(response){
                     console.log("order",response);
                     $scope.order=response;
-
+                    setFlag($scope.order.order.status);
                     angular.forEach($scope.type,function(value,index){
                         if(value.id==$scope.order.order.type){
                             $scope.currentType=$scope.type[index];
@@ -474,6 +493,7 @@ app.controller("OrderController",
             $scope.totalPrice=0;
             RestFactory.request(config.API.host+"order/get-rows/id/"+id).then(
                 function(response){
+                    console.log('response rows', response);
                     $scope.orderProducts=response;
                     console.log(response);
                     angular.forEach(response,function(value){
@@ -484,7 +504,7 @@ app.controller("OrderController",
 
                         }
                         if(_.has(value.product, 'price')) {
-                            $scope.totalPrice += parseInt(value.product.price);
+                            $scope.totalPrice += parseInt(value.price);
                         }
                     });
                 }
@@ -508,6 +528,7 @@ app.controller("OrderController",
             $scope.tableHeader = [
                 { name: "photo", title: 'Photo' },
                 { name: "articul", title: 'Articul' },
+                { name: "factoryArticul", title: 'Factory articul' },
                 { name: "title", title: 'Title' },
                 { name: "size", title: "Size"},
                 { name: "count", title: 'Count' },
@@ -538,12 +559,12 @@ app.controller("OrderController",
                     console.log(url);
                     RestFactory.request(url).then(
                         function(response){
-                            //console.log(response);
-                            if(response){
+                            console.log("send to factory",response);
+                            if(response!='null'&&response==true){
                                 messageCenterService.add('success', 'Order sended', {timeout: 3000});
                             }
                             else{
-                                messageCenterService.add('danger', 'Error!!!', {timeout: 3000});
+                                messageCenterService.add('danger', 'Error'+response, {timeout: 3000});
                             }
 
                         },
@@ -553,7 +574,32 @@ app.controller("OrderController",
                     )
                 });
             };
+            /**
+             *
+             * @param index
+             */
+            $scope.deleteProduct=function(index) {
+                console.log($scope.orderProducts[index]);
+                var id = $scope.orderProducts[index].id;
+                url = config.API.host + "order/delete-row/id/" + id;
+                RestFactory.request(url, "DELETE").then(
+                    function (response) {
+                        if(response=='true'){
+                            $scope.orderProducts.splice(index,1);
+                            messageCenterService.add('success', 'Product deleted', {timeout: 3000});
 
+                        }else{
+                            messageCenterService.add('danger', 'Error! Product is not deleted', {timeout: 3000});
+                        }
+
+
+
+                    },
+                    function(error){
+                        messageCenterService.add('danger', 'ERROR'+error, {timeout: 3000});
+                    }
+                );
+            };
             /**
              * make payment
              */
@@ -606,6 +652,7 @@ app.controller("OrderController",
                             console.log("payment",response);
                             if(_.isObject(response)&&response.id>0){
                                 messageCenterService.add('success', 'Payment created', {timeout: 3000});
+                                setFlag(null,payment.amount);
                             }else{
                                 messageCenterService.add('danger', 'Payment is not created', {timeout: 3000});
                             }
@@ -629,7 +676,9 @@ app.controller("OrderController",
                     runUpload();
                 }
             });
-
+            /**
+             * upload files
+             */
             function runUpload(){
 
                 $scope.uploadFlag=false;
@@ -642,7 +691,7 @@ app.controller("OrderController",
 
                 url = config.API.host + "order/loadfiles";
                 fd.append("id",id);
-
+                console.log("fd",fd);
                 $http.post(url,fd,
                     {
                         transformRequest: angular.identity,
