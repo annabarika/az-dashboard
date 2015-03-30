@@ -170,6 +170,9 @@ app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$loc
                 $scope.bestseller = response.bestseller;
 				$scope.factory = response.factory;
 				$scope.product = response.product;
+
+                $scope.sizes = {add: []};
+
 				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")"
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
@@ -183,4 +186,30 @@ app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$loc
                 messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
             }
         });
+
+        $scope.createOrder = function( sizes ){
+
+            if( Object.keys(sizes).length == 0 ) return false;
+
+            BestsellersService.createOrder( $scope.product.factoryId).then(function(response){
+                if(response.id){
+                    var orderId = response.id;
+                    var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, sizes);
+                    // Adding items to order
+                    for( i in products){
+                        BestsellersService.addOrderProductRow(orderId, products[i])
+                            .then(function(response){
+                                //console.log(response);
+                                if( response.id ){
+                                    products.splice(0, 1);
+                                    if(products.length == 0){
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                    }
+
+                }
+            });
+        }
     }]);
