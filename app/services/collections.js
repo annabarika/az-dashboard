@@ -1,6 +1,6 @@
 (function(){
 
-	var app = angular.module("services.collections",[]);
+    var app = angular.module("services.collections",[]);
 
     app.constant("PATHC",{
         FACTORIES           :   config.API.host+'factory/load',
@@ -20,12 +20,14 @@
         PRODUCTUPDATE       :   config.API.host+'catalogue/update',
         ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
         CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
-        "LOADSTATUSES"          :     config.API.host+'status/load/type/factoryCatalogue',
-        LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/"
+        LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue',
+        LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/",
+        GETORDER              :    config.API.host+"order/get/id/",
+        GETORDERROWS          :     config.API.host+"order/get-rows/id/"
     });
 
-        app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
-            function(PATHC, RestFactory, $modal, $http) {
+    app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
+        function(PATHC, RestFactory, $modal, $http) {
             return {
 
                 /**
@@ -53,11 +55,9 @@
                  * @param params
                  * @returns {*}
                  */
-                getCollections: function (params) {
+                getCollections: function (url) {
 
-                    //var url = (_.isUndefined(params) == false) ? PATHC.COLLECTIONS+params : PATHC.COLLECTIONS;
-
-                    return RestFactory.request(params);
+                    return RestFactory.request(url);
                 },
 
                 getCurrentCollection:function(id){
@@ -100,7 +100,43 @@
                 },
 
                 /**
-                 * /**
+                 * Get order by Id
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                getOrder : function(id){
+
+                    var url = PATHC.GETORDER+id;
+
+                    return RestFactory.request(url);
+                },
+
+                /**
+                 * Get order rows by OrderId
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                getOrderRows : function(id){
+
+                    var url = PATHC.GETORDERROWS+id;
+
+                    return RestFactory.request(url);
+                },
+
+                /**
+                 * Get order rows by OrderId
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                fetchSizesCount : function(sizes, rows){
+                    console.log('Response rows', _.first(rows).catalogueProduct);
+                    console.log('Items sizes', sizes);
+                },
+
+                /**
                  * Get collections by factory
                  *
                  * @param id
@@ -128,7 +164,7 @@
                  * Get compare product index
                  *
                  * @param items
-                 * @param product
+                 * @param object product
                  */
                 compareProduct: function(items, product) {
 
@@ -143,6 +179,46 @@
 
                     return i;
                 },
+
+                /**
+                 * Check filled sizes
+                 *
+                 * @param object sizes
+                 * @return boolean
+                 */
+                isSizeExists: function(sizes) {
+
+                    var size = [];
+                    angular.forEach(sizes, function(sizeObj) {
+
+                        if(sizeObj.count != '0') {
+                            size.push(sizeObj);
+                        }
+                    });
+
+                    return (size.length > 0);
+                },
+
+                /**
+                 * Check filled sizes from all collection
+                 *
+                 * @param object items
+                 * @return boolean
+                 */
+                isSizesExists: function(items) {
+
+                    var sizes = [];
+                    angular.forEach(items, function(item) {
+
+                        angular.forEach(item.sizes, function(size) {
+                            if(size.count != '0') {
+                                sizes.push(1);
+                            }
+                        });
+                    });
+                    return (sizes.length > 0);
+                },
+
                 /**
                  *
                  * @param data
@@ -150,19 +226,20 @@
                  * @param sizes
                  * @returns {Array}
                  */
-                buildProductsArray:function(data,collection,sizes){
+                buildProductsArray: function(data,collection,sizes) {
                     //console.log(data,collection);
                     var array=[];
 
                     angular.forEach(data,function(value,i){
 
                         sizes=value.sizes.split(/[\s,]+/);
-                        var photos=[];
-                        angular.forEach(value.photos,function(img){
+
+                        var photos = [];
+                        angular.forEach(value.photos,function(img) {
                             this.push(img.id);
                         },photos);
                         //console.log(sizes);
-                        var product={
+                        var product = {
                             articul:value.article,
                             price:value.price,
                             collectionId:collection.id,
@@ -184,13 +261,13 @@
                  *
                  * @param products
                  */
-                loadProducts:function(products){
-                    var params={},i=1;
-                    angular.forEach(products,function(value,key){
-                        params['product'+i]=value;
+                loadProducts: function(products) {
+                    var params = {},i = 1;
+                    angular.forEach(products,function(value,key) {
+                        params['product'+i] = value;
                         i++;
                     });
-                    var query= $.param(params);
+                    var query = $.param(params);
 
                     return RestFactory.request(PATHC.LOADPRODUCTS,"POST", products);
                 },
@@ -217,6 +294,7 @@
                                 if(product.hasOwnProperty('sizes') && _.isEmpty(product.sizes) == false) {
                                     angular.forEach(product.sizes, function(value, index) {
 
+                                        product.sizes[index].name = product.sizes[index].name.toUpperCase();
                                         product.sizes[index].count = '0';
                                     });
                                 }
@@ -224,6 +302,7 @@
                                 if(product.catalogueProduct.status == 1) {
                                     product.inOrder = true;
                                 }
+
                                 res.push(product);
                             });
                         });
@@ -237,6 +316,30 @@
                 cancelCollection: function (collectionId) {
 
                     return RestFactory.request(PATHC.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
+                },
+
+                /**
+                 * Check if collection is ordered
+                 *
+                 * return boolean
+                 */
+                isOrderByItems: function (items) {
+
+                    var isOrder = _.map(items, 'inOrder');
+                    return  isOrder.indexOf(true) !== -1;
+                },
+
+                /**
+                 * Check if collection has ordered all items
+                 *
+                 * return boolean
+                 */
+                isOrderAll: function (items) {
+
+                    var orderedItems =  _.findIndex(items, 'inOrder', false);
+
+                    if(orderedItems== -1) return true;
+                    else return false;
                 },
 
                 /**
@@ -261,13 +364,13 @@
                         'price'   : product.catalogueProduct.price,
                         'currencyId' : product.currency.id,
                         'sizes'     :   (function() {
-                                var sizes = [];
-                                angular.forEach(product.sizes, function(value, index){
-                                    sizes.push({
-                                        id : value.id,
-                                        name : value.name
-                                    })
-                                });
+                            var sizes = [];
+                            angular.forEach(product.sizes, function(value, index){
+                                sizes.push({
+                                    id : value.id,
+                                    name : value.name
+                                })
+                            });
 
                             return sizes;
                         })(product)
@@ -383,15 +486,15 @@
 
                     return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response) {
 
-                            if(response.id) {
-                                var params = {
-                                    'id'        :   parseInt(order.collection.id),
-                                    'orderId'   :   parseInt(response.id)
-                                };
+                        if(response.id) {
+                            var params = {
+                                'id'        :   parseInt(order.collection.id),
+                                'orderId'   :   parseInt(response.id)
+                            };
 
-                                return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", params);
-                            }
-                            else return false;
+                            return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", params);
+                        }
+                        else return false;
                     });
                 },
 
@@ -401,16 +504,16 @@
                  * @param data
                  * @returns {*}
                  */
-                productsCreate: function (data) {
+                productsCreate: function (data, orderId) {
 
                     var create = [];
-                        create.push({
-                            'method' : 'catalogue.createProductsBatch',
-                            'params'  : {
-                                'tokien_id'  : config.API.tokien_id,
-                                'products'   : []
-                            }
-                        });
+                    create.push({
+                        'method' : 'catalogue.createProductsBatch',
+                        'params'  : {
+                            'tokien_id'  : config.API.tokien_id,
+                            'products'   : []
+                        }
+                    });
 
                     if(_.keys(data,'items')){
 
@@ -449,38 +552,41 @@
                                         angular.forEach(frontendProduct.sizes, function (size) {
                                             var tmp = {};
 
-                                            tmp.id = frontendProduct.catalogueProduct.id,
-                                                tmp.articul =   (function() {
+                                            if(size.count != '0') {
+
+                                                tmp.id = frontendProduct.catalogueProduct.id,
+                                                    tmp.articul =   (function() {
+                                                        return _.pluck(_.filter(response, function(backProduct) {
+
+                                                            // compare products
+                                                            if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
+                                                                return backProduct.articul;
+                                                            }
+                                                        }), 'articul').toString();
+                                                    })(frontendProduct.catalogueProduct);
+
+                                                tmp.productId = (function() {
                                                     return _.pluck(_.filter(response, function(backProduct) {
 
                                                         // compare products
                                                         if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
-                                                            return backProduct.articul;
+                                                            return backProduct.id;
                                                         }
-                                                    }), 'articul').toString();
+                                                    }), 'id').toString();
+
                                                 })(frontendProduct.catalogueProduct);
 
-                                            tmp.productId = (function() {
-                                                return _.pluck(_.filter(response, function(backProduct) {
-
-                                                    // compare products
-                                                    if(backProduct.factoryArticul == frontendProduct.catalogueProduct.articul) {
-                                                        return backProduct.id;
-                                                    }
-                                                }), 'id').toString();
-
-                                            })(frontendProduct.catalogueProduct);
-
-                                            tmp.sizeId  =   size.id;
-                                            tmp.count   =   size.count;
-                                            tmp.price   =   frontendProduct.catalogueProduct.price;
-                                            tmp.orderId =   data.collection.orderId;
-                                            tmp.factoryArticul =   frontendProduct.catalogueProduct.articul;
+                                                tmp.sizeId  =   size.id;
+                                                tmp.count   =   size.count;
+                                                tmp.price   =   frontendProduct.catalogueProduct.price;
+                                                tmp.orderId =   (!_.isUndefined(orderId)) ? orderId :data.collection.orderId;
+                                                tmp.factoryArticul =   frontendProduct.catalogueProduct.articul;
+                                            }
 
                                             products.push(tmp);
                                         });
-                                        return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
 
+                                        return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                                     }
                                 });
                             }
