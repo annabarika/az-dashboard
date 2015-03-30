@@ -500,7 +500,7 @@ app.controller("OrderController",
 
                         }
                         if(_.has(value.product, 'price')) {
-                            $scope.totalPrice += parseInt(value.product.price);
+                            $scope.totalPrice += parseInt(value.price);
                         }
                     });
                 }
@@ -524,6 +524,7 @@ app.controller("OrderController",
             $scope.tableHeader = [
                 { name: "photo", title: 'Photo' },
                 { name: "articul", title: 'Articul' },
+                { name: "factoryArticul", title: 'Factory articul' },
                 { name: "title", title: 'Title' },
                 { name: "size", title: "Size"},
                 { name: "count", title: 'Count' },
