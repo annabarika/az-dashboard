@@ -1,6 +1,6 @@
 (function(){
 
-	var app = angular.module("services.collections",[]);
+    var app = angular.module("services.collections",[]);
 
     app.constant("PATHC",{
         FACTORIES           :   config.API.host+'factory/load',
@@ -26,8 +26,8 @@
         GETORDERROWS          :     config.API.host+"order/get-rows/id/"
     });
 
-        app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
-            function(PATHC, RestFactory, $modal, $http) {
+    app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
+        function(PATHC, RestFactory, $modal, $http) {
             return {
 
                 /**
@@ -330,6 +330,19 @@
                 },
 
                 /**
+                 * Check if collection has ordered all items
+                 *
+                 * return boolean
+                 */
+                isOrderAll: function (items) {
+
+                    var orderedItems =  _.findIndex(items, 'inOrder', false);
+
+                    if(orderedItems== -1) return true;
+                    else return false;
+                },
+
+                /**
                  * Delete product
                  */
                 deleteProduct: function (collectionId, productId) {
@@ -351,13 +364,13 @@
                         'price'   : product.catalogueProduct.price,
                         'currencyId' : product.currency.id,
                         'sizes'     :   (function() {
-                                var sizes = [];
-                                angular.forEach(product.sizes, function(value, index){
-                                    sizes.push({
-                                        id : value.id,
-                                        name : value.name
-                                    })
-                                });
+                            var sizes = [];
+                            angular.forEach(product.sizes, function(value, index){
+                                sizes.push({
+                                    id : value.id,
+                                    name : value.name
+                                })
+                            });
 
                             return sizes;
                         })(product)
@@ -473,15 +486,15 @@
 
                     return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response) {
 
-                            if(response.id) {
-                                var params = {
-                                    'id'        :   parseInt(order.collection.id),
-                                    'orderId'   :   parseInt(response.id)
-                                };
+                        if(response.id) {
+                            var params = {
+                                'id'        :   parseInt(order.collection.id),
+                                'orderId'   :   parseInt(response.id)
+                            };
 
-                                return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", params);
-                            }
-                            else return false;
+                            return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", params);
+                        }
+                        else return false;
                     });
                 },
 
@@ -494,13 +507,13 @@
                 productsCreate: function (data, orderId) {
 
                     var create = [];
-                        create.push({
-                            'method' : 'catalogue.createProductsBatch',
-                            'params'  : {
-                                'tokien_id'  : config.API.tokien_id,
-                                'products'   : []
-                            }
-                        });
+                    create.push({
+                        'method' : 'catalogue.createProductsBatch',
+                        'params'  : {
+                            'tokien_id'  : config.API.tokien_id,
+                            'products'   : []
+                        }
+                    });
 
                     if(_.keys(data,'items')){
 

@@ -452,6 +452,8 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
                 $scope.isOrdered = CollectionService.isOrderByItems($rootScope.items);
 
+                $scope.isOrderedAll = CollectionService.isOrderAll($rootScope.items);
+
                 if (_.isEmpty($rootScope.items)) {
                     messageCenterService.add('warning', 'Products not found in this collection', {timeout: 3000});
                 }
@@ -589,7 +591,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                                             positions.inOrder = true;
                                         });
                                         $scope.isOrdered = true;
-                                        $rootScope.isOrderedAll = true;
+                                        $rootScope.isOrderedAll = CollectionService.isOrderAll($rootScope.items);
                                     }
                                     else {
                                         $rootScope.items[$scope.position].inOrder=true;

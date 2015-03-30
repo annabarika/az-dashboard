@@ -6,8 +6,8 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-6 va-m">
-                    <button class="btn btn-green" ng-click="addToOrder()" ng-disabled="isOrderedAll"><span class="fa fa-check">Add to order</span></button>
-                    <button class="btn btn-red" ng-click="cancelCollection()" ng-disabled="isOrdered"><span class="fa fa-check">Delete</span></button>
+                    <button class="btn btn-green" ng-click="addToOrder()" ng-disabled="isOrderedAll"><span class="fa fa-check" ng-hide="isOrderedAll"></span> Add to order</button>
+                    <button class="btn btn-red" ng-click="cancelCollection()" ng-disabled="isOrdered"><span class="fa fa-check" ng-hide="isOrdered"></span> Delete</button>
                 </div>
             </div>
             <!--/ basic info heading -->
