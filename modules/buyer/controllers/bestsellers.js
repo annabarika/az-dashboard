@@ -170,6 +170,7 @@ app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$loc
                 $scope.bestseller = response.bestseller;
 				$scope.factory = response.factory;
 				$scope.product = response.product;
+                $scope.order = response.order;
 
                 $scope.sizes = {add: []};
 
@@ -186,6 +187,10 @@ app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$loc
                 messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
             }
         });
+
+        $scope.openOrder = function(order){
+            $location.path('/buyer/orders/id/'+order.id)
+        };
 
         $scope.createOrder = function( sizes ){
 
