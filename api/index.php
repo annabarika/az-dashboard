@@ -18,8 +18,6 @@ try {
 
     else if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!empty($_FILES)) {
-            #print_r($_FILES);
-
             $post = [];
             if(!file_exists($_SERVER['DOCUMENT_ROOT'].'tmp')) {
                 mkdir($_SERVER['DOCUMENT_ROOT'].'tmp', 0777);

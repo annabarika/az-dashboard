@@ -538,8 +538,17 @@ app.controller("OrderController",
                     console.log(url);
                     RestFactory.request(url).then(
                         function(response){
-                            console.log(response);
+                            //console.log(response);
+                            if(response){
+                                messageCenterService.add('success', 'Order sended', {timeout: 3000});
+                            }
+                            else{
+                                messageCenterService.add('danger', 'Error!!!', {timeout: 3000});
+                            }
 
+                        },
+                        function(error){
+                            messageCenterService.add('danger', 'Error: '+error, {timeout: 3000});
                         }
                     )
                 });
@@ -640,7 +649,7 @@ app.controller("OrderController",
                         headers: {'Content-Type': undefined}
                     })
                     .success(function(data,status){
-
+                        console.log("data upload",data);
                         if(_.isArray(data)){
                             messageCenterService.add('success', 'Files uploaded', {timeout: 3000});
                         }

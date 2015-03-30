@@ -11,7 +11,7 @@
         "modules.buyer",
         'MessageCenterModule',
         "ang-drag-drop",
-        "ngSanitize"
+        "ngSanitize",
     ])
 
         .config(function ($routeProvider, $locationProvider, $httpProvider) {

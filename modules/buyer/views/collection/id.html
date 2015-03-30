@@ -6,8 +6,8 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-6 va-m">
-                    <button class="btn btn-green" ng-click="addToOrder()"><span class="fa fa-check">Add to order</span></button>
-                    <button class="btn btn-red" ng-click="cancelCollection()"><span class="fa fa-check">Delete</span></button>
+                    <button class="btn btn-green" ng-click="addToOrder()" ng-disabled="isOrderedAll"><span class="fa fa-check">Add to order</span></button>
+                    <button class="btn btn-red" ng-click="cancelCollection()" ng-disabled="isOrdered"><span class="fa fa-check">Delete</span></button>
                 </div>
             </div>
             <!--/ basic info heading -->
@@ -61,7 +61,7 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    <ul ng-if="product.sizes[0]" class="media-list mb-sm sm">
+                                    <ul ng-if="product.sizes[0]" ng-hide="product.inOrder" class="media-list mb-sm sm">
                                         <li ng-repeat="size in product.sizes" class="media">
                                             <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="product.inOrder"/>
                                         </li>
@@ -81,7 +81,7 @@
                         <button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>
                         <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check">Delete</span></button>
                         </div>
-                        <div ng-show="product.inOrder">product ordered</div>
+                        <div ng-show="product.inOrder">Order ID # {{orderId}}</div>
                     </td>
                 </tr>
                 </tbody>

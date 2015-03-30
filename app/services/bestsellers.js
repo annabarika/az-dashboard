@@ -125,7 +125,7 @@
                      */
                     getDayDetailed: function (type, date) {
 
-                        var date = moment(date).format('YYYY-MM-DD HH:mm:ss'),
+                        var date = moment(date).format('YYYY-MM-DD'),
                             url = (type == 'ordered') ? API.LOAD_ORDERED_DETAILS : API.LOAD_TOTAL_DETAILS;
 
                         return RestFactory.request(url + date);
@@ -190,7 +190,6 @@
                         var params = {
                             "status": "0",
                             "productId": product.id,
-                            "name": product.title +' '+product.brand,
                             "createDate": (!_.isUndefined(date)) ? date : moment().format('YYYY-MM-DD HH:mm:ss')
                         };
 
