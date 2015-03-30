@@ -23,17 +23,6 @@ app.controller('OrderListController',
                 data,
                 filter={};
 
-            /* $scope.type=[
-             {
-             name:"Moscow",
-             id:1
-             },
-             {
-             name:"Hong Kong",
-             id:2
-             }
-             ];*/
-
             getTypes();
             function getTypes(){
                 url=config.API.host+"/order-type/load";
@@ -43,10 +32,6 @@ app.controller('OrderListController',
                     }
                 )
             }
-
-
-
-
 
             $scope.newOrder={};
 
@@ -490,7 +475,7 @@ app.controller("OrderController",
             RestFactory.request(config.API.host+"order/get-rows/id/"+id).then(
                 function(response){
                     $scope.orderProducts=response;
-
+                    console.log(response);
                     angular.forEach(response,function(value){
 
                         if(_.has(value, 'count')){
