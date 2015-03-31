@@ -40,6 +40,8 @@ app.controller('PaymentListController',
 						if(_.isArray(response)){
 							$scope.data = PaymentService.parseData(response,$scope.tableHeader);
 							$scope.payments=$scope.data;
+							console.log(response);
+
 						}
 					}
 				);

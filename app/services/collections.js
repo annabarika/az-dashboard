@@ -9,6 +9,7 @@
         IMAGES_PATH        :   config.API.imagehost+'/files/factory/attachments/',
         FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
         CREATECOLLECTION    :   config.API.host+"catalogue-collection/create",
+        UPDATECOLLECTION    :   config.API.host + "catalogue-collection/update",
         LOADFILES           :   config.API.host+'catalogue/loadfiles',
         LOADPRODUCTS        :   config.API.host+'catalogue-collection/add-collection-product',
         CANCELPRODUCT       :   config.API.host+'catalogue-collection/delete-collection-product/',
@@ -191,7 +192,7 @@
                     var size = [];
                     angular.forEach(sizes, function(sizeObj) {
 
-                        if(sizeObj.count != '0') {
+                        if(sizeObj.count != '0' && sizeObj.count != '') {
                             size.push(sizeObj);
                         }
                     });
@@ -211,7 +212,7 @@
                     angular.forEach(items, function(item) {
 
                         angular.forEach(item.sizes, function(size) {
-                            if(size.count != '0') {
+                            if(size.count != '0' && size.count != '') {
                                 sizes.push(1);
                             }
                         });
@@ -505,7 +506,8 @@
                  * @returns {*}
                  */
                 productsCreate: function (data, orderId) {
-
+                    /*console.log(data);
+                     return;*/
                     var create = [];
                     create.push({
                         'method' : 'catalogue.createProductsBatch',
@@ -524,7 +526,7 @@
 
                                 angular.forEach(item.files, function(file) {
                                     photos.push(file.path);
-                                })
+                                });
                                 return JSON.stringify(photos);
                             })(item);
 
@@ -588,6 +590,16 @@
                                         });
                                     }
                                 });
+                                RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",
+                                    {
+                                        id:data.collection.id,
+                                        factoryId:data.collection.factoryId,
+                                        status:1
+                                    }).then(
+                                    function(response){
+                                        console.log("PUT ",response);
+                                    }
+                                );
                                 return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                             }
                         }

@@ -122,7 +122,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                 $rootScope.factoryId = factory.id;
 
                 CollectionService.getFactoryCollections(factory.id).then(function (response) {
-
+console.log(response);
                     $rootScope.factoryCollections = response;
 
                 });
@@ -430,7 +430,9 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
     function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService, $timeout, $location) {
 
         // set title
-        $rootScope.documentTitle = 'Collection Checkout Card #' + $routeParams.collectionId;
+        $rootScope.documentTitle = 'Collection #' + $routeParams.collectionId;
+
+
         $scope.tableHeader = [
             {name: "preview", title: 'Preview'},
             {name: "articul", title: 'Articul'},
@@ -442,12 +444,18 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
         // Get collection card
         CollectionService.getCollectionCard($routeParams.collectionId).then(function (response) {
+            console.log(response);
+
+            //
 
             $rootScope.items = [], $scope.imagePath = CollectionService.getImagePath();
 
             if (_.isUndefined(response) == false) {
 
                 $rootScope.items = CollectionService.extractProducts(response);
+                console.log($rootScope.items);
+
+                $rootScope.documentTitle += " ("+$rootScope.items[0].factory.name + ")";
 
                 $scope.isOrdered = CollectionService.isOrderByItems($rootScope.items);
 
