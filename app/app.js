@@ -22,11 +22,13 @@
                 Application.makeReady()
             });
         })*/
-        .run(["$rootScope","$route","AuthFactory","$location",function($rootScope,$route,AuthFactory,$location){
+        .run(["$rootScope","$route","AuthFactory","$location","NavService",function($rootScope,$route,AuthFactory,$location,NavService){
 
             $rootScope.username=AuthFactory.getUser('name');
             if(!_.isUndefined($rootScope.username)){
                 $rootScope.authFlag=true;
+                NavService.getMenu();
+
             }
             else{
                 $location.path("/");
@@ -64,22 +66,7 @@
         })
 
         .controller("MainController",
-        function($scope,$rootScope, NavigationModel,AuthFactory,$location,messageCenterService,RestFactory,$route){
-            //console.log($scope.Navigation);
-            $scope.tmpMenu;
-            if(AuthFactory.getUser('type')){
-                NavigationModel.get().then(function(result){
-                    $scope.tmpMenu = AuthFactory.permissions(result.data);
-
-                });
-            }
-            $s cope.$watch("tmpMenu",function(value){
-                console.log("tmpMenu",value);
-                if(_.isArray(value)){
-                    $scope.Navigation = value;
-                    console.log($scope.Navigation);
-                }
-            });
+        function($scope,$rootScope,AuthFactory,$location,messageCenterService,RestFactory,$route,NavService){
             /**
              *
              * @param user
@@ -103,11 +90,17 @@
                                         if(item.name==data.name && item.password==data.password){
 
                                             AuthFactory.create(item);
+                                            NavService.getMenu();
                                             $location.path("/index");
                                             return;
                                         }
                                     })
                                 }
+                                else{
+                                    messageCenterService.add('danger', "Error: "+response, {timeout: 3000});
+                                }
+                            },function(error){
+                                messageCenterService.add('danger', "Error: "+error, {timeout: 3000});
                             }
                         )
                 }
@@ -119,10 +112,12 @@
              * logout
              */
             $scope.logout=function(){
-                delete $scope.Navigation;
+               // delete $rootScope.Navigation;
+                console.log("route");
+                console.log($route);
 
-                AuthFactory.destroy();
-                $location.path("/");
+               // AuthFactory.destroy();
+               // $location.path("/");
             };
 
 

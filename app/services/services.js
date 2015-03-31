@@ -6,5 +6,6 @@ angular.module("services",
     "services.bestsellers",
     "services.payments",
     "services.fileReader",
-    "services.authentication"
+    "services.authentication",
+    "services.navigation"
 ]);

@@ -87,43 +87,6 @@
                 getUser : function(key){
 
                         return $window.sessionStorage["auth-" + key];
-                },
-                permissions:function(data){
-                    //console.log(data);
-                    var array=[],menu=[];
-
-                    var type=JSON.parse($window.sessionStorage["auth-type"]);
-
-                    angular.forEach(data,function(item,i){
-
-                        array.push({
-                            "title":item.title,
-                            "icon":item.icon,
-                            "menu":[]
-                        });
-
-                        angular.forEach(item.menu,function(value,key){
-
-                            if(value.access==type){
-                                array[i].menu.push(value);
-
-                            }
-
-                        });
-
-                    });
-
-                    angular.forEach(array,function(item){
-                        if(item.menu.length!=0){
-                            menu.push(item);
-                        }
-                    });
-
-
-
-                    console.log("menu",menu);
-
-                    return menu;
                 }
             }
         }])
