@@ -81,7 +81,9 @@
                         angular.forEach($rootScope.Navigation,function(item,i){
 
                             angular.forEach(item.menu,function(value){
+                                //console.log(value.url==path);
                                 if(value.url==path){
+
                                     return true;
                                 }
                             })

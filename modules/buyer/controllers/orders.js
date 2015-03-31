@@ -564,7 +564,7 @@ app.controller("OrderController",
                                 messageCenterService.add('success', 'Order sended', {timeout: 3000});
                             }
                             else{
-                                messageCenterService.add('danger', 'Error'+response, {timeout: 3000});
+                                messageCenterService.add('danger', 'Error: '+response, {timeout: 3000});
                             }
 
                         },
@@ -596,7 +596,7 @@ app.controller("OrderController",
 
                     },
                     function(error){
-                        messageCenterService.add('danger', 'ERROR'+error, {timeout: 3000});
+                        messageCenterService.add('danger', 'Error: '+error, {timeout: 3000});
                     }
                 );
             };

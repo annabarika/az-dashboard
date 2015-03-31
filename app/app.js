@@ -71,8 +71,9 @@
              *
              * @param user
              */
-            $scope.auth=function(user){
-                if(_.isObject(user)){
+            $scope.auth=function(event,user){
+
+                if(_.isObject(user) && event.keyCode==13){
 
                     var data={
                         name:user.login,
@@ -117,9 +118,9 @@
                             }
                         )
                 }
-                else{
+                /*else{
                     messageCenterService.add('danger', "Invalid username or password", {timeout: 3000});
-                }
+                }*/
             };
             /**
              * logout
