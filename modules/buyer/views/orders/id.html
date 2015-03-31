@@ -27,9 +27,9 @@
         </div>
     </div>
 </div>
-<div class="container-fluid pt-md">
-    <div class="row">
-        <div class="col-md-12">
+        <div class="container-fluid pt-md">
+            <div class="row">
+                <div class="col-md-12">
                     <div class="tab-pane active">
                         <div class="row">
                             <div class="col-md-6">
@@ -37,47 +37,47 @@
                                     <div class="table-responsive">
                                         <table class="table table-hover table-bordered">
                                             <tbody>
-                                            <tr>
-                                                <td>Factory</td>
-                                                <td>{{order.factory.name}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Type</td>
-                                                <td>
-                                                    {{currentType.name}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Orderred total
-                                                </td>
-                                                <td>
-                                                    {{order.order.orderedTotal}}{{order.currency.ISOCode}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Paid total
-                                                </td>
-                                                <td ng-click="showPayment()">
-                                                   {{order.order.paidTotal}}{{order.currency.ISOCode}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Create date</td>
-                                                <td>{{order.order.createDate|date:'medium'}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cargo</td>
-                                                <td>
-                                                    <ul class="list-inline" ng-if="cargo==array">
-                                                        <li ng-repeat="item in cargo">
-                                                            #<a href=""  ng-click="goToCargo(item.cargo.id)">{{item.cargo.id}}</a>;
-                                                        </li>
-                                                    </ul>
-                                                    <span ng-if="cargo!=array">&mdash;</span>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td>Factory</td>
+                                                    <td>{{order.factory.name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Type</td>
+                                                    <td>
+                                                        {{currentType.name}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Orderred total
+                                                    </td>
+                                                    <td>
+                                                        {{order.order.orderedTotal}}{{order.currency.ISOCode}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Paid total
+                                                    </td>
+                                                    <td ng-click="showPayment()">
+                                                       {{order.order.paidTotal}}{{order.currency.ISOCode}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Create date</td>
+                                                    <td>{{order.order.createDate|date:'medium'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cargo</td>
+                                                    <td>
+                                                        <ul class="list-inline" ng-if="cargo==array">
+                                                            <li ng-repeat="item in cargo">
+                                                                #<a href=""  ng-click="goToCargo(item.cargo.id)">{{item.cargo.id}}</a>;
+                                                            </li>
+                                                        </ul>
+                                                        <span ng-if="cargo!=array">&mdash;</span>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -85,7 +85,7 @@
                             </div>
                         </div>
                     </div>
-</div>
+        </div>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -126,8 +126,5 @@
             </tr>
             </tbody>
         </table>
-
-
-
         </div>
     </div>
