@@ -90,8 +90,21 @@
                                         if(item.name==data.name && item.password==data.password){
 
                                             AuthFactory.create(item);
+
                                             NavService.getMenu();
-                                            $location.path("/index");
+
+                                            if(_.isUndefined($scope.currentPath)){
+                                                $location.path("/index");
+                                            }
+                                            else{
+                                                if(NavService.checkPath($scope.currentPath)){
+                                                    $location.path($scope.currentPath);
+                                                }
+                                                else{
+                                                    $location.path("/index");
+                                                }
+
+                                            }
                                             return;
                                         }
                                     })
@@ -112,14 +125,17 @@
              * logout
              */
             $scope.logout=function(){
-               // delete $rootScope.Navigation;
-                console.log("route");
-                console.log($route);
-
-               // AuthFactory.destroy();
-               // $location.path("/");
+                delete $rootScope.Navigation;
+                $scope.currentPath=$route.current.originalPath;
+                console.log($scope.currentPath);
+                AuthFactory.destroy();
+                $location.path("/");
             };
-
+            /**
+             *
+             * @type {string}
+             */
+            $rootScope.documentTitle="Welcome to Azimuth";
 
 
             /*$scope.$on("auth-required", function(event, reason) {

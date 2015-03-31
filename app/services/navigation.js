@@ -70,6 +70,23 @@
                                 _permissions(response);
                             }
                         );
+                    },
+                    /**
+                     *
+                     * @param path
+                     * @returns {boolean}
+                     */
+                    checkPath : function(path){
+
+                        angular.forEach($rootScope.Navigation,function(item,i){
+
+                            angular.forEach(item.menu,function(value){
+                                if(value.url==path){
+                                    return true;
+                                }
+                            })
+                        });
+                        return false;
                     }
                 }
             }
