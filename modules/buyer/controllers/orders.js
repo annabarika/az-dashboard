@@ -395,7 +395,7 @@ app.controller("OrderController",
              * @param amount
              */
             function setFlag(status,amount){
-                console.log("this", status,amount);
+               // console.log("this", status,amount);
                 if(status!=0||amount>0){
                     $scope.orderFlag=true;
                 }
@@ -520,7 +520,7 @@ app.controller("OrderController",
              * location to payment cart
              */
             $scope.showPayment=function(){
-                $location.path('/buyer/payments/by-order/'+id);
+                $location.path('/buyer/payments/payment_order/'+id);
             };
 
             $scope.imagePath=config.API.imagehost+'/files/factory/attachments/';

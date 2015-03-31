@@ -128,11 +128,12 @@
             </div>
             <div class="col-md-6">
                 <div style="padding-left:20px;">
-                    <h3>Buying history (new)</h3>
+                    <h3>Buying history</h3>
                 </div>
                 <table class="table" style="background:white;">
                     <tr>
                         <th>Buying date</th>
+                        <th>Order</th>
                         <th>Sizes = Count</th>
                         <th>Notes</th>
                         <th>Status</th>
@@ -141,6 +142,7 @@
                         <td>
                             <a ng-href="/buyer/bestseller/item/{{item.id}}" target="_blank">{{item.orderDate}}</a>
                         </td>
+                        <td><a ng-href="/buyer/orders/id/{{order.id}}">{{order.id}}</a></td>
                         <td>
                             <div ng-repeat="(size, count) in data.sizes">
                                 {{size}}=<b>{{count}}</b>
@@ -151,29 +153,6 @@
                     </tr>
                 </table>
 
-                <div style="padding-left:20px;">
-                    <h3>Buying history</h3>
-                </div>
-                <table class="table" style="background:white;">
-                    <tr>
-                        <th>Buying date</th>
-                        <th>Sizes = Count</th>
-                        <th>Notes</th>
-                        <th>Status</th>
-                    </tr>
-                    <tr ng-repeat="(date, data) in product.buyingHistory.buying">
-                        <td>
-                            <a href="http://back95.com/buyer/re_buying/item_details/{{product.id}}/{{data.buyingId}}" target="_blank">{{date}}</a>
-                        </td>
-                        <td>
-                            <div ng-repeat="(size, count) in data.sizes">
-                                {{size}}=<b>{{count}}</b>
-                            </div>
-                        </td>
-                        <td>{{data.notes}}</td>
-                        <td>{{data.status}}</td>
-                    </tr>
-                </table>
             </div>
         </div>
     </div>

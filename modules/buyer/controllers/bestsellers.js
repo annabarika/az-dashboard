@@ -160,7 +160,14 @@ app.controller('BestsellersAddController', function ($scope, $rootScope, searchU
 /**
  * Bestseller item management
  */
-app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$location",'$routeParams', 'BestsellersService', 'messageCenterService',
+app.controller('BestsellerItemController',[
+    '$scope',
+    '$rootScope',
+    "$modal",
+    "$location",
+    '$routeParams',
+    'BestsellersService',
+    'messageCenterService',
     function ($scope, $rootScope, $modal, $location, $routeParams, BestsellersService, messageCenterService){
 
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
@@ -174,12 +181,20 @@ app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$loc
 
                 $scope.sizes = {add: []};
 
-				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")"
+				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
-                    console.log(response);
+                    console.log("bests history",response);
                     $scope.bestsellerHistory = response;
                 });
+
+                BestsellersService.getProducts($scope.order.id).then(
+                    function(response){
+                        console.log("products", response);
+                        $scope.bestsellerHistory2 = response;
+                    }
+                );
+
 
                 console.log('Bestseller', response);
             }
@@ -187,6 +202,9 @@ app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$loc
                 messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
             }
         });
+
+
+
 
         $scope.openOrder = function(order){
             $location.path('/buyer/orders/id/'+order.id)

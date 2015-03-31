@@ -6,27 +6,27 @@
       {"title": "Orders",
         "count": "2",
         "url":"buyer/orders",
-        "access":["admin"]
+        "access":["admin","user"]
       },
       {"title": "Payments",
         "count": "0",
         "url":"buyer/payments",
-        "access":["admin"]
+        "access":["admin","user"]
       },
       {"title": "Bestsellers",
         "count": "0",
         "url":"buyer/bestsellers",
-        "access":["admin","developer"]
+        "access":["admin","developer","user"]
       },
       {"title": "New collection",
         "count": "2",
         "url":"buyer/collection"
-        ,"access":["admin"]
+        ,"access":["admin","user"]
       },
       {"title": "Cargo",
         "count": "3",
         "url":"buyer/cargo"
-        ,"access":["admin"]
+        ,"access":["admin","user"]
       }
     ]
   },
@@ -64,7 +64,7 @@
       },
       {
         "title":"Test6"
-      ,"access":["developer"]
+      ,"access":["developer","user"]
       }
     ]
   }

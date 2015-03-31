@@ -45,9 +45,9 @@ app.config(function($routeProvider){
             authRequired: 'developer'
         }
     )
-        .when('/buyer/payments/by-order/:id',
+        .when('/buyer/payments/payment_order/:id',
         {
-            templateUrl:"/modules/buyer/views/payments/by-order.html",
+            templateUrl:"/modules/buyer/views/payments/payment_order.html",
             controller:"PaymentOrderController",
             authRequired: 'developer'
         })

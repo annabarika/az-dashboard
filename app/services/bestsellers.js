@@ -17,7 +17,9 @@
             "GET_HISTORY"           : config.API.host + '/bestseller/load/status/1/productId/',
 
             "CREATE_ORDER"          : config.API.host + "order/create",
-            "ADD_ORDER_PRODUCT_ROW" : config.API.host + "order/create-bestseller-row"
+            "ADD_ORDER_PRODUCT_ROW" : config.API.host + "order/create-bestseller-row",
+
+            "LOAD_PRODUCTS"         : config.API.host+"order/get-rows/id/"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
@@ -258,7 +260,14 @@
                     addOrderProductRow: function(orderId, product){
                         product.orderId = orderId;
                         return RestFactory.request(API.ADD_ORDER_PRODUCT_ROW, 'POST', product);
+                    },
+
+                    getProducts: function(id){
+
+                        return RestFactory.request(API.LOAD_PRODUCTS+id)
                     }
+
+
                 }
             }]);
 })();

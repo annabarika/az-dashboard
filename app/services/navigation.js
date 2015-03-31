@@ -53,7 +53,7 @@
                         }
                     });
 
-                    console.log("menu",menu);
+                   // console.log("menu",menu);
                     $rootScope.Navigation = menu;
 
                 }
