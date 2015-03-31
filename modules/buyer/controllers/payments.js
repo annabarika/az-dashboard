@@ -235,6 +235,9 @@ app.controller("PaymentOrderController",[
 	function ($scope, $rootScope, $modal, $location, $route,$routeParams, RestFactory){
 		console.log($routeParams);
 		$scope.orderId=$routeParams.id;
+
+
+
 		$scope.back=function(){
 			$location.path("buyer/payments")
 		}

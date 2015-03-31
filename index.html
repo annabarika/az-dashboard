@@ -26,9 +26,9 @@
     <script src="/vendor/angular/draganddrop.js"></script>
     <script src="/vendor/lodash/lodash.js"></script>
     <script src="/vendor/angular/angular-sanitize.js"></script>
-    <script src="/vendor/angular/angular-sanitize.js"></script>
     <script src="/vendor/spin.js/spin.js"></script>
     <script src="/vendor/angular-spinner/angular-spinner.min.js"></script>
+   <!-- <script src="/vendor/angular/angularjs-auth.js"></script>-->
 
     <!--/ Third-party components -->
 
@@ -57,19 +57,19 @@
 <body ng-controller="MainController">
 <span us-spinner="{radius:12, width:4, length: 8}" spinner-key="loader"></span>
 
-<section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }" class="ng-scope">
-    <sidebar ng-class="classes[index % classes.length]">111</sidebar>
+<section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }">
+    <sidebar ng-class="classes[index % classes.length]" ng-show="authFlag">111</sidebar>
 
-    <header id="app-header" class="navbar"></header>
+    <header id="app-header" class="navbar" ng-show="authFlag"></header>
 
-    <footer id="app-footer" class="ng-scope"></footer>
+    <footer id="app-footer" ></footer>
 
-    <section id="app-content" class="clearfix ng-scope">
+    <section id="app-content" class="clearfix">
 
         <div class="spinner-wrapper"><div data-indicator=""></div></div>
 
-        <div class="content-body slide-down ng-scope">
-            <div class="page-header ng-scope">
+        <div class="content-body slide-down">
+            <div class="page-header" ng-show="authFlag">
                 <div class="box-layout">
                     <div class="col-sm-6 va-m">
                         <h1 style="float:left">{{documentTitle}}</h1>
@@ -108,6 +108,8 @@
 <script src="/app/services/bestsellers.js"></script>
 <script src="/app/services/payments.js"></script>
 <script src="/app/services/filereader.js"></script>
+<script src="/app/services/authentication.js"></script>
+<script src="/app/services/navigation.js"></script>
 
 <!--Loading widgets-->
 <script src="/app/widgets/widgets.js"></script>

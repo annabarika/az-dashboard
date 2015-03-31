@@ -1,0 +1,16 @@
+[
+    {
+        "id": "1",
+        "email": "kostyanuch87@gmail.com",
+        "name": "Green Lantern",
+        "type": "developer",
+        "password":"123"
+    },
+    {
+        "id": "2",
+        "email": "kostyanuch87@gmail.com",
+        "name": "test",
+        "type": "admin",
+        "password":"123"
+    }
+]
