@@ -1,6 +1,6 @@
 (function(){
 
-    angular.module("services.rest",[])
+    angular.module("services.rest",['angularSpinner'])
 
 
         /**
@@ -10,7 +10,7 @@
          * @param3:data,
          * @param4:header
          */
-        .factory("RestFactory", ["$http","$q",function($http,$q){
+        .factory("RestFactory", ["$http","$q", "usSpinnerService", function($http,$q, usSpinnerService) {
 
             var service={};
 
@@ -34,6 +34,8 @@
 					data: data,
                     headers : headers
 				};
+
+                usSpinnerService.spin('loader');
 				$http(req)
                     .success(function (response) {
                         if (response) {
@@ -42,15 +44,17 @@
                         else {
                             deferred.resolve(response);
                         }
+
+                        usSpinnerService.stop('loader');
                     })
                     .error(function (data, status, headers, config) {
                         //console.log("You can not send Cross Domain AJAX requests:"+data, status, headers, config);
 
                         deferred.reject(status);
+                        usSpinnerService.stop('loader');
                     });
 
                 return deferred.promise;
-
             };
             return service;
         }]);

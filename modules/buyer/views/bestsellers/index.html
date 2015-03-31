@@ -29,7 +29,9 @@
                 </p>
                 <span class="fc-day-grid-event fc-event mr-5 ml-5">
                     <div class="fc-content">
-                        <span class="fc-title pull-right"><a class="label label-primary hover" ng-click="selectMonth('total', key)">total: {{value}}</a> <a class="label label-success hover" ng-click="selectMonth('ordered', key)">ordered {{bestsellers.ordered[currentYear][key]}}</a></span>
+                        <!-- ng-click="selectMonth('total', key)" -->
+                        <span class="fc-title pull-right"><a class="label label-primary hover">
+                            total: {{value}}</a> <a class="label label-success hover" ng-click="selectMonth('ordered', key)">ordered {{bestsellers.ordered[currentYear][key]}}</a></span>
                     </div>
                 </span>
             </div>
@@ -67,7 +69,7 @@
                             <div class="media np">
                                 <div class="media-left">
                                       <span class="img-wrapper img-rounded">
-                                          <img ng-src="http://back95.ru/f/catalogue/{{ordered.product.id}}/{{ordered.product.photos[0]}}"/>
+                                          <img ng-src="http://back95.ru/f/catalogue/{{ordered.product.id}}/{{ordered.product.preview[1]}}"/>
                                       </span>
                                 </div>
                             </div>
@@ -89,7 +91,7 @@
             </accordion-group>
             <!-- /Ordered items -->
 
-            <accordion-group heading="Total">
+            <accordion-group heading="Total" ng-hide="true">
                 <div ng-if="!bestsellersTotal">Click on the calendar on the number of total items to see them</div>
                 <div ng-if="bestsellersTotal && !bestsellersTotal.length">Selected date has no items</div>
                 <table class="table table-bordered">
@@ -99,7 +101,7 @@
                             <div class="media np">
                                 <div class="media-left">
                                       <span class="img-wrapper img-rounded">
-                                          <img ng-src="http://back95.ru/f/catalogue/{{total.product.id}}/{{total.product.photos[0]}}"/>
+                                          <img ng-src="http://back95.ru/f/catalogue/{{total.product.id}}/{{total.product.preview[1]}}"/>
                                       </span>
                                 </div>
                             </div>

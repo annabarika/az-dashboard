@@ -26,6 +26,8 @@
     <script src="/vendor/angular/draganddrop.js"></script>
     <script src="/vendor/lodash/lodash.js"></script>
     <script src="/vendor/angular/angular-sanitize.js"></script>
+    <script src="/vendor/spin.js/spin.js"></script>
+    <script src="/vendor/angular-spinner/angular-spinner.min.js"></script>
    <!-- <script src="/vendor/angular/angularjs-auth.js"></script>-->
 
     <!--/ Third-party components -->
@@ -53,6 +55,8 @@
 </head>
 
 <body ng-controller="MainController">
+<span us-spinner="{radius:12, width:4, length: 8}" spinner-key="loader"></span>
+
 <section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }">
     <sidebar ng-class="classes[index % classes.length]" ng-show="authFlag">111</sidebar>
 

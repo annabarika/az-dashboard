@@ -133,6 +133,8 @@ app.controller('BestsellerItemController',
             $scope.load();
 
             $scope.createOrder = function( sizes ){
+                console.log(sizes);
+
                 // Preparing order rows
                 //console.log( Object.keys(sizes).length );
                 if( Object.keys(sizes).length == 0 ) return false;

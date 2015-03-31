@@ -2,41 +2,6 @@ var app = angular.module("modules.buyer.orders", [
 
 ]);
 
-/*app.run(function($rootScope,RestFactory,$http){
-
-    var tableOrders = [
-        { name: "id", title: 'ID' },
-        { name: "type", title: 'Type' },
-        { name: "status", title: 'Status' },
-        { name: "factoryName", title: "Factory"},
-        { name: "orderedTotal", title: 'Ordered total' },
-        { name: "paymentStatus", title: 'Payment status' },
-        { name: "createDate", title: 'Create date' },
-        { name: "deliveryDate", title: 'Production date' }
-    ];
-
-    RestFactory.request(config.API.host + "order/load").then(
-        function(response){
-            var data = [];
-            for( var i in response ){
-                data[i] = {};
-                for( var n in tableOrders) {
-                    var key = tableOrders[n].name;
-                    if( response[i][key]  ) {
-                        data[i][key] = response[i][key]
-                    }else{
-                        data[i][key] = '';
-                    }
-                }
-            }
-            $rootScope.data = data;
-           // $rootScope.orders = $scope.data;
-            console.log("run", $rootScope.data);
-        }
-    )
-});*/
-
-
 app.controller('OrderListController',
 
     [
@@ -58,31 +23,45 @@ app.controller('OrderListController',
                 data,
                 filter={};
 
-            $scope.type=[
-                {
-                    name:"Moscow",
-                    id:1
-                },
-                {
-                    name:"Hong Kong",
-                    id:2
-                }
-            ];
+            /* $scope.type=[
+             {
+             name:"Moscow",
+             id:1
+             },
+             {
+             name:"Hong Kong",
+             id:2
+             }
+             ];*/
+
+            getTypes();
+            function getTypes(){
+                url=config.API.host+"/order-type/load";
+                RestFactory.request(url).then(
+                    function(response){
+                        $scope.type=response;
+                    }
+                )
+            }
+
+
+
+
 
             $scope.newOrder={};
 
             /* Loading orders */
-			$rootScope.documentTitle = "Orders";
-			$scope.tableHeader = [
-				{ name: "id", title: 'ID' },
-				{ name: "type", title: 'Type' },
-				/*{ name: "status", title: 'Status' },*/
+            $rootScope.documentTitle = "Orders";
+            $scope.tableHeader = [
+                { name: "id", title: 'ID' },
+                { name: "type", title: 'Type' },
+                /*{ name: "status", title: 'Status' },*/
                 { name: "factoryName", title: "Factory"},
-				{ name: "orderedTotal", title: 'Ordered total' },
-				{ name: "paymentStatus", title: 'Payment status' },
-				{ name: "createDate", title: 'Create date' },
-				{ name: "deliveryDate", title: 'Production date' }
-			];
+                { name: "orderedTotal", title: 'Ordered total' },
+                { name: "paymentStatus", title: 'Payment status' },
+                { name: "createDate", title: 'Create date' },
+                { name: "deliveryDate", title: 'Production date' }
+            ];
 
             $scope.tableOrders = [
                 { name: "id", title: 'ID' },
@@ -98,67 +77,67 @@ app.controller('OrderListController',
 
 
 
-                RestFactory.request(config.API.host + "order/load")
-                    .then(function(response){
-                        //console.log(response);
-                        var data = [];
+            RestFactory.request(config.API.host + "order/load")
+                .then(function(response){
+                    //console.log(response);
+                    var data = [];
 
-                        for( var i in response ){
-                            data[i] = {};
-                            for( var n in $scope.tableOrders) {
-                                var key = $scope.tableOrders[n].name;
-                                if( response[i][key]  ) {
-                                    data[i][key] = response[i][key]
-                                }else{
-                                    data[i][key] = '';
-                                }
+                    for( var i in response ){
+                        data[i] = {};
+                        for( var n in $scope.tableOrders) {
+                            var key = $scope.tableOrders[n].name;
+                            if( response[i][key]  ) {
+                                data[i][key] = response[i][key]
+                            }else{
+                                data[i][key] = '';
                             }
                         }
-                        $scope.data = data;
-                        $scope.orders = $scope.data;
-                        //console.log($scope.orders);
+                    }
+                    $scope.data = data;
+                    $scope.orders = $scope.data;
+                    //console.log($scope.orders);
 
-                        $scope.buttons = [
-                            {
-                                class:"btn btn-default",
-                                value:"Cancel"
-                            },
-                            {
-                                class:"btn btn-default",
-                                value:"Send"
-                            }
-                        ]
-                    },
-                    function(error){
-                        console.log(error);
-                    });
+                    $scope.buttons = [
+                        {
+                            class:"btn btn-default",
+                            value:"Cancel"
+                        },
+                        {
+                            class:"btn btn-default",
+                            value:"Send"
+                        }
+                    ]
+                },
+                function(error){
+                    console.log(error);
+                });
 
 
-             //Loading factories
+            //Loading factories
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
-					var factory = [];
-					for( var i in response ){
+                    var factory = [];
+                    for( var i in response ){
 
-						factory.push( { type:"factory", id: response[i].factory.id, name: response[i].factory.name } );
-					}
+                        factory.push( { type:"factory", id: response[i].factory.id, name: response[i].factory.name } );
+                    }
                     $scope.Factory=factory;
                 },
                 function(error){
                     console.log(error);
                 });
 
-             //Loading statuses
+            //Loading statuses
             RestFactory.request(config.API.host + "status/load")
                 .then(function(response){
-					var statusByType = [];
-					for( var i in response ){
-						if( ! statusByType[response[i].type]) statusByType[response[i].type] = [];
-						statusByType[response[i].type].push({ type: response[i].type, id: response[i].statusId, name: response[i].name });
-					}
+                    var statusByType = [];
+                    for( var i in response ){
+                        if( ! statusByType[response[i].type]) statusByType[response[i].type] = [];
+                        statusByType[response[i].type].push({ type: response[i].type, id: response[i].statusId, name: response[i].name });
+                    }
                     $scope.orderStatus = statusByType['order'];
                     //console.log( $scope.orderStatus);
-					$scope.orderPaymentStatus = statusByType['orderPayment'];
+                    $scope.orderPaymentStatus = statusByType['orderPayment'];
                 },
                 function(error){
                     console.log(error);
@@ -175,100 +154,111 @@ app.controller('OrderListController',
 
             /*$scope.buttonAction=function(){
 
-                //console.log($rootScope.row,$rootScope.method);
+             //console.log($rootScope.row,$rootScope.method);
 
-                if($rootScope.method=='Cancel'){
+             if($rootScope.method=='Cancel'){
 
-                    modalWindow=$modal.open({
-                        templateUrl: "/app/views/new_product_create_confirm.html",
-                        controller: 'OrdersListController',
-                        backdrop:'static'
-                    });
-                    modalWindow.result.then(function(answer){
-                        if(answer){
-                            //console.log('del');
-                            url="",//url
-                                method='post',
-                                data=$rootScope.row;
-                            RestFactory.request(url,method,data)
-                                .then(function(response){
-                                    console.log(response);
-                                    $rootScope.changeAlert=1;
-                                    //update $scope.orders: $http?,$scope.$apply($digest) or array.splice
-                                },
-                                function(error){
-                                    console.log(error);
-                                    $rootScope.changeAlert=0;
-                                });
-                        }
-                    });
-                }
-                else{
-                    modalWindow=$modal.open({
-                        templateUrl: "/modules/buyer/views/orders/send_order.html",
-                        controller: 'OrdersController',
-                        backdrop:'static'
-                    });
-                }
+             modalWindow=$modal.open({
+             templateUrl: "/app/views/new_product_create_confirm.html",
+             controller: 'OrdersListController',
+             backdrop:'static'
+             });
+             modalWindow.result.then(function(answer){
+             if(answer){
+             //console.log('del');
+             url="",//url
+             method='post',
+             data=$rootScope.row;
+             RestFactory.request(url,method,data)
+             .then(function(response){
+             console.log(response);
+             $rootScope.changeAlert=1;
+             //update $scope.orders: $http?,$scope.$apply($digest) or array.splice
+             },
+             function(error){
+             console.log(error);
+             $rootScope.changeAlert=0;
+             });
+             }
+             });
+             }
+             else{
+             modalWindow=$modal.open({
+             templateUrl: "/modules/buyer/views/orders/send_order.html",
+             controller: 'OrdersController',
+             backdrop:'static'
+             });
+             }
 
-            };*/
+             };*/
 
             $scope.$watchCollection('resultData',function(newVal){
+                //console.log(newVal);
+                for(item in newVal){
+                    var arr=[];
 
-                    for(item in newVal){
-                        var arr=[];
+                    if($.isEmptyObject(newVal[item])){
 
-                        if($.isEmptyObject(newVal[item])){
-
-                            delete filter[item];
-                        }
-                        else{
-                            angular.forEach(newVal[item],function(value,key){
-
-
-                                if(value.ticked ===true){
-
-                                    arr.push(value.id);
-                                    filter[item]=arr;
-                                }
-
-                            });
-                        }
-                    }
-                    //console.log(filter);
-                    if(!$.isEmptyObject(filter)){
-
-                        url=config.API.host+"order/load/";
-
-                        if(filter.order){
-
-                            url+="status/"+filter.order.join()+"/";
-                        }
-
-                        if(filter.orderPayment){
-
-                            url+="paymentStatus/"+filter.orderPayment.join()+"/";
-                        }
-                        if(filter.factory){
-
-                            url+="factoryId/"+filter.factory.join()+"/";
-                        }
-
-                        console.log(url);
-
-
-                        RestFactory.request(url)
-                            .then(
-                            function(response){
-                                $scope.orders=response;
-                            },
-                            function(error){
-                                console.log(error);
-                            });
+                        delete filter[item];
                     }
                     else{
-                        $scope.orders=$scope.data;
+                        angular.forEach(newVal[item],function(value,key){
+
+
+                            if(key=="startDate"||key=="endDate"){
+
+                                arr.push(moment(value).format('YYYY-MM-DD'));
+                                filter[item]=arr;
+                            }
+
+                            if(value.ticked ===true){
+
+                                arr.push(value.id);
+                                filter[item]=arr;
+                            }
+
+                        });
                     }
+                }
+                //console.log(filter);
+
+                if(!$.isEmptyObject(filter)){
+
+                    url=config.API.host+"order/load/";
+
+                    if(filter.order){
+
+                        url+="status/"+filter.order.join()+"/";
+                    }
+
+                    if(filter.orderPayment){
+
+                        url+="paymentStatus/"+filter.orderPayment.join()+"/";
+                    }
+                    if(filter.factory){
+
+                        url+="factoryId/"+filter.factory.join()+"/";
+                    }
+                    if(filter.createDate){
+
+                        url+="createDate/"+filter.createDate.join(',')+"/";
+                    }
+
+                    console.log(url);
+
+
+                    RestFactory.request(url)
+                        .then(
+                        function(response){
+                            $scope.orders=response;
+                        },
+                        function(error){
+                            console.log(error);
+                        });
+                }
+                else{
+                    $scope.orders=$scope.data;
+                }
             });
 
             $scope.addNewOrder = function () {
@@ -284,7 +274,8 @@ app.controller('OrderListController',
                         type:function(){
                             return $scope.type;
                         }
-                    }
+                    },
+                    backdrop:'static'
                 });
             };
 
@@ -299,21 +290,8 @@ app.controller('OrderListController',
                     console.log(obj);
                 })
             };
-            /* $scope.filesChanged = function(elm){
-				console.log(elm.files);
-                $scope.newOrder.files=elm.files;
-                $scope.$apply();
-            };*/
 
-            /*$scope.$watch('files',function(newVal){
-                //console.log(newVal);
-                if(newVal){
-                    $rootScope.uploadFiles=$scope.files;
-                }
-            });*/
-
-
-}]);
+        }]);
 
 app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http,factory,type,messageCenterService){
 
@@ -321,78 +299,74 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
     $scope.type=type;
     var fileinput;
 
-    $scope.upload=function(){
-        fileinput = document.getElementById("filesNewOrder");
-        fileinput.click();
 
-    };
 
     $scope.saveOrder = function ( data ) {
-        /*console.log(data,$scope.files);*/
-			var fd = new FormData();
-			angular.forEach($scope.files, function(file){
-				fd.append('file', file);
-			});
+        console.log(data,$scope.files);
+        var fd = new FormData();
+        angular.forEach($scope.files, function(file){
+            fd.append('file[]', file);
+        });
 
         var params = {
             'buyerId'       :   1,
             'factoryId'     :   data.factory.id,
             'type'          :   data.type.id,
-            'currencyId'    :   5
+            'currencyId'    :   data.factory.currencyId
             /*,'amount'        :   data.amount*/
         };
         console.log("params",params);
-            var url = config.API.host + "order/create";
+        var url = config.API.host + "order/create";
 
-             RestFactory.request(url,"POST",params)
-                .then(function(response){
-					console.log(response);
-                    if(response=='null'){
-                        messageCenterService.add('danger', 'Order is not created', {timeout: 3000});
-                    }
-                    else{
-                        if(_.isObject(response)){
-                            url=config.API.host+"order/create-manual-row";
-                            params={
-                                orderId: response.id,
-                                price: data.amount
-                            };
-                            console.log(params);
-                            RestFactory.request(url,"POST",params).then(
-                                function(resp){
-                                    console.log("resp",resp);
-                                }
-                            );
-
-                            url = config.API.host + "order/loadfiles";
-                            fd.append("id",response.id);
-                            console.log(fd);
-                            $http.post(url,fd,
-                                {
-                                    transformRequest: angular.identity,
-                                    headers: {'Content-Type': undefined}
-                                })
-                                .success(function(data){
-                                    console.log("fileData",data);
-
-                                })
-                                .error(function(data,status){
-                                    console.log(data,status);
-                                })
-                        }
-                       // console.log(response);
-
-                        messageCenterService.add('success', 'Order is created', {timeout: 3000});
-                        $location.path( '/buyer/orders/id/'+ response.id );
-                        $modalInstance.close();
-                    }
-
-                },
-                function(error) {
-                  /*  console.log(error);*/
+        RestFactory.request(url,"POST",params)
+            .then(function(response){
+                //console.log(response);
+                if(response=='null'){
                     messageCenterService.add('danger', 'Order is not created', {timeout: 3000});
+                }
+                else{
+                    if(_.isObject(response)){
+                        url=config.API.host+"order/create-manual-row";
+                        params={
+                            orderId: response.id,
+                            price: data.amount
+                        };
+                        console.log(params);
+                        RestFactory.request(url,"POST",params).then(
+                            function(resp){
+                                console.log("resp",resp);
+                            }
+                        );
 
-                });
+                        url = config.API.host + "order/loadfiles";
+                        fd.append("id",response.id);
+                        console.log(fd);
+                        $http.post(url,fd,
+                            {
+                                transformRequest: angular.identity,
+                                headers: {'Content-Type': undefined}
+                            })
+                            .success(function(data){
+                                console.log("fileData",data);
+
+                            })
+                            .error(function(data,status){
+                                console.log(data,status);
+                            })
+                    }
+                    // console.log(response);
+
+                    messageCenterService.add('success', 'Order is created', {timeout: 3000});
+                    $location.path( '/buyer/orders/id/'+ response.id );
+                    $modalInstance.close();
+                }
+
+            },
+            function(error) {
+                /*  console.log(error);*/
+                messageCenterService.add('danger', 'Order is not created', {timeout: 3000});
+
+            });
 
 
     };
@@ -401,33 +375,44 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
         $modalInstance.dismiss('cancel');
     };
 });
-
+/**
+ * Controller for order cart
+ */
 app.controller("OrderController",
     [
         "$scope",
         "$rootScope",
         "$location",
         "$route",
-		"RestFactory",
+        "RestFactory",
         "$modal",
         "messageCenterService",
-        function($scope,$rootScope,$location, $route,RestFactory,$modal,messageCenterService){
+        "$http",
+        function($scope,$rootScope,$location, $route,RestFactory,$modal,messageCenterService,$http){
 
             $scope.$route = $route;
-			var id = $route.current.params.orderId,
+            var id = $route.current.params.orderId,
                 url,data;
 
+            getTypes();
+            function getTypes(){
+                url=config.API.host+"/order-type/load";
+                RestFactory.request(url).then(
+                    function(response){
+                        $scope.type=response;
+                    }
+                )
+            }
 
-            $scope.type=[
-                {
-                    name:"Moscow",
-                    id:1
-                },
-                {
-                    name:"Hong Kong",
-                    id:2
-                }
-            ];
+            $scope.currentType=function (){
+
+                angular.forEach($scope.type,function(value){
+
+                    if(value.id==$scope.order.order.type){
+                        return value;
+                    }
+                });
+            };
 
             $scope.statusTemplates = {
                 0:'<span class="label label-info">Draft</span>',
@@ -436,14 +421,45 @@ app.controller("OrderController",
                 3:'<span class="label label-warning">Finished</span>'
             };
 
-			$rootScope.documentTitle = 'Order #'+ id;
+            $rootScope.documentTitle = 'Order #'+ id;
 
-            $scope.back=function(){
-                $location.path('/buyer/orders');
+            $scope.cancel=function(){
+
+                if($scope.order.order.status==2){
+                    messageCenterService.add('danger', 'Order has been canceled', {timeout: 3000});
+                    return;
+                }
+
+
+                var modalInstance=$modal.open({
+                    templateUrl:"/modules/buyer/views/orders/cancel.html",
+                    size:"sm",
+                    backdrop:'static'
+
+                });
+                modalInstance.result.then(function(string){
+
+                    url=config.API.host+"order/cancel";
+
+                    RestFactory.request(url,"PUT",{id:id}).then(
+                        function(response){
+
+                            if(response.status==2){
+                                messageCenterService.add('success', 'Order cancelled', {timeout: 3000});
+                            }
+                            else{
+                                messageCenterService.add('danger', 'Order is not cancelled', {timeout: 3000});
+                            }
+
+                        }
+                    )
+                })
             };
-
-			RestFactory.request(config.API.host + "order/get/id/"+id)
-				.then(function(response){
+            /**
+             * load order by id
+             */
+            RestFactory.request(config.API.host + "order/get/id/"+id)
+                .then(function(response){
                     console.log("order",response);
                     $scope.order=response;
 
@@ -452,13 +468,10 @@ app.controller("OrderController",
                             $scope.currentType=$scope.type[index];
                         }
                     });
-				});
-
-            $scope.changeType=function(){
-                $scope.order.order.type=$scope.currentType.id;
-            };
-
-
+                });
+            /**
+             * load cargo by orderId
+             */
             RestFactory.request(config.API.host +"cargo/load/orderId/"+id).then(
                 function(response){
                     console.log(response);
@@ -468,53 +481,50 @@ app.controller("OrderController",
 
                 }
             );
-
-            $scope.orderProducts=[];
+            /**
+             * load products by orderId
+             * @type {Array}
+             */
             $scope.totalCount=0;
             $scope.totalPrice=0;
             RestFactory.request(config.API.host+"order/get-rows/id/"+id).then(
                 function(response){
+                    console.log('response rows', response);
+                    $scope.orderProducts=response;
 
-                    if(_.isArray(response)){
-                        var url;
+                    angular.forEach(response,function(value){
 
-                        angular.forEach(response,function(value){
-                            url=config.API.getproducts+'?params[tokien_id]=5f77e685beaa564fd3585738d65108c4&params[id]='+value.productId;
+                        if(_.has(value, 'count')){
 
-                            RestFactory.request(url).then(
-                                function(data){
-                                    var result=angular.fromJson(data.result);
-                                    var key=_.keys(result.products);
+                            $scope.totalCount+=parseInt(value.count);
 
-                                    $scope.orderProducts.push(result.products[key]);
-                                       // console.log(result.products[key]);
-                                    if(_.has(result.products[key], 'sizes_count')){
-                                        $scope.totalCount+=parseInt(result.products[key].sizes_count);
-                                    }
-                                    if(_.has(result.products[key], 'price')) {
-                                        $scope.totalPrice += parseInt(result.products[key].price);
-                                    }
-                                }
-                            )
-                        });
-
-                    }
+                        }
+                        if(_.has(value.product, 'price')) {
+                            $scope.totalPrice += parseInt(value.price);
+                        }
+                    });
                 }
             );
-
+            /**
+             * location to cargo cart
+             * @param id
+             */
             $scope.goToCargo=function(id){
-                console.log("cargo",id);
                 $location.path("/buyer/cargo/id/"+id);
             };
-
-
-            $scope.imagePath=config.API.imagehost+'/files/factory/attachments/';
+            /**
+             * location to payment cart
+             */
             $scope.showPayment=function(){
                 $location.path('/buyer/payments/by-order/'+id);
             };
+
+            $scope.imagePath=config.API.imagehost+'/files/factory/attachments/';
+
             $scope.tableHeader = [
                 { name: "photo", title: 'Photo' },
                 { name: "articul", title: 'Articul' },
+                { name: "factoryArticul", title: 'Factory articul' },
                 { name: "title", title: 'Title' },
                 { name: "size", title: "Size"},
                 { name: "count", title: 'Count' },
@@ -522,7 +532,9 @@ app.controller("OrderController",
                 { name: "subtotal", title: 'Subtotal' }
 
             ];
-
+            /**
+             * send to factory
+             */
             $scope.sendToFactory=function(){
                 var modalInstance=$modal.open({
                     templateUrl:"/modules/buyer/views/orders/send_to_factory.html",
@@ -550,6 +562,9 @@ app.controller("OrderController",
                 });
             };
 
+            /**
+             * make payment
+             */
             $scope.makePayment=function(){
                 var modalInstance=$modal.open({
                     templateUrl: "/modules/buyer/views/orders/make_payment.html",
@@ -563,7 +578,7 @@ app.controller("OrderController",
                                 messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
                                 return;
                             }
-                            if(_.isUndefined(payment.amount)||payment.amount==0){
+                            if(_.isUndefined(payment.amount)||payment.amount==0||_.isNull(payment.amount)){
                                 messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
                                 return;
                             }
@@ -582,28 +597,100 @@ app.controller("OrderController",
 
                 modalInstance.result.then(function(payment){
 
-                     url=config.API.host+"payment/create";
-                     data={
-                            'currencyId'    :   $scope.order.currency.id,
-                            //@TODO Узнать cashierId от авторизации
-                            'cashierId'     :   1,
-                            'orderId'       :   id,
-                            'paymentMethod' :   payment.method.name,
-                            'paymentType'   :   "payment",
-                            'amount'        :   payment.amount
-                     };
-                    //console.log(data);
+                    url=config.API.host+"payment/create";
+                    data={
+                        'currencyId'        :   $scope.order.currency.id,
+                        //@TODO Узнать cashierId и cashierOfficeId от авторизации
+                        'cashierId'         :   1,
+                        'cashierOfficeId'   :   1,
+                        'orderId'           :   id,
+                        'paymentMethod'     :   payment.method.name,
+                        'paymentType'       :   "payment",
+                        'amount'            :   payment.amount
+                    };
 
                     RestFactory.request(url,"POST",data).then(
                         function(response){
                             console.log("payment",response);
-                            if(_.isObject(response)){
+                            if(_.isObject(response)&&response.id>0){
                                 messageCenterService.add('success', 'Payment created', {timeout: 3000});
+                            }else{
+                                messageCenterService.add('danger', 'Payment is not created', {timeout: 3000});
                             }
                         }
                     );
 
                 })
+            };
+
+
+            $scope.upload=function(){
+                $scope.uploadFlag=true;
+                var uploader=document.getElementById("uploader");
+                uploader.click();
+            };
+
+            $scope.$watch("files",function(value){
+                console.log(value);
+                if(!_.isUndefined(value) && $scope.uploadFlag){
+
+                    runUpload();
+                }
+            });
+
+            function runUpload(){
+
+                $scope.uploadFlag=false;
+
+                var fd = new FormData();
+
+                angular.forEach($scope.files, function(file){
+                    fd.append('file[]', file);
+                });
+
+                url = config.API.host + "order/loadfiles";
+                fd.append("id",id);
+
+                $http.post(url,fd,
+                    {
+                        transformRequest: angular.identity,
+                        headers: {'Content-Type': undefined}
+                    })
+                    .success(function(data,status){
+
+                        if(_.isArray(data)){
+                            messageCenterService.add('success', 'Files uploaded', {timeout: 3000});
+                        }
+                        else{
+                            messageCenterService.add('danger', 'Download failed: '+data, {timeout: 3000});
+                        }
+
+                    })
+                    .error(function(data,status){
+                        messageCenterService.add('danger', 'Error: '+data+" "+status, {timeout: 3000});
+                    })
             }
 
-}]);
+            $scope.removeFiles=function(name){
+
+                var obj={};
+
+                angular.forEach($scope.files,function(v,k){
+
+                    if(v.name!=name){
+
+                        this[k]=v;
+                    }
+                },obj);
+
+                if(_.isEmpty(obj)){
+
+                    $scope.files=undefined;
+                }
+                else{
+                    $scope.files=obj;
+                }
+
+            }
+
+        }]);

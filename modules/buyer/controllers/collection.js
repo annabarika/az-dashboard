@@ -1,3 +1,5 @@
+"use strict";
+
 var app = angular.module("modules.buyer.collection", []);
 
 /**
@@ -8,6 +10,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
         var filter = {}, url;
 
+        var DRAFT = 0, ACTIVE = 1 ;
         // set title
         $rootScope.documentTitle = "Collection";
 
@@ -28,11 +31,11 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             var statuses = [];
             for (var i in response) {
 
-                if (response[i].statusId == 2) {
-                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: false});
+                if (response[i].statusId == DRAFT || response[i].statusId == ACTIVE ) {
+                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: true });
                 }
                 else {
-                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: true});
+                    statuses.push({id: response[i].statusId, name: response[i].name, ticked: false });
                 }
             }
 
@@ -55,7 +58,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         // Watch factory filters
         $scope.$watchCollection('filter', function (newVal) {
 
-            for (item in newVal) {
+            for (var item in newVal) {
                 var arr = [];
 
                 if ($.isEmptyObject(newVal[item])) {
@@ -106,7 +109,6 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         });
 
         $scope.edit = function () {
-            //$scope.testId=$rootScope.row.id;
             $location.path('/buyer/collection/id/' + $rootScope.row.id)
         };
 
@@ -201,7 +203,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             if ($scope.step == 2) {
                 $scope.step = 0;
                 $rootScope.photo = undefined;
-                for (i = 0; i < $scope.stepIcons.length; i++) {
+                for (var i = 0; i < $scope.stepIcons.length; i++) {
 
                     $scope.stepIcons[i].classList.remove('active');
                 }
@@ -236,9 +238,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             }
 
             if ($scope.step == 0) {
-                console.log($scope.step);
                 CollectionService.uploadFiles($rootScope.photo).success(function (data) {
-                        console.log(data);
                     if (_.isArray(data)) {
                         $scope.items = [];
 
@@ -250,7 +250,6 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
                         $scope.imagePath = CollectionService.getImagePath();
                         $scope.step++;
-                        console.log( $scope.step,$scope.items);
                     }
                 });
             }
@@ -313,24 +312,40 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
      *
      * @param order
      */
-    $scope.checkOut = function (order) {
+    $scope.checkOut = function (order, position) {
+
+        if(CollectionService.isSizesExists(order.items) === false) {
+
+            messageCenterService.add('danger', 'Can not create order with empty sizes count', {timeout: 3000});
+            $modalInstance.close();
+
+            return false;
+        }
 
         CollectionService.orderCreate(order).then(function (response) {
 
-            console.log('Order Response create', response);
+            var orderResponse = response;
 
             if (response.id) {
 
-                CollectionService.productsCreate($rootScope.order).then(function (response) {
-                    console.log(response);
+                CollectionService.productsCreate($rootScope.order, response.orderId).then(function () {
 
                     messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
-                    $timeout(function () {
-                        $location.path("buyer/collection");
-                    }, 2000);
+                    if (_.isUndefined(position)) {
 
-                    $modalInstance.close();
+                        // add all positions
+
+                        _.map($rootScope.items, function(positions) {
+                            positions.inOrder = true;
+                        });
+                        $rootScope.isOrderedAll = true;
+                    }
+                    else {
+                        $rootScope.items[$scope.position].inOrder=true;
+                    }
+
+                    $modalInstance.close(orderResponse.orderId, true);
                 });
             }
             else {
@@ -414,13 +429,11 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
 app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionService', '$routeParams', 'messageCenterService', '$timeout', '$location',
     function ($scope, $rootScope, CollectionService, $routeParams, messageCenterService, $timeout, $location) {
 
-
         // set title
         $rootScope.documentTitle = 'Collection Checkout Card #' + $routeParams.collectionId;
         $scope.tableHeader = [
             {name: "preview", title: 'Preview'},
             {name: "articul", title: 'Articul'},
-            {name: "name", title: 'Name'},
             {name: "price", title: 'Price'},
             {name: "factory", title: 'Factory'},
             {name: "sizes", title: 'Sizes'},
@@ -435,8 +448,30 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             if (_.isUndefined(response) == false) {
 
                 $rootScope.items = CollectionService.extractProducts(response);
+
+                $scope.isOrdered = CollectionService.isOrderByItems($rootScope.items);
+
+                $scope.isOrderedAll = CollectionService.isOrderAll($rootScope.items);
+
                 if (_.isEmpty($rootScope.items)) {
                     messageCenterService.add('warning', 'Products not found in this collection', {timeout: 3000});
+                }
+                else {
+
+                    // get collection
+                    CollectionService.getCurrentCollection($routeParams.collectionId).then(function (response) {
+
+                        $scope.orderId = _.first(response).orderId;
+
+                        //if(!_.isNull($scope.orderId)) {
+                        //    CollectionService.getOrderRows($scope.orderId).then(function(response) {
+                        //
+                        //        //@TODO NEED Collection `productId` for compare with CollectionProduct Rows `productId`
+                        //        // Resolve by connect to create - get server
+                        //       CollectionService.fetchSizesCount(response, $rootScope.items);
+                        //    });
+                        //}
+                    });
                 }
             }
         });
@@ -475,7 +510,8 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
         // Add product(s) to order
         $scope.addToOrder = function (product, position) {
-            $scope.position=position;
+
+            $scope.position = position;
 
             // load order types
             CollectionService.loadOrderTypes().then(function (response) {
@@ -483,84 +519,116 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
                 $rootScope.order = {};
 
-                if (_.isEmpty($rootScope.order.collection)) {
-                    CollectionService.getCurrentCollection($routeParams.collectionId).then(function (response) {
+                CollectionService.getCurrentCollection($routeParams.collectionId).then(function (response) {
 
-                        $rootScope.order.collection = _.first(response);
+                    $rootScope.order.collection = _.first(response);
 
-                        //@TODO BuyerId need to be defined
-                        $rootScope.order.buyerId = 1;
+                    //@TODO BuyerId need to be defined
+                    $rootScope.order.buyerId = 1;
 
-                        var index = _.first($rootScope.items);
-                        $rootScope.order.currencyId = (index.hasOwnProperty('currency'))
-                            ? index.currency.id : 5;
+                    var index = _.first($rootScope.items);
+                    $rootScope.order.currencyId = (index.hasOwnProperty('currency'))
+                        ? index.currency.id : 5;
 
 
-                        // add items to collection
-                        if (_.isUndefined(product)) {
-                            $rootScope.order.items = $rootScope.items;
+                    // add items to collection
+                    if (_.isUndefined(product)) {
+                        $rootScope.order.items = $rootScope.items;
+                    }
+                    else {
+
+                        if(CollectionService.isSizeExists(product.sizes) === false) {
+
+                            messageCenterService.add('danger', 'Can not create order with empty sizes count', {timeout: 3000});
+                            return false;
                         }
-                        else {
-                            var i = CollectionService.compareProduct($rootScope.items, product.catalogueProduct);
-                            $rootScope.order.items = [];
-                            $rootScope.order.items.push($rootScope.items[i]);
-                        }
 
-                        console.log('Order', $rootScope.order);
+                        var i = CollectionService.compareProduct($rootScope.items, product.catalogueProduct);
 
-                        if (_.isNull($rootScope.order.collection.orderId)) {
-                            // Create new order
-                            CollectionService.showModal("ADDORDER");
-                        }
-                        else
-                        {
-                            // Add to existing order $rootScope.order.collection.orderId
-                            CollectionService.productsCreate($rootScope.order).then(function (response) {
+                        $rootScope.order.items = [];
+                        $rootScope.order.items.push($rootScope.items[i]);
+                    }
 
-                                messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
+                    if (_.isNull($rootScope.order.collection.orderId)) {
+                        // Create new order
+                        $rootScope.position = $scope.position;
+                        var modal=CollectionService.showModal("ADDORDER");
+                        modal.result.then(function(orderId, ordered) {
+                                $scope.orderId = orderId;
+                                $scope.isOrdered = ordered;
+                            }
+                        )
+                    }
+                    else
+                    {
+                        // add products to Order
+                        CollectionService.getOrder($rootScope.order.collection.orderId).then(function (response) {
+                            var orderStatus = parseInt(response.order.status);
 
-                                $timeout(function () {
+                            if(orderStatus != 0) {
+                                messageCenterService.add('danger', 'Can not add products to order. Because it\'s not Draft', {timeout: 3000});
+                                return false;
+                            }
+                            else {
+
+                                if(CollectionService.isSizesExists($rootScope.order.items) === false) {
+
+                                    messageCenterService.add('danger', 'Can not create order with empty sizes count', {timeout: 3000});
+                                    return false;
+                                }
+
+                                // Add to existing order $rootScope.order.collection.orderId
+                                CollectionService.productsCreate($rootScope.order).then(function (response) {
+
+                                    messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
                                     if (_.isUndefined($scope.position)) {
-                                        // ordered all position -> move to collections
-                                        $location.path('/buyer/collection');
+
+                                        // add all positions
+
+                                        _.map($rootScope.items, function(positions) {
+                                            positions.inOrder = true;
+                                        });
+                                        $scope.isOrdered = true;
+                                        $rootScope.isOrderedAll = CollectionService.isOrderAll($rootScope.items);
                                     }
                                     else {
                                         $rootScope.items[$scope.position].inOrder=true;
+                                        $scope.isOrdered = true;
                                     }
-                                }, 1000);
-
-                            });
-                        }
-                    });
-                }
+                                });
+                            }
+                            $scope.orderId = $rootScope.order.collection.orderId;
+                        });
+                    }
+                });
             });
         };
 
-            //Add sizes to product
-            $scope.addSize = function (product) {
-                var flag = true;
+        //Add sizes to product
+        $scope.addSize = function (product) {
+            var flag = true;
 
-                var i = CollectionService.compareProduct($rootScope.items, product);
+            var i = CollectionService.compareProduct($rootScope.items, product);
 
-                CollectionService.showModal("ADDSIZE").result.then(function (size) {
-                    if (_.isUndefined(i) == false) {
+            CollectionService.showModal("ADDSIZE").result.then(function (size) {
+                if (_.isUndefined(i) == false) {
 
-                        if (!$rootScope.items[i].hasOwnProperty('sizes')) {
-                            $rootScope.items[i].sizes = [];
-                        }
-                        angular.forEach($rootScope.items[i].sizes, function (value) {
-
-                            if (value.id == size.id) {
-                                messageCenterService.add('warning', 'Size already added', {timeout: 3000});
-                                flag = false;
-                            }
-                        });
-                        if (flag) {
-                            $rootScope.items[i].sizes.push(size);
-                        }
+                    if (!$rootScope.items[i].hasOwnProperty('sizes')) {
+                        $rootScope.items[i].sizes = [];
                     }
-                });
-            }
+                    angular.forEach($rootScope.items[i].sizes, function (value) {
+
+                        if (value.id == size.id) {
+                            messageCenterService.add('warning', 'Size already added', {timeout: 3000});
+                            flag = false;
+                        }
+                    });
+                    if (flag) {
+                        $rootScope.items[i].sizes.push(size);
+                    }
+                }
+            });
+        }
     }
 ]);
