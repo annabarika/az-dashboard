@@ -139,13 +139,18 @@
                         <th>Status</th>
                     </tr>
                     <tr ng-repeat="item in bestsellerHistory">
+                        {{item}}
                         <td>
                             <a ng-href="/buyer/bestseller/item/{{item.id}}" target="_blank">{{item.orderDate}}</a>
                         </td>
-                        <td><a ng-href="/buyer/orders/id/{{order.id}}">{{order.id}}</a></td>
+                        <td><a ng-href="/buyer/orders/id/{{order.id}}">{{item.orderId}}</a></td>
                         <td>
-                            <div ng-repeat="(size, count) in data.sizes">
-                                {{size}}=<b>{{count}}</b>
+                            <!--<div ng-repeat="(size, count) in data.sizes">-->
+                            <div ng-if="item.size!=undefined && item.count!=undefined">
+                                {{item.size}}   = <b>{{item.count}}</b>
+                            </div>
+                            <div ng-if="item.size==undefined || item.count==undefined">
+                                {{item.size}}  <b>{{item.count}}</b>
                             </div>
                         </td>
                         <td>{{item.notes}}</td>

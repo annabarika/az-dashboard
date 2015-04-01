@@ -41,7 +41,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
             BestsellersService.getCalendarData('total', $scope.currentYear).then(function(response) {
                 $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
             });
-        }
+        };
 
         /**
          * Select month navigation
@@ -170,6 +170,10 @@ app.controller('BestsellerItemController',[
     'messageCenterService',
     function ($scope, $rootScope, $modal, $location, $routeParams, BestsellersService, messageCenterService){
 
+        $scope.bestsellerHistory=[];
+
+
+
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
@@ -184,17 +188,24 @@ app.controller('BestsellerItemController',[
 				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
-                    console.log("bests history",response);
-                    $scope.bestsellerHistory = response;
+                  /*  console.log("bests history",response);*/
+                    $scope.tmp = response;
+                    angular.forEach( $scope.tmp,function(item){
+                        BestsellersService.getProducts(item.orderId).then(
+                            function(response){
+                                /*console.log(i,"products",response);*/
+                                if(_.isArray(response) && response.length!=0){
+
+                                    item['size']=response[0].size;
+                                    item['count']=response[0].count;
+
+                                }
+                                $scope.bestsellerHistory.push(item);
+                                console.log( $scope.bestsellerHistory);
+                            }
+                        )
+                    });
                 });
-
-                BestsellersService.getProducts($scope.order.id).then(
-                    function(response){
-                        console.log("products", response);
-                        $scope.bestsellerHistory2 = response;
-                    }
-                );
-
 
                 console.log('Bestseller', response);
             }

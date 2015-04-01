@@ -263,7 +263,7 @@
                     },
 
                     getProducts: function(id){
-
+                        console.log("getProducts",id);
                         return RestFactory.request(API.LOAD_PRODUCTS+id)
                     }
 
