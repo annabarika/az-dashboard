@@ -24,6 +24,8 @@ app.controller('PaymentListController',
 			$scope.userType=JSON.parse(AuthFactory.getUser('type'));
 
 			$scope.userCO=JSON.parse(AuthFactory.getUser('cashierOffice'));
+
+
 			console.log($scope.userType,$scope.userCO);
 
 

@@ -70,58 +70,77 @@
             /**
              *
              * @param user
+             * @param event
              */
-            $scope.auth=function(event,user){
+            $scope.auth=function(user,event){
 
-                if(_.isObject(user) && event.keyCode==13){
+                if(!_.isUndefined(event)){
+
+                    if(event.keyCode!=13){
+
+                        return;
+                    }
+
+                }
+                if(_.isObject(user)){
 
                     var data={
                         name:user.login,
                         password:user.pass
                     };
-
-                        AuthFactory.runAuth(user).then(
-
-                            function(response){
-
-                                if(_.isArray(response)){
-
-                                    angular.forEach(response, function(item){
-
-                                        if(item.name==data.name && item.password==data.password){
-
-                                            AuthFactory.create(item);
-
-                                            NavService.getMenu();
-
-                                            if(_.isUndefined($scope.currentPath)){
-                                                $location.path("/index");
-                                            }
-                                            else{
-                                                if(NavService.checkPath($scope.currentPath)){
-                                                    $location.path($scope.currentPath);
-                                                }
-                                                else{
-                                                    $location.path("/index");
-                                                }
-
-                                            }
-                                            return;
-                                        }
-                                    })
-                                }
-                                else{
-                                    messageCenterService.add('danger', "Error: "+response, {timeout: 3000});
-                                }
-                            },function(error){
-                                messageCenterService.add('danger', "Error: "+error, {timeout: 3000});
-                            }
-                        )
+                    _auth(data);
                 }
-                /*else{
+                else{
                     messageCenterService.add('danger', "Invalid username or password", {timeout: 3000});
-                }*/
+                }
             };
+            /**
+             *
+             * @param data
+             * @private
+             */
+            function _auth(data){
+                AuthFactory.runAuth(data).then(
+
+                    function(response){
+
+                        if(_.isArray(response)){
+
+                            angular.forEach(response, function(item){
+
+                                if(item.name==data.name && item.password==data.password){
+
+                                    AuthFactory.create(item);
+
+                                    NavService.getMenu();
+
+                                    if(_.isUndefined($scope.currentPath)){
+                                        $location.path("/index");
+                                    }
+                                    else{
+                                        if(NavService.checkPath($scope.currentPath)){
+                                            $location.path($scope.currentPath);
+                                        }
+                                        else{
+                                            $location.path("/index");
+                                        }
+
+                                    }
+                                    return;
+                                }
+                            })
+                        }
+                        else{
+                            messageCenterService.add('danger', "Error: "+response, {timeout: 3000});
+                        }
+                    },function(error){
+                        messageCenterService.add('danger', "Error: "+error, {timeout: 3000});
+                    }
+                )
+            }
+
+
+
             /**
              * logout
              */

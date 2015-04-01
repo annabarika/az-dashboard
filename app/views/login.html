@@ -4,7 +4,7 @@
         <label>Login:</label>
         <input type="text" ng-model="user.login" class="form-control"/>
         <label>Password:</label>
-        <input type="password" ng-model="user.pass" class="form-control" ng-keyup="auth($event,user)"/>
+        <input type="password" ng-model="user.pass" class="form-control" ng-keyup="auth(user,$event)"/>
     </form>
     <button class="btn btn-default" ng-click="auth(user)">Log in</button>
 

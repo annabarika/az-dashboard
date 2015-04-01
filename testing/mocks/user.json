@@ -4,7 +4,8 @@
         "email": "kostyanuch87@gmail.com",
         "name": "developer",
         "type": "developer",
-        "password":"123"
+        "password":"123",
+        "cashierOffice":"1"
     },
     {
         "id": "2",
@@ -22,6 +23,7 @@
         "email": "kostyanuch87@gmail.com",
         "name": "user",
         "type": "user",
-        "password":"123"
+        "password":"123",
+        "cashierOffice":"1"
     }
 ]
