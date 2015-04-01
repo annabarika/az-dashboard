@@ -95,7 +95,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in orderProducts track by $index">
+                <tr ng-repeat="item in orderProducts track by $index" >
                     <td>{{$index+1}}</td>
                     <td>
                         <img ng-src="http://back95.ru/f/catalogue/{{item.product.id}}/{{item.product.preview[1]}}"/>
@@ -105,8 +105,12 @@
                     <td>{{item.product.factoryArticul}}</td>
                     <td>{{item.product.title}}</td>
                     <td>{{item.size}}</td>
-                    <td>{{item.count}}</td>
-                    <td>{{item.price}}</td>
+                    <td class="col-lg-1">
+                        <input class="form-control" type="text" ng-model="productModel.count" ng-init="productModel.count= item.count" ng-keyup="saveProduct($event,item,productModel)">
+                    </td>
+                    <td class="col-lg-1">
+                        <input class="form-control" type="text" ng-model="productModel.price" ng-init="productModel.price= item.price" ng-keyup="saveProduct($event,item,productModel)">
+                    </td>
                     <td>{{item.count *item.price||0}}</td>
                     <td ng-hide="orderFlag">
                         <button class="btn-default" ng-click="deleteProduct($index)">

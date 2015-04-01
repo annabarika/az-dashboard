@@ -37,7 +37,7 @@ app.controller('PaymentListController',
 				{ name: "factory"			, 	title: 'Factory' },
 				{ name: "date"				, 	title: 'Payment date' },
 				{ name: "method"			, 	title: 'Payment method'},
-				{ name:"cashierOfficeId"	,	title:"CashierOffice"},
+				/*{ name:"cashierOfficeId"	,	title:"CashierOffice"},*/
 				{ name:"cashierOfficeName"	,	title:"CashierOffice"},
 				{ name: "amount"			, 	title: 'Payment' },
 				{ name: "refund"			, 	title: 'Refund' }
@@ -321,13 +321,13 @@ app.controller("PaymentOrderController",[
 		 * @type {{name: string, title: string}[]}
 		 */
 		$scope.tableHeader = [
-			{ name: "id"			,	title: 'ID' },
-			{ name: "factory"		, 	title: 'Factory' },
-			{ name: "date"			, 	title: 'Payment date' },
-			{ name: "method"		, 	title: 'Payment method'},
-			{ name:"cashierOfficeId",	title:"CashierOffice"},
-			{ name: "amount"		, 	title: 'Payment' },
-			{ name: "refund"		, 	title: 'Refund' }
+			{ name: "id"				,	title: 'ID' },
+			{ name: "factory"			, 	title: 'Factory' },
+			{ name: "date"				, 	title: 'Payment date' },
+			{ name: "method"			, 	title: 'Payment method'},
+			{ name:"cashierOfficeName"	,	title:"CashierOffice"},
+			{ name: "amount"			, 	title: 'Payment' },
+			{ name: "refund"			, 	title: 'Refund' }
 		];
 		/**
 		 * get Order Payments
@@ -355,9 +355,9 @@ app.controller("PaymentOrderController",[
 					return
 				}
 				$scope.cashierOfficies=response;
-
+				//console.log($scope.cashierOfficies);
 				$scope.orderPayments=PaymentService.parseCashierOffice($scope.orderPayments,$scope.cashierOfficies);
-
+				//console.log("this",$scope.orderPayments);
 			}
 		);
 

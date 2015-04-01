@@ -19,7 +19,9 @@
             "CREATE_ORDER"          : config.API.host + "order/create",
             "ADD_ORDER_PRODUCT_ROW" : config.API.host + "order/create-bestseller-row",
 
-            "LOAD_PRODUCTS"         : config.API.host+"order/get-rows/id/"
+            "LOAD_PRODUCTS"         : config.API.host + "order/get-rows/id/",
+            "UPDATE"                : config.API.host + "/bestseller/update",
+            "CREATE_PDF"            : config.API.host + "/order/send/id/"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
@@ -256,17 +258,62 @@
                         }
                         return products;
                     },
-
+                    /**
+                     *
+                     * @param orderId
+                     * @param product
+                     * @returns {*}
+                     */
                     addOrderProductRow: function(orderId, product){
                         product.orderId = orderId;
                         return RestFactory.request(API.ADD_ORDER_PRODUCT_ROW, 'POST', product);
                     },
-
+                    /**
+                     *
+                     * @param id
+                     * @returns {*}
+                     */
                     getProducts: function(id){
                         console.log("getProducts",id);
                         return RestFactory.request(API.LOAD_PRODUCTS+id)
-                    }
+                    },
+                    /**
+                     *
+                     * @param sizes
+                     * @returns {Array}
+                     */
+                    sizeCheck:function(sizes){
 
+                        var array=[],
+                            length=sizes.length;
+
+                        for(var i=0;i<length;i++){
+
+                            if(_.has(sizes[i],"count") && _.has(sizes[i],"size")){
+
+                                if(sizes[i].count!="" && sizes[i].count!=0 && sizes[i].size!=""){
+                                    array.push(sizes[i]);
+                                }
+
+                            }
+                        }
+
+                        return array;
+                    },
+                    /**
+                     *
+                     * @param data
+                     * @returns {*}
+                     */
+                    update:function(data){
+
+                        return RestFactory.request(API.UPDATE,"PUT",data);
+                    },
+
+                    createPdf:function(id){
+
+                        return RestFactory.request(API.CREATE_PDF+id);
+                    }
 
                 }
             }]);
