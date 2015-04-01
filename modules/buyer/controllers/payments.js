@@ -32,14 +32,15 @@ app.controller('PaymentListController',
 			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				{ name: "id"			,	title: 'ID' },
-				{ name: "orderId"		, 	title: 'Order' },
-				{ name: "factory"		, 	title: 'Factory' },
-				{ name: "date"			, 	title: 'Payment date' },
-				{ name: "method"		, 	title: 'Payment method'},
-				{ name:"cashierOfficeId",	title:"CashierOffice"},
-				{ name: "amount"		, 	title: 'Payment' },
-				{ name: "refund"		, 	title: 'Refund' }
+				{ name: "id"				,	title: 'ID' },
+				{ name: "orderId"			, 	title: 'Order' },
+				{ name: "factory"			, 	title: 'Factory' },
+				{ name: "date"				, 	title: 'Payment date' },
+				{ name: "method"			, 	title: 'Payment method'},
+				{ name:"cashierOfficeId"	,	title:"CashierOffice"},
+				{ name:"cashierOfficeName"	,	title:"CashierOffice"},
+				{ name: "amount"			, 	title: 'Payment' },
+				{ name: "refund"			, 	title: 'Refund' }
 			];
 
 			function getPayments(){
@@ -76,10 +77,13 @@ app.controller('PaymentListController',
 					}
 					$scope.cashierOfficies=response;
 					console.log($scope.cashierOfficies);
+
+					$scope.payments=PaymentService.parseCashierOffice($scope.payments,$scope.cashierOfficies);
+
+
 					angular.forEach($scope.cashierOfficies,function(value){
 						if(value.id==$scope.userCO){
 							$scope.userCO=value;
-							console.log($scope.userCO);
 							return;
 						}
 					})
@@ -303,11 +307,19 @@ app.controller("PaymentOrderController",[
 	"messageCenterService",
 
 	function ($scope, $rootScope, $modal, $location, $route,$routeParams,PaymentService,messageCenterService){
-		console.log($routeParams);
+		/**
+		 * orderId
+		 */
 		$scope.orderId=$routeParams.id;
-
+		/**
+		 *
+		 * @type {string}
+		 */
 		$rootScope.documentTitle="Payments for order #"+$scope.orderId;
-
+		/**
+		 *
+		 * @type {{name: string, title: string}[]}
+		 */
 		$scope.tableHeader = [
 			{ name: "id"			,	title: 'ID' },
 			{ name: "factory"		, 	title: 'Factory' },
@@ -317,7 +329,9 @@ app.controller("PaymentOrderController",[
 			{ name: "amount"		, 	title: 'Payment' },
 			{ name: "refund"		, 	title: 'Refund' }
 		];
-
+		/**
+		 * get Order Payments
+		 */
 		PaymentService.getOrderPayments($scope.orderId).then(
 			function(response){
 				console.log("orderpayment",response);
@@ -330,8 +344,27 @@ app.controller("PaymentOrderController",[
 				}
 			}
 		);
+		/**
+		 * get Cashier Officeis
+		 */
+		PaymentService. getCashierOfficies().then(
+			function(response){
+
+				if(_.isString(response)){
+					messageCenterService.add("danger","Error while loading offices",{timeout:3000});
+					return
+				}
+				$scope.cashierOfficies=response;
+
+				$scope.orderPayments=PaymentService.parseCashierOffice($scope.orderPayments,$scope.cashierOfficies);
+
+			}
+		);
 
 
+		/**
+		 * return to payments index page
+		 */
 		$scope.back=function(){
 			$location.path("buyer/payments")
 		}

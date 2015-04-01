@@ -71,6 +71,35 @@
                 },
                 /**
                  *
+                 * @param payments
+                 * @param officies
+                 * @returns {Array}
+                 */
+                parseCashierOffice:function(payments,officies){
+
+                    var result=[];
+
+                    angular.forEach(payments,function(item){
+
+                        angular.forEach(officies,function(value){
+
+                            if(value.id==item.cashierOfficeId){
+
+                                item.cashierOfficeName=value.name;
+
+                                return;
+                            }
+                        });
+
+                        this.push(item);
+
+                    },result);
+
+                    return result;
+                },
+
+                /**
+                 *
                  * @returns {*}
                  */
                 getStatuses: function(){
