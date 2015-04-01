@@ -12,7 +12,7 @@
                     <p class="text-muted mb-0">Status: {{bestseller.status}}</p>
                 </div>
                 <div class="col-sm-8">
-                    <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> Save</div>
+                    <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="saveBestseller()"><i class="fa fa-plus"></i> Save</div>
                     <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="addNewItems()"><span class="fa fa-file-o"> Create PDF</span></button>
                     <button ng-show="bestseller.orderId" class="btn btn-success" ng-click="openOrder(order)"><span class="fa"> Open order</span></button>
                     <button ng-hide="bestseller.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
@@ -61,7 +61,7 @@
                         <div class="pa-md">
                             <form role="form">
                                 <div class="form-group">
-                                    <textarea class="form-control" placeholder="Add notes to product" rows="3"></textarea>
+                                    <textarea class="form-control" placeholder="Add notes to product" rows="3">{{bestseller.notes}}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -141,9 +141,9 @@
                     <tr ng-repeat="item in bestsellerHistory">
                         {{item}}
                         <td>
-                            <a ng-href="/buyer/bestseller/item/{{item.id}}" target="_blank">{{item.orderDate}}</a>
+                            <a ng-href="/buyer/bestsellers/item/{{item.id}}" target="_blank">{{item.orderDate}}</a>
                         </td>
-                        <td><a ng-href="/buyer/orders/id/{{order.id}}">{{item.orderId}}</a></td>
+                        <td><a ng-href="/buyer/orders/id/{{item.orderId}}">{{item.orderId}}</a></td>
                         <td>
                             <!--<div ng-repeat="(size, count) in data.sizes">-->
                             <div ng-if="item.size!=undefined && item.count!=undefined">
