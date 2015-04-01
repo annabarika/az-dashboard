@@ -8,7 +8,7 @@
     /**
      * Factory for
      */
-    app.factory("tableFactory", ["$filter","$rootScope",function($filter,$rootScope){
+    app.factory("tableFactory", ["$filter","$rootScope","$location",function($filter,$rootScope,$location){
 
         var service={};
 
@@ -31,6 +31,11 @@
         service.prepareData = function(header, data){
 
         };
+
+        service.location=function(path){
+            $location.path(path);
+        };
+
         return service;
     }]);
     app.filter('orderByEx', orderByExFilter);
@@ -120,13 +125,17 @@
                 ,buttonAction:"&"
                 ,caption:"@"
                 ,cellsButton:"&"
+                ,useBadge:"@"
+                ,path:"@"
             },
 
             link:function($scope){
 
-                $scope.sortBy = function() {
+                if($scope.useBadge==undefined){
+                    $scope.useBadge=false;
+                }
 
-                    //console.log($scope.dataheader);
+                $scope.sortBy = function() {
 
                     var order = [];
                     angular.forEach($scope.dataheader, function(h){
@@ -216,11 +225,17 @@
                     if($scope.buttonAction){
                         $scope.buttonAction();
                     }
-                }
+                };
 
                 $scope.addItem=function(row){
                     tableFactory.getRow(row);
                     $scope.cellsButton();
+                };
+                $scope.go=function(path){
+                    event.stopPropagation();
+                    var fullpath=$scope.path+path;
+                    console.log(fullpath);
+                    tableFactory.location(fullpath);
                 }
             }
 

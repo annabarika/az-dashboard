@@ -28,13 +28,15 @@
                                 ng-click="sortReorder(headerRow.name, $event)"
                                 ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
                             </th>
-                            <!--<th ng-repeat="th in toolbarInputs"></th>-->
                             <th ng-repeat="th in toolbarButtons"></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() track by $index" ng-class="row.active">
-                            <td>{{$index+1}}</td>
+
+                            <td class="status_{{row.status}}">
+                                {{$index+1}}
+                            </td>
 
                             <td ng-repeat="headerRow in dataheader" ng-click="edit_row(row)">
 
@@ -46,15 +48,28 @@
                                     </div>
                                 </div>
 
+                                <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">
+                                    <span ng-if="headerRow.name!='orderId'">{{row[headerRow.name]}}
+                                        <span ng-if="headerRow.name=='amount'">
+                                            {{row.currency}}
+                                        </span>
+                                    </span>
 
-
-                                <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">{{row[headerRow.name]}}</div>
+                                    <span ng-if="headerRow.name=='orderId'">
+                                        <a href="" ng-if="path!=undefined" ng-click="go(row[headerRow.name])">{{row[headerRow.name]}}</a>
+                                        <span ng-if="path==undefined">{{row[headerRow.name]}}</span>
+                                    </span>
+                                </div>
 
                                 <ul class="media-list mb-sm sm" ng-if="headerRow.name=='size_list'">
                                     <li class="media" ng-repeat="item in row.size_list">
                                         <p class="mt-5">{{item.value}}</p>
                                     </li>
-                                    <li><button class="btn btn-success" ng-click="addItem(row)"><i class="fa fa-plus"></i> {{headerRow.title}}</button></li>
+                                    <li>
+                                        <button class="btn btn-success" ng-click="addItem(row)"><i class="fa fa-plus"></i>
+                                            {{headerRow.title}}
+                                        </button>
+                                    </li>
                                 </ul>
 
                                 <ul class="media-list mb-sm sm" ng-if="headerRow.name=='count_list'">

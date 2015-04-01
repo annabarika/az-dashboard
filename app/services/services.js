@@ -3,5 +3,9 @@ angular.module("services",
     "services.rest",
     "services.cargo",
     "services.collections",
-    "services.fileReader"
+    "services.bestsellers",
+    "services.payments",
+    "services.fileReader",
+    "services.authentication",
+    "services.navigation"
 ]);

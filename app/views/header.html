@@ -2,6 +2,15 @@
 
     <!-- start: left nav -->
 
+    <div class="col-sm-3">
+        <label>Hello, {{username}}</label>
+        <br>
+        <a ng-href="/login" ng-click="logout()">logoff</a>
+    </div>
+    <!--<div ng-if="!Auth.isLoggedIn()">
+        <a ng-href="/login">Login</a>
+    </div>-->
+
     <ul class="nav navbar-nav navbar-left">
 
         <li class="visible-xs" ng-init="index=0; classes=['app-sidebar', 'sidebar-open-ltr app-sidebar sidebar-left']" ng-click="index = index + 1">
@@ -32,7 +41,7 @@
 
     <!-- start: navbar form -->
 
-    <form class="navbar-form navbar-left ng-pristine ng-valid" name="form-search">
+    <form class="navbar-form navbar-left ng-valid" name="form-search">
 
         <div class="form-group">
 

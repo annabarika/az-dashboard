@@ -10,14 +10,8 @@
                     $parse(attrs.fileInput)
                         .assign(scope,elm[0].files);
                     scope.$apply();
-                    console.log("elm",elm)
+
                 });
-
-                /*el.bind("change", function(e){
-
-                    $scope.file = (e.srcElement || e.target).files[0];
-                    $scope.getFile();
-                })*/
             }
         }
     }]);

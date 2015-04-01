@@ -38,15 +38,16 @@
                             item-label="icon name maker"
                             tick-property="ticked"
                             max-labels="2"
+                            max-height="250px"
                             >
                     </multi-select>
                 </div>
             </div>
-            <div class="col-md-5 col-sm-12"  ng-controller="DatepickerCtrl">
+            <!--<div class="col-md-5 col-sm-12">
                 <div class="bs-docs-section">
                     <form name="datepickerForm" class="form-inline" role="form">
 
-                        <!-- Date range example -->
+                        &lt;!&ndash; Date range example &ndash;&gt;
                         <div class="form-group">
                             <div class="col-md-2 col-sm-2">
                                 <label class="control-label">Date dange:</label>
@@ -73,6 +74,13 @@
                         </div>
                     </form>
                 </div>
+            </div>-->
+
+            <div class="col-sm-5">
+                <div class="col-sm-4 va-m">
+                    <input date-range-picker class="form-control date-picker" placeholder="Select date range" type="text"
+                           ng-model="resultData.createDate" />
+                </div>
             </div>
         </div>
     </div>
@@ -85,7 +93,7 @@
         edit="edit()"
         row="row"
         toolbar-battons="buttons"
-        button-action="buttonAction()"
+        use-badge="true"
         >
 </widget-table>
 

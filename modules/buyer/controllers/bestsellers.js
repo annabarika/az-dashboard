@@ -1,194 +1,249 @@
-var app = angular.module("modules.buyer.bestsellers", [
+// Create module @require angucomple for remote search
+var app = angular.module("modules.buyer.bestsellers", ['angucomplete']);
 
-]);
-app.controller('BestsellersController',
-    [
-        '$scope', '$rootScope', '$route', '$location', 'RestFactory',
+// Bestseller's representation
+app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
+    function ($scope, $rootScope, $modal, BestsellersService, messageCenterService, $location) {
 
-        function($scope, $rootScope, $route, $location, RestFactory) {
-            $scope.$route = $route;
-            $scope.$location = $location;
+        // Document header title
+        $rootScope.documentTitle = "Bestsellers";
 
-            $scope.calendar = {};
-            $rootScope.bestsellers = [];
-            $rootScope.hideHeader = 'hideHeader';
-         
+        // Get current state of date
+        $scope.currentYear  = moment().year();
+        $scope.currentMonth = moment.utc(new Date()).format("MMMM");
 
-            $rootScope.documentTitle = "Bestsellers calendar";
+        // Get months
+        $scope.months = BestsellersService.getMonths();
 
-            $scope.loadCalendar = function(){
+        // Get bestsellers data
+        $scope.bestsellers = {};
 
-                var url = config.API.host + "bestseller/load/status/1";
+        BestsellersService.getCalendarData('ordered', $scope.currentYear).then(function(response) {
+            $scope.bestsellers.ordered = BestsellersService.resolveCalendarData(response);
+        });
 
-                RestFactory.request(url)
-                    .then(function (response) {
-                        for( var i in response ){
-                            var dateArray = response[i].orderDate.split('-');
-                            if( $scope.calendar[dateArray[0]] == undefined){
-                                $scope.calendar[dateArray[0]] = [];
-                            }
-                            var month = parseInt(dateArray[1]);
-                            if( $scope.calendar[dateArray[0]][month] == undefined){
-                                $scope.calendar[dateArray[0]][month] = { count: 1, name: config.monthNames[month-1] };
-                            }
-                            $scope.calendar[dateArray[0]][month].count++;
-                        }
+        BestsellersService.getCalendarData('total', $scope.currentYear).then(function(response) {
+            $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
+        });
 
-                        // Filling calendar width months
-                        for( var y in $scope.calendar ){
-                            for( var month = 1; month <= 12; month++){
-                                if($scope.calendar[y][month] == undefined){
-                                    $scope.calendar[y][month] = { count:0, name: config.monthNames[month-1] };
-                                }
-                            }
-                        }
-                    },
-                    function (error) {
-                        console.log(error);
-                    });
-            };
+        /**
+         * Select year navigation
+         *
+         * @param int index
+         */
+        $scope.changeYear = function (index) {
+            $scope.currentYear = $scope.currentYear + parseInt(index);
 
-            $scope.showMonth = function(year, month) {
-                var startDate = year + '-' + month + '-01';
-                var endDate = year + '-' + month + '-31';
-                var url = config.API.host + "bestseller/load/orderDate/" + startDate + ',' + endDate;
-                $rootScope.selectedDate = { year: year, month: config.monthNames[month-1] };
+            BestsellersService.getCalendarData('ordered', $scope.currentYear).then(function(response) {
+                $scope.bestsellers.ordered = BestsellersService.resolveCalendarData(response);
+            });
 
-                RestFactory.request(url)
-                    .then(function (response) {
-                        var productId = [];
-                        $rootScope.bestsellers = response;
+            BestsellersService.getCalendarData('total', $scope.currentYear).then(function(response) {
+                $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
+            });
+        };
 
-                        for( var i in response){
-                            productId.push(response[i].id);
-                        }
+        /**
+         * Select month navigation
+         *
+         * @param int monthISO eg. 02
+         */
+        $scope.selectMonth = function (type, monthISO) {
 
-                        var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + productId.join(',');
-                        RestFactory.request(productsLoadUrl)
-                            .then(function (response) {
-                                for( var i in $rootScope.bestsellers ){
-                                    productId = $rootScope.bestsellers[i].productId;
-                                    $rootScope.bestsellers[i].product = response[productId];
-                                }
-                                //$scope.$apply();
+            // get mont name eg. February
+            $scope.currentMonth = BestsellersService.getMonths(monthISO);
 
-                                console.log(response);
-                                console.log($scope);
-                            });
+            BestsellersService.getMonthDetailed(type, $scope.currentYear, monthISO).then(function(response) {
 
-                    });
-            };
-
-            $scope.loadProducts = function(id){
-                var productsLoadUrl = config.API.host + "bestseller/load-detailed/id/" + id;
-                RestFactory.request(productsLoadUrl)
-                    .then(function (response) {
-                        for( var i in response) {
-                            $rootScope.products = response;
-                        }
-                        //$scope.$apply();
-
-                        console.log(response);
-                        console.log($scope);
-                    });
-
-            };
-
-            $scope.loadCalendar();
-        }
-    ]);
-
-app.controller('BestsellerItemController',
-    [
-        '$scope', '$rootScope', '$route', '$location', 'RestFactory',
-
-        function($scope, $rootScope, $route, $location, RestFactory){
-            $scope.$route = $route;
-            $scope.$location = $location;
-
-            $rootScope.documentTitle = "Item";
-
-
-            $scope.load = function() {
-                var url = config.API.host + "bestseller/get/id/" + $route.current.params.bestsellerId;
-
-                RestFactory.request(url)
-                    .then(function (response) {
-
-                        $scope.product = response.product;
-                        $scope.bestseller = response.bestseller;
-                        $scope.order = response.order;
-                        $scope.factory = response.factory;
-
-                        $scope.sizes = {add: [{size: 'XS', count: 1}], L: {count: 2}, M: {count: 3}};
-                        $rootScope.documentTitle = $scope.product.brand + ' (' + $scope.product.articul + ')';
-
-                    },
-                    function (error) {
-                        console.log(error);
-                    });
-            };
-
-            $scope.load();
-
-            $scope.createOrder = function( sizes ){
-                // Preparing order rows
-                //console.log( Object.keys(sizes).length );
-                if( Object.keys(sizes).length == 0 ) return false;
-
-                var products = [];
-                var size = '';
-                if( sizes.add ){
-                    for( var i in sizes.add ){
-                        size = sizes.add[i].size;
-                        sizes[size] = { count : sizes.add[i].count };
-                    }
+                if(type == 'ordered') {
+                    $scope.bestsellersOrdered = response;
                 }
-
-
-                for( var size in sizes){
-                    if( size != 'add' ){
-                        products.push({
-                            size: size,
-                            productId: $scope.product.id,
-                            count: sizes[size].count,
-                            price: $scope.product.price,
-                            factoryArticul: $scope.product.factoryArticul,
-                            bestsellerId: $scope.$route.current.params.bestsellerId
-                        });
-                    }
+                else {
+                    $scope.bestsellersTotal = response;
                 }
-                // Creating order
-                var createOrderUrl = config.API.host+"order/create";
-                var order = {
-                    factoryId: $scope.product.factoryId,
-                    buyerId: 328,
-                    type: 1
-                };
+            });
+        };
 
-                RestFactory.request(createOrderUrl, 'POST', order)
-                    .then(function(response){
-                        if(response.id){
-                            var orderId = response.id;
-                            var addProductUrl = config.API.host+"order/create-bestseller-row";
-                            // Adding items to order
-                            for( i in products){
-                                products[i].orderId = orderId;
-                                RestFactory.request(addProductUrl, 'POST', products[i])
-                                    .then(function(response){
-                                        //console.log(response);
-                                        if( response.id ){
-                                            //console.log(i);
-                                            products.splice(0, 1);
-                                            if(products.length == 0){
-                                                $scope.load();
-                                            }
-                                            //console.log(products.length);
-                                        }
-                                    });
+        /**
+         * Get bestsellers by choosed selected date
+         * @param date
+         */
+        $scope.selectDate = function(date) {
 
-                            }
+            $scope.currentYear = moment(date).year();
+
+            BestsellersService.getDayDetailed('ordered', date).then(function(response) {
+                $scope.bestsellersOrdered = response;
+
+                BestsellersService.getDayDetailed('total', date).then(function(response) {
+                    $scope.bestsellersTotal = response;
+                });
+            });
+        };
+
+        /**
+         * Create bestseller
+         * @uses autocomplete search
+         */
+        $scope.createBestseller = function(product) {
+
+            if(_.isUndefined(product)) {
+
+                $rootScope.modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/bestsellers/create.html",
+                    controller: 'BestsellersAddController',
+                    backdrop:'static',
+                    size: 'sm',
+                    resolve :  {
+                        searchUri : function() {
+                            // resolve the search uri to autocomplete directive
+                            return BestsellersService.searchArticulUri()
                         }
-                    });
+                    }
+                });
             }
-        }]);
+            else {
+                if('originalObject' in product) {
+                    BestsellersService.addToBestseller(product.originalObject).then(function(response) {
+
+                        if(response.id) {
+
+                            $rootScope.modalInstance.close();
+                            $location.path('/buyer/bestsellers/item/'+response.id)
+                        }
+                        else {
+                            messageCenterService.add('danger', 'Product does not created. Undefined error', {timeout: 3000});
+                        }
+                    });
+                }
+                else {
+                    messageCenterService.add('danger', 'Try to add unfounded product', {timeout: 3000});
+                }
+            }
+        };
+
+        /**
+         * Datepickers functions
+         */
+
+        $scope.date = new Date();
+
+        $scope.clear = function () {
+            $scope.date = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+        };
+
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        };
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+        $scope.format = 'EEE MMM dd yyyy HH:mm:ss Z';
+    }
+]);
+
+// Bestseller's add item
+app.controller('BestsellersAddController', function ($scope, $rootScope, searchUri) {
+        // provide search action to autocomplete
+        $scope.searchUri = searchUri;
+    }
+);
+
+/**
+ * Bestseller item management
+ */
+app.controller('BestsellerItemController',[
+    '$scope',
+    '$rootScope',
+    "$modal",
+    "$location",
+    '$routeParams',
+    'BestsellersService',
+    'messageCenterService',
+    function ($scope, $rootScope, $modal, $location, $routeParams, BestsellersService, messageCenterService){
+
+        $scope.bestsellerHistory=[];
+
+
+
+        BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
+
+            if(response.bestseller) {
+
+                $scope.bestseller = response.bestseller;
+				$scope.factory = response.factory;
+				$scope.product = response.product;
+                $scope.order = response.order;
+
+                $scope.sizes = {add: []};
+
+				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
+
+                BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
+                  /*  console.log("bests history",response);*/
+                    $scope.tmp = response;
+                    angular.forEach( $scope.tmp,function(item){
+                        BestsellersService.getProducts(item.orderId).then(
+                            function(response){
+                                /*console.log(i,"products",response);*/
+                                if(_.isArray(response) && response.length!=0){
+
+                                    item['size']=response[0].size;
+                                    item['count']=response[0].count;
+
+                                }
+                                $scope.bestsellerHistory.push(item);
+                                console.log( $scope.bestsellerHistory);
+                            }
+                        )
+                    });
+                });
+
+                console.log('Bestseller', response);
+            }
+            else {
+                messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
+            }
+        });
+
+
+
+
+        $scope.openOrder = function(order){
+            $location.path('/buyer/orders/id/'+order.id)
+        };
+
+        $scope.createOrder = function( sizes ){
+
+            if( Object.keys(sizes).length == 0 ) return false;
+
+            BestsellersService.createOrder( $scope.product.factoryId).then(function(response){
+                if(response.id){
+                    var orderId = response.id;
+                    var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, sizes);
+                    // Adding items to order
+                    for( i in products){
+                        BestsellersService.addOrderProductRow(orderId, products[i])
+                            .then(function(response){
+                                //console.log(response);
+                                if( response.id ){
+                                    products.splice(0, 1);
+                                    if(products.length == 0){
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                    }
+
+                }
+            });
+        }
+    }]);

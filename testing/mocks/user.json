@@ -1,0 +1,29 @@
+[
+    {
+        "id": "1",
+        "email": "kostyanuch87@gmail.com",
+        "name": "developer",
+        "type": "developer",
+        "password":"123",
+        "cashierOffice":"1"
+    },
+    {
+        "id": "2",
+        "email": "qwerty@com",
+        "name": "admin",
+        "type": "admin",
+        "password":"123",
+        "cashierOffice":"1",
+        "settings": {
+            "cashierOffice":": 1"
+        }
+    },
+    {
+        "id": "3",
+        "email": "kostyanuch87@gmail.com",
+        "name": "user",
+        "type": "user",
+        "password":"123",
+        "cashierOffice":"1"
+    }
+]

@@ -5,13 +5,12 @@
         <h4 class="modal-title" id="myModalLabel">Add Size</h4>
     </div>
     <div class="modal-body">
-        <!--<input type="text" placeholder="size" class="form-control" ng-model="new_size"/>-->
         <select class="form-control" data-ng-model="new_size"
                 ng-options="opt as opt.name for opt in all_sizes">
             <option value="">Choose size</option>
         </select>
 
-        <input type="text" placeholder="count" class="form-control" ng-model="count"/>
+        <input type="text" placeholder="count" class="form-control" ng-model="count" ng-init="count=0" />
     </div>
     <!--footer-->
     <div class="modal-footer">

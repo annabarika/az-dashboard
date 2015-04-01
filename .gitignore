@@ -1,9 +1,7 @@
 .idea
 npm-debug.log
 logs
-
-vendor
-vendor-dist
-
+tmp
+f
 api/config.php
 app/config.js

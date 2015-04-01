@@ -9,11 +9,24 @@
                     <multi-select
                             default-label="Factory filter"
                             input-model="factories"
-                            output-model="filter"
+                            output-model="filter.factory"
                             button-label="icon name"
                             item-label="icon name maker"
                             tick-property="ticked"
-                            max-labels="2"
+                            max-labels="1"
+                            max-height="250px"
+                            >
+                    </multi-select>
+                </div>
+                <div class="col-sm-4 va-m">
+                    <multi-select
+                            default-label="Status filter"
+                            input-model="statuses"
+                            output-model="filter.status"
+                            button-label="icon name"
+                            item-label="icon name maker"
+                            tick-property="ticked"
+                            max-labels="1"
                             >
                     </multi-select>
                 </div>
@@ -28,5 +41,6 @@
         row="row"
         toolbar-battons="buttons"
         button-action="buttonAction()"
+        path="/buyer/orders/id/"
         >
 </widget-table>

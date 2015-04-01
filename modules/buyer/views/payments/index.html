@@ -1,15 +1,55 @@
 <div class="page-header">
     <div class="box-layout">
         <div class="row mb-xs">
-            <div class="col-sm-1">
+            <div class="col-sm-3">
                 <div class="btn btn-info" ng-click="addNewPayment()"><i class="fa fa-plus"></i> New payment</div>
+                <div class="btn btn-default" ng-hide="userType!='admin'" ng-click="addNewCashOffice()"><i class="fa fa-plus"></i> New cashier office</div>
+            </div>
+
+            <div class=" col-sm-2">
+                <multi-select
+                        default-label="Status filter"
+                        input-model="status"
+                        output-model="resultData.status"
+                        button-label="icon name"
+                        item-label="icon name maker"
+                        tick-property="ticked"
+                        max-labels="1"
+                        >
+                </multi-select>
+            </div>
+            <div class=" col-sm-2">
+                <multi-select
+                        default-label="CashierOffice filter"
+                        input-model="cashierOfficies"
+                        output-model="resultData.cashierOffice"
+                        button-label="icon name"
+                        item-label="icon name maker"
+                        tick-property="ticked"
+                        max-labels="1"
+                        >
+                </multi-select>
+            </div>
+            <div class=" col-sm-2">
+                <multi-select
+                        default-label="Type filter"
+                        input-model="paymentType"
+                        output-model="resultData.type"
+                        button-label="icon name"
+                        item-label="icon name maker"
+                        tick-property="ticked"
+                        max-labels="1"
+                        selection-mode="single"
+                        >
+                </multi-select>
             </div>
         </div>
+
     </div>
 </div>
 
 <widget-table
-        datarows="data"
+        datarows="payments"
         dataheader="tableHeader"
         edit="edit()"
         row="row"

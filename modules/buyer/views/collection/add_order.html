@@ -5,7 +5,7 @@
         <h4 class="modal-title" id="myModalLabel">Add to Order</h4>
     </div>
     <div class="modal-body">
-        <h4>Factory #{{order.collection.factoryId}} "{{order.collection.factoryName}}"</h4>
+        <h4>Factory #{{order.collection.factoryId}} "{{order.collection.name}}"</h4>
         <h4>Buyer {{order.buyerId}}</h4>
         <hr>
         <select class="form-control" data-ng-model="order.type"
@@ -16,7 +16,7 @@
     </div>
     <!--footer-->
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="checkOut(order)">Checkout</button>
+        <button type="button" class="btn btn-primary" ng-click="checkOut(order, position)">Checkout</button>
         <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
     </div>
 </div>
