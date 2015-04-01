@@ -231,6 +231,14 @@ app.controller('BestsellerItemController',[
 
                 function(response){
                     console.log(response);
+                    if (_.has(response,'html'))
+                    {
+                        window.location=response.html;
+                        target="_blank";
+                    }
+                    else{
+                        messageCenterService.add("danger","Error: pdf is not created",{timeout:3000});
+                    }
                 }
             )
 

@@ -20,8 +20,8 @@
             "ADD_ORDER_PRODUCT_ROW" : config.API.host + "order/create-bestseller-row",
 
             "LOAD_PRODUCTS"         : config.API.host + "order/get-rows/id/",
-            "UPDATE"                : config.API.host + "/bestseller/update",
-            "CREATE_PDF"            : config.API.host + "/order/send/id/"
+            "UPDATE"                : config.API.host + "bestseller/update",
+            "CREATE_PDF"            : config.API.host + "order/send/id/"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
