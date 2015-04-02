@@ -11,7 +11,8 @@
         "modules.buyer",
         'MessageCenterModule',
         "ang-drag-drop",
-        "ngSanitize"
+        "ngSanitize",
+        "countTo"
     ])
 
        /* .run(function (Authentication,Application) {

@@ -420,12 +420,13 @@
                 showModal : function(path,size) {
 
                     var TEMPLATE={
-                        NEW    :   "/modules/buyer/views/collection/choose_factory.html",
-                        CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
-                        ADDSIZE:   "/modules/buyer/views/collection/add_size.html",
-                        ADDORDER:   "/modules/buyer/views/collection/add_order.html",
-                        CANCEL_COLLECTION :   "/modules/buyer/views/collection/ask_collection.html",
-                        CANCEL_PRODUCT :   "/modules/buyer/views/collection/ask_product.html"
+                        NEW                 :   "/modules/buyer/views/collection/choose_factory.html",
+                        CHOOSE              :   "/modules/buyer/views/collection/choose_collection.html",
+                        ADDSIZE             :   "/modules/buyer/views/collection/add_size.html",
+                        ADDORDER            :   "/modules/buyer/views/collection/add_order.html",
+                        CANCEL_COLLECTION   :   "/modules/buyer/views/collection/ask_collection.html",
+                        CANCEL_PRODUCT      :   "/modules/buyer/views/collection/ask_product.html",
+                        PROGRESS            :   "/modules/buyer/views/collection/progress_to_upload.html"
                     };
 
                     var s;
@@ -434,7 +435,8 @@
                     var modal= $modal.open({
                         templateUrl : TEMPLATE[path],
                         controller : "ModalController",
-                        size:s
+                        size:s,
+                        backdrop:'static'
                     });
                     return modal;
                 },

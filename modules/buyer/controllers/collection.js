@@ -143,15 +143,16 @@ console.log(response);
 /**
  * Upload photos controller
  */
-app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal",
-    function ($scope, $rootScope, $location, CollectionService, $modal) {
+app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal","$timeout","messageCenterService",
+    function ($scope, $rootScope, $location, CollectionService, $modal,$timeout,messageCenterService) {
         var fileinput;
         $scope.$watch("photo", function (value) {
+            console.log($scope.photo);
             $rootScope.photo = value;
         });
 
         if ($rootScope.collection == undefined) {
-            $location.path("/buyer/collection");
+           // $location.path("/buyer/collection");
         }
         else {
             $rootScope.documentTitle = "Collection name: " + $rootScope.collection.name;
@@ -224,21 +225,72 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
          * include templates and upload photos,products
          */
         $scope.nextStep = function () {
-            //show error window
 
             if ($rootScope.photo == undefined) {
 
-                $rootScope.message = "You are forgot upload photo";
-                $modal.open({
-                    templateUrl: '/app/views/error.html',
-                    controller: 'BsAlertCtrl',
-                    size: 'lg'
-                });
+                messageCenterService.add("danger","You are forgot upload photo",{timeout:3000});
+
                 return;
             }
 
             if ($scope.step == 0) {
-                CollectionService.uploadFiles($rootScope.photo).success(function (data) {
+                /*console.log($rootScope.photo.length);
+                $scope.photoCount=$rootScope.photo.length;
+
+                var amt = $scope.photoCount;
+
+                $scope.countTo = amt;
+                $scope.countFrom = 0;
+
+                $timeout(function(){
+                    $scope.progressValue = amt;
+                }, 200);*/
+
+                //CollectionService.showModal("PROGRESS","lg");
+
+                var modalInstance=$modal.open({
+                        templateUrl: "/modules/buyer/views/collection/progress_to_upload.html",
+                        controller: function($scope,CollectionService,photo){
+                            $scope.photo=photo;
+
+                            $scope.max=$scope.photo.length;
+                            console.log($scope.max);
+
+                            $scope.dynamic=0;
+
+
+                            for ( var image in $scope.photo){
+
+                                if(parseInt(image)<$scope.max){
+                                    console.log( typeof parseInt(image), image, $scope.photo[image]);
+                                }
+
+
+                            }
+
+
+
+                            $scope.cancelUpload=function(){
+                                modalInstance.dismiss();
+                            }
+
+
+                        },
+                        size:"lg",
+                        backdrop:"static",
+                        resolve:{
+                            photo:function(){
+                                return $scope.photo
+                            }
+                        }
+                    }
+                );
+
+
+
+
+
+                /*CollectionService.uploadFiles($rootScope.photo).success(function (data) {
                     if (_.isArray(data)) {
                         $scope.items = [];
 
@@ -251,7 +303,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                         $scope.imagePath = CollectionService.getImagePath();
                         $scope.step++;
                     }
-                });
+                });*/
             }
 
             if ($scope.step == 1) {
@@ -287,6 +339,13 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 $scope.step = 0;
             }
         };
+
+
+        /**
+         * test progress bar
+         */
+
+
 
     }]);
 
