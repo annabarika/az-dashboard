@@ -147,7 +147,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
     function ($scope, $rootScope, $location, CollectionService, $modal,$timeout,messageCenterService) {
         var fileinput;
         $scope.$watch("photo", function (value) {
-            console.log($scope.photo);
+
             $rootScope.photo = value;
         });
 
@@ -234,39 +234,73 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             }
 
             if ($scope.step == 0) {
-                /*console.log($rootScope.photo.length);
-                $scope.photoCount=$rootScope.photo.length;
-
-                var amt = $scope.photoCount;
-
-                $scope.countTo = amt;
-                $scope.countFrom = 0;
-
-                $timeout(function(){
-                    $scope.progressValue = amt;
-                }, 200);*/
-
-                //CollectionService.showModal("PROGRESS","lg");
 
                 var modalInstance=$modal.open({
                         templateUrl: "/modules/buyer/views/collection/progress_to_upload.html",
-                        controller: function($scope,CollectionService,photo){
+                        controller: function($scope,CollectionService,photo,$timeout){
                             $scope.photo=photo;
 
                             $scope.max=$scope.photo.length;
-                            console.log($scope.max);
 
                             $scope.dynamic=0;
 
+                            $scope.items = [];
 
-                            for ( var image in $scope.photo){
-
-                                if(parseInt(image)<$scope.max){
-                                    console.log( typeof parseInt(image), image, $scope.photo[image]);
-                                }
-
-
+                            var keyArray=[],
+                                image;
+                            for (var key in $scope.photo){
+                                if(key!='length' && key!='item')
+                                keyArray.push(key);
                             }
+                            console.log(keyArray);
+
+                            _Upload(0);
+
+                            function _Upload(i){
+                                image=$scope.photo[keyArray[i]];
+                                console.log(image);
+
+                                CollectionService.uploadFiles(image).success(function (data) {
+
+                                    if (_.isArray(data)) {
+
+                                        console.log("data upload",data);
+
+                                        $scope.items.push({
+                                            photos:data
+                                        });
+
+                                        console.log("items array",$scope.items);
+
+                                        $timeout(function(){
+
+                                            $scope.dynamic ++;
+
+                                        }, 200);
+
+                                        i++;
+
+                                        if(i<$scope.max){
+
+                                            _Upload(i);
+
+                                        }else{
+                                            if($scope.items.length==$scope.max){
+
+                                                $timeout(function(){
+
+                                                    modalInstance.close($scope.items);
+
+                                                }, 1000);
+                                            }
+                                        }
+
+
+
+                                    }
+                                });
+                            }
+
 
 
 
@@ -283,8 +317,15 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                 return $scope.photo
                             }
                         }
-                    }
-                );
+                });
+                modalInstance.result.then(function(array){
+                    $scope.items=array;
+
+                    $scope.imagePath = CollectionService.getImagePath();
+
+                    console.log("result",$scope.items, $scope.imagePath);
+                    $scope.step++;
+                });
 
 
 

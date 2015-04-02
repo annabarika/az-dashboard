@@ -460,14 +460,14 @@
                  * @param photo
                  * @returns {*}
                  */
-                uploadFiles : function(photo) {
+                uploadFiles : function(file) {
 
                     var fd=new FormData();
 
-                    angular.forEach(photo,function(file){
+                    /*angular.forEach(files,function(file){
                         fd.append('file[]',file);
-
-                    });
+                    });*/
+                    fd.append('file[]',file);
 
                     return $http.post(PATHC.LOADFILES,fd,
                         {

@@ -35,7 +35,6 @@ try {
                         throw new Exception('Could not move file to '.$file.' see '.__FILE__);
                     }
                 }
-
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].'/catalogue/loadfiles');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
