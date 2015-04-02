@@ -152,7 +152,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
 
         if ($rootScope.collection == undefined) {
-           // $location.path("/buyer/collection");
+            $location.path("/buyer/collection");
         }
         else {
             $rootScope.documentTitle = "Collection name: " + $rootScope.collection.name;
@@ -194,10 +194,23 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             array.push($data);
         };
 
-        $scope.upload = function () {
+        $scope.upload = function (flag) {
+
             fileinput = document.getElementById("fileUpload");
+
+            var dir=fileinput.getAttribute("webkitdirectory");
+
+            if(!_.isNull(dir) && _.isUndefined(flag)){
+                fileinput.removeAttribute("webkitdirectory");
+            }
+
+            if(_.isNull(dir) && flag ){
+                fileinput.setAttribute("webkitdirectory","");
+            }
+
             fileinput.click();
         };
+
 
         $scope.back = function () {
 
@@ -225,7 +238,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
          * include templates and upload photos,products
          */
         $scope.nextStep = function () {
-
+            console.log("items",$scope.items);
             if ($rootScope.photo == undefined) {
 
                 messageCenterService.add("danger","You are forgot upload photo",{timeout:3000});
@@ -246,31 +259,37 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
                             $scope.items = [];
 
+                            $scope.flagUpload=true;
+
                             var keyArray=[],
-                                image;
+                                image,id;
+
                             for (var key in $scope.photo){
+
                                 if(key!='length' && key!='item')
                                 keyArray.push(key);
                             }
-                            console.log(keyArray);
 
                             _Upload(0);
-
+                            /**
+                             *
+                             * @param i
+                             * @private
+                             */
                             function _Upload(i){
                                 image=$scope.photo[keyArray[i]];
-                                console.log(image);
 
                                 CollectionService.uploadFiles(image).success(function (data) {
 
                                     if (_.isArray(data)) {
 
-                                        console.log("data upload",data);
+                                        //console.log("data upload",data);
 
                                         $scope.items.push({
                                             photos:data
                                         });
 
-                                        console.log("items array",$scope.items);
+                                        //console.log("items array",$scope.items);
 
                                         $timeout(function(){
 
@@ -280,7 +299,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
                                         i++;
 
-                                        if(i<$scope.max){
+                                        if(i<$scope.max && $scope.flagUpload==true){
 
                                             _Upload(i);
 
@@ -301,11 +320,48 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                 });
                             }
 
+                            /**
+                             *
+                             * @param i
+                             * @private
+                             */
+                            function _deleteFiles(i){
+                                id=$scope.items[i].photos[0].id;
+                               // console.log(id);
+                                CollectionService.deleteFiles(id).then(
+                                    function(response){
+
+                                        if(response=='true'){
+                                            $scope.dynamic --;
+                                            i++;
+                                            if(i<$scope.items.length){
+                                                _deleteFiles(i);
+                                            }
+                                            else{
+
+                                                $timeout(function(){
+
+                                                    modalInstance.dismiss();
+
+                                                }, 1000);
 
 
+                                                messageCenterService.add("danger","Downloading files interrupted by the user.",{timeout:3000});
+                                            }
+                                        }
 
+                                    }
+                                )
+                            }
+
+
+                            /**
+                             * cancel and delete downloads
+                             */
                             $scope.cancelUpload=function(){
-                                modalInstance.dismiss();
+                                $scope.flagUpload=false;
+                                //console.log($scope.items);
+                                _deleteFiles(0);
                             }
 
 

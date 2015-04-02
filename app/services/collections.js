@@ -3,28 +3,29 @@
     var app = angular.module("services.collections",[]);
 
     app.constant("PATHC",{
-        FACTORIES           :   config.API.host+'factory/load',
-        COLLECTIONS         :   config.API.host+'catalogue-collection/load/status/0,1',
-        COLLECTION_CARD     :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
-        IMAGES_PATH        :   config.API.imagehost+'/files/factory/attachments/',
-        FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
-        CREATECOLLECTION    :   config.API.host+"catalogue-collection/create",
-        UPDATECOLLECTION    :   config.API.host + "catalogue-collection/update",
-        LOADFILES           :   config.API.host+'catalogue/loadfiles',
-        LOADPRODUCTS        :   config.API.host+'catalogue-collection/add-collection-product',
-        CANCELPRODUCT       :   config.API.host+'catalogue-collection/delete-collection-product/',
-        CANCELCOLLECTION    :   config.API.host+'catalogue-collection/cancel/',
-        LOADSIZES           :   config.API.host+'size/load',
-        LOADORDERTYPES      :   config.API.host+'order-type/load/',
-        ORDERCREATE         :   config.API.host+'order/create',
-        PRODUCTSCREATE      :   config.API.host+'create.php',
-        PRODUCTUPDATE       :   config.API.host+'catalogue/update',
-        ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
-        CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
-        LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue',
-        LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/",
-        GETORDER              :    config.API.host+"order/get/id/",
-        GETORDERROWS          :     config.API.host+"order/get-rows/id/"
+        FACTORIES               :   config.API.host+'factory/load',
+        COLLECTIONS             :   config.API.host+'catalogue-collection/load/status/0,1',
+        COLLECTION_CARD         :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
+        IMAGES_PATH             :   config.API.imagehost+'/files/factory/attachments/',
+        FACTORYCOLLECTIONS      :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
+        CREATECOLLECTION        :   config.API.host+"catalogue-collection/create",
+        UPDATECOLLECTION        :   config.API.host + "catalogue-collection/update",
+        LOADFILES               :   config.API.host+'catalogue/loadfiles',
+        DELETE_FILES             :   config.API.host+'catalogue/deletefile',
+        LOADPRODUCTS            :   config.API.host+'catalogue-collection/add-collection-product',
+        CANCELPRODUCT           :   config.API.host+'catalogue-collection/delete-collection-product/',
+        CANCELCOLLECTION        :   config.API.host+'catalogue-collection/cancel/',
+        LOADSIZES               :   config.API.host+'size/load',
+        LOADORDERTYPES          :   config.API.host+'order-type/load/',
+        ORDERCREATE             :   config.API.host+'order/create',
+        PRODUCTSCREATE          :   config.API.host+'create.php',
+        PRODUCTUPDATE           :   config.API.host+'catalogue/update',
+        ADDORDERTOCOLLECTION    :     config.API.host+'catalogue-collection/add-order-collection',
+        CREATEPRODUCTFACTORY    :     config.API.host+'order/create-factory-row',
+        LOADSTATUSES            :     config.API.host+'status/load/type/factoryCatalogue',
+        LOADONECOLLECTION       :    config.API.host+"catalogue-collection/load/id/",
+        GETORDER                :    config.API.host+"order/get/id/",
+        GETORDERROWS            :     config.API.host+"order/get-rows/id/"
     });
 
     app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
@@ -474,6 +475,11 @@
                             transformRequest: angular.identity,
                             headers: {'Content-Type': undefined}
                         });
+                },
+
+                deleteFiles: function(id){
+
+                    return RestFactory.request(PATHC.DELETE_FILES,'POST',{id:id});
                 },
 
                 /**
