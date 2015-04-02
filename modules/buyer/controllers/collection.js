@@ -143,10 +143,11 @@ console.log(response);
 /**
  * Upload photos controller
  */
-app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal",
-    function ($scope, $rootScope, $location, CollectionService, $modal) {
+app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal","$timeout","messageCenterService",
+    function ($scope, $rootScope, $location, CollectionService, $modal,$timeout,messageCenterService) {
         var fileinput;
         $scope.$watch("photo", function (value) {
+
             $rootScope.photo = value;
         });
 
@@ -193,10 +194,23 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             array.push($data);
         };
 
-        $scope.upload = function () {
+        $scope.upload = function (flag) {
+
             fileinput = document.getElementById("fileUpload");
+
+            var dir=fileinput.getAttribute("webkitdirectory");
+
+            if(!_.isNull(dir) && _.isUndefined(flag)){
+                fileinput.removeAttribute("webkitdirectory");
+            }
+
+            if(_.isNull(dir) && flag ){
+                fileinput.setAttribute("webkitdirectory","");
+            }
+
             fileinput.click();
         };
+
 
         $scope.back = function () {
 
@@ -224,21 +238,156 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
          * include templates and upload photos,products
          */
         $scope.nextStep = function () {
-            //show error window
-
+            console.log("items",$scope.items);
             if ($rootScope.photo == undefined) {
 
-                $rootScope.message = "You are forgot upload photo";
-                $modal.open({
-                    templateUrl: '/app/views/error.html',
-                    controller: 'BsAlertCtrl',
-                    size: 'lg'
-                });
+                messageCenterService.add("danger","You are forgot upload photo",{timeout:3000});
+
                 return;
             }
 
             if ($scope.step == 0) {
-                CollectionService.uploadFiles($rootScope.photo).success(function (data) {
+
+                var modalInstance=$modal.open({
+                        templateUrl: "/modules/buyer/views/collection/progress_to_upload.html",
+                        controller: function($scope,CollectionService,photo,$timeout){
+                            $scope.photo=photo;
+
+                            $scope.max=$scope.photo.length;
+
+                            $scope.dynamic=0;
+
+                            $scope.items = [];
+
+                            $scope.flagUpload=true;
+
+                            var keyArray=[],
+                                image,id;
+
+                            for (var key in $scope.photo){
+
+                                if(key!='length' && key!='item')
+                                keyArray.push(key);
+                            }
+
+                            _Upload(0);
+                            /**
+                             *
+                             * @param i
+                             * @private
+                             */
+                            function _Upload(i){
+                                image=$scope.photo[keyArray[i]];
+
+                                CollectionService.uploadFiles(image).success(function (data) {
+
+                                    if (_.isArray(data)) {
+
+                                        //console.log("data upload",data);
+
+                                        $scope.items.push({
+                                            photos:data
+                                        });
+
+                                        //console.log("items array",$scope.items);
+
+                                        $timeout(function(){
+
+                                            $scope.dynamic ++;
+
+                                        }, 200);
+
+                                        i++;
+
+                                        if(i<$scope.max && $scope.flagUpload==true){
+
+                                            _Upload(i);
+
+                                        }else{
+                                            if($scope.items.length==$scope.max){
+
+                                                $timeout(function(){
+
+                                                    modalInstance.close($scope.items);
+
+                                                }, 1000);
+                                            }
+                                        }
+
+
+
+                                    }
+                                });
+                            }
+
+                            /**
+                             *
+                             * @param i
+                             * @private
+                             */
+                            function _deleteFiles(i){
+                                id=$scope.items[i].photos[0].id;
+                               // console.log(id);
+                                CollectionService.deleteFiles(id).then(
+                                    function(response){
+
+                                        if(response=='true'){
+                                            $scope.dynamic --;
+                                            i++;
+                                            if(i<$scope.items.length){
+                                                _deleteFiles(i);
+                                            }
+                                            else{
+
+                                                $timeout(function(){
+
+                                                    modalInstance.dismiss();
+
+                                                }, 1000);
+
+
+                                                messageCenterService.add("danger","Downloading files interrupted by the user.",{timeout:3000});
+                                            }
+                                        }
+
+                                    }
+                                )
+                            }
+
+
+                            /**
+                             * cancel and delete downloads
+                             */
+                            $scope.cancelUpload=function(){
+                                $scope.flagUpload=false;
+                                //console.log($scope.items);
+                                _deleteFiles(0);
+                            }
+
+
+                        },
+                        size:"lg",
+                        backdrop:"static",
+                        resolve:{
+                            photo:function(){
+                                return $scope.photo
+                            }
+                        }
+                });
+                modalInstance.result.then(function(array){
+                    $scope.items=array;
+
+                    $scope.imagePath = CollectionService.getImagePath();
+
+                    console.log("result",$scope.items, $scope.imagePath);
+                    $scope.step++;
+                });
+
+
+
+
+
+                /*CollectionService.uploadFiles($rootScope.photo).success(function (data) {
                     if (_.isArray(data)) {
                         $scope.items = [];
 
@@ -251,7 +400,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                         $scope.imagePath = CollectionService.getImagePath();
                         $scope.step++;
                     }
-                });
+                });*/
             }
 
             if ($scope.step == 1) {
@@ -287,6 +436,13 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 $scope.step = 0;
             }
         };
+
+
+        /**
+         * test progress bar
+         */
+
+
 
     }]);
 

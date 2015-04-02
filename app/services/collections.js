@@ -3,28 +3,29 @@
     var app = angular.module("services.collections",[]);
 
     app.constant("PATHC",{
-        FACTORIES           :   config.API.host+'factory/load',
-        COLLECTIONS         :   config.API.host+'catalogue-collection/load/status/0,1',
-        COLLECTION_CARD     :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
-        IMAGES_PATH        :   config.API.imagehost+'/files/factory/attachments/',
-        FACTORYCOLLECTIONS  :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
-        CREATECOLLECTION    :   config.API.host+"catalogue-collection/create",
-        UPDATECOLLECTION    :   config.API.host + "catalogue-collection/update",
-        LOADFILES           :   config.API.host+'catalogue/loadfiles',
-        LOADPRODUCTS        :   config.API.host+'catalogue-collection/add-collection-product',
-        CANCELPRODUCT       :   config.API.host+'catalogue-collection/delete-collection-product/',
-        CANCELCOLLECTION    :   config.API.host+'catalogue-collection/cancel/',
-        LOADSIZES           :   config.API.host+'size/load',
-        LOADORDERTYPES      :   config.API.host+'order-type/load/',
-        ORDERCREATE         :   config.API.host+'order/create',
-        PRODUCTSCREATE      :   config.API.host+'create.php',
-        PRODUCTUPDATE       :   config.API.host+'catalogue/update',
-        ADDORDERTOCOLLECTION  :     config.API.host+'catalogue-collection/add-order-collection',
-        CREATEPRODUCTFACTORY  :     config.API.host+'order/create-factory-row',
-        LOADSTATUSES          :     config.API.host+'status/load/type/factoryCatalogue',
-        LOADONECOLLECTION     :    config.API.host+"catalogue-collection/load/id/",
-        GETORDER              :    config.API.host+"order/get/id/",
-        GETORDERROWS          :     config.API.host+"order/get-rows/id/"
+        FACTORIES               :   config.API.host+'factory/load',
+        COLLECTIONS             :   config.API.host+'catalogue-collection/load/status/0,1',
+        COLLECTION_CARD         :   config.API.host+'catalogue-collection/get-collection-products/collectionId/',
+        IMAGES_PATH             :   config.API.imagehost+'/files/factory/attachments/',
+        FACTORYCOLLECTIONS      :   config.API.host+"catalogue-collection/load/status/0/factoryId/",
+        CREATECOLLECTION        :   config.API.host+"catalogue-collection/create",
+        UPDATECOLLECTION        :   config.API.host + "catalogue-collection/update",
+        LOADFILES               :   config.API.host+'catalogue/loadfiles',
+        DELETE_FILES             :   config.API.host+'catalogue/deletefile',
+        LOADPRODUCTS            :   config.API.host+'catalogue-collection/add-collection-product',
+        CANCELPRODUCT           :   config.API.host+'catalogue-collection/delete-collection-product/',
+        CANCELCOLLECTION        :   config.API.host+'catalogue-collection/cancel/',
+        LOADSIZES               :   config.API.host+'size/load',
+        LOADORDERTYPES          :   config.API.host+'order-type/load/',
+        ORDERCREATE             :   config.API.host+'order/create',
+        PRODUCTSCREATE          :   config.API.host+'create.php',
+        PRODUCTUPDATE           :   config.API.host+'catalogue/update',
+        ADDORDERTOCOLLECTION    :     config.API.host+'catalogue-collection/add-order-collection',
+        CREATEPRODUCTFACTORY    :     config.API.host+'order/create-factory-row',
+        LOADSTATUSES            :     config.API.host+'status/load/type/factoryCatalogue',
+        LOADONECOLLECTION       :    config.API.host+"catalogue-collection/load/id/",
+        GETORDER                :    config.API.host+"order/get/id/",
+        GETORDERROWS            :     config.API.host+"order/get-rows/id/"
     });
 
     app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
@@ -420,12 +421,13 @@
                 showModal : function(path,size) {
 
                     var TEMPLATE={
-                        NEW    :   "/modules/buyer/views/collection/choose_factory.html",
-                        CHOOSE :   "/modules/buyer/views/collection/choose_collection.html",
-                        ADDSIZE:   "/modules/buyer/views/collection/add_size.html",
-                        ADDORDER:   "/modules/buyer/views/collection/add_order.html",
-                        CANCEL_COLLECTION :   "/modules/buyer/views/collection/ask_collection.html",
-                        CANCEL_PRODUCT :   "/modules/buyer/views/collection/ask_product.html"
+                        NEW                 :   "/modules/buyer/views/collection/choose_factory.html",
+                        CHOOSE              :   "/modules/buyer/views/collection/choose_collection.html",
+                        ADDSIZE             :   "/modules/buyer/views/collection/add_size.html",
+                        ADDORDER            :   "/modules/buyer/views/collection/add_order.html",
+                        CANCEL_COLLECTION   :   "/modules/buyer/views/collection/ask_collection.html",
+                        CANCEL_PRODUCT      :   "/modules/buyer/views/collection/ask_product.html",
+                        PROGRESS            :   "/modules/buyer/views/collection/progress_to_upload.html"
                     };
 
                     var s;
@@ -434,7 +436,8 @@
                     var modal= $modal.open({
                         templateUrl : TEMPLATE[path],
                         controller : "ModalController",
-                        size:s
+                        size:s,
+                        backdrop:'static'
                     });
                     return modal;
                 },
@@ -458,20 +461,25 @@
                  * @param photo
                  * @returns {*}
                  */
-                uploadFiles : function(photo) {
+                uploadFiles : function(file) {
 
                     var fd=new FormData();
 
-                    angular.forEach(photo,function(file){
+                    /*angular.forEach(files,function(file){
                         fd.append('file[]',file);
-
-                    });
+                    });*/
+                    fd.append('file[]',file);
 
                     return $http.post(PATHC.LOADFILES,fd,
                         {
                             transformRequest: angular.identity,
                             headers: {'Content-Type': undefined}
                         });
+                },
+
+                deleteFiles: function(id){
+
+                    return RestFactory.request(PATHC.DELETE_FILES,'POST',{id:id});
                 },
 
                 /**

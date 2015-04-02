@@ -14,7 +14,9 @@
         <tr ng-repeat="item in items">
             <td>
                 <div class="media np">
+
                     <div class="media-left" ng-repeat="img in item.photos track by $index">
+
                                 <span class="img-wrapper img-rounded"
                                       ui-draggable="true"
                                       ui-on-Drop="onDrop($event,$data,item.photos)"
