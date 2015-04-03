@@ -15,17 +15,17 @@
         <tr>
             <td></td>
             <td>
-                <button class=".btn-xs" ng-click="addArticules()">
+                <button class="btn btn-xs btn-success" ng-click="addArticules()">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </td>
             <td>
-                <button class=".btn-xs" ng-click="addSizes()">
+                <button class="btn btn-xs btn-success" ng-click="addSizes()">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </td>
             <td>
-                <button class=".btn-xs" ng-click="addPrices()" ng-hide="priceFlag">
+                <button class="btn btn-xs btn-success" ng-click="addPrices()" ng-hide="priceFlag">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
                 <input ng-show="priceFlag" type="text" ng-model="commonPrice" ng-keyup="addPrices(commonPrice,$event)"/><!--ng-blur="priceFlag=!priceFlag"-->

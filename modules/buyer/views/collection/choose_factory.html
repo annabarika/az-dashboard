@@ -5,11 +5,13 @@
         <h4 class="modal-title" id="myModalLabel">New Collection</h4>
     </div>
     <div class="modal-body">
+
         <form>
-            <select class="form-control" data-ng-model="newCollection.factories"
+            <!--<select class="form-control" data-ng-model="newCollection.factories"
                     ng-options="opt as opt.name for opt in factories">
                 <option value="">Choose factory</option>
-            </select>
+            </select>-->
+            <autocomplete input-model="factories" output-model="newCollection.factories" column="columnHeaders"></autocomplete>
         </form>
     </div>
     <!--footer-->
