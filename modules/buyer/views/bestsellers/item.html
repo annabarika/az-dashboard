@@ -19,7 +19,8 @@
         <!--/ end page header -->
 
         <div class="container-fluid">
-            <div class="row">
+            <div class="pa-md">
+                <div class="row">
                 <div class="col-md-6">
                     <div class="col-md-6" ng-repeat="photo in product.photos">
                         <!-- thumbnail -->
@@ -29,8 +30,8 @@
                         <!--/ thumbnail -->
                     </div>
                 </div>
-                <div class="col-md-6 panel">
-                    <div class="panel panel-default border-n">
+                <div class="col-md-6">
+                    <div class="panel panel-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <tbody>
@@ -55,30 +56,21 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="pa-md">
+                            <form role="form" class="ng-pristine ng-valid">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <textarea class="form-control" placeholder="Add notes to product" rows="3" ng-keyup="updateNotes(notes,$event)" ng-model="notes"></textarea>
+                                    </div>
+                                </form>
+                            </form>
+                        </div>
                     </div>
 
-
-                    <form role="form">
-                        <div class="form-group">
-                            <textarea class="form-control" placeholder="Add notes to product" rows="3" ng-keyup="updateNotes(notes,$event)" ng-model="notes"></textarea>
-                        </div>
-                    </form>
-
-                    <hr style="margin:30px 0" />
-
-                    <div ng-hide="bestseller.status>0">
-                        <div style="padding-left:20px;">
-                            <h3>Size chart to order <span ng-show="order.id">(#{{order.id}})</span></h3>
-                            <div style="margin:20px 0;">
-                                <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 10</span></button>
-                                <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 20</span></button>
-                                <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 30</span></button>
-                                <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 50</span></button>
-                                <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 100</span></button>
-                                <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 200</span></button>
-                                <button type="submit" class="btn btn-default"><span class="fa fa-plus"> 500</span></button>
-                            </div>
-                            <table class="table" style="background:white;">
+                    <div class="panel panel-body">
+                        <div ng-hide="bestseller.status>0">
+                            <h3 class="mb-sm ng-binding">Size chart to order <span ng-show="order.id">(#{{order.id}})</span></h3>
+                            <table class="table">
                                 <tr>
                                     <th>Size</th>
                                     <th>Count</th>
@@ -101,13 +93,9 @@
                         </div>
                     </div>
 
-                    <hr style="margin:30px 0" />
-
-                    <div>
-                        <div style="padding-left:20px;">
-                            <h3>Buying history</h3>
-                        </div>
-                        <table class="table" style="background:white;">
+                    <div class="panel panel-body">
+                        <h3 class="mb-sm ng-binding">Buying history</h3>
+                        <table class="table">
                             <tr>
                                 <th>Buying date</th>
                                 <th>Order</th>
@@ -136,10 +124,13 @@
                                 <td>{{item.status}}</td>
                             </tr>
                         </table>
-                        <!--Old History-->
-                        <div style="padding-left:20px;" ng-hide="product.buyingHistory.buying==undefined">
-                            <h3>Buying history (old)</h3>
-                            <table class="table" style="background:white;" ng-hide="product.buyingHistory.buying==undefined">
+                    </div>
+
+                    <div class="panel panel-body">
+                    <!--Old History-->
+                        <div ng-hide="product.buyingHistory.buying==undefined">
+                            <h3 class="mb-sm ng-binding">Buying history (old)</h3>
+                            <table class="table" ng-hide="product.buyingHistory.buying==undefined">
                                 <tr>
                                     <th>Buying date</th>
                                     <th>Sizes = Count</th>
@@ -165,6 +156,7 @@
 
                 </div>
 
+            </div>
             </div>
         </div>
 
