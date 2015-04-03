@@ -570,11 +570,9 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
 
             var orderResponse = response;
 
-            if (response.id) {
+            if (orderResponse.id) {
 
                 CollectionService.productsCreate($rootScope.order, response.orderId).then(function () {
-
-                    messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
 
                     if (_.isUndefined(position)) {
 
@@ -589,7 +587,18 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
                         $rootScope.items[$scope.position].inOrder=true;
                     }
 
-                    $modalInstance.close(orderResponse.orderId, true);
+                    // Send created order
+                    CollectionService.sendCreatedOrder(orderResponse.orderId).then(function(response) {
+
+
+                        if(response) {
+                            messageCenterService.add('success', 'Order successfuly created', {timeout: 3000});
+                            $modalInstance.close(orderResponse.orderId, true);
+                        }
+                        else {
+                            messageCenterService.add('danger', 'Failed to Sent Order. Checking connection', {timeout: 3000});
+                        }
+                    });
                 });
             }
             else {

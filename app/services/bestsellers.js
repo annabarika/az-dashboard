@@ -21,7 +21,7 @@
 
             "LOAD_PRODUCTS"         : config.API.host + "order/get-rows/id/",
             "UPDATE"                : config.API.host + "bestseller/update",
-            "CREATE_PDF"            : config.API.host + "order/send/id/"
+            "CREATE_PDF"            : config.API.host + "order/send-to-factory/id/"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',

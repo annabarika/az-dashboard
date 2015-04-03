@@ -589,7 +589,7 @@ app.controller("OrderController",
                 });
                 modalInstance.result.then(function(){
 
-                    url=config.API.host+'order/send/id/'+id;
+                    url=config.API.host+'order/send-to-factory/id/'+id;
                     console.log(url);
                     RestFactory.request(url).then(
                         function(response){
