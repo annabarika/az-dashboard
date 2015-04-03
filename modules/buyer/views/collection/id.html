@@ -6,8 +6,12 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-6 va-m">
-                    <button class="btn btn-green" ng-click="addToOrder()" ng-disabled="isOrderedAll"><span class="fa fa-check" ng-hide="isOrderedAll"></span> Add to order</button>
+                    <button class="btn btn-green" ng-click="addToOrder()" ng-disabled="isOrderedAll"><span class="fa fa-check" ng-hide="isOrderedAll"></span>Create order</button>
                     <button class="btn btn-red" ng-click="cancelCollection()" ng-disabled="isOrdered"><span class="fa fa-check" ng-hide="isOrdered"></span> Delete</button>
+                    <button class="btn btn-default" ng-click="addCount(1)"><span class="fa fa-plus"> 1</span></button>
+                    <button class="btn btn-default" ng-click="addCount(3)"><span class="fa fa-plus"> 3</span></button>
+                    <button class="btn btn-default" ng-click="addCount(5)"><span class="fa fa-plus"> 5</span></button>
+
                 </div>
             </div>
             <!--/ basic info heading -->
@@ -31,16 +35,18 @@
                             <div class="media-left">
                                 <span class="img-wrapper img-rounded">
                                     <img ng-src="{{imagePath}}{{product.files[0].path}}" >
-                                    {{imagePath}}{{product.files[0].path}}
+                                    <!--{{imagePath}}{{product.files[0].path}}-->
                                 </span>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" numbers-only value="{{product.catalogueProduct.articul}}" ng-disabled="product.inOrder"/>
+                        <!--<input type="text" class="md form-control" ng-model="product.catalogueProduct.articul" numbers-only value="{{product.catalogueProduct.articul}}" ng-disabled="product.inOrder"/>-->
+                        {{product.catalogueProduct.articul}}
                     </td>
                     <td>
-                        <input type="text" class="sm form-control" ng-model="product.catalogueProduct.price" value="{{product.catalogueProduct.price}}" ng-disabled="product.inOrder"/>
+                        <!--<input type="text" class="sm form-control" ng-model="product.catalogueProduct.price" value="{{product.catalogueProduct.price}}" ng-disabled="product.inOrder"/>-->
+                       {{product.catalogueProduct.price}}
                          {{product.currency.ISOCode}}
                     </td>
                     <td>
@@ -57,9 +63,16 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    <ul ng-if="product.sizes[0]" ng-hide="product.inOrder" class="media-list mb-sm sm">
+                                    <ul ng-if="product.sizes[0]" ng-hide="product.inOrder" class="media-list mb-sm lg">
                                         <li ng-repeat="size in product.sizes" class="media">
                                             <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="product.inOrder" value="0"/>
+                                            <div class="btn-group" role="group" aria-label="...">
+                                                <button class="btn btn-default btn-xs" ng-click="addCount(1,$index,product)"><span class="fa fa-plus"> 1</span></button>
+                                                <button class="btn btn-default btn-xs" ng-click="addCount(3,$index,product)"><span class="fa fa-plus"> 3</span></button>
+                                                <button class="btn btn-default btn-xs" ng-click="addCount(5,$index,product)"><span class="fa fa-plus"> 5</span></button>
+                                            </div>
+
+
                                         </li>
                                     </ul>
                                 </td>
@@ -73,9 +86,16 @@
                     </td>
                     <td>
                         <div class="btn-group" ng-hide="product.inOrder">
-                        <button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check">Add to order</span></button>
-                        <button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>
-                        <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check">Delete</span></button>
+                        <button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check"></span>Create order</button>
+                        <!--<button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>-->
+                        <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check"></span>Delete</button>
+
+                            <button class="btn btn-default" ng-click="addCount(1,$index)"><span class="fa fa-plus"> 1</span></button>
+                            <button class="btn btn-default" ng-click="addCount(3,$index)"><span class="fa fa-plus"> 3</span></button>
+                            <button class="btn btn-default" ng-click="addCount(5,$index)"><span class="fa fa-plus"> 5</span></button>
+
+
+
                         </div>
                         <div ng-show="product.inOrder">Order ID # <a ng-href="/buyer/orders/id/{{orderId}}">{{orderId}}</a></div>
                     </td>

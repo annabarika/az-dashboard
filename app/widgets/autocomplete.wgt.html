@@ -1,9 +1,18 @@
-<div class='autocomplete_widget'>
+<div class='autocomplete_widget' class="input-group">
     <input type='text' placeholder='search' ng-model='search'/>
-    <ul ng-hide="flag">
+    <!--<ul ng-hide="flag">
         <li ng-repeat='row in inputModel|filter:search' ng-click='getRow(row)'>
             <span ng-if="row.name!=undefined">{{row.name}}</span>
             <span ng-if="row.name==undefined">{{row.id}}</span>
         </li>
-    </ul>
+    </ul>-->
+    <table ng-hide="flag" class="table table-bordered bg-white" style="position:absolute;max-width:868px">
+        <tr ng-repeat="row in inputModel|filter:search" ng-click='getRow(row)'>
+            <td ng-if="column!=undefined" ng-repeat="col in column">
+                {{row[col.name]}}
+            </td>
+
+        </tr>
+
+    </table>
 </div>

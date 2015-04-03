@@ -122,7 +122,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         /*
          * Add new collection*/
         $scope.newCollection = function () {
-            var modalInstance = CollectionService.showModal('NEW', "sm");
+            var modalInstance = CollectionService.showModal('NEW', "lg");
 
             modalInstance.result.then(function (factory) {
 
@@ -144,21 +144,22 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
                         }
                     });
+                    var control=CollectionService.fromSession();
+                    console.log(control);
+                    if(control==undefined){
 
+                        var modalInstance = CollectionService.showModal("CHOOSE", 'sm');
+
+                        modalInstance.result.then(function (collection) {
+
+                            //$rootScope.collection = collection;
+                            CollectionService.inSession(collection);
+
+                            $location.path("buyer/collection/upload");
+                        })
+                    }
                 });
-                var control=CollectionService.fromSession();
-                if(control==undefined){
 
-                    var modalInstance = CollectionService.showModal("CHOOSE", 'sm');
-
-                    modalInstance.result.then(function (collection) {
-
-                        //$rootScope.collection = collection;
-                        CollectionService.inSession(collection);
-
-                        $location.path("buyer/collection/upload");
-                    })
-                }
 
 
 
@@ -652,6 +653,14 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
         $modalInstance.close();
     };
 
+    $scope.columnHeaders=[
+        {name:"name"},
+        {name:"phone"},
+        {name:"email"},
+        {name:"docs"}
+    ];
+
+
     $scope.chooseCollection = function (collection) {
         $modalInstance.close(collection);
     };
@@ -736,6 +745,60 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 }
             }
         });
+        /**
+         *
+         * @param count
+         * @param index
+         * @param product
+         */
+        $scope.addCount=function(count,index,product){
+
+            if(_.isUndefined(index) && _.isUndefined(product)){
+
+                angular.forEach($rootScope.items,function(item){
+
+                    jQuery.map(item.sizes, function( n) {
+
+                        if(typeof n.count=='string') n.count=parseInt(n.count);
+
+                        return ( n.count+=parseInt(count));
+                    });
+                })
+            }
+            else{
+
+                if(_.isUndefined(product)){
+
+                    jQuery.map($rootScope.items[index].sizes, function( n) {
+
+                        if(typeof n.count=='string') n.count=parseInt(n.count);
+
+                        return ( n.count+=parseInt(count));
+                    });
+                }
+                else{
+                    var length=$rootScope.items.length;
+                    for (var i=0;i<length;i++){
+                        if($rootScope.items[i].catalogueProduct.id==product.catalogueProduct.id){
+
+                            if(typeof $rootScope.items[i].sizes[index].count=='string')
+                                $rootScope.items[i].sizes[index].count=parseInt($rootScope.items[i].sizes[index].count);
+
+                           $rootScope.items[i].sizes[index].count+=count;
+                            return;
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+        };
+
+
+
 
         //Cancel collection
         $scope.cancelCollection = function () {
@@ -751,7 +814,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
         };
 
         // Delete product row
-        $scope.saveProduct = function (product) {
+       /* $scope.saveProduct = function (product) {
 
             CollectionService.saveProduct(product).then(function (response) {
 
@@ -762,7 +825,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                     messageCenterService.add('danger', 'Error update', {timeout: 3000});
                 }
             });
-        };
+        };*/
 
         // Add product(s) to order
         $scope.addToOrder = function (product, position) {

@@ -408,7 +408,7 @@
                 /**
                  * Save product
                  */
-                saveProduct: function (product) {
+                /*saveProduct: function (product) {
 
                     var params = {
                         'id' : product.catalogueProduct.id,
@@ -430,7 +430,7 @@
                     };
 
                     return RestFactory.request(PATHC.PRODUCTUPDATE, 'PUT', params);
-                },
+                },*/
 
                 /**
                  * Get image path
@@ -539,6 +539,9 @@
 
                     return RestFactory.request(PATHC.DELETE_FILES,'POST',{id:id});
                 },
+
+
+
 
                 /**
                  * Create order

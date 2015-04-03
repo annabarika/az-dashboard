@@ -285,6 +285,13 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
     var fileinput;
 
 
+    $scope.columnHeaders=[
+         {name:"name"},
+         {name:"phone"},
+         {name:"email"},
+         {name:"docs"}
+    ];
+
 
     $scope.saveOrder = function ( data ) {
         console.log(data,$scope.files);
