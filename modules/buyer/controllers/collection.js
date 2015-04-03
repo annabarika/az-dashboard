@@ -13,13 +13,12 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         var DRAFT = 0, ACTIVE = 1 ;
         // set title
         $rootScope.documentTitle = "Collection";
-        $rootScope.hideHeader = 'showHeader';
 
         // Load scope sizes
         CollectionService.loadSizes().then(function (response) {
             $rootScope.all_sizes = response;
         });
-
+        $rootScope.hideHeader = 'showHeader';
 
 
         // set table header
@@ -123,7 +122,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         /*
          * Add new collection*/
         $scope.newCollection = function () {
-            var modalInstance = CollectionService.showModal('NEW', "sm");
+            var modalInstance = CollectionService.showModal('NEW', "lg");
 
             modalInstance.result.then(function (factory) {
 
@@ -145,21 +144,22 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
                         }
                     });
+                    var control=CollectionService.fromSession();
+                    console.log(control);
+                    if(control==undefined){
 
+                        var modalInstance = CollectionService.showModal("CHOOSE", 'sm');
+
+                        modalInstance.result.then(function (collection) {
+
+                            //$rootScope.collection = collection;
+                            CollectionService.inSession(collection);
+
+                            $location.path("buyer/collection/upload");
+                        })
+                    }
                 });
-                var control=CollectionService.fromSession();
-                if(control==undefined){
 
-                    var modalInstance = CollectionService.showModal("CHOOSE", 'sm');
-
-                    modalInstance.result.then(function (collection) {
-
-                        //$rootScope.collection = collection;
-                        CollectionService.inSession(collection);
-
-                        $location.path("buyer/collection/upload");
-                    })
-                }
 
 
 
@@ -188,7 +188,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
 
         if ($scope.collection == undefined) {
-           // $location.path("/buyer/collection");
+            // $location.path("/buyer/collection");
             $scope.collection=CollectionService.fromSession();
             console.log($scope.collection);
         }
@@ -348,137 +348,137 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             if ($scope.step == 0) {
 
                 var modalInstance=$modal.open({
-                        templateUrl: "/modules/buyer/views/collection/progress_to_upload.html",
-                        controller: function($scope,CollectionService,photo,$timeout){
-                            $scope.photo=photo;
+                    templateUrl: "/modules/buyer/views/collection/progress_to_upload.html",
+                    controller: function($scope,CollectionService,photo,$timeout){
+                        $scope.photo=photo;
 
-                            $scope.max=$scope.photo.length;
+                        $scope.max=$scope.photo.length;
 
-                            $scope.dynamic=0;
+                        $scope.dynamic=0;
 
-                            $scope.items = [];
+                        $scope.items = [];
 
-                            $scope.flagUpload=true;
+                        $scope.flagUpload=true;
 
-                            $scope.type='success';
+                        $scope.type='success';
 
-                            var keyArray=[],
-                                image,id;
+                        var keyArray=[],
+                            image,id;
 
-                            for (var key in $scope.photo){
+                        for (var key in $scope.photo){
 
-                                if(key!='length' && key!='item')
+                            if(key!='length' && key!='item')
                                 keyArray.push(key);
-                            }
-
-                            _Upload(0);
-                            /**
-                             *
-                             * @param i
-                             * @private
-                             */
-                            function _Upload(i){
-                                image=$scope.photo[keyArray[i]];
-
-                                CollectionService.uploadFiles(image).success(function (data) {
-
-                                    if (_.isArray(data)) {
-
-                                        //console.log("data upload",data);
-
-                                        $scope.items.push({
-                                            photos:data,
-                                            article:"",
-                                            sizes:"",
-                                            price:""
-                                        });
-
-                                        //console.log("items array",$scope.items);
-
-                                        $timeout(function(){
-
-                                            $scope.dynamic ++;
-
-                                        }, 200);
-
-                                        i++;
-
-                                        if(i<$scope.max && $scope.flagUpload==true){
-
-                                            _Upload(i);
-
-                                        }else{
-                                            if($scope.items.length==$scope.max){
-
-                                                $timeout(function(){
-
-                                                    modalInstance.close($scope.items);
-
-                                                }, 1000);
-                                            }
-                                        }
-
-
-
-                                    }
-                                });
-                            }
-
-                            /**
-                             *
-                             * @param i
-                             * @private
-                             */
-                            function _deleteFiles(i){
-                                id=$scope.items[i].photos[0].id;
-                               // console.log(id);
-                                CollectionService.deleteFiles(id).then(
-                                    function(response){
-
-                                        if(response=='true'){
-                                            $scope.dynamic --;
-                                            i++;
-                                            if(i<$scope.items.length){
-                                                _deleteFiles(i);
-                                            }
-                                            else{
-
-                                                $timeout(function(){
-
-                                                    modalInstance.dismiss();
-
-                                                }, 1000);
-
-
-                                                messageCenterService.add("danger","Downloading files interrupted by the user.",{timeout:3000});
-                                            }
-                                        }
-
-                                    }
-                                )
-                            }
-
-
-                            /**
-                             * cancel and delete downloads
-                             */
-                            $scope.cancelUpload=function(){
-                                $scope.flagUpload=false;
-
-                                $scope.type='danger';
-                                //console.log($scope.items);
-                                _deleteFiles(0);
-                            }
-
-
-                        },
-                        size:"lg",
-                        backdrop:"static",
-                        resolve:{
-                            photo:function(){
-                                return $scope.photo
-                            }
                         }
+
+                        _Upload(0);
+                        /**
+                         *
+                         * @param i
+                         * @private
+                         */
+                        function _Upload(i){
+                            image=$scope.photo[keyArray[i]];
+
+                            CollectionService.uploadFiles(image).success(function (data) {
+
+                                if (_.isArray(data)) {
+
+                                    //console.log("data upload",data);
+
+                                    $scope.items.push({
+                                        photos:data,
+                                        article:"",
+                                        sizes:"",
+                                        price:""
+                                    });
+
+                                    //console.log("items array",$scope.items);
+
+                                    $timeout(function(){
+
+                                        $scope.dynamic ++;
+
+                                    }, 200);
+
+                                    i++;
+
+                                    if(i<$scope.max && $scope.flagUpload==true){
+
+                                        _Upload(i);
+
+                                    }else{
+                                        if($scope.items.length==$scope.max){
+
+                                            $timeout(function(){
+
+                                                modalInstance.close($scope.items);
+
+                                            }, 1000);
+                                        }
+                                    }
+
+
+
+                                }
+                            });
+                        }
+
+                        /**
+                         *
+                         * @param i
+                         * @private
+                         */
+                        function _deleteFiles(i){
+                            id=$scope.items[i].photos[0].id;
+                            // console.log(id);
+                            CollectionService.deleteFiles(id).then(
+                                function(response){
+
+                                    if(response=='true'){
+                                        $scope.dynamic --;
+                                        i++;
+                                        if(i<$scope.items.length){
+                                            _deleteFiles(i);
+                                        }
+                                        else{
+
+                                            $timeout(function(){
+
+                                                modalInstance.dismiss();
+
+                                            }, 1000);
+
+
+                                            messageCenterService.add("danger","Downloading files interrupted by the user.",{timeout:3000});
+                                        }
+                                    }
+
+                                }
+                            )
+                        }
+
+
+                        /**
+                         * cancel and delete downloads
+                         */
+                        $scope.cancelUpload=function(){
+                            $scope.flagUpload=false;
+
+                            $scope.type='danger';
+                            //console.log($scope.items);
+                            _deleteFiles(0);
+                        }
+
+
+                    },
+                    size:"lg",
+                    backdrop:"static",
+                    resolve:{
+                        photo:function(){
+                            return $scope.photo
+                        }
+                    }
                 });
                 modalInstance.result.then(function(array){
                     $scope.items=array;
@@ -653,6 +653,14 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
         $modalInstance.close();
     };
 
+    $scope.columnHeaders=[
+        {name:"name"},
+        {name:"phone"},
+        {name:"email"},
+        {name:"docs"}
+    ];
+
+
     $scope.chooseCollection = function (collection) {
         $modalInstance.close(collection);
     };
@@ -737,6 +745,60 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 }
             }
         });
+        /**
+         *
+         * @param count
+         * @param index
+         * @param product
+         */
+        $scope.addCount=function(count,index,product){
+
+            if(_.isUndefined(index) && _.isUndefined(product)){
+
+                angular.forEach($rootScope.items,function(item){
+
+                    jQuery.map(item.sizes, function( n) {
+
+                        if(typeof n.count=='string') n.count=parseInt(n.count);
+
+                        return ( n.count+=parseInt(count));
+                    });
+                })
+            }
+            else{
+
+                if(_.isUndefined(product)){
+
+                    jQuery.map($rootScope.items[index].sizes, function( n) {
+
+                        if(typeof n.count=='string') n.count=parseInt(n.count);
+
+                        return ( n.count+=parseInt(count));
+                    });
+                }
+                else{
+                    var length=$rootScope.items.length;
+                    for (var i=0;i<length;i++){
+                        if($rootScope.items[i].catalogueProduct.id==product.catalogueProduct.id){
+
+                            if(typeof $rootScope.items[i].sizes[index].count=='string')
+                                $rootScope.items[i].sizes[index].count=parseInt($rootScope.items[i].sizes[index].count);
+
+                            $rootScope.items[i].sizes[index].count+=count;
+                            return;
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+        };
+
+
+
 
         //Cancel collection
         $scope.cancelCollection = function () {
@@ -752,18 +814,18 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
         };
 
         // Delete product row
-        $scope.saveProduct = function (product) {
+        /* $scope.saveProduct = function (product) {
 
-            CollectionService.saveProduct(product).then(function (response) {
+         CollectionService.saveProduct(product).then(function (response) {
 
-                if (response.catalogueProduct) {
-                    messageCenterService.add('success', 'Product row successfuly updated', {timeout: 3000});
-                }
-                else {
-                    messageCenterService.add('danger', 'Error update', {timeout: 3000});
-                }
-            });
-        };
+         if (response.catalogueProduct) {
+         messageCenterService.add('success', 'Product row successfuly updated', {timeout: 3000});
+         }
+         else {
+         messageCenterService.add('danger', 'Error update', {timeout: 3000});
+         }
+         });
+         };*/
 
         // Add product(s) to order
         $scope.addToOrder = function (product, position) {

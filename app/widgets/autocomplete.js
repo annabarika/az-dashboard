@@ -5,11 +5,12 @@ angular.module('widgets.autocomplete', [])
             restrict:"EA",
             scope:{
                 inputModel:"=",
-                outputModel:"="
+                outputModel:"=",
+                column:"="
             },
             templateUrl:"/app/widgets/autocomplete.wgt.html",
             link:function($scope,elem, attr){
-
+                /*console.log("input",$scope.inputModel,$scope.column);*/
                 var ul=elem[0].children[0].children[1];
 
                 $scope.flag=true;
@@ -17,7 +18,9 @@ angular.module('widgets.autocomplete', [])
 
                 $scope.$watch('search',function(val){
                     if(val){
+
                         $scope.flag=false;
+                        console.log($scope.flag);
                     }
                     else{
                         $scope.flag=true;
