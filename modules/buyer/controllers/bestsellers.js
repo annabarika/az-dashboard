@@ -247,6 +247,16 @@ app.controller('BestsellerItemController',[
             )
 
         };
+
+        /**
+         *
+         * @param order
+         */
+        $scope.calculate = function(num){
+            $scope.sizes = BestsellersService.calculate(num, $scope.sizes);
+        };
+
+
         /**
          *
          * @param order

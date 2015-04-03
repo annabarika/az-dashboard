@@ -70,6 +70,15 @@
                     <div class="panel panel-body">
                         <div ng-hide="bestseller.status>0">
                             <h3 class="mb-sm ng-binding">Size chart to order <span ng-show="order.id">(#{{order.id}})</span></h3>
+
+                            <div style="margin:20px 0;">
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(15)"> 15</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(25)"> 25</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(35)"> 35</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(50)"> 50</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(100)"> 100</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(200)"> 500</span></button>
+                            </div>
                             <table class="table">
                                 <tr>
                                     <th>Size</th>
