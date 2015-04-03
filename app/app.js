@@ -11,7 +11,8 @@
         "modules.buyer",
         'MessageCenterModule',
         "ang-drag-drop",
-        "ngSanitize"
+        "ngSanitize",
+        "flow"
     ])
 
        /* .run(function (Authentication,Application) {
@@ -31,7 +32,7 @@
 
             }
             else{
-                $location.path("/");
+                $location.path("/login");
             }
 
         }])
@@ -42,7 +43,7 @@
 
             $routeProvider
 
-                .when("/",
+                .when("/login",
                 {
                     templateUrl: "/app/views/login.html",
                     controller: "MainController"
@@ -57,7 +58,7 @@
 
                 .otherwise(
                 {
-                    redirectTo:'/'
+                    redirectTo:'/index'
                 }
             );
 

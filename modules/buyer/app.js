@@ -14,6 +14,7 @@ app.config(function($routeProvider){
         {
             templateUrl:"/modules/buyer/views/orders/index.html",
             controller:"OrderListController",
+            //TODO при роутинге нужно будет проверять наличие прав
             authRequired: ['developer','admin']
         }
     )

@@ -172,19 +172,29 @@ app.controller('BestsellerItemController',[
 
         $scope.bestsellerHistory=[];
 
-
-
+        $scope.documentTitle = 'Loading..';
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
 
                 $scope.bestseller = response.bestseller;
+                $scope.notes=$scope.bestseller.notes;
 				$scope.factory = response.factory;
 				$scope.product = response.product;
                 $scope.order = response.order;
-
-                $scope.sizes = {add: []};
-
+                $scope.sizes = [{  }, { } ];
+                console.log($scope.product);
+                if( $scope.product.marketing.sizes ){
+                    var sizes = $scope.product.marketing.sizes;
+                    for( var size in sizes ){
+                        sizes[size].size = size;
+                        sizes[size].hide = true;
+                        $scope.sizes.push(sizes[size]);
+                    }
+                }
+                $scope.sizes.push({});
+                $scope.sizes.push({});
+                console.log($scope.sizes);
 				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
@@ -201,7 +211,7 @@ app.controller('BestsellerItemController',[
 
                                 }
                                 $scope.bestsellerHistory.push(item);
-                                console.log( $scope.bestsellerHistory);
+                               // console.log( $scope.bestsellerHistory);
                             }
                         )
                     });
@@ -213,37 +223,105 @@ app.controller('BestsellerItemController',[
                 messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
             }
         });
+        /**
+         * show pdf
+         */
+        $scope.createPdf=function(){
+            console.log($scope.bestseller.orderId);
+            BestsellersService.createPdf($scope.bestseller.orderId).then(
 
+                function(response){
+                    console.log(response);
+                    if (_.has(response,'html'))
+                    {
+                        window.location=response.html;
+                        target="_blank";
+                    }
+                    else{
+                        messageCenterService.add("danger","Error: pdf is not created",{timeout:3000});
+                    }
+                }
+            )
 
-
-
+        };
+        /**
+         *
+         * @param order
+         */
         $scope.openOrder = function(order){
             $location.path('/buyer/orders/id/'+order.id)
         };
-
+        /**
+         *
+         * @param sizes
+         */
         $scope.createOrder = function( sizes ){
 
-            if( Object.keys(sizes).length == 0 ) return false;
+            console.log("sizes",sizes);
+
+            var _sizeArray=BestsellersService.sizeCheck(sizes);
+
+            console.log("sizeArray",_sizeArray);
+
+            if(_sizeArray.length==0){
+
+                messageCenterService.add("danger","size or count is empty",{timeout:3000});
+                return;
+            }
 
             BestsellersService.createOrder( $scope.product.factoryId).then(function(response){
                 if(response.id){
                     var orderId = response.id;
-                    var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, sizes);
+                    var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, _sizeArray);
                     // Adding items to order
                     for( i in products){
-                        BestsellersService.addOrderProductRow(orderId, products[i])
-                            .then(function(response){
-                                //console.log(response);
+                        BestsellersService.addOrderProductRow(orderId, products[i]).then(
+                            function(response){
+                                console.log(response);
                                 if( response.id ){
                                     products.splice(0, 1);
                                     if(products.length == 0){
                                         window.location.reload();
                                     }
                                 }
-                            });
+                            },
+                            function(error){
+                                messageCenterService.add("danger","ERROR: "+error,{timeout:3000});
+                            }
+                        );
                     }
 
                 }
             });
+        };
+        /**
+         *
+         * @param notes
+         * @param event
+         */
+        $scope.updateNotes=function(notes,event){
+            if(event.keyCode==13){
+
+                var data={
+                    id:$scope.bestseller.id,
+                    status:$scope.bestseller.status,
+                    notes:notes
+                };
+                console.log(data);
+                BestsellersService.update(data).then(
+                    function(response){
+                        //console.log(response);
+                        if(response.notes==notes){
+                            messageCenterService.add("success","Notes updated",{timeout:3000});
+                        }
+                        else{
+                            messageCenterService.add("danger","Notes is not updated",{timeout:3000});
+                        }
+                    }
+                )
+            }
+
         }
+
+
     }]);

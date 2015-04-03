@@ -404,10 +404,6 @@ app.controller("OrderController",
                 }
             }
 
-
-
-
-
             $scope.currentType=function (){
 
                 angular.forEach($scope.type,function(value){
@@ -509,6 +505,44 @@ app.controller("OrderController",
                     });
                 }
             );
+
+            $scope.saveProduct=function(event,product,model){
+
+                if(event.keyCode==13){
+
+                    if(model.price==""||model.count==""){
+
+                        messageCenterService.add("danger", "Fields price and count should not be empty",{timeout:3000});
+
+                        return;
+                    }
+
+
+
+                    console.log("new", product);
+                    url=config.API.host+"/order/update-row";
+                    data={
+                        id:product.id,
+                        size:product.size,
+                        price:model.price,
+                        count:model.count
+                    };
+                    RestFactory.request(url,"PUT",data).then(
+                        function(response){
+                            console.log(response);
+                            if(_.isObject(response)){
+                                messageCenterService.add("success", "Articul #"+product.product.articul+" updated",{timeout:3000});
+                            }
+                            else{
+                                messageCenterService.add("danger", "Articul #"+product.product.articul+" is not updated",{timeout:3000});
+                            }
+                        }
+                    )
+
+                }
+            };
+
+
             /**
              * location to cargo cart
              * @param id
@@ -560,7 +594,7 @@ app.controller("OrderController",
                     RestFactory.request(url).then(
                         function(response){
                             console.log("send to factory",response);
-                            if(response!='null'&&response==true){
+                            if(response=='true'){
                                 messageCenterService.add('success', 'Order sended', {timeout: 3000});
                             }
                             else{

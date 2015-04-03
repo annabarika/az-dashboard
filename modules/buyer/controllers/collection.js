@@ -122,7 +122,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                 $rootScope.factoryId = factory.id;
 
                 CollectionService.getFactoryCollections(factory.id).then(function (response) {
-console.log(response);
+
                     $rootScope.factoryCollections = response;
 
                 });
@@ -131,7 +131,9 @@ console.log(response);
 
                 modalInstance.result.then(function (collection) {
 
-                    $rootScope.collection = collection;
+                   //$rootScope.collection = collection;
+                    CollectionService.inSession(collection);
+
                     $location.path("buyer/collection/upload");
                 })
             });
@@ -143,18 +145,22 @@ console.log(response);
 /**
  * Upload photos controller
  */
-app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal",
-    function ($scope, $rootScope, $location, CollectionService, $modal) {
+app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal","$timeout","messageCenterService",
+    function ($scope, $rootScope, $location, CollectionService, $modal,$timeout,messageCenterService) {
         var fileinput;
+
         $scope.$watch("photo", function (value) {
+
             $rootScope.photo = value;
         });
 
-        if ($rootScope.collection == undefined) {
-            $location.path("/buyer/collection");
+        if ($scope.collection == undefined) {
+           // $location.path("/buyer/collection");
+            $scope.collection=CollectionService.fromSession();
+            console.log($scope.collection);
         }
         else {
-            $rootScope.documentTitle = "Collection name: " + $rootScope.collection.name;
+            $rootScope.documentTitle = "Collection name: " + $scope.collection.name;
         }
 
         $scope.collectionTemplates = [
@@ -172,6 +178,60 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
 
         /* Getting collection */
+
+        /**
+         * fill all articuls
+         */
+        $scope.addArticules=function(){
+
+            var article=100000;
+            angular.forEach($scope.items,function(item){
+                if(item["article"]==""){
+                    item["article"]=article;
+                    article++;
+                }
+
+            });
+        };
+        /**
+         * fill all sizes
+         */
+        $scope.addSizes=function(){
+            angular.forEach($scope.items,function(item){
+                if(item["sizes"]=="")
+                    item["sizes"]='0';
+            });
+        };
+        /**
+         * fill all prices
+         * @param price
+         * @param event
+         */
+        $scope.addPrices=function(price,event){
+
+            if(_.isUndefined(price) && _.isUndefined(event)){
+                $scope.priceFlag=true;
+                return;
+            }
+
+            if(_.isUndefined(price)){
+                messageCenterService.add("danger","Please, enter price",{timeout:3000});
+                return;
+            }
+
+            if(event.keyCode==13){
+
+                angular.forEach($scope.items,function(item){
+
+                    if(item.price==""|| _.isNull(item.price))
+                        item["price"]=parseFloat(price);
+                });
+                $scope.priceFlag=false;
+
+            }
+
+        };
+
 
 
         $scope.dropSuccessHandler = function ($event, index, object) {
@@ -193,10 +253,27 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             array.push($data);
         };
 
-        $scope.upload = function () {
+        $scope.upload = function (flag) {
+
             fileinput = document.getElementById("fileUpload");
+
+            var dir=fileinput.getAttribute("webkitdirectory");
+
+            if(!_.isNull(dir) && _.isUndefined(flag)){
+                fileinput.removeAttribute("webkitdirectory");
+            }
+
+            if(_.isNull(dir) && flag ){
+                fileinput.setAttribute("webkitdirectory","");
+            }
+
             fileinput.click();
         };
+
+
+
+
+
 
         $scope.back = function () {
 
@@ -224,55 +301,183 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
          * include templates and upload photos,products
          */
         $scope.nextStep = function () {
-            //show error window
 
             if ($rootScope.photo == undefined) {
 
-                $rootScope.message = "You are forgot upload photo";
-                $modal.open({
-                    templateUrl: '/app/views/error.html',
-                    controller: 'BsAlertCtrl',
-                    size: 'lg'
-                });
+                messageCenterService.add("danger","You are forgot upload photo",{timeout:3000});
+
                 return;
             }
 
             if ($scope.step == 0) {
-                CollectionService.uploadFiles($rootScope.photo).success(function (data) {
-                    if (_.isArray(data)) {
-                        $scope.items = [];
 
-                        angular.forEach(data, function (value, index) {
-                            this.push({
-                                photos: [value]
-                            })
-                        }, $scope.items);
+                var modalInstance=$modal.open({
+                        templateUrl: "/modules/buyer/views/collection/progress_to_upload.html",
+                        controller: function($scope,CollectionService,photo,$timeout){
+                            $scope.photo=photo;
 
-                        $scope.imagePath = CollectionService.getImagePath();
-                        $scope.step++;
-                    }
+                            $scope.max=$scope.photo.length;
+
+                            $scope.dynamic=0;
+
+                            $scope.items = [];
+
+                            $scope.flagUpload=true;
+
+                            $scope.type='success';
+
+                            var keyArray=[],
+                                image,id;
+
+                            for (var key in $scope.photo){
+
+                                if(key!='length' && key!='item')
+                                keyArray.push(key);
+                            }
+
+                            _Upload(0);
+                            /**
+                             *
+                             * @param i
+                             * @private
+                             */
+                            function _Upload(i){
+                                image=$scope.photo[keyArray[i]];
+
+                                CollectionService.uploadFiles(image).success(function (data) {
+
+                                    if (_.isArray(data)) {
+
+                                        //console.log("data upload",data);
+
+                                        $scope.items.push({
+                                            photos:data,
+                                            article:"",
+                                            sizes:"",
+                                            price:""
+                                        });
+
+                                        //console.log("items array",$scope.items);
+
+                                        $timeout(function(){
+
+                                            $scope.dynamic ++;
+
+                                        }, 200);
+
+                                        i++;
+
+                                        if(i<$scope.max && $scope.flagUpload==true){
+
+                                            _Upload(i);
+
+                                        }else{
+                                            if($scope.items.length==$scope.max){
+
+                                                $timeout(function(){
+
+                                                    modalInstance.close($scope.items);
+
+                                                }, 1000);
+                                            }
+                                        }
+
+
+
+                                    }
+                                });
+                            }
+
+                            /**
+                             *
+                             * @param i
+                             * @private
+                             */
+                            function _deleteFiles(i){
+                                id=$scope.items[i].photos[0].id;
+                               // console.log(id);
+                                CollectionService.deleteFiles(id).then(
+                                    function(response){
+
+                                        if(response=='true'){
+                                            $scope.dynamic --;
+                                            i++;
+                                            if(i<$scope.items.length){
+                                                _deleteFiles(i);
+                                            }
+                                            else{
+
+                                                $timeout(function(){
+
+                                                    modalInstance.dismiss();
+
+                                                }, 1000);
+
+
+                                                messageCenterService.add("danger","Downloading files interrupted by the user.",{timeout:3000});
+                                            }
+                                        }
+
+                                    }
+                                )
+                            }
+
+
+                            /**
+                             * cancel and delete downloads
+                             */
+                            $scope.cancelUpload=function(){
+                                $scope.flagUpload=false;
+
+                                $scope.type='danger';
+                                //console.log($scope.items);
+                                _deleteFiles(0);
+                            }
+
+
+                        },
+                        size:"lg",
+                        backdrop:"static",
+                        resolve:{
+                            photo:function(){
+                                return $scope.photo
+                            }
+                        }
+                });
+                modalInstance.result.then(function(array){
+                    $scope.items=array;
+
+                    $scope.imagePath = CollectionService.getImagePath();
+
+                    console.log("result",$scope.items);
+                    $scope.step++;
+                    $scope.priceFlag=false;
                 });
             }
 
             if ($scope.step == 1) {
 
-                $scope.products = CollectionService.buildProductsArray($scope.items, $rootScope.collection, $rootScope.all_sizes);
+                var validation = CollectionService.validationProducts($scope.items);
 
-                if (_.isEmpty($scope.products) == false) {
+                if(validation){
+                    $scope.products = CollectionService.buildProductsArray($scope.items, $scope.collection);
 
-                    CollectionService.loadProducts($scope.products).then(
-                        function (response) {
+                    if (_.isEmpty($scope.products) == false) {
 
-                            $scope.count = response.length;
+                        CollectionService.loadProducts($scope.products).then(
+                            function (response) {
+                                console.log("", response);
+                                $scope.count = response.length;
 
-                            $scope.step++;
-                        }
-                    )
+                                $scope.step++;
+                            }
+                        )
+                    }
+                }
+                else{
+                    messageCenterService.add("danger", "Please complete the form in all products",{timeout:3000});
                 }
 
-            }
-
-            if ($scope.step == 2) {
 
             }
         };
@@ -304,6 +509,10 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
      * @param factory
      */
     $scope.chooseFactory = function (factory) {
+        if(_.isUndefined(factory)){
+            messageCenterService.add("danger","You are not choose factory",{timeout:3000});
+            return;
+        }
         $modalInstance.close(factory);
     };
 
@@ -613,30 +822,5 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             });
         };
 
-        //Add sizes to product
-        $scope.addSize = function (product) {
-            var flag = true;
-
-            var i = CollectionService.compareProduct($rootScope.items, product);
-
-            CollectionService.showModal("ADDSIZE").result.then(function (size) {
-                if (_.isUndefined(i) == false) {
-
-                    if (!$rootScope.items[i].hasOwnProperty('sizes')) {
-                        $rootScope.items[i].sizes = [];
-                    }
-                    angular.forEach($rootScope.items[i].sizes, function (value) {
-
-                        if (value.id == size.id) {
-                            messageCenterService.add('warning', 'Size already added', {timeout: 3000});
-                            flag = false;
-                        }
-                    });
-                    if (flag) {
-                        $rootScope.items[i].sizes.push(size);
-                    }
-                }
-            });
-        }
     }
 ]);

@@ -59,16 +59,16 @@
                                 <td>
                                     <ul ng-if="product.sizes[0]" ng-hide="product.inOrder" class="media-list mb-sm sm">
                                         <li ng-repeat="size in product.sizes" class="media">
-                                            <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="product.inOrder"/>
+                                            <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="product.inOrder" value="0"/>
                                         </li>
                                     </ul>
                                 </td>
                             </tr>
-                            <tr>
+                           <!-- <tr>
                                 <td colspan="2">
                                     <button class="btn btn-success" ng-click="addSize(product.catalogueProduct)" ng-hide="product.inOrder"><i class="fa fa-plus"></i> add size</button>
                                 </td>
-                            </tr>
+                            </tr>-->
                         </table>
                     </td>
                     <td>

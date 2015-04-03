@@ -4,7 +4,7 @@
         "email": "kostyanuch87@gmail.com",
         "name": "developer",
         "type": "developer",
-        "password":"123",
+        "password":"111222333",
         "cashierOffice":"1"
     },
     {
@@ -12,7 +12,7 @@
         "email": "qwerty@com",
         "name": "admin",
         "type": "admin",
-        "password":"123",
+        "password":"VP201b",
         "cashierOffice":"1",
         "settings": {
             "cashierOffice":": 1"
@@ -23,7 +23,7 @@
         "email": "kostyanuch87@gmail.com",
         "name": "user",
         "type": "user",
-        "password":"123",
+        "password":"111222333",
         "cashierOffice":"1"
     }
 ]

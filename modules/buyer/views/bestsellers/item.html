@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-sm-8">
                     <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="saveBestseller()"><i class="fa fa-plus"></i> Save</div>
-                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="addNewItems()"><span class="fa fa-file-o"> Create PDF</span></button>
+                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="createPdf()"><span class="fa fa-file-o"> Create PDF</span></button>
                     <button ng-show="bestseller.orderId" class="btn btn-success" ng-click="openOrder(order)"><span class="fa"> Open order</span></button>
                     <button ng-hide="bestseller.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
 
@@ -61,7 +61,7 @@
                         <div class="pa-md">
                             <form role="form">
                                 <div class="form-group">
-                                    <textarea class="form-control" placeholder="Add notes to product" rows="3">{{bestseller.notes}}</textarea>
+                                    <textarea class="form-control" placeholder="Add notes to product" rows="3" ng-keyup="updateNotes(notes,$event)" ng-model="notes"></textarea>
                                 </div>
                             </form>
                         </div>
@@ -74,7 +74,7 @@
         <div class="row">
 
 
-            <div class="col-md-6">
+            <div class="col-md-6" ng-hide="bestseller.status>0">
                 <div style="padding-left:20px;">
                     <h3>Size chart to order <span ng-show="order.id">(#{{order.id}})</span></h3>
                     <div style="margin:20px 0;">
@@ -94,26 +94,28 @@
                         <th>Sales (customers)</th>
                         <th>Returns, %</th>
                     </tr>
-                    <tr>
-                        <td><input type="text" ng-model="sizes.add[0].size" value="XS" size="6"/></td>
-                        <td><input type="text" ng-model="sizes.add[0].count" value="1" size="3"/></td>
+<!--                    <tr>
+                        <td><input type="text" ng-model="sizes[0].size" value="XS" size="6"/></td>
+                        <td><input type="text" ng-model="sizes[0].count" value="1" size="3"/></td>
                         <td colspan="3"></td>
                     </tr>
                     <tr>
-                        <td><input type="text" ng-model="sizes.add[1].size" value="" size="6"/></td>
-                        <td><input type="text" ng-model="sizes.add[1].count" value="" size="3"/></td>
+                        <td><input type="text" ng-model="sizes[1].size" value="" size="6"/></td>
+                        <td><input type="text" ng-model="sizes[1].count" value="" size="3"/></td>
                         <td colspan="3"></td>
-                    </tr>
-                    <tr ng-repeat="(size, sizeData) in product.marketing.sizes">
-                        <td>{{size}}
-                            <input type="hidden" ng-model="sizes[size].size" value="{{size}}"/>
+                    </tr>-->
+                    <tr ng-repeat="(size, sizeData) in sizes">
+                        <td>
+                            <span ng-show="sizeData.hide">{{sizeData.size}}</span>
+                            <input type="hidden" ng-model="sizeData.size"/>
+                            <input ng-hide="sizeData.hide" type="text" ng-model="sizeData.size" size="6"/>
                         </td>
-                        <td><input type="text" ng-model="sizes[size].count" size="3" value="2"/></td>
+                        <td><input type="text" ng-model="sizeData.count" size="3" value="2"/></td>
                         <td>{{sizeData.saleSpeed | number:0}}</td>
                         <td>{{sizeData.sales}} ({{sizeData.customers}})</td>
                         <td>{{sizeData.returns / sizeData.sales * 100 | number:0}}</td>
                     </tr>
-                    <tr>
+<!--                    <tr>
                         <td><input type="text" ng-model="sizes.add[2].size" value="" size="6"/></td>
                         <td><input type="text" ng-model="sizes.add[2].count" value="" size="3"/></td>
                         <td colspan="3"></td>
@@ -122,13 +124,13 @@
                         <td><input type="text" ng-model="sizes.add[3].size" value="" size="6"/></td>
                         <td><input type="text" ng-model="sizes.add[3].count" value="" size="3"/></td>
                         <td colspan="3"></td>
-                    </tr>
+                    </tr>-->
                 </table>
                 </div>
             </div>
             <div class="col-md-6">
                 <div style="padding-left:20px;">
-                    <h3>Buying history</h3>
+                    <h3>Buying history: NEW</h3>
                 </div>
                 <table class="table" style="background:white;">
                     <tr>
@@ -141,7 +143,9 @@
                     <tr ng-repeat="item in bestsellerHistory">
                         {{item}}
                         <td>
-                            <a ng-href="/buyer/bestsellers/item/{{item.id}}" target="_blank">{{item.orderDate}}</a>
+                           <b>
+                               <a ng-href="/buyer/bestsellers/item/{{item.id}}" target="_blank">{{item.orderDate}}</a>
+                           </b>
                         </td>
                         <td><a ng-href="/buyer/orders/id/{{item.orderId}}">{{item.orderId}}</a></td>
                         <td>
@@ -155,6 +159,30 @@
                         </td>
                         <td>{{item.notes}}</td>
                         <td>{{item.status}}</td>
+                    </tr>
+                </table>
+                <!--Old History-->
+                <div style="padding-left:20px;" ng-hide="product.buyingHistory.buying==undefined" >
+                    <h3>Buying history (old)</h3>
+                </div>
+                <table class="table" style="background:white;" ng-hide="product.buyingHistory.buying==undefined">
+                    <tr>
+                        <th>Buying date</th>
+                        <th>Sizes = Count</th>
+                        <th>Notes</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="(date, data) in product.buyingHistory.buying">
+                        <td>
+                            <a href="http://back95.com/buyer/re_buying/item_details/{{product.id}}/{{data.buyingId}}" target="_blank">{{date}}</a>
+                        </td>
+                        <td>
+                            <div ng-repeat="(size, count) in data.sizes">
+                                {{size}}=<b>{{count}}</b>
+                            </div>
+                        </td>
+                        <td>{{data.notes}}</td>
+                        <td>{{data.status}}</td>
                     </tr>
                 </table>
 
