@@ -2,7 +2,7 @@ var config = {
     API: {
         host: "/api/",
         key: 'test',
-        imagehost: 'http://compass',
+        imagehost: 'http://lex.b.compass',
         getproducts:"/api/jsonp.php",
         tokien_id : "5f77e685beaa564fd3585738d65108c4"
     },

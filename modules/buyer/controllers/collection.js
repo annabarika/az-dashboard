@@ -14,6 +14,13 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         // set title
         $rootScope.documentTitle = "Collection";
 
+        // Load scope sizes
+        CollectionService.loadSizes().then(function (response) {
+            $rootScope.all_sizes = response;
+        });
+
+
+
         // set table header
         $scope.tableHeader = [
             {name: "id", title: 'ID'},
@@ -125,17 +132,36 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
                     $rootScope.factoryCollections = response;
 
+                    console.log($rootScope.factoryCollections);
+
+                    angular.forEach($rootScope.factoryCollections, function(value){
+
+                        if(value.status==0){
+
+                            CollectionService.inSession(value);
+
+                            $location.path("buyer/collection/upload");
+
+                        }
+                    });
+
                 });
+                var control=CollectionService.fromSession();
+                if(control==undefined){
 
-                var modalInstance = CollectionService.showModal("CHOOSE", 'sm');
+                    var modalInstance = CollectionService.showModal("CHOOSE", 'sm');
 
-                modalInstance.result.then(function (collection) {
+                    modalInstance.result.then(function (collection) {
 
-                   //$rootScope.collection = collection;
-                    CollectionService.inSession(collection);
+                        //$rootScope.collection = collection;
+                        CollectionService.inSession(collection);
 
-                    $location.path("buyer/collection/upload");
-                })
+                        $location.path("buyer/collection/upload");
+                    })
+                }
+
+
+
             });
         };
 
@@ -148,6 +174,12 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal","$timeout","messageCenterService",
     function ($scope, $rootScope, $location, CollectionService, $modal,$timeout,messageCenterService) {
         var fileinput;
+
+        CollectionService.loadSizes().then(function (response) {
+            $rootScope.all_sizes = response;
+        });
+
+
 
         $scope.$watch("photo", function (value) {
 
@@ -223,8 +255,11 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
                 angular.forEach($scope.items,function(item){
 
-                    if(item.price==""|| _.isNull(item.price))
-                        item["price"]=parseFloat(price);
+                    if(item.price==""|| _.isNull(item.price)){
+                        price=price.replace(",",".");
+                        item["price"]=price;
+                    }
+
                 });
                 $scope.priceFlag=false;
 
@@ -457,10 +492,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
             if ($scope.step == 1) {
 
-                var validation = CollectionService.validationProducts($scope.items);
+                var validation = CollectionService.validationProducts($scope.items,$rootScope.all_sizes);
 
-                if(validation){
-                    $scope.products = CollectionService.buildProductsArray($scope.items, $scope.collection);
+                if(validation==-1){
+                    $scope.products = CollectionService.buildProductsArray($scope.items, $scope.collection,$rootScope.all_sizes);
 
                     if (_.isEmpty($scope.products) == false) {
 
@@ -475,7 +510,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                     }
                 }
                 else{
-                    messageCenterService.add("danger", "Please complete the form in all products",{timeout:3000});
+                    messageCenterService.add("danger", "Row  #"+(validation+1)+" is not a full",{timeout:3000});
                 }
 
 
@@ -691,11 +726,6 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                     });
                 }
             }
-        });
-
-        // Load scope sizes
-        CollectionService.loadSizes().then(function (response) {
-            $rootScope.all_sizes = response;
         });
 
         //Cancel collection
