@@ -25,7 +25,8 @@
         LOADSTATUSES            :     config.API.host+'status/load/type/factoryCatalogue',
         LOADONECOLLECTION       :    config.API.host+"catalogue-collection/load/id/",
         GETORDER                :    config.API.host+"order/get/id/",
-        GETORDERROWS            :     config.API.host+"order/get-rows/id/"
+        GETORDERROWS            :     config.API.host+"order/get-rows/id/",
+        SENDORDER               :     config.API.host+"order/send-notification/id/"
     });
 
     app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
@@ -99,6 +100,19 @@
                     var sorted = _.sortBy(collections, 'createDate').reverse();
 
                     return sorted;
+                },
+
+                /**
+                 * Send order created
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                sendCreatedOrder : function(id){
+
+                    var url = PATHC.SENDORDER+id;
+
+                    return RestFactory.request(url);
                 },
 
                 /**
