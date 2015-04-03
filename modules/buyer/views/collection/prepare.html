@@ -11,6 +11,25 @@
         </thead>
 
         <tbody>
+        <tr>
+            <td></td>
+            <td>
+                <button class=".btn-xs" ng-click="addArticules()">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+            </td>
+            <td>
+                <button class=".btn-xs" ng-click="addSizes()">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+            </td>
+            <td>
+                <button class=".btn-xs" ng-click="addPrices()" ng-hide="priceFlag">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+                <input ng-show="priceFlag" type="text" ng-model="commonPrice" ng-keyup="addPrices(commonPrice,$event)"/>
+            </td>
+        </tr>
         <tr ng-repeat="item in items">
             <td>
                 <div class="media np">

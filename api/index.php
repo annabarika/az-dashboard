@@ -44,6 +44,7 @@ try {
                 //			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 
                 $response = curl_exec($ch);
+
                 curl_close($ch);
                 echo $response;
                 die;

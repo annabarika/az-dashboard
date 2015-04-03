@@ -122,7 +122,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                 $rootScope.factoryId = factory.id;
 
                 CollectionService.getFactoryCollections(factory.id).then(function (response) {
-console.log(response);
+
                     $rootScope.factoryCollections = response;
 
                 });
@@ -131,7 +131,9 @@ console.log(response);
 
                 modalInstance.result.then(function (collection) {
 
-                    $rootScope.collection = collection;
+                   //$rootScope.collection = collection;
+                    CollectionService.inSession(collection);
+
                     $location.path("buyer/collection/upload");
                 })
             });
@@ -146,16 +148,19 @@ console.log(response);
 app.controller("UploadController", ['$scope', '$rootScope', '$location', 'CollectionService', "$modal","$timeout","messageCenterService",
     function ($scope, $rootScope, $location, CollectionService, $modal,$timeout,messageCenterService) {
         var fileinput;
+
         $scope.$watch("photo", function (value) {
 
             $rootScope.photo = value;
         });
 
-        if ($rootScope.collection == undefined) {
-            $location.path("/buyer/collection");
+        if ($scope.collection == undefined) {
+           // $location.path("/buyer/collection");
+            $scope.collection=CollectionService.fromSession();
+            console.log($scope.collection);
         }
         else {
-            $rootScope.documentTitle = "Collection name: " + $rootScope.collection.name;
+            $rootScope.documentTitle = "Collection name: " + $scope.collection.name;
         }
 
         $scope.collectionTemplates = [
@@ -173,6 +178,60 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
 
         /* Getting collection */
+
+        /**
+         * fill all articuls
+         */
+        $scope.addArticules=function(){
+
+            var article=100000;
+            angular.forEach($scope.items,function(item){
+                if(item["article"]==""){
+                    item["article"]=article;
+                    article++;
+                }
+
+            });
+        };
+        /**
+         * fill all sizes
+         */
+        $scope.addSizes=function(){
+            angular.forEach($scope.items,function(item){
+                if(item["sizes"]=="")
+                    item["sizes"]='0';
+            });
+        };
+        /**
+         * fill all prices
+         * @param price
+         * @param event
+         */
+        $scope.addPrices=function(price,event){
+
+            if(_.isUndefined(price) && _.isUndefined(event)){
+                $scope.priceFlag=true;
+                return;
+            }
+
+            if(_.isUndefined(price)){
+                messageCenterService.add("danger","Please, enter price",{timeout:3000});
+                return;
+            }
+
+            if(event.keyCode==13){
+
+                angular.forEach($scope.items,function(item){
+
+                    if(item.price==""|| _.isNull(item.price))
+                        item["price"]=parseFloat(price);
+                });
+                $scope.priceFlag=false;
+
+            }
+
+        };
+
 
 
         $scope.dropSuccessHandler = function ($event, index, object) {
@@ -212,6 +271,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         };
 
 
+
+
+
+
         $scope.back = function () {
 
             if ($scope.step == 2) {
@@ -238,7 +301,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
          * include templates and upload photos,products
          */
         $scope.nextStep = function () {
-            console.log("items",$scope.items);
+
             if ($rootScope.photo == undefined) {
 
                 messageCenterService.add("danger","You are forgot upload photo",{timeout:3000});
@@ -260,6 +323,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                             $scope.items = [];
 
                             $scope.flagUpload=true;
+
+                            $scope.type='success';
 
                             var keyArray=[],
                                 image,id;
@@ -286,7 +351,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                         //console.log("data upload",data);
 
                                         $scope.items.push({
-                                            photos:data
+                                            photos:data,
+                                            article:"",
+                                            sizes:"",
+                                            price:""
                                         });
 
                                         //console.log("items array",$scope.items);
@@ -360,6 +428,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                              */
                             $scope.cancelUpload=function(){
                                 $scope.flagUpload=false;
+
+                                $scope.type='danger';
                                 //console.log($scope.items);
                                 _deleteFiles(0);
                             }
@@ -379,49 +449,35 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
                     $scope.imagePath = CollectionService.getImagePath();
 
-                    console.log("result",$scope.items, $scope.imagePath);
+                    console.log("result",$scope.items);
                     $scope.step++;
+                    $scope.priceFlag=false;
                 });
-
-
-
-
-
-                /*CollectionService.uploadFiles($rootScope.photo).success(function (data) {
-                    if (_.isArray(data)) {
-                        $scope.items = [];
-
-                        angular.forEach(data, function (value, index) {
-                            this.push({
-                                photos: [value]
-                            })
-                        }, $scope.items);
-
-                        $scope.imagePath = CollectionService.getImagePath();
-                        $scope.step++;
-                    }
-                });*/
             }
 
             if ($scope.step == 1) {
 
-                $scope.products = CollectionService.buildProductsArray($scope.items, $rootScope.collection, $rootScope.all_sizes);
+                var validation = CollectionService.validationProducts($scope.items);
 
-                if (_.isEmpty($scope.products) == false) {
+                if(validation){
+                    $scope.products = CollectionService.buildProductsArray($scope.items, $scope.collection);
 
-                    CollectionService.loadProducts($scope.products).then(
-                        function (response) {
+                    if (_.isEmpty($scope.products) == false) {
 
-                            $scope.count = response.length;
+                        CollectionService.loadProducts($scope.products).then(
+                            function (response) {
+                                console.log("", response);
+                                $scope.count = response.length;
 
-                            $scope.step++;
-                        }
-                    )
+                                $scope.step++;
+                            }
+                        )
+                    }
+                }
+                else{
+                    messageCenterService.add("danger", "Please complete the form in all products",{timeout:3000});
                 }
 
-            }
-
-            if ($scope.step == 2) {
 
             }
         };
@@ -436,13 +492,6 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 $scope.step = 0;
             }
         };
-
-
-        /**
-         * test progress bar
-         */
-
-
 
     }]);
 
@@ -460,6 +509,10 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
      * @param factory
      */
     $scope.chooseFactory = function (factory) {
+        if(_.isUndefined(factory)){
+            messageCenterService.add("danger","You are not choose factory",{timeout:3000});
+            return;
+        }
         $modalInstance.close(factory);
     };
 
@@ -769,30 +822,5 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             });
         };
 
-        //Add sizes to product
-        $scope.addSize = function (product) {
-            var flag = true;
-
-            var i = CollectionService.compareProduct($rootScope.items, product);
-
-            CollectionService.showModal("ADDSIZE").result.then(function (size) {
-                if (_.isUndefined(i) == false) {
-
-                    if (!$rootScope.items[i].hasOwnProperty('sizes')) {
-                        $rootScope.items[i].sizes = [];
-                    }
-                    angular.forEach($rootScope.items[i].sizes, function (value) {
-
-                        if (value.id == size.id) {
-                            messageCenterService.add('warning', 'Size already added', {timeout: 3000});
-                            flag = false;
-                        }
-                    });
-                    if (flag) {
-                        $rootScope.items[i].sizes.push(size);
-                    }
-                }
-            });
-        }
     }
 ]);
