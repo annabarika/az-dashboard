@@ -234,17 +234,36 @@
                     });
                     return (sizes.length > 0);
                 },
-                validationProducts:function(products){
+                validationProducts:function(products,allSizes){
 
-                    var length=products.length;
+                    var length=products.length, sizes;
 
                     for(var i=0;i<length;i++){
-                        console.log(products[i].sizes,typeof products[i].sizes);
-                        if(products[i].article=="" || products[i].sizes=="" || products[i].price==""|| _.isNull(products[i].price)){
-                            return false;
+
+                        if(products[i].article=="" || products[i].sizes=="" || products[i].price==""|| _.isNull(products[i].price)|| _.isUndefined(products[i].price)){
+                            return i;
                         }
+
+                        var sizes=products[i].sizes.split(/[,.\/]+/);
+
+                        console.log(sizes);
+
+                        for(var j=0;j<sizes.length;j++){
+
+                            sizes[j]=sizes[j].toUpperCase();
+
+                            console.log(_.findIndex(allSizes,{name:sizes[j]}));
+
+                            if(_.findIndex(allSizes,{name:sizes[j]})==-1){
+
+                                return i;
+                            }
+                        }
+
+
+
                     }
-                    return true;
+                    return -1;//true
 
                 },
                 /**
@@ -260,7 +279,13 @@
 
                     angular.forEach(data,function(value,i){
 
-                        sizes=value.sizes.split(/[\s,]+/);
+                        var sizes=value.sizes.split(/[,.\/]+/);
+
+                        for(var j=0;j<sizes.length;j++){
+                            sizes[j]=sizes[j].toUpperCase();
+                        }
+
+                        var price=value.price.replace(",",".");
 
                         var photos = [];
                         angular.forEach(value.photos,function(img) {
@@ -269,7 +294,7 @@
                         //console.log(sizes);
                         var product = {
                             articul:value.article,
-                            price:value.price,
+                            price:price,
                             collectionId:collection.id,
                             photos:photos,
                             sizes:sizes,
