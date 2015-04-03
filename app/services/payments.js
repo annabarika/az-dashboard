@@ -9,7 +9,9 @@
         CASHIEROFFICE   :   config.API.host + "cashier-office/load",
         CREATE          :   config.API.host + "cashier-office/create",
         ORDERTYPE       :   config.API.host + "order-type/load",
-        NEWPAYMENT      :   config.API.host + "payment/create"
+        CURRENCY        :   config.API.host + "currency/load",
+        NEWPAYMENT      :   config.API.host + "payment/create",
+        ORDERPAYMENTS   :   config.API.host +"/payment/load/orderId/"
     });
 
     app.factory("PaymentService", ["PATH", 'RestFactory',
@@ -23,6 +25,15 @@
                 getPayments: function(){
 
                     return RestFactory.request(PATH.LOAD);
+                },
+                /**
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                getOrderPayments: function(id){
+
+                    return RestFactory.request(PATH.ORDERPAYMENTS+id);
                 },
                 /**
                  *
@@ -43,19 +54,50 @@
                     angular.forEach(array,function(item,i){
                         // console.log(item,i);
                         this.push({
-                            id        :   item.payment.id,
-                            orderId   :   item.payment.orderId,
-                            factoryId :   item.factory.id,
-                            factory   :   item.factory.name,
-                            date      :   item.payment.paymentDate,
-                            method    :   item.payment.paymentMethod,
-                            amount    :   (item.payment.paymentType=='payment')?item.payment.amount:"",
-                            refund    :   (item.payment.paymentType=='refund')?item.payment.amount:""
+                            id              :   item.payment.id,
+                            orderId         :   item.payment.orderId,
+                            factoryId       :   item.factory.id,
+                            factory         :   item.factory.name,
+                            date            :   item.payment.paymentDate,
+                            method          :   item.payment.paymentMethod,
+                            cashierOfficeId :   item.payment.cashierOfficeId,
+                            amount          :   (item.payment.paymentType=='payment')?item.payment.amount:"",
+                            refund          :   (item.payment.paymentType=='refund')?item.payment.amount:"",
+                            currency        :   item.currency.ISOCode
 
                         });
                     },payments);
                     return payments;
                 },
+                /**
+                 *
+                 * @param payments
+                 * @param officies
+                 * @returns {Array}
+                 */
+                parseCashierOffice:function(payments,officies){
+
+                    var result=[];
+
+                    angular.forEach(payments,function(item){
+
+                        angular.forEach(officies,function(value){
+
+                            if(value.id==item.cashierOfficeId){
+
+                                item.cashierOfficeName=value.name;
+
+                                return;
+                            }
+                        });
+
+                        this.push(item);
+
+                    },result);
+
+                    return result;
+                },
+
                 /**
                  *
                  * @returns {*}
@@ -74,6 +116,13 @@
                  *
                  * @returns {*}
                  */
+                getCurrency:function(){
+                    return RestFactory.request(PATH.CURRENCY);
+                },
+                /**
+                 *
+                 * @returns {*}
+                 */
                 getCashierOfficies:function(){
                     return RestFactory.request(PATH.CASHIEROFFICE);
                 },
@@ -86,9 +135,10 @@
                     var data={
                         'name': obj.name,
                         'status': 0,
-                        'orderTypeId':obj.type.id
+                        'orderTypeId':obj.type.id,
+                        'currencyId':obj.currency.id
                     };
-                    console.log(data);
+                    //console.log("new Cash.Off.",data);
                     return RestFactory.request(PATH.CREATE,"POST",data);
                 },
                 /**

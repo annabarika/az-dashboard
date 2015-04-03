@@ -12,24 +12,35 @@ app.controller('PaymentListController',
 		"PaymentService",
 		"$modal",
 		"messageCenterService",
+		"AuthFactory",
 
-		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService){
+		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService,AuthFactory){
 
 			$scope.$route = $route;
 			$scope.$location = $location;
 			var filter={},
 				url;
 
+			$scope.userType=JSON.parse(AuthFactory.getUser('type'));
+
+			$scope.userCO=JSON.parse(AuthFactory.getUser('cashierOffice'));
+
+
+			console.log($scope.userType,$scope.userCO);
+
+
 			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				{ name: "id", title: 'ID' },
-				{ name: "orderId", title: 'Order' },
-				{ name: "factory", title: 'Factory' },
-				{ name: "date", title: 'Payment date' },
-				{ name: "method", title: 'Payment method'},
-				{ name: "amount", title: 'Payment' },
-				{ name: "refund", title: 'Refund' }
+				{ name: "id"				,	title: 'ID' },
+				{ name: "orderId"			, 	title: 'Order' },
+				{ name: "factory"			, 	title: 'Factory' },
+				{ name: "date"				, 	title: 'Payment date' },
+				{ name: "method"			, 	title: 'Payment method'},
+				/*{ name:"cashierOfficeId"	,	title:"CashierOffice"},*/
+				{ name:"cashierOfficeName"	,	title:"CashierOffice"},
+				{ name: "amount"			, 	title: 'Payment' },
+				{ name: "refund"			, 	title: 'Refund' }
 			];
 
 			function getPayments(){
@@ -38,8 +49,13 @@ app.controller('PaymentListController',
 					function(response){
 
 						if(_.isArray(response)){
+
 							$scope.data = PaymentService.parseData(response,$scope.tableHeader);
 							$scope.payments=$scope.data;
+
+							console.log(response);
+
+
 						}
 					}
 				);
@@ -54,7 +70,23 @@ app.controller('PaymentListController',
 
 			PaymentService. getCashierOfficies().then(
 				function(response){
+
+					if(_.isString(response)){
+						messageCenterService.add("danger","Error while loading offices",{timeout:3000});
+						return
+					}
 					$scope.cashierOfficies=response;
+					console.log($scope.cashierOfficies);
+
+					$scope.payments=PaymentService.parseCashierOffice($scope.payments,$scope.cashierOfficies);
+
+
+					angular.forEach($scope.cashierOfficies,function(value){
+						if(value.id==$scope.userCO){
+							$scope.userCO=value;
+							return;
+						}
+					})
 				}
 			);
 
@@ -116,16 +148,29 @@ app.controller('PaymentListController',
 			$scope.addNewPayment=function(){
 				var modalInstance=$modal.open({
 					templateUrl:"/modules/buyer/views/payments/new_payment.html",
-					controller:function($scope,PaymentService){
+					controller:function($scope,PaymentService,cashierOffice){
+
+						$scope.cashierOffice=cashierOffice;
+						/**
+						 * get Orders
+						 */
 						PaymentService.getOrders().then(
 							function(response){
 								$scope.orders=response;
 							}
 						);
+						/**
+						 *
+						 * @type {{name: string}[]}
+						 */
 						$scope.paymentMethod=[
 							{name:"cash"},
 							{name:"bank"}
 						];
+						/**
+						 *
+						 * @param payment
+						 */
 						$scope.create=function(payment){
 
 							if(_.isUndefined(payment)){
@@ -151,7 +196,12 @@ app.controller('PaymentListController',
 						}
 					},
 					backdrop:'static',
-					size:"sm"
+					size:"sm",
+					resolve:{
+						cashierOffice:function(){
+							return $scope.userCO;
+						}
+					}
 				});
 				modalInstance.result.then(
 					function(payment){
@@ -173,14 +223,29 @@ app.controller('PaymentListController',
 			 * Add new cashier office
 			 */
 			$scope.addNewCashOffice=function(){
+
 				var modalInstance=$modal.open({
 					templateUrl:"/modules/buyer/views/payments/new_cash_office.html",
 					controller:function($scope,PaymentService){
+						/**
+						 * get Types
+						 */
 						PaymentService.getOrderType().then(
 						function(response){
 							$scope.type=response;
-						}
-					);
+						});
+						/**
+						 * get Currency
+						 */
+						PaymentService.getCurrency().then(
+							function(response){
+								$scope.currency=response;
+							}
+						);
+						/**
+						 *
+						 * @param obj
+						 */
 						$scope.create=function(obj){
 							if(_.isUndefined(obj)){
 								messageCenterService.add('danger', 'Not entered name', {timeout: 3000});
@@ -207,7 +272,7 @@ app.controller('PaymentListController',
 						console.log(obj);
 						PaymentService.createCashierOffice(obj).then(
 							function(response){
-								if(_.isString(response)){
+								if(_.isObject(response)){
 									messageCenterService.add('success', 'Cashier Office created', {timeout: 3000});
 								}else{
 									messageCenterService.add('danger', 'Cashier Office is not created:'+response , {timeout: 3000});
@@ -219,8 +284,16 @@ app.controller('PaymentListController',
 						)
 					}
 				)
-			}
+			};
 
+
+			/**
+			 *	Location to Payment orders
+			 */
+			$scope.edit = function(){
+				console.log($rootScope.row);
+				$location.path( '/buyer/payments/payment_order/'+ $rootScope.row.orderId);
+			};
 		}]);
 
 app.controller("PaymentOrderController",[
@@ -230,11 +303,68 @@ app.controller("PaymentOrderController",[
 	"$location",
 	"$route",
 	"$routeParams",
-	"RestFactory",
+	"PaymentService",
+	"messageCenterService",
 
-	function ($scope, $rootScope, $modal, $location, $route,$routeParams, RestFactory){
-		console.log($routeParams);
+	function ($scope, $rootScope, $modal, $location, $route,$routeParams,PaymentService,messageCenterService){
+		/**
+		 * orderId
+		 */
 		$scope.orderId=$routeParams.id;
+		/**
+		 *
+		 * @type {string}
+		 */
+		$rootScope.documentTitle="Payments for order #"+$scope.orderId;
+		/**
+		 *
+		 * @type {{name: string, title: string}[]}
+		 */
+		$scope.tableHeader = [
+			{ name: "id"				,	title: 'ID' },
+			{ name: "factory"			, 	title: 'Factory' },
+			{ name: "date"				, 	title: 'Payment date' },
+			{ name: "method"			, 	title: 'Payment method'},
+			{ name:"cashierOfficeName"	,	title:"CashierOffice"},
+			{ name: "amount"			, 	title: 'Payment' },
+			{ name: "refund"			, 	title: 'Refund' }
+		];
+		/**
+		 * get Order Payments
+		 */
+		PaymentService.getOrderPayments($scope.orderId).then(
+			function(response){
+				console.log("orderpayment",response);
+				if(_.isArray(response)){
+					$scope.data = PaymentService.parseData(response,$scope.tableHeader);
+					$scope.orderPayments=$scope.data;
+				}
+				else{
+					messageCenterService.add("danger","Error: "+response,{timeout:3000});
+				}
+			}
+		);
+		/**
+		 * get Cashier Officeis
+		 */
+		PaymentService. getCashierOfficies().then(
+			function(response){
+
+				if(_.isString(response)){
+					messageCenterService.add("danger","Error while loading offices",{timeout:3000});
+					return
+				}
+				$scope.cashierOfficies=response;
+				//console.log($scope.cashierOfficies);
+				$scope.orderPayments=PaymentService.parseCashierOffice($scope.orderPayments,$scope.cashierOfficies);
+				//console.log("this",$scope.orderPayments);
+			}
+		);
+
+
+		/**
+		 * return to payments index page
+		 */
 		$scope.back=function(){
 			$location.path("buyer/payments")
 		}

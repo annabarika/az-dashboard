@@ -11,6 +11,11 @@
             ng-options="opt as opt.name for opt in type">
         <option value="">Choose type</option>
     </select>
+    <label>Currency:</label>
+    <select class="form-control" data-ng-model="cash.currency"
+            ng-options="opt as opt.ISOCode for opt in currency">
+        <option value="">Choose currency</option>
+    </select>
 
 </div>
 <div class="modal-footer">

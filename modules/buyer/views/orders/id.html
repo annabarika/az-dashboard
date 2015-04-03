@@ -12,7 +12,7 @@
                     <div class="btn btn-success" ng-click="upload()">Upload</div>
                     <div class="btn btn-warning" ng-click="sendToFactory()"><i class="fa fa-check"></i> Send to Factory</div>
                     <div class="btn btn-info" ng-click="makePayment()"><i class="fa fa-plus"></i> Make Payment</div>
-                    <div class="btn btn-default" ng-click="cancel()"><i class="fa fa-ban"></i> Cancel</div>
+                    <div class="btn btn-default" ng-click="cancel()" ng-disabled="orderFlag"><i class="fa fa-ban"></i> Cancel</div>
                 </div>
             </div>
         </div>
@@ -25,24 +25,11 @@
                 </button>
             </li>
         </div>
-
-        <!--<div class="row">
-            <div class="col-sm-2 col-md-2" ng-repeat="file in files">
-                <button ng-click="removeFiles(file.name)" class="btn btn-link">
-                    <i class="fa fa-remove"></i>
-                </button>
-                <div class="thumbnail">
-                    <img file-preview="file" style="height:120px;"/>
-                </div>
-            </div>
-        </div>-->
-
-
     </div>
 </div>
-<div class="container-fluid pt-md">
-    <div class="row">
-        <div class="col-md-12">
+        <div class="container-fluid pt-md">
+            <div class="row">
+                <div class="col-md-12">
                     <div class="tab-pane active">
                         <div class="row">
                             <div class="col-md-6">
@@ -50,47 +37,47 @@
                                     <div class="table-responsive">
                                         <table class="table table-hover table-bordered">
                                             <tbody>
-                                            <tr>
-                                                <td>Factory</td>
-                                                <td>{{order.factory.name}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Type</td>
-                                                <td>
-                                                    {{currentType.name}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Orderred total
-                                                </td>
-                                                <td>
-                                                    {{order.order.orderedTotal}}{{order.currency.ISOCode}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Paid total
-                                                </td>
-                                                <td ng-click="showPayment()">
-                                                   {{order.order.paidTotal}}{{order.currency.ISOCode}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Create date</td>
-                                                <td>{{order.order.createDate|date:'medium'}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cargo</td>
-                                                <td>
-                                                    <ul class="list-inline" ng-if="cargo==array">
-                                                        <li ng-repeat="item in cargo">
-                                                            #<a href=""  ng-click="goToCargo(item.cargo.id)">{{item.cargo.id}}</a>;
-                                                        </li>
-                                                    </ul>
-                                                    <span ng-if="cargo!=array">&mdash;</span>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td>Factory</td>
+                                                    <td>{{order.factory.name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Type</td>
+                                                    <td>
+                                                        {{currentType.name}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Orderred total
+                                                    </td>
+                                                    <td>
+                                                        {{order.order.orderedTotal}}{{order.currency.ISOCode}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Paid total
+                                                    </td>
+                                                    <td ng-click="showPayment()">
+                                                       {{order.order.paidTotal}}{{order.currency.ISOCode}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Create date</td>
+                                                    <td>{{order.order.createDate|date:'medium'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cargo</td>
+                                                    <td>
+                                                        <ul class="list-inline" ng-if="cargo==array">
+                                                            <li ng-repeat="item in cargo">
+                                                                #<a href=""  ng-click="goToCargo(item.cargo.id)">{{item.cargo.id}}</a>;
+                                                            </li>
+                                                        </ul>
+                                                        <span ng-if="cargo!=array">&mdash;</span>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -98,16 +85,17 @@
                             </div>
                         </div>
                     </div>
-</div>
+        </div>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>#</th>
                     <th ng-repeat="column in tableHeader">{{column.title}}</th>
+                    <th ng-hide="orderFlag"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in orderProducts track by $index">
+                <tr ng-repeat="item in orderProducts track by $index" >
                     <td>{{$index+1}}</td>
                     <td>
                         <img ng-src="http://back95.ru/f/catalogue/{{item.product.id}}/{{item.product.preview[1]}}"/>
@@ -117,9 +105,18 @@
                     <td>{{item.product.factoryArticul}}</td>
                     <td>{{item.product.title}}</td>
                     <td>{{item.size}}</td>
-                    <td>{{item.count}}</td>
-                    <td>{{item.price}}</td>
+                    <td class="col-lg-1">
+                        <input class="form-control" type="text" ng-model="productModel.count" ng-init="productModel.count= item.count" ng-keyup="saveProduct($event,item,productModel)">
+                    </td>
+                    <td class="col-lg-1">
+                        <input class="form-control" type="text" ng-model="productModel.price" ng-init="productModel.price= item.price" ng-keyup="saveProduct($event,item,productModel)">
+                    </td>
                     <td>{{item.count *item.price||0}}</td>
+                    <td ng-hide="orderFlag">
+                        <button class="btn-default" ng-click="deleteProduct($index)">
+                            <i class="fa fa-ban"></i>
+                        </button>
+                    </td>
 
                 </tr>
             <tr>
@@ -133,8 +130,5 @@
             </tr>
             </tbody>
         </table>
-
-
-
         </div>
     </div>

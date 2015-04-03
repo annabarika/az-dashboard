@@ -3,7 +3,7 @@
         <div class="row mb-xs">
             <div class="col-sm-3">
                 <div class="btn btn-info" ng-click="addNewPayment()"><i class="fa fa-plus"></i> New payment</div>
-                <div class="btn btn-default" ng-click="addNewCashOffice()"><i class="fa fa-plus"></i> New cashier office</div>
+                <div class="btn btn-default" ng-hide="userType!='admin'" ng-click="addNewCashOffice()"><i class="fa fa-plus"></i> New cashier office</div>
             </div>
 
             <div class=" col-sm-2">
@@ -15,6 +15,7 @@
                         item-label="icon name maker"
                         tick-property="ticked"
                         max-labels="1"
+                        max-height="250px"
                         >
                 </multi-select>
             </div>
@@ -27,6 +28,7 @@
                         item-label="icon name maker"
                         tick-property="ticked"
                         max-labels="1"
+                        max-height="250px"
                         >
                 </multi-select>
             </div>

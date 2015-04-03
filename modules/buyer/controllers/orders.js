@@ -23,17 +23,6 @@ app.controller('OrderListController',
                 data,
                 filter={};
 
-            /* $scope.type=[
-             {
-             name:"Moscow",
-             id:1
-             },
-             {
-             name:"Hong Kong",
-             id:2
-             }
-             ];*/
-
             getTypes();
             function getTypes(){
                 url=config.API.host+"/order-type/load";
@@ -43,10 +32,6 @@ app.controller('OrderListController',
                     }
                 )
             }
-
-
-
-
 
             $scope.newOrder={};
 
@@ -404,6 +389,21 @@ app.controller("OrderController",
                 )
             }
 
+            /**
+             *
+             * @param status
+             * @param amount
+             */
+            function setFlag(status,amount){
+               // console.log("this", status,amount);
+                if(status!=0||amount>0){
+                    $scope.orderFlag=true;
+                }
+                else{
+                    $scope.orderFlag=false;
+                }
+            }
+
             $scope.currentType=function (){
 
                 angular.forEach($scope.type,function(value){
@@ -462,7 +462,7 @@ app.controller("OrderController",
                 .then(function(response){
                     console.log("order",response);
                     $scope.order=response;
-
+                    setFlag($scope.order.order.status);
                     angular.forEach($scope.type,function(value,index){
                         if(value.id==$scope.order.order.type){
                             $scope.currentType=$scope.type[index];
@@ -491,7 +491,7 @@ app.controller("OrderController",
                 function(response){
                     console.log('response rows', response);
                     $scope.orderProducts=response;
-
+                    console.log(response);
                     angular.forEach(response,function(value){
 
                         if(_.has(value, 'count')){
@@ -505,6 +505,44 @@ app.controller("OrderController",
                     });
                 }
             );
+
+            $scope.saveProduct=function(event,product,model){
+
+                if(event.keyCode==13){
+
+                    if(model.price==""||model.count==""){
+
+                        messageCenterService.add("danger", "Fields price and count should not be empty",{timeout:3000});
+
+                        return;
+                    }
+
+
+
+                    console.log("new", product);
+                    url=config.API.host+"/order/update-row";
+                    data={
+                        id:product.id,
+                        size:product.size,
+                        price:model.price,
+                        count:model.count
+                    };
+                    RestFactory.request(url,"PUT",data).then(
+                        function(response){
+                            console.log(response);
+                            if(_.isObject(response)){
+                                messageCenterService.add("success", "Articul #"+product.product.articul+" updated",{timeout:3000});
+                            }
+                            else{
+                                messageCenterService.add("danger", "Articul #"+product.product.articul+" is not updated",{timeout:3000});
+                            }
+                        }
+                    )
+
+                }
+            };
+
+
             /**
              * location to cargo cart
              * @param id
@@ -516,7 +554,7 @@ app.controller("OrderController",
              * location to payment cart
              */
             $scope.showPayment=function(){
-                $location.path('/buyer/payments/by-order/'+id);
+                $location.path('/buyer/payments/payment_order/'+id);
             };
 
             $scope.imagePath=config.API.imagehost+'/files/factory/attachments/';
@@ -555,13 +593,47 @@ app.controller("OrderController",
                     console.log(url);
                     RestFactory.request(url).then(
                         function(response){
-                            console.log(response);
+                            console.log("send to factory",response);
+                            if(response=='true'){
+                                messageCenterService.add('success', 'Order sended', {timeout: 3000});
+                            }
+                            else{
+                                messageCenterService.add('danger', 'Error: '+response, {timeout: 3000});
+                            }
 
+                        },
+                        function(error){
+                            messageCenterService.add('danger', 'Error: '+error, {timeout: 3000});
                         }
                     )
                 });
             };
+            /**
+             *
+             * @param index
+             */
+            $scope.deleteProduct=function(index) {
+                console.log($scope.orderProducts[index]);
+                var id = $scope.orderProducts[index].id;
+                url = config.API.host + "order/delete-row/id/" + id;
+                RestFactory.request(url, "DELETE").then(
+                    function (response) {
+                        if(response=='true'){
+                            $scope.orderProducts.splice(index,1);
+                            messageCenterService.add('success', 'Product deleted', {timeout: 3000});
 
+                        }else{
+                            messageCenterService.add('danger', 'Error! Product is not deleted', {timeout: 3000});
+                        }
+
+
+
+                    },
+                    function(error){
+                        messageCenterService.add('danger', 'Error: '+error, {timeout: 3000});
+                    }
+                );
+            };
             /**
              * make payment
              */
@@ -614,6 +686,7 @@ app.controller("OrderController",
                             console.log("payment",response);
                             if(_.isObject(response)&&response.id>0){
                                 messageCenterService.add('success', 'Payment created', {timeout: 3000});
+                                setFlag(null,payment.amount);
                             }else{
                                 messageCenterService.add('danger', 'Payment is not created', {timeout: 3000});
                             }
@@ -637,7 +710,9 @@ app.controller("OrderController",
                     runUpload();
                 }
             });
-
+            /**
+             * upload files
+             */
             function runUpload(){
 
                 $scope.uploadFlag=false;
@@ -650,14 +725,14 @@ app.controller("OrderController",
 
                 url = config.API.host + "order/loadfiles";
                 fd.append("id",id);
-
+                console.log("fd",fd);
                 $http.post(url,fd,
                     {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}
                     })
                     .success(function(data,status){
-
+                        console.log("data upload",data);
                         if(_.isArray(data)){
                             messageCenterService.add('success', 'Files uploaded', {timeout: 3000});
                         }

@@ -41,7 +41,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
             BestsellersService.getCalendarData('total', $scope.currentYear).then(function(response) {
                 $scope.bestsellers.total = BestsellersService.resolveCalendarData(response);
             });
-        }
+        };
 
         /**
          * Select month navigation
@@ -160,25 +160,60 @@ app.controller('BestsellersAddController', function ($scope, $rootScope, searchU
 /**
  * Bestseller item management
  */
-app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$location",'$routeParams', 'BestsellersService', 'messageCenterService',
+app.controller('BestsellerItemController',[
+    '$scope',
+    '$rootScope',
+    "$modal",
+    "$location",
+    '$routeParams',
+    'BestsellersService',
+    'messageCenterService',
     function ($scope, $rootScope, $modal, $location, $routeParams, BestsellersService, messageCenterService){
+
+        $scope.bestsellerHistory=[];
 
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
 
                 $scope.bestseller = response.bestseller;
+                $scope.notes=$scope.bestseller.notes;
 				$scope.factory = response.factory;
 				$scope.product = response.product;
                 $scope.order = response.order;
-
-                $scope.sizes = {add: []};
-
-				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")"
+                $scope.sizes = [{  }, { } ];
+                console.log($scope.product);
+                if( $scope.product.marketing.sizes ){
+                    var sizes = $scope.product.marketing.sizes;
+                    for( var size in sizes ){
+                        sizes[size].size = size;
+                        sizes[size].hide = true;
+                        $scope.sizes.push(sizes[size]);
+                    }
+                }
+                $scope.sizes.push({});
+                $scope.sizes.push({});
+                console.log($scope.sizes);
+				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
-                    console.log(response);
-                    $scope.bestsellerHistory = response;
+                  /*  console.log("bests history",response);*/
+                    $scope.tmp = response;
+                    angular.forEach( $scope.tmp,function(item){
+                        BestsellersService.getProducts(item.orderId).then(
+                            function(response){
+                                /*console.log(i,"products",response);*/
+                                if(_.isArray(response) && response.length!=0){
+
+                                    item['size']=response[0].size;
+                                    item['count']=response[0].count;
+
+                                }
+                                $scope.bestsellerHistory.push(item);
+                               // console.log( $scope.bestsellerHistory);
+                            }
+                        )
+                    });
                 });
 
                 console.log('Bestseller', response);
@@ -187,34 +222,105 @@ app.controller('BestsellerItemController',['$scope', '$rootScope',"$modal","$loc
                 messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
             }
         });
+        /**
+         * show pdf
+         */
+        $scope.createPdf=function(){
+            console.log($scope.bestseller.orderId);
+            BestsellersService.createPdf($scope.bestseller.orderId).then(
 
+                function(response){
+                    console.log(response);
+                    if (_.has(response,'html'))
+                    {
+                        window.location=response.html;
+                        target="_blank";
+                    }
+                    else{
+                        messageCenterService.add("danger","Error: pdf is not created",{timeout:3000});
+                    }
+                }
+            )
+
+        };
+        /**
+         *
+         * @param order
+         */
         $scope.openOrder = function(order){
             $location.path('/buyer/orders/id/'+order.id)
         };
-
+        /**
+         *
+         * @param sizes
+         */
         $scope.createOrder = function( sizes ){
 
-            if( Object.keys(sizes).length == 0 ) return false;
+            console.log("sizes",sizes);
+
+            var _sizeArray=BestsellersService.sizeCheck(sizes);
+
+            console.log("sizeArray",_sizeArray);
+
+            if(_sizeArray.length==0){
+
+                messageCenterService.add("danger","size or count is empty",{timeout:3000});
+                return;
+            }
 
             BestsellersService.createOrder( $scope.product.factoryId).then(function(response){
                 if(response.id){
                     var orderId = response.id;
-                    var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, sizes);
+                    var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, _sizeArray);
                     // Adding items to order
                     for( i in products){
-                        BestsellersService.addOrderProductRow(orderId, products[i])
-                            .then(function(response){
-                                //console.log(response);
+                        BestsellersService.addOrderProductRow(orderId, products[i]).then(
+                            function(response){
+                                console.log(response);
                                 if( response.id ){
                                     products.splice(0, 1);
                                     if(products.length == 0){
                                         window.location.reload();
                                     }
                                 }
-                            });
+                            },
+                            function(error){
+                                messageCenterService.add("danger","ERROR: "+error,{timeout:3000});
+                            }
+                        );
                     }
 
                 }
             });
+        };
+        /**
+         *
+         * @param notes
+         * @param event
+         */
+        $scope.updateNotes=function(notes,event){
+            if(event.keyCode==13){
+
+                var data={
+                    id:$scope.bestseller.id,
+                    status:$scope.bestseller.status,
+                    notes:notes
+                };
+                console.log(data);
+                BestsellersService.update(data).then(
+                    function(response){
+                        //console.log(response);
+                        if(response.notes==notes){
+                            messageCenterService.add("success","Notes updated",{timeout:3000});
+                        }
+                        else{
+                            messageCenterService.add("danger","Notes is not updated",{timeout:3000});
+                        }
+                    }
+                )
+            }
+
         }
+
+
     }]);
