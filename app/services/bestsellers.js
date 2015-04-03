@@ -125,7 +125,7 @@
                         sizes.forEach(function(size) {
 
                             if(!_.isUndefined(size.saleSpeed)) {
-                                totalCount += size.count = Math.ceil(num / 100 * size.saleSpeed / sizes.length);
+                                totalCount += size.count = Math.ceil( num * size.saleSpeed / totalSaleSpeed );
                             }
                         });
 
