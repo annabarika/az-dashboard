@@ -5,7 +5,7 @@
                 <div class="btn btn-info" ng-click="newCollection()"><i class="fa fa-plus"></i> New collection</div>
             </div>
             <div class="col-sm-5">
-                <div class="col-sm-4 va-m">
+                <!--<div class="col-sm-4 va-m">
                     <multi-select
                             default-label="Factory filter"
                             input-model="factories"
@@ -29,7 +29,18 @@
                             max-labels="1"
                             >
                     </multi-select>
-                </div>
+                </div>-->
+                <select class="form-control" data-ng-model="filter.factory"
+                                 ng-options="opt as opt.name for opt in factories">
+                    <option value="">Choose factory</option>
+                </select>
+
+                <select class="form-control" data-ng-model="filter.status"
+                        ng-options="opt as opt.name for opt in statuses">
+                    <option value="">Choose status</option>
+                </select>
+
+                <button class="btn btn-success" ng-click="filtrate(filter)">filtrate </button>
             </div>
         </div>
     </div>
@@ -37,7 +48,30 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
     <!-- start thumbnail row -->
-     <div class="pa-md">
+        <div class="pa-md">
+            <div class="row">
+
+                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections">
+                    <div class="panel panel-body">
+                        <div class="row_collection" ng-repeat="(key,value) in item.products">
+                            <ul ng-repeat="(k,v) in value|limitTo:2">
+                                {{v[0].factory.name}}
+                            <li class="img-wrapper">
+                                    <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
+
+                            </li>
+
+                            </ul>
+                            <div>
+                        <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    <!-- <div class="pa-md">
         <div class="row">
             <div class="col-sm-3 col-md-3 col-bt-2">
                 <div class="panel panel-body">
@@ -280,7 +314,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     </div>
 </div>
 

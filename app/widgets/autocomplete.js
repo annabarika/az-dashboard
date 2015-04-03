@@ -20,7 +20,7 @@ angular.module('widgets.autocomplete', [])
                     if(val){
 
                         $scope.flag=false;
-                        console.log($scope.flag);
+                        //console.log($scope.flag);
                     }
                     else{
                         $scope.flag=true;

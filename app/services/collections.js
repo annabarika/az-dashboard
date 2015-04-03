@@ -235,30 +235,35 @@
                     return (sizes.length > 0);
                 },
                 validationProducts:function(products,allSizes){
-
+                    console.log(allSizes);
                     var length=products.length, sizes;
 
                     for(var i=0;i<length;i++){
 
-                        if(products[i].article=="" || products[i].sizes=="" || products[i].price==""|| _.isNull(products[i].price)|| _.isUndefined(products[i].price)){
+                        if(products[i].article=="" || products[i].sizes=="" || products[i].price==""|| _.isNull(products[i].price)){
                             return i;
                         }
 
                         var sizes=products[i].sizes.split(/[,.\/]+/);
 
-                        console.log(sizes);
+                       // console.log(sizes);
 
-                        for(var j=0;j<sizes.length;j++){
+                        if(allSizes.length!=0){
 
-                            sizes[j]=sizes[j].toUpperCase();
+                            for(var j=0;j<sizes.length;j++){
 
-                            console.log(_.findIndex(allSizes,{name:sizes[j]}));
+                                sizes[j]=sizes[j].toUpperCase();
 
-                            if(_.findIndex(allSizes,{name:sizes[j]})==-1){
+                                //console.log(_.findIndex(allSizes,{name:sizes[j]}));
 
-                                return i;
+                                if(_.findIndex(allSizes,{name:sizes[j]})==-1){
+
+                                    return i;
+                                }
                             }
                         }
+
+
 
 
 
@@ -273,8 +278,8 @@
                  * @param sizes
                  * @returns {Array}
                  */
-                buildProductsArray: function(data,collection) {
-                    //console.log(data,collection);
+                buildProductsArray: function(data,collection,currency) {
+                    console.log(data,collection,currency);
                     var array=[];
 
                     angular.forEach(data,function(value,i){
@@ -298,9 +303,9 @@
                             collectionId:collection.id,
                             photos:photos,
                             sizes:sizes,
-                            currencyId:5,
-                            factoryId:parseInt(collection.factoryId),
-                            name:"noname"
+                            currencyId:currency,
+                            factoryId:parseInt(collection.factoryId)
+
                         };
 
                         this.push(product);
@@ -506,12 +511,16 @@
                     return RestFactory.request(PATHC.CREATECOLLECTION,"POST",data);
                 },
 
-                inSession:function(collection){
-                   localStorage.collection=angular.toJson(collection);
+                inSession:function(data,name){
+                   localStorage[name]=angular.toJson(data);
                 },
 
-                fromSession:function(){
-                    return angular.fromJson(localStorage.collection);
+                fromSession:function(name){
+                    return angular.fromJson(localStorage[name]);//localStorage.collection
+                },
+
+                deleteSession:function(key){
+                    localStorage.removeItem(key);
                 },
 
                 /**

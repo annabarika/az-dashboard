@@ -5,8 +5,8 @@ var app = angular.module("modules.buyer.collection", []);
 /**
  * Get collection representation
  */
-app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionService', '$location',
-    function ($scope, $rootScope, CollectionService, $location) {
+app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionService', '$location',"messageCenterService",
+    function ($scope, $rootScope, CollectionService, $location, messageCenterService) {
 
         var filter = {}, url;
 
@@ -19,8 +19,8 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             $rootScope.all_sizes = response;
         });
         $rootScope.hideHeader = 'showHeader';
-
-
+        // Load imagePath
+        $scope.imagePath = CollectionService.getImagePath();
         // set table header
         $scope.tableHeader = [
             {name: "id", title: 'ID'},
@@ -36,6 +36,13 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         CollectionService.getCollectionStatuses().then(function (response) {
 
             var statuses = [];
+
+            $scope.filter={
+                factory:"",
+                status:""
+            };
+
+
             for (var i in response) {
 
                 if (response[i].statusId == DRAFT || response[i].statusId == ACTIVE ) {
@@ -48,6 +55,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
             $rootScope.statuses = statuses;
 
+            $scope.filter.status=$rootScope.statuses[0];
         });
 
         // get factories to filter
@@ -62,9 +70,110 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
         });
 
-        // Watch factory filters
-        $scope.$watchCollection('filter', function (newVal) {
+        //$scope.filter.status=$rootScope.statuses[0];
+        var url = config.API.host + "catalogue-collection/load/status/0/";
+        _loadCollections(url);
 
+
+        function _loadCollections(url){
+            CollectionService.getCollections(url).then(function (response) {
+
+                $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
+                console.log($rootScope.collections);
+                var keys=[],
+                    length=$rootScope.collections.length;
+
+
+
+                if(length!=0){
+                    for(var i=0;i<length;i++){
+                        keys.push({
+                            position:i,
+                            id:$rootScope.collections[i].id
+                        });
+
+                    }
+                    console.log("keys",keys);
+                    _getAllProducts(0,keys);
+                }
+                else{
+                    messageCenterService.add("danger","Empty collections array",{timeout:3000});
+                }
+
+
+
+            });
+        }
+
+
+
+
+
+
+
+        function _getAllProducts(i,keys){
+
+            CollectionService.getCollectionCard(keys[i].id).then(
+                function(response){
+                    console.log(keys[i].id," = ",response);
+                    if(response.length!=0){
+                        $rootScope.collections[keys[i].position]['products']=response;
+                    }
+                    else{
+                        $rootScope.collections[keys[i].position]['products']=null;
+                    }
+                    i++;
+                    if(i<keys.length){
+                        _getAllProducts(i,keys);
+                    }
+                    else{
+                        console.log("final",$rootScope.collections);
+
+                    }
+
+                });
+        }
+
+
+
+
+
+        $scope.filtrate=function(filter){
+            console.log(filter);
+
+            var url = config.API.host + "catalogue-collection/load/";
+
+            for( var key in filter){
+                if (key=='status') {
+
+                    if(_.isObject(filter.status) && !_.isEmpty(filter.status)){
+                        url += "status/" + filter.status.id + "/";
+                    }
+
+
+
+                }
+
+                if (key=='factory' ) {
+
+                    if(_.isObject(filter.factory) && !_.isEmpty(filter.factory)){
+                        url += "factoryId/" + filter.factory.id+ "/";
+                    }
+
+                }
+            }
+
+            console.log(url);
+
+            _loadCollections(url)
+
+
+        };
+
+
+        // Watch factory filters
+        /*$scope.$watchCollection('filter', function (newVal) {
+            //console.log(newVal);
             for (var item in newVal) {
                 var arr = [];
 
@@ -104,16 +213,24 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
                     $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
 
+                    _getAllProducts();
                 });
             }
             else {
                 CollectionService.getCollections(url).then(function (response) {
 
                     $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-                    //console.log('All collections', $rootScope.collections);
+                    console.log('All collections', $rootScope.collections);
+                    _getAllProducts();
                 });
             }
-        });
+        });*/
+
+
+
+
+
+
 
         $scope.edit = function () {
             $location.path('/buyer/collection/id/' + $rootScope.row.id)
@@ -122,11 +239,22 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         /*
          * Add new collection*/
         $scope.newCollection = function () {
+
+            var control = CollectionService.fromSession();
+
+            if(control){
+                CollectionService.deleteSession('collection');
+            }
+
+
             var modalInstance = CollectionService.showModal('NEW', "lg");
 
             modalInstance.result.then(function (factory) {
 
+                CollectionService.inSession(factory,"factory");
+
                 $rootScope.factoryId = factory.id;
+                console.log(factory);
 
                 CollectionService.getFactoryCollections(factory.id).then(function (response) {
 
@@ -153,7 +281,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                         modalInstance.result.then(function (collection) {
 
                             //$rootScope.collection = collection;
-                            CollectionService.inSession(collection);
+                            CollectionService.inSession(collection,"collection");
 
                             $location.path("buyer/collection/upload");
                         })
@@ -178,6 +306,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
         CollectionService.loadSizes().then(function (response) {
             $rootScope.all_sizes = response;
+            //console.log( "sizes",$rootScope.all_sizes);
         });
 
 
@@ -189,8 +318,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 
         if ($scope.collection == undefined) {
             // $location.path("/buyer/collection");
-            $scope.collection=CollectionService.fromSession();
-            console.log($scope.collection);
+            $scope.collection=CollectionService.fromSession("collection");
+            //console.log($scope.collection);
         }
         else {
             $rootScope.documentTitle = "Collection name: " + $scope.collection.name;
@@ -496,16 +625,25 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 var validation = CollectionService.validationProducts($scope.items,$rootScope.all_sizes);
 
                 if(validation==-1){
-                    $scope.products = CollectionService.buildProductsArray($scope.items, $scope.collection,$rootScope.all_sizes);
+                    var factory=CollectionService.fromSession('factory');
+
+                    $scope.products = CollectionService.buildProductsArray($scope.items, $scope.collection,factory.currencyId);
 
                     if (_.isEmpty($scope.products) == false) {
 
                         CollectionService.loadProducts($scope.products).then(
                             function (response) {
                                 console.log("", response);
-                                $scope.count = response.length;
 
-                                $scope.step++;
+                                if(response=='null'){
+                                    messageCenterService.add('danger','ERROR: can not to create products',{timeout:3000});
+                                }
+                                if(response.length!=0){
+                                    $scope.count = response.length;
+
+                                    $scope.step++;
+                                }
+
                             }
                         )
                     }
