@@ -5962,3 +5962,14 @@ ul.row_collection{
     font-size: 11px;
     color: #999;
 }
+.photos_gallery{
+    display: block;
+    padding: 4px;
+    margin-bottom: 10px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
