@@ -172,6 +172,7 @@ app.controller('BestsellerItemController',[
 
         $scope.bestsellerHistory=[];
 
+        $scope.documentTitle = 'Loading..';
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
