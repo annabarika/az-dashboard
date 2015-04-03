@@ -13,6 +13,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         var DRAFT = 0, ACTIVE = 1 ;
         // set title
         $rootScope.documentTitle = "Collection";
+        $rootScope.hideHeader = 'showHeader';
 
         // Load scope sizes
         CollectionService.loadSizes().then(function (response) {
