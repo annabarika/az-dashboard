@@ -135,7 +135,7 @@
                             return size.saleSpeed;
                         });
 
-                        // rest from choosed count
+                        // rest from chased count
                         var rest = (num-totalCount);
 
                         minSales.count = (minSales.count + rest);
