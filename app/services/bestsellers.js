@@ -21,7 +21,8 @@
 
             "LOAD_PRODUCTS"         : config.API.host + "order/get-rows/id/",
             "UPDATE"                : config.API.host + "bestseller/update",
-            "CREATE_PDF"            : config.API.host + "order/send-to-factory/id/"
+            "CREATE_PDF"            : config.API.host + "order/send-to-factory/id/",
+            "SEND_ORDER"            : config.API.host+"order/send-notification/id/"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
@@ -107,6 +108,19 @@
                         }
 
                         return RestFactory.request(url + range.join(','));
+                    },
+
+                    /**
+                     * Send order created
+                     *
+                     * @param id
+                     * @returns {*}
+                     */
+                    sendCreatedOrder : function(id){
+
+                        var url = API.SEND_ORDER+id;
+
+                        return RestFactory.request(url);
                     },
 
                     /**

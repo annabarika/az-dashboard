@@ -277,11 +277,9 @@ app.controller('BestsellerItemController',[
                         BestsellersService.addOrderProductRow(orderId, products[i]).then(
                             function(response){
                                 console.log(response);
-                                if( response.id ){
+                                if(response.id){
+
                                     products.splice(0, 1);
-                                    if(products.length == 0){
-                                        window.location.reload();
-                                    }
                                 }
                             },
                             function(error){
@@ -289,7 +287,14 @@ app.controller('BestsellerItemController',[
                             }
                         );
                     }
+                    BestsellersService.sendCreatedOrder(orderId).then(function(response) {
+                        if(response.file) {
 
+                            if(products.length == 0){
+                                window.location.reload();
+                            }
+                        }
+                    });
                 }
             });
         };
