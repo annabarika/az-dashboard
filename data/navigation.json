@@ -3,6 +3,16 @@
     "icon":"ai ai-style",
     "menu":
     [
+      {"title": "New collection",
+        "count": "2",
+        "url":"buyer/collection"
+      ,"access":["admin","user"]
+      },
+      {"title": "Bestsellers",
+        "count": "0",
+        "url":"buyer/bestsellers",
+        "access":["admin","developer","user"]
+      },
       {"title": "Orders",
         "count": "2",
         "url":"buyer/orders",
@@ -12,16 +22,6 @@
         "count": "0",
         "url":"buyer/payments",
         "access":["admin","user"]
-      },
-      {"title": "Bestsellers",
-        "count": "0",
-        "url":"buyer/bestsellers",
-        "access":["admin","developer","user"]
-      },
-      {"title": "New collection",
-        "count": "2",
-        "url":"buyer/collection"
-        ,"access":["admin","user"]
       },
       {"title": "Cargo",
         "count": "3",

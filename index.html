@@ -59,8 +59,9 @@
 <body ng-controller="MainController">
 <span us-spinner="{radius:12, width:4, length: 8}" spinner-key="loader"></span>
 
-<section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }">
-    <sidebar ng-class="classes[index % classes.length]" ng-show="authFlag">111</sidebar>
+
+<section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }" class="ng-scope">
+    <sidebar ng-class="classes[index % classes.length]" class="showHeader">111</sidebar>
 
     <header id="app-header" class="navbar" ng-show="authFlag"></header>
 
