@@ -32,7 +32,7 @@
 
         .factory("AuthFactory",["$rootScope","$location","RestFactory","$window",function($rootScope,$location,RestFactory,$window){
 
-            var _path="/testing/mocks/user.json";
+            var _path="/testing/mocks/user2.json";
 
             return{
                 /**
