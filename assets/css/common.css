@@ -5907,3 +5907,7 @@ tr td.status_3 {
 tr td.status_4{
     border-left: 5px solid #f0ad4e;
 }
+.width100 {
+    width: 100%;
+    display: block;
+}
