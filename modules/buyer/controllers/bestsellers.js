@@ -173,6 +173,9 @@ app.controller('BestsellerItemController',[
         $scope.bestsellerHistory=[];
 
         $scope.documentTitle = 'Loading..';
+
+        $rootScope.hideHeader = 'hideHeader';
+
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
