@@ -13,7 +13,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         var DRAFT = 0, ACTIVE = 1 ;
         // set title
         $rootScope.documentTitle = "Collection";
-
+        $rootScope.hideHeader = 'showHeader';
         // set table header
         $scope.tableHeader = [
             {name: "id", title: 'ID'},
