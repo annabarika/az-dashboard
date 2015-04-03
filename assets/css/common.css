@@ -3704,6 +3704,11 @@ select[multiple].form-group-lg .form-control {
 .img-rounded {
     border-radius: 2px;
 }
+/*.img-wrapper:hover{
+    border:2px solid red;
+}*/
+
+
 .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn {

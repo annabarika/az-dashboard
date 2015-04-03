@@ -220,7 +220,19 @@
                     });
                     return (sizes.length > 0);
                 },
+                validationProducts:function(products){
 
+                    var length=products.length;
+
+                    for(var i=0;i<length;i++){
+                        console.log(products[i].sizes,typeof products[i].sizes);
+                        if(products[i].article=="" || products[i].sizes=="" || products[i].price==""|| _.isNull(products[i].price)){
+                            return false;
+                        }
+                    }
+                    return true;
+
+                },
                 /**
                  *
                  * @param data
@@ -228,7 +240,7 @@
                  * @param sizes
                  * @returns {Array}
                  */
-                buildProductsArray: function(data,collection,sizes) {
+                buildProductsArray: function(data,collection) {
                     //console.log(data,collection);
                     var array=[];
 
@@ -423,7 +435,6 @@
                     var TEMPLATE={
                         NEW                 :   "/modules/buyer/views/collection/choose_factory.html",
                         CHOOSE              :   "/modules/buyer/views/collection/choose_collection.html",
-                        ADDSIZE             :   "/modules/buyer/views/collection/add_size.html",
                         ADDORDER            :   "/modules/buyer/views/collection/add_order.html",
                         CANCEL_COLLECTION   :   "/modules/buyer/views/collection/ask_collection.html",
                         CANCEL_PRODUCT      :   "/modules/buyer/views/collection/ask_product.html",
@@ -454,6 +465,14 @@
                     };
 
                     return RestFactory.request(PATHC.CREATECOLLECTION,"POST",data);
+                },
+
+                inSession:function(collection){
+                   localStorage.collection=angular.toJson(collection);
+                },
+
+                fromSession:function(){
+                    return angular.fromJson(localStorage.collection);
                 },
 
                 /**
