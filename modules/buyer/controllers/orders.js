@@ -287,9 +287,10 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
 
     $scope.columnHeaders=[
          {name:"name"},
-         {name:"phone"},
+        /* {name:"phone"},
          {name:"email"},
-         {name:"docs"}
+         {name:"docs"}*/
+
     ];
 
 

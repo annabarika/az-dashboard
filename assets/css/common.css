@@ -3729,7 +3729,11 @@ select[multiple].form-group-lg .form-control {
 /*.img-wrapper:hover{
     border:2px solid red;
 }*/
-
+.img_sm{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
 
 .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,

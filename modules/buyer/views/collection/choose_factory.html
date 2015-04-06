@@ -1,17 +1,13 @@
 <div ng-controller='CollectionsController'>
     <!--header-->
     <div class="modal-header">
-        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">New Collection</h4>
+        <button type="button" class="close" ng-click="$dismiss()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New collection</h4>
     </div>
     <div class="modal-body">
 
         <form>
-            <!--<select class="form-control" data-ng-model="newCollection.factories"
-                    ng-options="opt as opt.name for opt in factories">
-                <option value="">Choose factory</option>
-            </select>-->
-            <autocomplete input-model="factories" output-model="newCollection.factories" column="columnHeaders"></autocomplete>
+            <autocomplete input-model="factoryAll" output-model="newCollection.factories" column="columnHeaders" imagepath="imagePath"></autocomplete>
         </form>
     </div>
     <!--footer-->

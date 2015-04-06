@@ -58,14 +58,6 @@ app.config(function($routeProvider){
             controller:"CollectionsController",
             authRequired: 'developer'
         })
-        .when('/buyer/collection/updated',
-        {
-            templateUrl:"/modules/buyer/views/collection/index.html",
-            controller:"CollectionsController",
-            authRequired: 'developer'
-        })
-
-
         .when('/buyer/collection/upload',
         {
             templateUrl:"/modules/buyer/views/collection/collection.html",
