@@ -31,6 +31,31 @@
 
     app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
         function(PATHC, RestFactory, $modal, $http) {
+
+            /**
+             *
+             * @param files
+             * @returns {Array}
+             * @private
+             */
+            function _getArray(files){
+
+                var array=[];
+
+                for (var i=0;i<files.length;i++){
+
+                    array.push(files[i].path);
+                }
+
+                return array;
+            }
+
+
+
+
+
+
+
             return {
 
                 /**
@@ -40,6 +65,31 @@
                  */
                 getFactories: function () {
                     return RestFactory.request(PATHC.FACTORIES);
+                },
+
+                /**
+                 *
+                 * @param factories
+                 * @returns {Array}
+                 */
+                parseFactory: function(factories){
+
+                    var factory=[];
+
+                    for( var f in factories){
+
+                        factory.push(
+                            {
+                                name    :   factories[f].factory.name,
+                                phone   :  JSON.parse(factories[f].factory.phone),
+                                email   :   factories[f].email,
+                                address :   factories[f].factoryAddress,
+                                preview :   _getArray(factories[f].factoryFiles)
+                            }
+                        )
+                    }
+                    console.log("parser",factory);
+                    return factory;
                 },
 
                 /**

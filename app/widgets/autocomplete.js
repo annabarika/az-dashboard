@@ -6,11 +6,13 @@ angular.module('widgets.autocomplete', [])
             scope:{
                 inputModel:"=",
                 outputModel:"=",
-                column:"="
+                column:"=",
+                imagepath:"="
             },
             templateUrl:"/app/widgets/autocomplete.wgt.html",
             link:function($scope,elem, attr){
-                /*console.log("input",$scope.inputModel,$scope.column);*/
+
+                console.log($scope.imagepath);
                 var ul=elem[0].children[0].children[1];
 
                 $scope.flag=true;

@@ -6,7 +6,7 @@
             <span ng-if="row.name==undefined">{{row.id}}</span>
         </li>
     </ul>-->
-    <table ng-hide="flag" class="table table-bordered bg-white" style="position:absolute;max-width:868px">
+   <!-- <table ng-hide="flag" class="table table-bordered bg-white" style="position:absolute;max-width:868px">
         <tr ng-repeat="row in inputModel|filter:search" ng-click='getRow(row)'>
             <td ng-if="column!=undefined" ng-repeat="col in column">
                 {{row[col.name]}}
@@ -14,5 +14,41 @@
 
         </tr>
 
+    </table>-->
+   <table ng-hide="flag" class="table table-bordered bg-white" style="position:absolute;max-width:868px">
+        <tr ng-if="column!=undefined">
+            <th ng-repeat="col in column">{{col.name}}</th>
+        </tr>
+        <tr ng-repeat="row in inputModel|filter:search" ng-click='getRow(row)'>
+            <td ng-if="column!=undefined " ng-repeat="col in column">
+
+                <table ng-if="col.name=='phone'">
+
+                    <tr ng-repeat="phone in row.phone">
+                        <td>{{phone}}</td>
+                    </tr>
+
+                </table>
+
+                <table ng-if="col.name=='preview'">
+
+                    <tr ng-repeat="img in row.preview">
+                        <td>
+                          <span class="thumbnail img_sm">
+                              <img ng-src="{{imagepath}}{{img}}"/>
+                          </span>
+                        </td>
+                    </tr>
+
+                </table>
+
+
+                <span ng-if="col.name!='phone' && col.name!='preview'">
+                    {{row[col.name]}}
+                </span>
+
+            </td>
+
+        </tr>
     </table>
 </div>

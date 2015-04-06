@@ -58,7 +58,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
             $rootScope.statuses = statuses;
 
-            $scope.filter.status=$rootScope.statuses[0];
+            $scope.status=$rootScope.statuses[0];
         });
 
         // get factories to filter
@@ -114,7 +114,9 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         $scope.showCollection=function(status){
              console.log("status",status);
             $scope.statusFlag=status.id;
-            console.log("flag", $scope.statusFlag);
+
+            url = config.API.host + "catalogue-collection/load/status/"+status.id;
+            _loadCollections(url);
         };
 
 
@@ -588,8 +590,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
  */
 app.controller("ModalController", function ($scope, $rootScope, CollectionService, $modalInstance, $routeParams, $location, messageCenterService, $timeout) {
 
-   console.log("factories", $rootScope.factories);
+  // console.log("factories", $rootScope.factories);
 
+    $scope.factoryAll=CollectionService.parseFactory($rootScope.factories);
+    console.log($scope.factoryAll);
 
 
     $scope.cancel = function () {
@@ -710,12 +714,13 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
     };
 
     $scope.columnHeaders=[
-        {name:"name"},
-        {name:"phone"},
-        {name:"email"},
-        {name:"docs"}
+        {name  :   "name"},
+        {name   :   "phone"},
+        {name   :   "email"},
+        {name   :   "address"},
+        {name   :   "preview"}
     ];
-
+    $scope.imagePath = CollectionService.getImagePath();
 
     $scope.chooseCollection = function (collection) {
         $modalInstance.close(collection);
