@@ -5,50 +5,33 @@
                 <div class="btn btn-info" ng-click="newCollection()"><i class="fa fa-plus"></i> New collection</div>
             </div>
             <div class="col-sm-5">
-                <!--<div class="col-sm-4 va-m">
-                    <multi-select
-                            default-label="Factory filter"
-                            input-model="factories"
-                            output-model="filter.factory"
-                            button-label="icon name"
-                            item-label="icon name maker"
-                            tick-property="ticked"
-                            max-labels="1"
-                            max-height="250px"
-                            >
-                    </multi-select>
-                </div>
-                <div class="col-sm-4 va-m">
-                    <multi-select
-                            default-label="Status filter"
-                            input-model="statuses"
-                            output-model="filter.status"
-                            button-label="icon name"
-                            item-label="icon name maker"
-                            tick-property="ticked"
-                            max-labels="1"
-                            >
-                    </multi-select>
-                </div>-->
-                <select class="form-control" data-ng-model="filter.factory"
-                                 ng-options="opt as opt.name for opt in factories">
-                    <option value="">Choose factory</option>
-                </select>
 
-                <select class="form-control" data-ng-model="filter.status"
+                <select class="form-control" data-ng-model="status" ng-change="showCollection(status)"
                         ng-options="opt as opt.name for opt in statuses">
                     <option value="">Choose status</option>
                 </select>
-
-                <button class="btn btn-success" ng-click="filtrate(filter)">filtrate </button>
             </div>
         </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-12">
-    <!-- start thumbnail row -->
-        <div class="pa-md">
+    <div class="col-sm-12 col-md-12" >
+
+        <div class="pa-md" ng-if="statusFlag==0">
+            <widget-table
+                datarows="collections"
+                dataheader="tableHeader"
+                edit="edit()"
+                row="row"
+                toolbar-battons="buttons"
+                button-action="buttonAction()"
+                path="/buyer/orders/id/"
+            >
+            </widget-table>
+        </div>
+
+
+        <div class="pa-md" ng-if="statusFlag==1">
             <div class="row">
 
                 <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections">
@@ -56,277 +39,27 @@
                         <div class="row_collection" ng-repeat="(key,value) in item.products">
                             <ul ng-repeat="(k,v) in value|limitTo:2">
                                 {{v[0].factory.name}}
-                            <li class="img-wrapper">
+                                <li class="img-wrapper">
                                     <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
 
-                            </li>
+                                </li>
 
                             </ul>
                             <div>
-                        <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                                <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-            </div>
-        </div>
-
-
-    <!-- <div class="pa-md">
-        <div class="row">
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection_sm">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection_sm">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">Factory Hello Kitty&nbsp;&nbsp;<span class="date">2015-09-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection_sm">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar4.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar5.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">Siarhei&nbsp;&nbsp;<span class="date">2015-02-11</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar4.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar5.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar4.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar4.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection_sm">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection_sm">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection_sm">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection_sm">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-bt-2">
-                <div class="panel panel-body">
-                    <ul class="row_collection">
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar1.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar2.jpg"/>
-                        </li>
-                        <li class="thumbnail collection">
-                            <img src="/assets/images/avatar/avatar3.jpg"/>
-                        </li>
-                    </ul>
-                    <p class="caption">KIVA&nbsp;&nbsp;<span class="date">2015-05-10</span></p>
-                </div>
-            </div>
-        </div>
-    </div>-->
     </div>
+
+
+
+
+
 </div>
 
 
 
-<!--<widget-table-->
-        <!--datarows="collections"-->
-        <!--dataheader="tableHeader"-->
-        <!--edit="edit()"-->
-        <!--row="row"-->
-        <!--toolbar-battons="buttons"-->
-        <!--button-action="buttonAction()"-->
-        <!--path="/buyer/orders/id/"-->
-        <!-->
-<!--</widget-table>-->
