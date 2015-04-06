@@ -5973,3 +5973,7 @@ ul.row_collection{
     -webkit-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
 }
+.auth{
+    margin: 0 auto;
+    float: none!important;
+}

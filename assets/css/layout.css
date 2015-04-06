@@ -883,3 +883,7 @@ tr.hold{
         left: 0;
     }
 }
+
+.sidebar-left.ng-hide ~ #app-content{
+    margin-left: 0!important;
+}

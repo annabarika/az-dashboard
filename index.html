@@ -61,11 +61,11 @@
 
 
 <section id="app-wrapper" data-ui-view="" ng-class="{ 'hideHeader': hideHeader=='hideHeader' }" class="ng-scope">
-    <sidebar ng-class="classes[index % classes.length]" class="showHeader">111</sidebar>
+    <sidebar ng-class="classes[index % classes.length]" class="showHeader" ng-show="authFlag">111</sidebar>
 
     <header id="app-header" class="navbar" ng-show="authFlag"></header>
 
-    <footer id="app-footer" ></footer>
+    <footer id="app-footer" ng-show="authFlag"></footer>
 
     <section id="app-content" class="clearfix">
 
