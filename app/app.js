@@ -12,20 +12,13 @@
         'MessageCenterModule',
         "ang-drag-drop",
         "ngSanitize",
-        "flow"
+        "flow"//library for uploading files
     ])
 
-       /* .run(function (Authentication,Application) {
-
-        Authentication.requestUser().then(
-
-            function(){
-                Application.makeReady()
-            });
-        })*/
         .run(["$rootScope","$route","AuthFactory","$location","NavService",function($rootScope,$route,AuthFactory,$location,NavService){
 
             $rootScope.username=AuthFactory.getUser('name');
+
             if(!_.isUndefined($rootScope.username)){
                 $rootScope.authFlag=true;
                 NavService.getMenu();
@@ -101,6 +94,7 @@
              * @private
              */
             function _auth(data){
+
                 AuthFactory.runAuth(data).then(
 
                     function(response){
@@ -116,16 +110,21 @@
                                     NavService.getMenu();
 
                                     if(_.isUndefined($scope.currentPath)){
+
                                         $location.path("/index");
                                     }
                                     else{
                                         if(NavService.checkPath($scope.currentPath)){
+
+
                                             $location.path($scope.currentPath);
                                         }
                                         else{
+
+                                            console.log("check path", NavService.checkPath($scope.currentPath));
+
                                             $location.path("/index");
                                         }
-
                                     }
                                     return;
                                 }
@@ -140,15 +139,14 @@
                 )
             }
 
-
-
             /**
              * logout
              */
             $scope.logout=function(){
                 delete $rootScope.Navigation;
                 $scope.currentPath=$route.current.originalPath;
-                console.log($scope.currentPath);
+                console.log("current Path",$scope.currentPath);
+                //Auth
                 AuthFactory.destroy();
                 $location.path("/");
             };
@@ -158,60 +156,6 @@
              */
             $rootScope.documentTitle="Welcome to Azimuth";
 
-
-            /*$scope.$on("auth-required", function(event, reason) {
-                console.log(event,reason);
-                $rootScope.authFlag=false;
-               // $location.url("/login?redir=" + encodeURIComponent(reason.route.originalPath) );
-                $location.path("/login");
-            });*/
-
-            /**
-             *  logIn
-             * @param user
-             */
-            /*$scope.auth=function(user){
-
-                if(_.isObject(user)){
-
-                    var data={
-                        name:user.login,
-                        password:user.pass
-                    };
-                    var url="/testing/mocks/user.json";
-                    RestFactory.request(url).then(
-                        function(response){
-
-                            if(_.isArray(response)){
-
-                                angular.forEach(response, function(item){
-
-                                    if(item.name==data.name && item.password==data.password){
-                                       // console.log(item);
-                                        Auth.create(item);
-                                        $rootScope.authFlag=true;
-                                        //$location.path($location.search().redir);
-                                        $location.path("/index");
-                                        return;
-                                    }
-                                })
-                            }
-                        },function(error){
-                            messageCenterService.add('danger', 'error', {timeout: 3000});
-                        }
-                    )
-                }
-                else{
-                    messageCenterService.add('danger', "Invalid username or password", {timeout: 3000});
-                }
-            };*/
-            /**
-             *  logout
-             */
-            /*$scope.logoff = function() {
-                $rootScope.authFlag=false;
-                Auth.destroy();
-            }*/
         })
 
         .controller('BsAlertCtrl', ["$rootScope","$scope", function ($rootScope,$scope) {

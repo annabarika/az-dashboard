@@ -12,8 +12,8 @@
                 return {
                     request: function (config) {
                         config.headers = config.headers || {};
-                        if($window.sessionStorage.token) {
-                            config.headers[authHeaderName] = $window.sessionStorage.token;
+                        if($window.localStorage.token) {
+                            config.headers[authHeaderName] = $window.localStorage.token;
                         }
                         return config;
                     }
@@ -59,10 +59,10 @@
                     var type = data.type || ['developer'];
                     for (var key in data) {
                         if (typeof data[key] === "string") {
-                            $window.sessionStorage['auth-'+key] = data[key];
+                            $window.localStorage['auth-'+key] = data[key];
                         }
                     }
-                    $window.sessionStorage['auth-type'] = JSON.stringify(type);
+                    $window.localStorage['auth-type'] = JSON.stringify(type);
                     $rootScope.authFlag=true;
                     $rootScope.username=data.name;
                 },
@@ -71,9 +71,9 @@
                  */
                 destroy : function(){
 
-                    for (var key in $window.sessionStorage) {
+                    for (var key in $window.localStorage) {
                         if (key.match(/^auth-/)) {
-                            delete $window.sessionStorage[key];
+                            delete $window.localStorage[key];
                         }
                     }
                     $rootScope.authFlag=false;
@@ -86,7 +86,7 @@
                  */
                 getUser : function(key){
 
-                        return $window.sessionStorage["auth-" + key];
+                        return $window.localStorage["auth-" + key];
                 }
             }
         }])
