@@ -64,13 +64,16 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         // get factories to filter
         CollectionService.getFactories().then(function (response) {
 
+            $rootScope.factories=response;
+
             var factories = [];
             angular.forEach(response, function (value) {
                 factories.push(value.factory);
             });
 
-            $rootScope.factories = factories;
-            console.log( $rootScope.factories);
+            $scope.factories = factories;
+
+            //console.log( $scope.factories);
         });
 
         //$scope.filter.status=$rootScope.statuses[0];
@@ -134,8 +137,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                         _getAllProducts(i,keys);
                     }
                     else{
-                        console.log("final",$rootScope.collections);
-
+                       // console.log("final",$rootScope.collections);
                     }
 
                 });
@@ -585,6 +587,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
  * Modal window controller
  */
 app.controller("ModalController", function ($scope, $rootScope, CollectionService, $modalInstance, $routeParams, $location, messageCenterService, $timeout) {
+
+   console.log("factories", $rootScope.factories);
+
+
 
     $scope.cancel = function () {
         $modalInstance.dismiss();

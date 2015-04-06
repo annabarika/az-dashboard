@@ -53,10 +53,58 @@
                     </div>
                 </div>
 
-    </div>
+            </div>
+        </div>
 
+        <div class="pa-md" ng-if="statusFlag==2">
+            <div class="row">
 
+                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections">
+                    <div class="panel panel-body">
+                        <div class="row_collection" ng-repeat="(key,value) in item.products">
+                            <ul ng-repeat="(k,v) in value|limitTo:2">
+                                {{v[0].factory.name}}
+                                <li class="img-wrapper">
+                                    <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
 
+                                </li>
+
+                            </ul>
+                            <div>
+                                <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="pa-md" ng-if="statusFlag==3">
+            <div class="row">
+
+                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections">
+                    <div class="panel panel-body">
+                        <div class="row_collection" ng-repeat="(key,value) in item.products">
+                            <ul ng-repeat="(k,v) in value|limitTo:2">
+                                {{v[0].factory.name}}
+                                <li class="img-wrapper">
+                                    <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
+
+                                </li>
+
+                            </ul>
+                            <div>
+                                <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
 
 </div>
