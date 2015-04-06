@@ -14,6 +14,9 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         // set title
         $rootScope.documentTitle = "Collection";
 
+        $scope.statusFlag=0;
+
+
         // Load scope sizes
         CollectionService.loadSizes().then(function (response) {
             $rootScope.all_sizes = response;
@@ -67,7 +70,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             });
 
             $rootScope.factories = factories;
-
+            console.log( $rootScope.factories);
         });
 
         //$scope.filter.status=$rootScope.statuses[0];
@@ -79,7 +82,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             CollectionService.getCollections(url).then(function (response) {
 
                 $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-                console.log($rootScope.collections);
+               // console.log($rootScope.collections);
                 var keys=[],
                     length=$rootScope.collections.length;
 
@@ -93,7 +96,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                         });
 
                     }
-                    console.log("keys",keys);
+                    //console.log("keys",keys);
                     _getAllProducts(0,keys);
                 }
                 else{
@@ -105,7 +108,11 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             });
         }
 
-
+        $scope.showCollection=function(status){
+             console.log("status",status);
+            $scope.statusFlag=status.id;
+            console.log("flag", $scope.statusFlag);
+        };
 
 
 
@@ -115,7 +122,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
             CollectionService.getCollectionCard(keys[i].id).then(
                 function(response){
-                    console.log(keys[i].id," = ",response);
+                   // console.log(keys[i].id," = ",response);
                     if(response.length!=0){
                         $rootScope.collections[keys[i].position]['products']=response;
                     }
@@ -134,104 +141,9 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                 });
         }
 
-
-
-
-
-        $scope.filtrate=function(filter){
-            console.log(filter);
-
-            var url = config.API.host + "catalogue-collection/load/";
-
-            for( var key in filter){
-                if (key=='status') {
-
-                    if(_.isObject(filter.status) && !_.isEmpty(filter.status)){
-                        url += "status/" + filter.status.id + "/";
-                    }
-
-
-
-                }
-
-                if (key=='factory' ) {
-
-                    if(_.isObject(filter.factory) && !_.isEmpty(filter.factory)){
-                        url += "factoryId/" + filter.factory.id+ "/";
-                    }
-
-                }
-            }
-
-            console.log(url);
-
-            _loadCollections(url)
-
-
-        };
-
-
-        // Watch factory filters
-        /*$scope.$watchCollection('filter', function (newVal) {
-            //console.log(newVal);
-            for (var item in newVal) {
-                var arr = [];
-
-                if ($.isEmptyObject(newVal[item])) {
-
-                    delete filter[item];
-                }
-                else {
-                    angular.forEach(newVal[item], function (value, key) {
-
-
-                        if (value.ticked === true) {
-
-                            arr.push(value.id);
-                            filter[item] = arr;
-                        }
-
-                    });
-                }
-            }
-            url = config.API.host + "catalogue-collection/load/status/0,1/";
-
-            if (!$.isEmptyObject(filter)) {
-
-
-                if (filter.status) {
-
-                    url += "status/" + filter.status.join() + "/";
-                }
-
-                if (filter.factory) {
-
-                    url += "factoryId/" + filter.factory.join() + "/";
-                }
-
-                CollectionService.getCollections(url).then(function (response) {
-
-                    $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-
-                    _getAllProducts();
-                });
-            }
-            else {
-                CollectionService.getCollections(url).then(function (response) {
-
-                    $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-                    console.log('All collections', $rootScope.collections);
-                    _getAllProducts();
-                });
-            }
-        });*/
-
-
-
-
-
-
-
+        /**
+         * location to collection cart
+         */
         $scope.edit = function () {
             $location.path('/buyer/collection/id/' + $rootScope.row.id)
         };
@@ -254,17 +166,17 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                 CollectionService.inSession(factory,"factory");
 
                 $rootScope.factoryId = factory.id;
-                console.log(factory);
+               // console.log(factory);
 
                 CollectionService.getFactoryCollections(factory.id).then(function (response) {
 
                     $rootScope.factoryCollections = response;
 
-                    console.log($rootScope.factoryCollections);
+                  //  console.log($rootScope.factoryCollections);
 
                     angular.forEach($rootScope.factoryCollections, function(value){
 
-                        if(value.status==0){
+                        if(value.status==0 || value.status==1){
 
                             CollectionService.inSession(value);
 
@@ -273,7 +185,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
                         }
                     });
                     var control=CollectionService.fromSession();
-                    console.log(control);
+                   // console.log(control);
                     if(control==undefined){
 
                         var modalInstance = CollectionService.showModal("CHOOSE", 'sm');

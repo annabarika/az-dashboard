@@ -24,7 +24,7 @@
                 function _permissions(data){
                     var array=[],menu=[];
 
-                    var type=JSON.parse($window.sessionStorage["auth-type"]);
+                    var type=JSON.parse($window.localStorage["auth-type"]);
 
                     angular.forEach(data,function(item,i){
 
@@ -53,8 +53,9 @@
                         }
                     });
 
-                   // console.log("menu",menu);
+                    //console.log("menu",menu);
                     $rootScope.Navigation = menu;
+
 
                 }
 
@@ -81,9 +82,9 @@
                         angular.forEach($rootScope.Navigation,function(item,i){
 
                             angular.forEach(item.menu,function(value){
-                                //console.log(value.url==path);
-                                if(value.url==path){
 
+                                if("/"+value.url==path){
+                                    console.log(value.url,'==',path);
                                     return true;
                                 }
                             })
