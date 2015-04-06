@@ -382,7 +382,7 @@ app.controller('BestsellerItemController',[
                 BestsellersService.update(data).then(
                     function(response){
                         //console.log(response);
-                        if(response.notes==notes){
+                        if(response.notes==notes) {
                             messageCenterService.add("success","Notes updated",{timeout:3000});
                         }
                         else{

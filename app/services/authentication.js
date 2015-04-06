@@ -62,10 +62,12 @@
                             $window.localStorage['auth-'+key] = data[key];
                         }
                     }
+
+                    $window.localStorage['auth-data'] = JSON.stringify(data);
+
                     $window.localStorage['auth-type'] = JSON.stringify(type);
                     $rootScope.authFlag=true;
                     $rootScope.username=data.name;
-                    $rootScope.user = data;
                 },
                 /**
                  * logout

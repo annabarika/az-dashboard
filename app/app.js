@@ -21,6 +21,9 @@
 
             if(!_.isUndefined($rootScope.username)){
                 $rootScope.authFlag=true;
+
+                $rootScope.user = JSON.parse(AuthFactory.getUser('data'));
+
                 NavService.getMenu();
 
             }

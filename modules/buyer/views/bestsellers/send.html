@@ -11,7 +11,7 @@
                 <td>
                     <p class="form-inline">
                         <label class="control-label">Subject</label>
-                        <input class="form-control pull-right width80" type="text" value="Reorder from {{username | capitalize:true}}: {{product.factoryArticul}} ({{product.factoryName}})">
+                        <input class="form-control pull-right width80" type="text" value="Reorder from {{user.name | capitalize:true}}: {{product.factoryArticul}} ({{product.factoryName}})">
                     </p>
                 </td>
             </tr>
@@ -27,10 +27,13 @@
                 <td>
                     <p class="form-inline">
                         <label class="control-label">Message</label>
-                        <textarea class="form-control pull-right width80">
+                        <textarea class="form-control pull-right width80" rows="10">
                             Good day! Here's order for {{product.factoryArticul}}.
                             You can find details in the attachment
-                            {{username | capitalize:true}}
+                            Best regards, {{user.type | capitalize:true}}
+
+                            Phone: {{user.phone}}
+                            Email: {{user.email}}
                         </textarea>
                     </p>
                 </td>
