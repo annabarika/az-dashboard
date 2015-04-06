@@ -1,5 +1,5 @@
 // Create module @require angucomple for remote search
-var app = angular.module("modules.buyer.bestsellers", ['angucomplete']);
+var app = angular.module("modules.buyer.bestsellers", ['angucomplete', 'commonFilters']);
 
 // Bestseller's representation
 app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
@@ -410,8 +410,8 @@ app.controller('BestsellerItemController',[
                     backdrop:'static',
                     size: 'md',
                     resolve :  {
-                        bestseller : function() {
-                            return bestseller;
+                        product : function() {
+                            return BestsellersService.getProducts(bestseller.orderId)
                         }
                     }
                 });

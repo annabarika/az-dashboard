@@ -314,15 +314,16 @@
                         product.orderId = orderId;
                         return RestFactory.request(API.ADD_ORDER_PRODUCT_ROW, 'POST', product);
                     },
+
                     /**
                      *
                      * @param id
                      * @returns {*}
                      */
                     getProducts: function(id){
-                        console.log("getProducts",id);
                         return RestFactory.request(API.LOAD_PRODUCTS+id)
                     },
+
                     /**
                      *
                      * @param sizes

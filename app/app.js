@@ -17,7 +17,7 @@
 
         .run(["$rootScope","$route","AuthFactory","$location","NavService",function($rootScope,$route,AuthFactory,$location,NavService){
 
-            $rootScope.username=AuthFactory.getUser('name');
+            $rootScope.username = AuthFactory.getUser('name');
 
             if(!_.isUndefined($rootScope.username)){
                 $rootScope.authFlag=true;
