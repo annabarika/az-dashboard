@@ -1,20 +1,6 @@
 <div class='autocomplete_widget' class="input-group">
     <input type='text' placeholder='search' ng-model='search'/>
-    <!--<ul ng-hide="flag">
-        <li ng-repeat='row in inputModel|filter:search' ng-click='getRow(row)'>
-            <span ng-if="row.name!=undefined">{{row.name}}</span>
-            <span ng-if="row.name==undefined">{{row.id}}</span>
-        </li>
-    </ul>-->
-   <!-- <table ng-hide="flag" class="table table-bordered bg-white" style="position:absolute;max-width:868px">
-        <tr ng-repeat="row in inputModel|filter:search" ng-click='getRow(row)'>
-            <td ng-if="column!=undefined" ng-repeat="col in column">
-                {{row[col.name]}}
-            </td>
 
-        </tr>
-
-    </table>-->
    <table ng-hide="flag" class="table table-bordered bg-white" style="position:absolute;max-width:868px">
         <tr ng-if="column!=undefined">
             <th ng-repeat="col in column">{{col.name}}</th>
@@ -48,7 +34,7 @@
                 </span>
 
             </td>
-
+            <td ng-if="column==undefined">{{row}}</td>
         </tr>
     </table>
 </div>

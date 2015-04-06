@@ -34,7 +34,7 @@
         <div class="pa-md" ng-if="statusFlag==1">
             <div class="row">
 
-                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections">
+                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
                     <div class="panel panel-body">
                         <div class="row_collection" ng-repeat="(key,value) in item.products">
                             <ul ng-repeat="(k,v) in value|limitTo:2">
@@ -59,7 +59,7 @@
         <div class="pa-md" ng-if="statusFlag==2">
             <div class="row">
 
-                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections">
+                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
                     <div class="panel panel-body">
                         <div class="row_collection" ng-repeat="(key,value) in item.products">
                             <ul ng-repeat="(k,v) in value|limitTo:2">
@@ -84,7 +84,7 @@
         <div class="pa-md" ng-if="statusFlag==3">
             <div class="row">
 
-                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections">
+                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
                     <div class="panel panel-body">
                         <div class="row_collection" ng-repeat="(key,value) in item.products">
                             <ul ng-repeat="(k,v) in value|limitTo:2">

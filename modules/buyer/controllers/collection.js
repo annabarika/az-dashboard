@@ -149,54 +149,79 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
          * location to collection cart
          */
         $scope.edit = function () {
+
             $location.path('/buyer/collection/id/' + $rootScope.row.id)
         };
-
+        $scope.showCart=function(item){
+            console.log(item);
+            $location.path('/buyer/collection/id/' + item.id)
+        };
         /*
          * Add new collection*/
         $scope.newCollection = function () {
 
-            var control = CollectionService.fromSession();
+            var control = CollectionService.fromSession("collection");
 
             if(control){
                 CollectionService.deleteSession('collection');
             }
 
-
             var modalInstance = CollectionService.showModal('NEW', "lg");
-
+            /**
+             * choose factory
+             */
             modalInstance.result.then(function (factory) {
 
                 CollectionService.inSession(factory,"factory");
 
                 $rootScope.factoryId = factory.id;
-               // console.log(factory);
 
                 CollectionService.getFactoryCollections(factory.id).then(function (response) {
 
                     $rootScope.factoryCollections = response;
 
-                  //  console.log($rootScope.factoryCollections);
+                    console.log("factory collections",$rootScope.factoryCollections);
 
-                    angular.forEach($rootScope.factoryCollections, function(value){
 
-                        if(value.status==0 || value.status==1){
+                    if(response.length!=0){
 
-                            CollectionService.inSession(value);
+                        angular.forEach($rootScope.factoryCollections, function(value){
 
-                            $location.path("buyer/collection/upload");
+                            if(value.status==0 || value.status==1){
 
-                        }
-                    });
-                    var control=CollectionService.fromSession();
-                   // console.log(control);
+                                CollectionService.inSession(value,"collection");
+
+                                $location.path("buyer/collection/upload");
+
+                            }
+                        });
+
+                    }
+                    else{
+
+                        CollectionService.createCollection($rootScope.factoryId).then(function (response) {
+
+                            if (response.factoryId==$rootScope.factoryId) {
+
+                                CollectionService.inSession(response,"collection");
+
+                                $location.path("buyer/collection/upload");
+
+                            }
+
+                        });
+
+                    }
+
+                    var control=CollectionService.fromSession("collection");
+                    console.log(control);
+
                     if(control==undefined){
 
                         var modalInstance = CollectionService.showModal("CHOOSE", 'sm');
 
                         modalInstance.result.then(function (collection) {
 
-                            //$rootScope.collection = collection;
                             CollectionService.inSession(collection,"collection");
 
                             $location.path("buyer/collection/upload");
@@ -209,7 +234,6 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
             });
         };
-
     }
 ]);
 
@@ -224,9 +248,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
             $rootScope.all_sizes = response;
             //console.log( "sizes",$rootScope.all_sizes);
         });
-
-
-
+        //TODO избавить от watch
         $scope.$watch("photo", function (value) {
 
             $rootScope.photo = value;
@@ -554,8 +576,15 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                 if(response=='null'){
                                     messageCenterService.add('danger','ERROR: can not to create products',{timeout:3000});
                                 }
-                                if(response.length!=0){
+                                if(_.isArray(response) && response.length!=0){
+
                                     $scope.count = response.length;
+
+                                    CollectionService.updateCollection($scope.collection.id).then(
+                                        function (response){
+                                            console.log("update col.status",response);
+                                        }
+                                    );
 
                                     $scope.step++;
                                 }
@@ -593,7 +622,7 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
   // console.log("factories", $rootScope.factories);
 
     $scope.factoryAll=CollectionService.parseFactory($rootScope.factories);
-    console.log($scope.factoryAll);
+
 
 
     $scope.cancel = function () {

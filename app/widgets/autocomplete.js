@@ -12,7 +12,6 @@ angular.module('widgets.autocomplete', [])
             templateUrl:"/app/widgets/autocomplete.wgt.html",
             link:function($scope,elem, attr){
 
-                console.log($scope.imagepath);
                 var ul=elem[0].children[0].children[1];
 
                 $scope.flag=true;
