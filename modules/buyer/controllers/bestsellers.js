@@ -8,6 +8,59 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         // Document header title
         $rootScope.documentTitle = "Bestsellers";
 
+        // Get bestsellers data
+        $scope.bestsellers = {};
+
+        /**
+         * Create bestseller
+         * @uses autocomplete search
+         */
+        $scope.createBestseller = function(product) {
+
+            if(_.isUndefined(product)) {
+
+                $rootScope.modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/bestsellers/create.html",
+                    controller: 'BestsellersAddController',
+                    backdrop:'static',
+                    size: 'sm',
+                    resolve :  {
+                        searchUri : function() {
+                            // resolve the search uri to autocomplete directive
+                            return BestsellersService.searchArticulUri()
+                        }
+                    }
+                });
+            }
+            else {
+                if('originalObject' in product) {
+                    BestsellersService.addToBestseller(product.originalObject).then(function(response) {
+
+                        if(response.id) {
+
+                            $rootScope.modalInstance.close();
+                            $location.path('/buyer/bestsellers/item/'+response.id)
+                        }
+                        else {
+                            messageCenterService.add('danger', 'Product does not created. Undefined error', {timeout: 3000});
+                        }
+                    });
+                }
+                else {
+                    messageCenterService.add('danger', 'Try to add unfounded product', {timeout: 3000});
+                }
+            }
+        };
+    }
+]);
+
+// Bestseller's representation
+app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
+    function ($scope, $rootScope, $modal, BestsellersService, messageCenterService, $location) {
+
+        // Document header title
+        $rootScope.documentTitle = "Bestsellers Ordered";
+
         // Get current state of date
         $scope.currentYear  = moment().year();
         $scope.currentMonth = moment.utc(new Date()).format("MMMM");
@@ -186,7 +239,7 @@ app.controller('BestsellerItemController',[
 				$scope.product = response.product;
                 $scope.order = response.order;
                 $scope.sizes = [{  }, { } ];
-                console.log($scope.product);
+                //console.log($scope.product);
                 if( $scope.product.marketing.sizes ){
                     var sizes = $scope.product.marketing.sizes;
                     for( var size in sizes ){
@@ -197,7 +250,7 @@ app.controller('BestsellerItemController',[
                 }
                 $scope.sizes.push({});
                 $scope.sizes.push({});
-                console.log($scope.sizes);
+                //console.log($scope.sizes);
 				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
@@ -220,7 +273,7 @@ app.controller('BestsellerItemController',[
                     });
                 });
 
-                console.log('Bestseller', response);
+                //console.log('Bestseller', response);
             }
             else {
                 messageCenterService.add('danger', 'Bestseller not found', {timeout: 3000});
@@ -230,11 +283,11 @@ app.controller('BestsellerItemController',[
          * show pdf
          */
         $scope.createPdf=function(){
-            console.log($scope.bestseller.orderId);
+            //console.log($scope.bestseller.orderId);
             BestsellersService.createPdf($scope.bestseller.orderId).then(
 
                 function(response){
-                    console.log(response);
+                    //console.log(response);
                     if (_.has(response,'html'))
                     {
                         window.location=response.html;
@@ -270,11 +323,11 @@ app.controller('BestsellerItemController',[
          */
         $scope.createOrder = function( sizes ){
 
-            console.log("sizes",sizes);
+            //console.log("sizes",sizes);
 
             var _sizeArray=BestsellersService.sizeCheck(sizes);
 
-            console.log("sizeArray",_sizeArray);
+            //console.log("sizeArray",_sizeArray);
 
             if(_sizeArray.length==0){
 
@@ -290,7 +343,7 @@ app.controller('BestsellerItemController',[
                     for( i in products){
                         BestsellersService.addOrderProductRow(orderId, products[i]).then(
                             function(response){
-                                console.log(response);
+                                //console.log(response);
                                 if(response.id){
 
                                     products.splice(0, 1);
@@ -325,7 +378,7 @@ app.controller('BestsellerItemController',[
                     status:$scope.bestseller.status,
                     notes:notes
                 };
-                console.log(data);
+                //console.log(data);
                 BestsellersService.update(data).then(
                     function(response){
                         //console.log(response);
@@ -338,8 +391,35 @@ app.controller('BestsellerItemController',[
                     }
                 )
             }
-
         }
+
+
+        /**
+         * Send bestseller
+         *
+         * @uses modal fullfill
+         */
+        $scope.send = function(bestseller, send) {
+
+            if(_.isUndefined(send)) {
+
+                console.log(bestseller);
+                $rootScope.modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/bestsellers/send.html",
+                    controller: 'BestsellerItemController',
+                    backdrop:'static',
+                    size: 'md',
+                    resolve :  {
+                        bestseller : function() {
+                            return bestseller;
+                        }
+                    }
+                });
+            }
+            else {
+                console.log('Send to owners');
+            }
+        };
 
 
     }]);

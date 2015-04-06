@@ -5933,9 +5933,14 @@ tr td.status_4{
     border-left: 5px solid #f0ad4e;
 }
 .width100 {
-    width: 100%;
+    width: 100% !important;
     display: block;
-}.col-bt-2{
+}
+.width80 {
+    width: 80% !important;
+    display: block;
+}
+.col-bt-2{
     min-height: 275px;
 }
 ul.row_collection{

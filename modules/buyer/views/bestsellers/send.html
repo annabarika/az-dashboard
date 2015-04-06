@@ -1,0 +1,43 @@
+<div>
+    <!--header-->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Reorder send form</h4>
+    </div>
+    <div class="modal-body">
+        <table class="table table-hover">
+            <tbody>
+            <tr>
+                <td>
+                    <p class="form-inline">
+                        <label class="control-label">Subject</label>
+                        <input class="form-control pull-right width80" type="text" value="Reorder from {{username | capitalize:true}}: FactoryArticul (Factory))">
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="form-inline">
+                        <label class="control-label">To</label>
+                        <input class="form-control pull-right width80" type="text">
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="form-inline">
+                        <label class="control-label">Message</label>
+                        <textarea class="form-control pull-right width80">Good day! Here's order for FactoryArticul. You can find details in the attachment</textarea>
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!--footer-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-green" data-ng-controller="BestsellerItemController" ng-click="send(bestseller, true)">Send</button>
+        <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
+    </div>
+</div>

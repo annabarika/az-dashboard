@@ -86,7 +86,7 @@
                  */
                 getUser : function(key){
 
-                        return $window.localStorage["auth-" + key];
+                    return $window.localStorage["auth-" + key];
                 }
             }
         }])

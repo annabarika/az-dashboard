@@ -5,20 +5,57 @@
         <div class="page-header clearfix">
             <div class="row">
                 <div class="col-md-2">
+                        <span class="fc-header-title">
+                           <h2><button class="btn btn-default" ng-click="changeYear(-1)"><i class="fa fa-chevron-left"></i></button>
+                               {{currentYear}}
+                               <button class="btn btn-default" ng-click="changeYear(1)"><i class="fa fa-chevron-right"></i></button>
+                           </h2>
+                        </span>
+                </div>
+                <div class="col-md-4">
                     <button type="button" class="btn btn-success" ng-click="createBestseller()"><i class="fa fa-plus"></i> Create Bestseller</button>
                 </div>
             </div>
         </div>
 
         <div class="panel fullcalendar box-layout">
-
+            <!-- Repelled by total -->
+            <div class="page-header clearfix" ng-if="!bestsellers.total[currentYear]">
+                No bestsellers this year. Sorry :(
+            </div>
+            <div class="col-md-2 col-sm-2 fc" ng-if="bestsellers.total[currentYear]" ng-repeat="(key,value) in bestsellers.total[currentYear]">
+                <p class="fc-widget-header">
+                    {{months[key]}}
+                </p>
+                <span class="fc-day-grid-event fc-event mr-5 ml-5">
+                    <div class="fc-content">
+                        <!-- ng-click="selectMonth('total', key)" -->
+                        <span class="fc-title"><!--<a class="label label-primary hover">
+                            total: {{value}}</a>--> <a class="width100 label label-success hover" ng-click="selectMonth('ordered', key)">ordered {{bestsellers.ordered[currentYear][key]}}</a></span>
+                    </div>
+                </span>
+            </div>
         </div>
         <!-- end: panel -->
     </div>
 </div>
 <div  class="col-md-3 bg-auto height-auto bdr-b-sm bdr-b-xs">
     <div class="scroll">
-
+        <!-- start page header -->
+        <div class="page-header clearfix">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="mb-sm">{{currentMonth}} {{currentYear}}</h3>
+                </div>
+            </div>
+            <p class="input-group">
+                <input type="text" class="form-control" ng-change="selectDate(date)" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                       <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+            </p>
+        </div>
+        <!--/ end page header -->
         <accordion close-others="oneAtATime">
 
             <!-- Ordered items -->
