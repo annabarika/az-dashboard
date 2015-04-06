@@ -22,7 +22,8 @@
             "LOAD_PRODUCTS"         : config.API.host + "order/get-rows/id/",
             "UPDATE"                : config.API.host + "bestseller/update",
             "CREATE_PDF"            : config.API.host + "order/send-to-factory/id/",
-            "SEND_ORDER"            : config.API.host+"order/send-notification/id/"
+            "SEND_ORDER"            : config.API.host+"order/send-notification/id/",
+            "LOAD_MODERATORS"       : "/testing/mocks/moderators.json"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
@@ -316,12 +317,22 @@
                     },
 
                     /**
+                     * Get order products
                      *
                      * @param id
                      * @returns {*}
                      */
                     getProducts: function(id){
                         return RestFactory.request(API.LOAD_PRODUCTS+id)
+                    },
+
+                    /**
+                     * Get all moderators
+                     *
+                     * @returns {*}
+                     */
+                    getModerators: function(){
+                        return RestFactory.request(API.LOAD_MODERATORS)
                     },
 
                     /**

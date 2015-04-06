@@ -229,6 +229,10 @@ app.controller('BestsellerItemController',[
 
         $rootScope.hideHeader = 'hideHeader';
 
+        BestsellersService.getModerators().then(function(response) {
+            $scope.moderators = response;
+        });
+
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
@@ -403,17 +407,11 @@ app.controller('BestsellerItemController',[
 
             if(_.isUndefined(send)) {
 
-                console.log(bestseller);
                 $rootScope.modalInstance = $modal.open({
                     templateUrl: "/modules/buyer/views/bestsellers/send.html",
                     controller: 'BestsellerItemController',
                     backdrop:'static',
-                    size: 'md',
-                    resolve :  {
-                        product : function() {
-                            return BestsellersService.getProducts(bestseller.orderId)
-                        }
-                    }
+                    size: 'md'
                 });
             }
             else {
@@ -421,5 +419,37 @@ app.controller('BestsellerItemController',[
             }
         };
 
+        var to = [];
 
+        /**
+         * Assign to fields < TO >
+         *
+         * @param credentials
+         */
+        $scope.assign = function(credentials) {
+
+            var founded = _.findIndex(to, {name: credentials.name});
+
+            if(founded == -1) {
+
+                to.push({
+                    name : credentials.name,
+                    email: ' <'+credentials.email+'>'
+                });
+            }
+            else {
+                _.remove(to, {name: credentials.name })
+            }
+
+            // format to string
+            $scope.to = (function() {
+
+                var result = [];
+                to.forEach(function(value) {
+                    result.push(value.name +' '+value.email);
+                });
+
+                return result.join(',');
+            })();
+        };
     }]);

@@ -5982,3 +5982,7 @@ ul.row_collection{
     margin: 0 auto;
     float: none!important;
 }
+
+.left {
+    float: left !important;
+}

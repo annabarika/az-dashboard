@@ -11,7 +11,7 @@
                 <td>
                     <p class="form-inline">
                         <label class="control-label">Subject</label>
-                        <input class="form-control pull-right width80" type="text" value="Reorder from {{user.name | capitalize:true}}: {{product.factoryArticul}} ({{product.factoryName}})">
+                        <input class="form-control pull-right width80" type="text" value="Reorder from {{user.name | capitalize:true}}: {{product.factoryArticul}} ({{factory.name}})">
                     </p>
                 </td>
             </tr>
@@ -19,7 +19,27 @@
                 <td>
                     <p class="form-inline">
                         <label class="control-label">To</label>
-                        <input class="form-control pull-right width80" type="text">
+                        <input class="form-control pull-right width80" type="text" ng-model="to" value="">
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="form-inline left">
+                        <label class="control-label">Moderators</label>
+                        <div class="width80 pull-right">
+                            <button ng-repeat="moderator in moderators" ng-class="{true: 'btn-info', false: 'btn-default'}[!moderator.archived]" ng-click="assign(moderator); moderator.archived = !moderator.archived" class="btn-sm">{{moderator.name}} &lt;{{moderator.email}}&gt;</button>
+                        </div>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="form-inline left">
+                        <label class="control-label">Factories</label>
+                    <div class="width80 pull-right">
+                        <button class="btn-sm" ng-class="{true: 'btn-info', false: 'btn-default'}[!factory.archived]" ng-click="assign(factory); factory.archived = !factory.archived">{{factory.name}} &lt;{{factory.email}}&gt;</button>
+                    </div>
                     </p>
                 </td>
             </tr>
