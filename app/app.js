@@ -18,11 +18,11 @@
         .run(["$rootScope","$route","AuthFactory","$location","NavService",function($rootScope,$route,AuthFactory,$location,NavService){
 
             $rootScope.user=JSON.parse(AuthFactory.getUser('user'));
-            //$rootScope.username=$rootScope.user.name;
-           // console.log($rootScope.user);
 
-            //if(!_.isUndefined($rootScope.username)){
+            $rootScope.username=$rootScope.user.name;
+
             if(!_.isUndefined($rootScope.user)){
+
                 $rootScope.authFlag=true;
                 NavService.getMenu();
 

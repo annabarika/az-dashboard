@@ -43,39 +43,6 @@
                     </multi-select>
                 </div>
             </div>
-            <!--<div class="col-md-5 col-sm-12">
-                <div class="bs-docs-section">
-                    <form name="datepickerForm" class="form-inline" role="form">
-
-                        &lt;!&ndash; Date range example &ndash;&gt;
-                        <div class="form-group">
-                            <div class="col-md-2 col-sm-2">
-                                <label class="control-label">Date dange:</label>
-                            </div>
-                            <div class="col-md-4 col-sm-4">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" ng-click="openMin($event)" datepicker-popup="{{format}}" ng-model="dtMin" is-open="openedMin" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="min date"/>
-                              <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openMin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                <button type="button" class="btn btn-default" ng-click="openMin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                              </span>
-                                </p>
-                            </div>
-                            <div class="col-md-1 col-sm-1 text-center">
-                                <label class="control-label"><i class="fa fa-arrows-h"></i></label>
-                            </div>
-                            <div class="col-md-4 col-sm-4">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" ng-click="openMax($event)" datepicker-popup="{{format}}" ng-model="dtMax" is-open="openedMax"  datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="max date"/>
-                              <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openMax($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                              </span>
-                                </p>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>-->
 
             <div class="col-sm-5">
                 <div class="col-sm-4 va-m">
@@ -87,12 +54,86 @@
     </div>
 </div>
 
-<widget-table
-        datarows="orders"
-        dataheader="tableHeader"
-        edit="edit()"
-        row="row"
-        toolbar-battons="buttons"
-        use-badge="true">
-</widget-table>
+<div class="pa-md">
 
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start panel -->
+            <div class="panel panel-default">
+                <table class="table table-bordered table-hover dataTable no-footer" id="DataTable">
+                    <thead>
+                    <tr>
+                        <th> # </th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Vendor</a></th>
+                        <th></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Created</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Delivery date</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Invoices</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Order total (&#165;)</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Paid (&#165;)</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Received (&#165;)</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Notes</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Actions</a></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in orders" ng-click="edit(item)">
+                        <td>
+                            <span class="btn btn-default btn-rounded btn-sm">3</span>
+                        </td>
+                        <td>
+                            <h5 class="text-muted fw-sb">{{item.factoryName}}</h5>
+                            <hr>
+                            Ph.
+                            <p class="mb-0 fw-sb" ng-repeat="phone in item.factoryPhone">{{phone}}</p>
+                        </td>
+                        <td>
+                            <a href="{{imagePath}}{{item.factoryFiles[0].path}}" class="thumbnail img_sm" target="_blank">
+                                <img ng-src="{{imagePath}}{{item.factoryFiles[0].path}}"/>
+                            </a>
+                        </td>
+                        <td>
+                            <p >{{item.order.createDate}}</p>
+                        </td>
+                        <td>
+                            <p ng-if="item.order.deliveryDate!=null">{{item.order.deliveryDate}}</p>
+                            <p ng-if="item.order.deliveryDate==null">none</p>
+                        </td>
+                        <td>
+                            <span class="thumbnail media-left" ng-repeat="img in item.files track by $index">
+                                 <a href="{{imagePath}}{{img.path}}" target="_blank" ng-if="$index<2">
+                                     <img ng-src="{{imagePath}}{{img.path}}"/>
+                                 </a>
+                            </span>
+                        </td>
+                        <td>
+                            <p class="text-right">{{item.order.orderedTotal}}</p>
+                           <!-- <p class="text-muted text-right">Prepayment: 1200</p>-->
+                        </td>
+                        <td>
+                            <p class="fw-sb text-right">{{item.order.paidTotal}}</p>
+                            <p class="text-muted text-right" ng-repeat="p in item.payments">
+                                + {{p.amount}} ({{p.paymentDate}} {{p.paymentMethod}})
+                            </p>
+                            <!--<p class="text-muted text-right">+1200 (Prepayment cash)</p>-->
+                        </td>
+                        <td>
+                            <p class="text-right">0</p>
+                        </td>
+                        <td>
+                            <p class="text-right" ng-repeat="p in item.payments">{{p.note}}</p>
+                            <!--<p class="text-muted text-right-sm" ng-repeat="p in item.payments">Changed: {{p.paymentDate}}</p>-->
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="sendToFactory($index)"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="cancel($index)"><i class="fa fa-ban"></i></button>
+                            <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')">&#165;</button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="makePayment($index,'refund')">&#165;</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
