@@ -34,7 +34,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
             }
             else {
                 if('originalObject' in product) {
-                    BestsellersService.addToBestseller(product.originalObject).then(function(response) {
+                    BestsellersService.createBestseller(product.originalObject).then(function(response) {
 
                         if(response.id) {
 
@@ -157,7 +157,7 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
             }
             else {
                 if('originalObject' in product) {
-                    BestsellersService.addToBestseller(product.originalObject).then(function(response) {
+                    BestsellersService.createBestseller(product.originalObject).then(function(response) {
 
                         if(response.id) {
 
@@ -342,7 +342,7 @@ app.controller('BestsellerItemController',[
             BestsellersService.createOrder( $scope.product.factoryId).then(function(response){
                 if(response.id){
                     var orderId = response.id;
-                    var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, _sizeArray);
+                    var products = BestsellersService.prepareProducts($scope.bestseller.id, $scope.product, _sizeArray);
                     // Adding items to order
                     for( i in products){
                         BestsellersService.addOrderProductRow(orderId, products[i]).then(
@@ -369,6 +369,77 @@ app.controller('BestsellerItemController',[
                 }
             });
         };
+
+
+        /**
+         * Re Order Bestseller
+         *
+         * @param sizes
+         */
+        $scope.reOrder = function() {
+
+            console.log('Bestseller', $scope.bestseller);
+            console.log('Product', $scope.product);
+            console.log('Sizes', $scope.sizes);
+            console.log('Factory', $scope.factory);
+
+            // Create Bestseller
+            BestsellersService.createBestseller({id : $scope.bestseller.productId}).then(function(response) {
+
+                if(response.id) {
+
+                    var betsellerId = response.id;
+
+                    // Create Order
+                    BestsellersService.createOrder($scope.product.factoryId).then(function (response) {
+
+                        if (response.id) {
+                            var orderId = response.id;
+
+
+
+                        }
+                    });
+                }
+                else {
+                    messageCenterService.add('danger', 'Bestseller does not created', {timeout: 3000});
+                }
+            });
+
+
+                                //var products = BestsellersService.prepareProducts(betsellerId, $scope.product, _sizeArray);
+                        //        var orderId = response.id;
+                        //        var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, _sizeArray);
+                        //        // Adding items to order
+                        //        for( i in products){
+                        //            BestsellersService.addOrderProductRow(orderId, products[i]).then(
+                        //                function(response){
+                        //                    //console.log(response);
+                        //                    if(response.id){
+                        //
+                        //                        products.splice(0, 1);
+                        //                    }
+                        //                },
+                        //                function(error){
+                        //                    messageCenterService.add("danger","ERROR: "+error,{timeout:3000});
+                        //                }
+                        //            );
+                        //        }
+                        //        BestsellersService.sendCreatedOrder(orderId).then(function(response) {
+                        //            if(response.file) {
+                        //
+                        //                if(products.length == 0){
+                        //                    window.location.reload();
+                        //                }
+                        //            }
+                        //        });
+                        //    }
+
+
+
+
+        };
+
         /**
          *
          * @param notes
@@ -396,7 +467,6 @@ app.controller('BestsellerItemController',[
                 )
             }
         }
-
 
         /**
          * Send bestseller

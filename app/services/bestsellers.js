@@ -239,7 +239,7 @@
                     },
 
                     /**
-                     * Add product to bestseller
+                     * Add product to bestseller (create)
                      *
                      * @param json product
                      * @param string date
@@ -301,7 +301,7 @@
                         return RestFactory.request(API.CREATE_ORDER, 'POST', order);
                     },
 
-                    prepareProducts: function(orderId, bestsellerId, product, sizes){
+                    prepareProducts: function(bestsellerId, product, sizes){
                         var products = [];
                         var size = '';
                         if( sizes.add ){

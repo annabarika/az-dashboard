@@ -9,11 +9,11 @@
             <div class="box-layout">
                 <div class="col-sm-12">
                     <!-- <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="saveBestseller()"><i class="fa fa-plus"></i> Save</div> -->
-                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="createPdf()"><span class="fa file-pdf-o"> Open PDF</span></button>
-                    <button ng-show="bestseller.orderId" class="btn btn-success" ng-click="openOrder(order)"><span class="fa"> Open order</span></button>
+                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="createPdf()"><span class="fa fa-file-pdf-o"> Open PDF</span></button>
+                    <button ng-show="bestseller.orderId" class="btn btn-success" ng-click="openOrder(order)"><span class="fa fa-folder-open-o"> Open order</span></button>
                     <button ng-hide="bestseller.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
+                    <button ng-show="bestseller.orderId" type="submit" class="btn btn-success" ng-click="reOrder()"><i class="fa fa-gavel"></i> Re Order</button>
                     <button ng-show="bestseller.orderId" type="submit" class="btn btn-success" ng-click="send(bestseller)"><i class="fa fa-send-o"></i> Send mail</button>
-
                 </div>
             </div>
             <!--/ basic info heading -->
