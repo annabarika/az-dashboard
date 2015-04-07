@@ -3729,7 +3729,11 @@ select[multiple].form-group-lg .form-control {
 /*.img-wrapper:hover{
     border:2px solid red;
 }*/
-
+.img_sm{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
 
 .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
@@ -3862,7 +3866,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .media.media-sm .media-left img,
 .media.media-sm .media-right img,
 .media.media-sm .media-left .img-wrapper,
-.media.media-sm .media-right .img-wrapper {
+.media.media-sm .media-right .img-wrapper,
+.thumbnail.media-left img, .thumbnail.media-right img {
     width: 32px;
     height: 32px;
 }
@@ -5977,6 +5982,11 @@ ul.row_collection{
     border-radius: 4px;
     -webkit-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
+}
+.img_sm{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
 }
 .auth{
     margin: 0 auto;

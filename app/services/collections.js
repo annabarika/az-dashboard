@@ -31,6 +31,31 @@
 
     app.factory("CollectionService", ["PATHC", 'RestFactory', '$modal', "$http",
         function(PATHC, RestFactory, $modal, $http) {
+
+            /**
+             *
+             * @param files
+             * @returns {Array}
+             * @private
+             */
+            function _getArray(files){
+
+                var array=[];
+
+                for (var i=0;i<files.length;i++){
+
+                    array.push(files[i].path);
+                }
+
+                return array;
+            }
+
+
+
+
+
+
+
             return {
 
                 /**
@@ -40,6 +65,33 @@
                  */
                 getFactories: function () {
                     return RestFactory.request(PATHC.FACTORIES);
+                },
+
+                /**
+                 *
+                 * @param factories
+                 * @returns {Array}
+                 */
+                parseFactory: function(factories){
+                    //console.log(factories);
+                    var factory=[];
+
+                    for( var f in factories){
+
+                        factory.push(
+                            {
+                                name        :   factories[f].factory.name,
+                                phone       :  JSON.parse(factories[f].factory.phone),
+                                email       :   factories[f].email,
+                                address     :   factories[f].factoryAddress,
+                                preview     :   _getArray(factories[f].factoryFiles),
+                                id          :   f,
+                                currencyId  :   factories[f].factory.currencyId
+                            }
+                        )
+                    }
+                    //console.log("parser",factory);
+                    return factory;
                 },
 
                 /**
@@ -503,6 +555,7 @@
                  * @returns {*}
                  */
                 createCollection : function(factoryId){
+                    console.log("id",factoryId);
                     var data={
                         factoryId:factoryId,
                         name:"collection"
@@ -511,14 +564,32 @@
                     return RestFactory.request(PATHC.CREATECOLLECTION,"POST",data);
                 },
 
+                updateCollection: function(id){
+                    console.log(id);
+
+                    return RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",{'id' : id,status:1});
+                },
+                /**
+                 *
+                 * @param data
+                 * @param name
+                 */
                 inSession:function(data,name){
                    localStorage[name]=angular.toJson(data);
                 },
-
+                /**
+                 *
+                 * @param name
+                 * @returns {Object|Array|string|number|*}
+                 */
                 fromSession:function(name){
+                    /*console.log(name);*/
                     return angular.fromJson(localStorage[name]);//localStorage.collection
                 },
-
+                /**
+                 *
+                 * @param key
+                 */
                 deleteSession:function(key){
                     localStorage.removeItem(key);
                 },
