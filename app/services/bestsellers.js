@@ -22,6 +22,7 @@
             "LOAD_PRODUCTS"         : config.API.host + "order/get-rows/id/",
             "UPDATE"                : config.API.host + "bestseller/update",
             "CREATE_PDF"            : config.API.host + "order/send-to-factory/id/",
+            "ORDER_PDF_REPORT"      : config.API.host + "order/report/id/",
             "SEND_ORDER"            : config.API.host+"order/send-notification/id/",
             "LOAD_MODERATORS"       : "/testing/mocks/moderators.json"
         })
@@ -227,10 +228,13 @@
                     },
 
                     /**
-                     * Get find articul uri
+                     * Get Order report
+                     *
+                     * @param int orderId
+                     * @returns {*}
                      */
-                    searchArticulUri: function() {
-                        return API.FIND_BY_ARTICUL;
+                    getOrderReport: function(orderId) {
+                        return RestFactory.request(API.ORDER_PDF_REPORT+parseInt(orderId));
                     },
 
                     /**

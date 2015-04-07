@@ -409,9 +409,18 @@ app.controller('BestsellerItemController',[
 
                 $rootScope.modalInstance = $modal.open({
                     templateUrl: "/modules/buyer/views/bestsellers/send.html",
-                    controller: 'BestsellerItemController',
+                    controller: function(report,$scope){
+                        $scope.report = report;
+                    },
+
                     backdrop:'static',
-                    size: 'md'
+                    size: 'md',
+                    resolve :  {
+                        report : function() {
+                            // resolve order report path
+                            return BestsellersService.getOrderReport($scope.bestseller.orderId);
+                        }
+                    }
                 });
             }
             else {
