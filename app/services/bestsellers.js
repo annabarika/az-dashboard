@@ -263,6 +263,10 @@
                      * @returns {*}
                      */
                     sendReport: function(data) {
+                        var emails = data.to.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+
+                        data.to = emails;
+
                         return RestFactory.request(API.SEND_MODERATE, 'POST', data);
                     },
 

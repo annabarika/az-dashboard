@@ -436,7 +436,7 @@ app.controller('BestsellerItemController',[
             else {
 
                 // Form validation
-                var check = _.map(report, function(letter, title) {
+                var check = _.map(report, function(letter) {
 
                     if(_.isUndefined(letter) === true || _.isEmpty(letter) === true) {
                         return false;
@@ -450,7 +450,15 @@ app.controller('BestsellerItemController',[
                 }
 
                 BestsellersService.sendReport(report).then(function(response) {
-                    console.log(response);
+
+                    $rootScope.modalInstance.close();
+
+                    if(response) {
+                        messageCenterService.add("success","Report successfully sent",{timeout:3000});
+                    }
+                    else {
+                        messageCenterService.add("danger","Sent report failed",{timeout:3000});
+                    }
                 });
             }
         };
@@ -484,6 +492,7 @@ app.controller('BestsellerItemController',[
                 }
                 else {
                     to = [];
+
                 }
             }
             else {

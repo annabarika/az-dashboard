@@ -70,6 +70,7 @@ try {
     }
 
     $response = $APIService->setURL($request)->call();
+
     echo json_encode($response);
 
 }catch( \Exception $e ){
