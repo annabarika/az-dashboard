@@ -811,6 +811,9 @@ tr.hold{
         -webkit-box-shadow: 3px 0 10px -3px rgba(0, 0, 0, 0.7);
         box-shadow: 3px 0 10px -3px rgba(0, 0, 0, 0.7);
     }
+    .hideHeader .sidebar-left .nav-sidebar > .nav-group.active > .nav-submenu{
+        display: none;
+    }
 
     .hideHeader #app-header.navbar {
         left: 68px;
@@ -882,4 +885,8 @@ tr.hold{
     .hideHeader .sidebar-left ~ #app-footer {
         left: 0;
     }
+}
+
+.sidebar-left.ng-hide ~ #app-content{
+    margin-left: 0!important;
 }

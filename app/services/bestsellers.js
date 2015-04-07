@@ -110,6 +110,38 @@
                         return RestFactory.request(url + range.join(','));
                     },
 
+
+                    calculate : function(num, sizes) {
+
+                        var totalSaleSpeed = 0,
+                            totalCount = 0;
+
+                        sizes.forEach(function(size) {
+
+                            if(!_.isUndefined(size.saleSpeed)) {
+                                totalSaleSpeed += parseInt(size.saleSpeed);
+                            }
+                        });
+                        sizes.forEach(function(size) {
+
+                            if(!_.isUndefined(size.saleSpeed)) {
+                                totalCount += size.count = Math.ceil( num * size.saleSpeed / totalSaleSpeed );
+                            }
+                        });
+
+                        // find min sales item
+
+                        var minSales = _.min(sizes, function(size) {
+                            return size.saleSpeed;
+                        });
+
+                        // rest from chased count
+                        var rest = (num-totalCount);
+
+                        minSales.count = (minSales.count + rest);
+                        return sizes;
+                    },
+
                     /**
                      * Send order created
                      *

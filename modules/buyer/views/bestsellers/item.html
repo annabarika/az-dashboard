@@ -8,8 +8,8 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-12">
-                    <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="saveBestseller()"><i class="fa fa-plus"></i> Save</div>
-                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="createPdf()"><span class="fa fa-file-o"> Create PDF</span></button>
+                    <!-- <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="saveBestseller()"><i class="fa fa-plus"></i> Save</div> -->
+                    <button ng-show="bestseller.orderId" class="btn btn-info" ng-click="createPdf()"><span class="fa fa-file-o"> Open PDF</span></button>
                     <button ng-show="bestseller.orderId" class="btn btn-success" ng-click="openOrder(order)"><span class="fa"> Open order</span></button>
                     <button ng-hide="bestseller.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
                 </div>
@@ -22,7 +22,7 @@
             <div class="pa-md">
                 <div class="row">
                 <div class="col-md-6">
-                    <div class="col-md-6" ng-repeat="photo in product.photos">
+                    <div class="col-md-6 col-lg-4" ng-repeat="photo in product.photos">
                         <!-- thumbnail -->
                         <a href="http://back95.ru/f/catalogue/{{product.id}}/{{photo}}" target="_blank">
                             <img src="http://back95.ru/f/p400x400/catalogue/{{product.id}}/{{photo}}" class="photos_gallery"/>
@@ -35,14 +35,12 @@
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <tbody>
-                                <tr>
-                                    <td>Factory:</td>
-                                    <td>{{factory.name}}</td>
-                                </tr>
+                                <!--
                                 <tr>
                                     <td>Status:</td>
                                     <td>{{bestseller.status}}</td>
                                 </tr>
+                                -->
                                 <tr>
                                     <td>Total sales speed:</td>
                                     <td>{{product.saleSpeed}}</td>
@@ -52,6 +50,10 @@
                                     <td>
                                         {{product.marketing.discount.retail | number:0}}% / {{product.marketing.discount.wholesale | number:0}}%
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td>Factory:</td>
+                                    <td>{{factory.name}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -70,6 +72,15 @@
                     <div class="panel panel-body">
                         <div ng-hide="bestseller.status>0">
                             <h3 class="mb-sm ng-binding">Size chart to order <span ng-show="order.id">(#{{order.id}})</span></h3>
+
+                            <div style="margin:20px 0;">
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(15)"> 15</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(25)"> 25</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(35)"> 35</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(50)"> 50</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(100)"> 100</span></button>
+                                <button type="submit" class="btn btn-small btn-default"><span class="fa fa-plus" ng-click="calculate(200)"> 500</span></button>
+                            </div>
                             <table class="table">
                                 <tr>
                                     <th>Size</th>
@@ -165,3 +176,4 @@
 <!--/ end box layout -->
 </div>
 </form>
+

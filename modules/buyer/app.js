@@ -18,6 +18,13 @@ app.config(function($routeProvider){
             authRequired: ['developer','admin']
         }
     )
+        .when('/buyer/orders/orders_registry.html',
+        {
+            templateUrl:"/modules/buyer/views/orders/orders_registry.html",
+            controller:"OrderController",
+            authRequired: 'developer'
+        }
+    )
         .when('/buyer/orders/id/:orderId',
         {
             templateUrl:"/modules/buyer/views/orders/id.html",
