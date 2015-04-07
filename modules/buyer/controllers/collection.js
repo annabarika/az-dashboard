@@ -12,17 +12,20 @@ app.run(
             /**
              * load factory
              */
-            //$http.get(config.API.host+'factory/load')
             CollectionService.getFactories()
                 .success(function(data){
 
                     var factories = [];
                      angular.forEach(data, function (value) {
+
+                         var files=value.factoryFiles;
+                         value.factory['files']=files;
+
                      factories.push(value.factory);
                      });
 
                     $rootScope.factories = factories;
-                    //console.log("success factory", $rootScope.factories);
+                   // console.log("success factory", $rootScope.factories);
                 });
 
             /**
@@ -55,22 +58,15 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
         CollectionService.loadSizes().then(function (response) {
             $rootScope.all_sizes = response;
         });
+
         $rootScope.hideHeader = 'showHeader';
+
         // Load imagePath
         $scope.imagePath = CollectionService.getImagePath();
-        // set table header
-        /*$scope.tableHeader = [
-            {name: "id", title: 'ID'},
-            {name: "name", title: 'Collection'},
-            {name: "factoryName", title: "Factory"},
-            {name: "statusName", title: "Status"},
-            {name: "createDate", title: 'Create date'},
-            {name:"orderId",title:"Order"}
-        ];*/
+
         $scope.filteredFactory = [];
 
-        //$scope.filter.status=$rootScope.statuses[0];
-        var url = config.API.host + "catalogue-collection/load/status/0/";
+        var url = config.API.host + "catalogue-collection/load/status/0";
         _loadCollections(url);
 
 
@@ -78,63 +74,16 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
             CollectionService.getCollections(url).then(function (response) {
 
                 $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-               // console.log($rootScope.collections);
-                var keys=[],
-                    length=$rootScope.collections.length;
 
+                var length=$rootScope.collections.length;
 
-
-                if(length!=0){
-                    for(var i=0;i<length;i++){
-                        keys.push({
-                            position:i,
-                            id:$rootScope.collections[i].id
-                        });
-
-                    }
-                    //console.log("keys",keys);
-                    _getAllProducts(0,keys);
-                }
-                else{
+                if(length==0){
                     messageCenterService.add("danger","Empty collections array",{timeout:3000});
                 }
 
 
 
             });
-        }
-
-        /*$scope.showCollection=function(status){
-             console.log("status",status);
-            $scope.statusFlag=status.id;
-
-            url = config.API.host + "catalogue-collection/load/status/"+status.id;
-            _loadCollections(url);
-        };*/
-
-
-
-
-        function _getAllProducts(i,keys){
-
-            CollectionService.getCollectionCard(keys[i].id).then(
-                function(response){
-                   // console.log(keys[i].id," = ",response);
-                    if(response.length!=0){
-                        $rootScope.collections[keys[i].position]['products']=response;
-                    }
-                    else{
-                        $rootScope.collections[keys[i].position]['products']=null;
-                    }
-                    i++;
-                    if(i<keys.length){
-                        _getAllProducts(i,keys);
-                    }
-                    else{
-                        console.log("final",$rootScope.collections);
-                    }
-
-                });
         }
 
         /**
@@ -144,14 +93,26 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
             $location.path('/buyer/collection/id/' + $rootScope.row.id)
         };
-        /*$scope.showCart=function(item){
-            console.log(item);
-            $location.path('/buyer/collection/id/' + item.id)
-        };*/
-
 
         $scope.uploadProducts=function(collection){
             console.log(collection);
+
+            CollectionService.inSession(collection,"collection");
+
+            var length=$rootScope.factories.length;
+
+            for(var i=0;i<length;i++){
+
+                if($rootScope.factories[i].id==collection.factoryId){
+
+                    CollectionService.inSession($rootScope.factories[i],"factory");
+
+                    break;
+                }
+            }
+
+            $location.path("buyer/collection/upload");
+
             //TODO сохранять еще и фабрику
         };
 
@@ -231,10 +192,10 @@ app.controller("CollectionsReadyController",
         "messageCenterService",
 
         function($scope,$rootScope,$location,CollectionService,messageCenterService){
+
             //document Title
             $rootScope.documentTitle = "Ready collections";
 
-            console.log($rootScope.factories);
             // Load imagePath
             $scope.imagePath = CollectionService.getImagePath();
             /**
@@ -289,10 +250,9 @@ app.controller("CollectionsReadyController",
 
                 CollectionService.getCollectionCard(keys[i].id).then(
                     function(response){
-                         console.log(keys[i].id," = ",response,typeof response, response.length);
+
                         if(response.length!=0){
                             $scope.collections[keys[i].position]['products']=response;
-                           // $scope.collections[keys[i].position]['factoryName']='';
                         }
                         else{
                             $scope.collections[keys[i].position]['products']=null;
@@ -308,7 +268,14 @@ app.controller("CollectionsReadyController",
                     });
             }
 
-
+            /**
+             *
+             * @param item
+             */
+            $scope.showCart=function(item){
+                console.log(item);
+                $location.path('/buyer/collection/id/' + item.id)
+            };
         }
     ]);
 

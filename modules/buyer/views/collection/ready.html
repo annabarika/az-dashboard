@@ -1,32 +1,37 @@
 <div class="page-header">
     <div class="box-layout">
         <div class="row mb-xs">
-            <div class="col-sm-1">
+           <!-- <div class="col-sm-1">
                 <div class="btn btn-info" ng-click="newCollection()"><i class="fa fa-plus"></i> New collection</div>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
 <div class="row">
 
-    <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
-        <div class="panel panel-body">
-            <div class="row_collection" ng-repeat="(key,value) in item.products">
-                <ul ng-repeat="(k,v) in value|limitTo:2">
-                    {{v[0].factory.name}}
-                    <li class="img-wrapper">
-                        <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
+    <div class="pa-md">
+        <div class="row">
 
-                    </li>
+            <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
+                <div class="panel panel-body">
+                    <div class="row_collection" >
 
-                </ul>
-                <div>
-                    <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                        <ul class="row_collection" ng-repeat="products in item.products ">
+                            <li class="img-wrapper" ng-if="$index<2"  ng-repeat="product in products track by $index">
+                                <img ng-src="{{imagePath}}{{product[0].files[0].path}}"/>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
+
 
 
 

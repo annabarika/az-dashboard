@@ -4,112 +4,38 @@
             <div class="col-sm-1">
                 <div class="btn btn-info" ng-click="newCollection()"><i class="fa fa-plus"></i> New collection</div>
             </div>
-           <!-- <div class="col-sm-5">
-
-                <select class="form-control" data-ng-model="status" ng-change="showCollection(status)"
-                        ng-options="opt as opt.name for opt in statuses">
-                </select>
-            </div>-->
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-12" >
 
-        <!--<div class="pa-md">
-            <widget-table
-                datarows="collections"
-                dataheader="tableHeader"
-                edit="edit()"
-                row="row"
-                toolbar-buttons="buttons"
-                button-action="buttonAction()"
-                path="/buyer/orders/id/"
-            >
-            </widget-table>
-        </div>-->
-
-
         <div class="pa-md">
             <div class="row">
 
                 <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="uploadProducts(item)">
                     <div class="panel panel-body">
-                        <div class="row_collection" ng-repeat="products in item.products ">
+                        <ul class="row_collection">
+                            <li ng-repeat="file in item.factoryFiles" class="img-wrapper">
 
+                                <img ng-src="{{imagePath}}{{file.path}}"/>
 
-                            <ul ng-repeat="product in products track by $index">
-                                <li class="img-wrapper" ng-if="$index<2">
-                                    <img ng-src="{{imagePath}}{{product[0].files[0].path}}"/>
-                                </li>
+                            </li>
+                        </ul>
 
-                            </ul>
-
-
-
-                            <div>
-                                <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
-                            </div>
+                        <div>
+                            <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
                         </div>
-
                     </div>
                 </div>
 
             </div>
         </div>
-
-       <!-- <div class="pa-md" ng-if="statusFlag==2">
-            <div class="row">
-
-                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
-                    <div class="panel panel-body">
-                        <div class="row_collection" ng-repeat="(key,value) in item.products">
-                            <ul ng-repeat="(k,v) in value|limitTo:2">
-                                {{v[0].factory.name}}
-                                <li class="img-wrapper">
-                                    <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
-
-                                </li>
-
-                            </ul>
-                            <div>
-                                <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="pa-md" ng-if="statusFlag==3">
-            <div class="row">
-
-                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
-                    <div class="panel panel-body">
-                        <div class="row_collection" ng-repeat="(key,value) in item.products">
-                            <ul ng-repeat="(k,v) in value|limitTo:2">
-                                {{v[0].factory.name}}
-                                <li class="img-wrapper">
-                                    <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
-
-                                </li>
-
-                            </ul>
-                            <div>
-                                <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>-->
-
-
+    </div>
 </div>
+
+
+
 
 
 

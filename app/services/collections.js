@@ -128,7 +128,6 @@
                  * @param factories
                  * @returns {Array}
                  */
-                    //TODO фабрики и статусы неизвестны, их необходимо выгружать раньше
                 filterCollections : function(response, factories, statuses) {
                     //console.log(factories,statuses);
                     var collections = [];
@@ -139,6 +138,7 @@
 
                             if(factory.id == value.factoryId) {
                                 value.factoryName = factory.name;
+                                value.factoryFiles = factory.files;
                             }
                         });
 
