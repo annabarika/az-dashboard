@@ -12,21 +12,23 @@ app.controller('PaymentListController',
 		"PaymentService",
 		"$modal",
 		"messageCenterService",
-		"AuthFactory",
 
-		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService,AuthFactory){
+
+		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService){
 
 			$scope.$route = $route;
 			$scope.$location = $location;
 			var filter={},
 				url;
 
-			$scope.userType=JSON.parse(AuthFactory.getUser('type'));
+			//$scope.userType=JSON.parse(AuthFactory.getUser('type'));
+			$scope.userType=$rootScope.user.type;
 
-			$scope.userCO=JSON.parse(AuthFactory.getUser('cashierOffice'));
+			//$scope.userCO=JSON.parse(AuthFactory.getUser('cashierOffice'));
+			$scope.userCO=$rootScope.user.cashierOffice;
 
 
-			console.log($scope.userType,$scope.userCO);
+			console.log("test",$scope.userType,$scope.userCO);
 
 
 			/* Getting payments */

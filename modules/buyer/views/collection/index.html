@@ -4,49 +4,51 @@
             <div class="col-sm-1">
                 <div class="btn btn-info" ng-click="newCollection()"><i class="fa fa-plus"></i> New collection</div>
             </div>
-            <div class="col-sm-5">
+           <!-- <div class="col-sm-5">
 
                 <select class="form-control" data-ng-model="status" ng-change="showCollection(status)"
                         ng-options="opt as opt.name for opt in statuses">
-                   <!-- <option value="">Choose status</option>-->
                 </select>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-12" >
 
-        <div class="pa-md" ng-if="statusFlag==0">
+        <!--<div class="pa-md">
             <widget-table
                 datarows="collections"
                 dataheader="tableHeader"
                 edit="edit()"
                 row="row"
-                toolbar-battons="buttons"
+                toolbar-buttons="buttons"
                 button-action="buttonAction()"
                 path="/buyer/orders/id/"
             >
             </widget-table>
-        </div>
+        </div>-->
 
 
-        <div class="pa-md" ng-if="statusFlag==1">
+        <div class="pa-md">
             <div class="row">
 
-                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
+                <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="uploadProducts(item)">
                     <div class="panel panel-body">
-                        <div class="row_collection" ng-repeat="(key,value) in item.products">
-                            <ul ng-repeat="(k,v) in value|limitTo:2">
-                                {{v[0].factory.name}}
-                                <li class="img-wrapper">
-                                    <img ng-src="{{imagePath}}{{v[0].files[0].path}}"/>
+                        <div class="row_collection" ng-repeat="products in item.products ">
 
+
+                            <ul ng-repeat="product in products track by $index">
+                                <li class="img-wrapper" ng-if="$index<2">
+                                    <img ng-src="{{imagePath}}{{product[0].files[0].path}}"/>
                                 </li>
 
                             </ul>
+
+
+
                             <div>
-                                <p class="caption">&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                                <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
                             </div>
                         </div>
 
@@ -56,7 +58,7 @@
             </div>
         </div>
 
-        <div class="pa-md" ng-if="statusFlag==2">
+       <!-- <div class="pa-md" ng-if="statusFlag==2">
             <div class="row">
 
                 <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="showCart(item)">
@@ -104,7 +106,7 @@
                 </div>
 
             </div>
-        </div>
+        </div>-->
 
 
 </div>

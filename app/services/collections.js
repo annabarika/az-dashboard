@@ -64,7 +64,8 @@
                  * @returns {*}
                  */
                 getFactories: function () {
-                    return RestFactory.request(PATHC.FACTORIES);
+                   // return RestFactory.request(PATHC.FACTORIES);
+                    return $http.get(PATHC.FACTORIES);
                 },
 
                 /**
@@ -101,7 +102,8 @@
                  */
                 getCollectionStatuses: function () {
 
-                    return RestFactory.request(PATHC.LOADSTATUSES);
+                    //return RestFactory.request(PATHC.LOADSTATUSES);
+                    return $http.get(PATHC.LOADSTATUSES);
                 },
 
                 /**
@@ -126,8 +128,9 @@
                  * @param factories
                  * @returns {Array}
                  */
+                    //TODO фабрики и статусы неизвестны, их необходимо выгружать раньше
                 filterCollections : function(response, factories, statuses) {
-
+                    //console.log(factories,statuses);
                     var collections = [];
 
                     angular.forEach(response, function(value) {

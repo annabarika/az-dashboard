@@ -58,6 +58,12 @@ app.config(function($routeProvider){
             controller:"CollectionsController",
             authRequired: 'developer'
         })
+        .when('/buyer/collection/ready',
+        {
+            templateUrl:"/modules/buyer/views/collection/ready.html",
+            controller:"CollectionsReadyController",
+            authRequired: 'developer'
+        })
         .when('/buyer/collection/upload',
         {
             templateUrl:"/modules/buyer/views/collection/collection.html",

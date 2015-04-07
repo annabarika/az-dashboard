@@ -57,12 +57,13 @@
                  */
                 create : function(data) {
                     var type = data.type || ['developer'];
-                    for (var key in data) {
+                    /*for (var key in data) {
                         if (typeof data[key] === "string") {
                             $window.localStorage['auth-'+key] = data[key];
                         }
-                    }
-                    $window.localStorage['auth-type'] = JSON.stringify(type);
+                    }*/
+                    //$window.localStorage['auth-type'] = JSON.stringify(type);
+                    $window.localStorage['user']=JSON.stringify(data);
                     $rootScope.authFlag=true;
                     $rootScope.username=data.name;
                 },
@@ -86,7 +87,7 @@
                  */
                 getUser : function(key){
 
-                        return $window.localStorage["auth-" + key];
+                        return $window.localStorage[key];
                 }
             }
         }])

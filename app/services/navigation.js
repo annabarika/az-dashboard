@@ -24,7 +24,8 @@
                 function _permissions(data){
                     var array=[],menu=[];
 
-                    var type=JSON.parse($window.localStorage["auth-type"]);
+                   // var type=JSON.parse($window.localStorage["auth-type"]);
+                    var type=$rootScope.user.type;
 
                     angular.forEach(data,function(item,i){
 
