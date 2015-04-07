@@ -39,7 +39,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
                         if(response.id) {
 
                             $rootScope.modalInstance.close();
-                            $location.path('/buyer/bestsellers/item/'+response.id)
+                            $location.path('/buyer/bestsellers/item/'+response.id);
                         }
                         else {
                             messageCenterService.add('danger', 'Product does not created. Undefined error', {timeout: 3000});
@@ -313,7 +313,6 @@ app.controller('BestsellerItemController',[
             $scope.sizes = BestsellersService.calculate(num, $scope.sizes);
         };
 
-
         /**
          *
          * @param order
@@ -321,7 +320,9 @@ app.controller('BestsellerItemController',[
         $scope.openOrder = function(order){
             $location.path('/buyer/orders/id/'+order.id)
         };
+
         /**
+         * Create Order
          *
          * @param sizes
          */
@@ -370,74 +371,70 @@ app.controller('BestsellerItemController',[
             });
         };
 
-
         /**
          * Re Order Bestseller
          *
-         * @param sizes
+         * @param array scopeSizes
          */
-        $scope.reOrder = function() {
+        $scope.reOrder = function(scopeSizes) {
 
-            console.log('Bestseller', $scope.bestseller);
-            console.log('Product', $scope.product);
-            console.log('Sizes', $scope.sizes);
-            console.log('Factory', $scope.factory);
+            var create = {};
 
-            // Create Bestseller
-            BestsellersService.createBestseller({id : $scope.bestseller.productId}).then(function(response) {
+            create.sizes = BestsellersService.sizeCheck(scopeSizes);
 
-                if(response.id) {
+            if(create.sizes.length > 0) {
 
-                    var betsellerId = response.id;
+                // Create Bestseller
+                BestsellersService.createBestseller({id : $scope.bestseller.productId}).then(function(response) {
 
-                    // Create Order
-                    BestsellersService.createOrder($scope.product.factoryId).then(function (response) {
+                    if(response.id) {
 
-                        if (response.id) {
-                            var orderId = response.id;
+                        create.betsellerId = response.id;
 
+                        // Create Order
+                        BestsellersService.createOrder($scope.product.factoryId).then(function (response) {
 
+                            if (response.id) {
+                                create.orderId = response.id;
+                                create.products = BestsellersService.prepareProducts(create.betsellerId, $scope.product, create.sizes);
 
-                        }
-                    });
-                }
-                else {
-                    messageCenterService.add('danger', 'Bestseller does not created', {timeout: 3000});
-                }
-            });
+                                // Adding items to order
+                                for(i in create.products) {
+                                    BestsellersService.addOrderProductRow(create.orderId, create.products[i]).then(function(response) {
 
+                                            if(response.id){
+                                                create.products.splice(0, 1);
+                                            }
+                                        }, function(error){
+                                            messageCenterService.add("danger","ERROR: "+error,{timeout:3000});
+                                        }
+                                    );
+                                }
 
-                                //var products = BestsellersService.prepareProducts(betsellerId, $scope.product, _sizeArray);
-                        //        var orderId = response.id;
-                        //        var products = BestsellersService.prepareProducts(orderId, $scope.bestseller.id, $scope.product, _sizeArray);
-                        //        // Adding items to order
-                        //        for( i in products){
-                        //            BestsellersService.addOrderProductRow(orderId, products[i]).then(
-                        //                function(response){
-                        //                    //console.log(response);
-                        //                    if(response.id){
-                        //
-                        //                        products.splice(0, 1);
-                        //                    }
-                        //                },
-                        //                function(error){
-                        //                    messageCenterService.add("danger","ERROR: "+error,{timeout:3000});
-                        //                }
-                        //            );
-                        //        }
-                        //        BestsellersService.sendCreatedOrder(orderId).then(function(response) {
-                        //            if(response.file) {
-                        //
-                        //                if(products.length == 0){
-                        //                    window.location.reload();
-                        //                }
-                        //            }
-                        //        });
-                        //    }
+                                // send order
+                                BestsellersService.sendCreatedOrder(create.orderId).then(function(response) {
+                                    if(response.file) {
 
+                                        messageCenterService.add('success', 'Bestseller reordered', {timeout: 3000});
 
-
-
+                                        $location.path('/buyer/bestsellers/item/'+create.betsellerId);
+                                        delete create;
+                                    }
+                                });
+                            }
+                            else {
+                                messageCenterService.add('danger', 'Order does not created', {timeout: 3000});
+                            }
+                        });
+                    }
+                    else {
+                        messageCenterService.add('danger', 'Bestseller does not created', {timeout: 3000});
+                    }
+                });
+            }
+            else {
+                messageCenterService.add("danger","size or count is empty",{timeout:3000});
+            }
         };
 
         /**

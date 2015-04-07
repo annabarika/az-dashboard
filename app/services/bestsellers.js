@@ -245,7 +245,7 @@
                      * @param string date
                      * @returns {*}
                      */
-                    addToBestseller: function(product, date) {
+                    createBestseller: function(product, date) {
 
                         var params = {
                             "status": "0",
