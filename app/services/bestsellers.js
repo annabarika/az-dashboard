@@ -23,7 +23,8 @@
             "UPDATE"                : config.API.host + "bestseller/update",
             "CREATE_PDF"            : config.API.host + "order/send-to-factory/id/",
             "ORDER_PDF_REPORT"      : config.API.host + "order/report/id/",
-            "SEND_ORDER"            : config.API.host+"order/send-notification/id/",
+            "SEND_ORDER_NOTIFICATION" : config.API.host+"order/send-notification/id/",
+            "SEND_MODERATE"         : config.API.host+"report/send",
             "LOAD_MODERATORS"       : "/testing/mocks/moderators.json"
         })
 
@@ -152,7 +153,7 @@
                      */
                     sendCreatedOrder : function(id){
 
-                        var url = API.SEND_ORDER+id;
+                        var url = API.SEND_ORDER_NOTIFICATION+id;
 
                         return RestFactory.request(url);
                     },
@@ -253,6 +254,16 @@
                         };
 
                         return RestFactory.request(API.ADD_TO_BESTSELLER, 'POST', params);
+                    },
+
+                    /**
+                     * Send report
+                     *
+                     * @param array data
+                     * @returns {*}
+                     */
+                    sendReport: function(data) {
+                        return RestFactory.request(API.SEND_MODERATE, 'POST', data);
                     },
 
                     /**

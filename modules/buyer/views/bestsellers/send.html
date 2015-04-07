@@ -4,77 +4,72 @@
         <button type="button" class="close" ng-click="$close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Reorder send form</h4>
     </div>
-    <div class="modal-body">
-        <table class="table table-hover">
-            <tbody>
-            <tr>
-                <td>
-                    <p class="form-inline">
-                        <label class="control-label">Subject</label>
-                        <input class="form-control pull-right width80" type="text" value="Reorder from {{user.name | capitalize:true}}: {{product.factoryArticul}} ({{factory.name}})">
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="form-inline">
-                        <label class="control-label">To</label>
-                        <input class="form-control pull-right width80" type="text" ng-model="to" value="">
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="form-inline left">
-                        <label class="control-label">Moderators</label>
+    <form role="form">
+        <div class="modal-body">
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <td>
+                        <p class="form-inline">
+                            <label class="control-label">Subject</label>
+                            <input class="form-control pull-right width80" type="text" ng-model="report.subject" required="true">
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="form-inline">
+                            <label class="control-label">To</label>
+                            <input class="form-control pull-right width80" ng-model="report.to" placeholder="Please select recipients" type="text" required="true" autofocus>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="form-inline left">
+                            <label class="control-label">Moderators</label>
                         <div class="width80 pull-right">
+                            <button ng-click="assign(moderators);" class="btn-sm"><i class="fa fa-plus"></i></button>
                             <button ng-repeat="moderator in moderators" ng-class="{true: 'btn-info', false: 'btn-default'}[!moderator.archived]" ng-click="assign(moderator); moderator.archived = !moderator.archived" class="btn-sm">{{moderator.name}} &lt;{{moderator.email}}&gt;</button>
                         </div>
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="form-inline left">
-                        <label class="control-label">Factories</label>
-                    <div class="width80 pull-right">
-                        <button class="btn-sm" ng-class="{true: 'btn-info', false: 'btn-default'}[!factory.archived]" ng-click="assign(factory); factory.archived = !factory.archived">{{factory.name}} &lt;{{factory.email}}&gt;</button>
-                    </div>
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="form-inline">
-                        <label class="control-label">Message</label>
-                        <textarea class="form-control pull-right width80" rows="10">
-                            Good day! Here's order for {{product.factoryArticul}}.
-                            You can find details in the attachment
-                            Best regards, {{user.type | capitalize:true}}
-
-                            Phone: {{user.phone}}
-                            Email: {{user.email}}
-                        </textarea>
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="form-inline left">
-                        <label class="control-label">Attachment</label>
-                    <div class="width80 pull-right">
-                        <i class="fa fa-send-o"></i> <a href="{{report.pdf}}" target="_blank">{{report.pdf}}</a>
-                    </div>
-                    </p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-    </div>
-    <!--footer-->
-    <div class="modal-footer">
-        <button type="button" class="btn btn-green" data-ng-controller="BestsellerItemController" ng-click="send(bestseller, true)">Send</button>
-        <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
-    </div>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="form-inline left">
+                            <label class="control-label">Factories</label>
+                        <div class="width80 pull-right">
+                            <button class="btn-sm" ng-class="{true: 'btn-info', false: 'btn-default'}[!factory.archived]" ng-click="assign(factory); factory.archived = !factory.archived">{{factory.name}} &lt;{{factory.email}}&gt;</button>
+                        </div>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="form-inline">
+                            <label class="control-label">Message</label>
+                            <textarea class="form-control pull-right width80" rows="10" ng-model="report.message" required="true"></textarea>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="form-inline left">
+                            <label class="control-label">Attachment</label>
+                        <div class="width80 pull-right">
+                        <i class="fa fa-send-o"></i> <a ng-model="report.attachment" href="{{report.attachment}}" target="_blank">{{report.attachment}}</a>
+                        </div>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--footer-->
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-green" data-ng-controller="BestsellerItemController" ng-click="send(report, true)">Send</button>
+            <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
+        </div>
+    </form>
 </div>

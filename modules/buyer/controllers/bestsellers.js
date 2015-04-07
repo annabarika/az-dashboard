@@ -403,28 +403,55 @@ app.controller('BestsellerItemController',[
          *
          * @uses modal fullfill
          */
-        $scope.send = function(bestseller, send) {
+        $scope.send = function(report, send) {
 
             if(_.isUndefined(send)) {
 
-                $rootScope.modalInstance = $modal.open({
-                    templateUrl: "/modules/buyer/views/bestsellers/send.html",
-                    controller: function(report,$scope){
-                        $scope.report = report;
-                    },
+                BestsellersService.getOrderReport($scope.bestseller.orderId).then(function(response) {
 
-                    backdrop:'static',
-                    size: 'md',
-                    resolve :  {
-                        report : function() {
-                            // resolve order report path
-                            return BestsellersService.getOrderReport($scope.bestseller.orderId);
-                        }
+                    if(response) {
+
+                        $rootScope.report =  {
+                            subject : 'Reorder from '+ $rootScope.user.name.capitalizeFirstLetter() + ' : '+$scope.product.factoryArticul +' ('+ $scope.factory.name+' )',
+                            to : '',
+                            message :   "Good day! Here's order for "+ $scope.product.factoryArticul +"\n"+
+                                        "You can find details in the attachment\n"+
+                                        "Best regards, "+ $rootScope.user.type.capitalizeFirstLetter() + "\n\n"+
+                            'Phone: '+ $rootScope.user.phone+ "\n"+
+                            'Email: '+ $rootScope.user.email+ "\n",
+                            attachment : response.pdf
+                        };
+                        $rootScope.modalInstance = $modal.open({
+                            templateUrl: "/modules/buyer/views/bestsellers/send.html",
+                            controller: 'BestsellerItemController',
+                            backdrop:'static',
+                            size: 'md'
+                        });
+                    }
+                    else {
+                        messageCenterService.add("danger","Could not create order report. Try again",{timeout:3000});
                     }
                 });
             }
             else {
-                console.log('Send to owners');
+
+                // Form validation
+                var check = _.map(report, function(letter, title) {
+
+                    if(_.isUndefined(letter) === true || _.isEmpty(letter) === true) {
+                        return false;
+                    }
+                    else return letter;
+                });
+
+                if(_.includes(check, false) === true) {
+                    messageCenterService.add("danger", "All fields are required", {timeout:3000});
+                    return false;
+                }
+
+                BestsellersService.sendReport(report).then(function(response) {
+                    console.log(response);
+                });
             }
         };
 
@@ -437,21 +464,44 @@ app.controller('BestsellerItemController',[
          */
         $scope.assign = function(credentials) {
 
-            var founded = _.findIndex(to, {name: credentials.name});
 
-            if(founded == -1) {
-
-                to.push({
-                    name : credentials.name,
-                    email: ' <'+credentials.email+'>'
-                });
+            if(credentials.email) {
+                var founded = _.findIndex(to, {name: credentials.name});
             }
             else {
-                _.remove(to, {name: credentials.name })
+                var collection = true;
+            }
+
+            if(collection === true) {
+
+                if(_.isEmpty(to)) {
+                    credentials.forEach(function(credential) {
+                        to.push({
+                            name : credential.name,
+                            email: ' <'+credential.email+'>'
+                        });
+                    });
+                }
+                else {
+                    to = [];
+                }
+            }
+            else {
+                if(founded == -1) {
+
+                    to.push({
+                        name : credentials.name,
+                        email: ' <'+credentials.email+'>'
+                    });
+                }
+
+                else {
+                    _.remove(to, {name: credentials.name })
+                }
             }
 
             // format to string
-            $scope.to = (function() {
+            $rootScope.report.to = (function() {
 
                 var result = [];
                 to.forEach(function(value) {
@@ -461,4 +511,8 @@ app.controller('BestsellerItemController',[
                 return result.join(',');
             })();
         };
+
+        String.prototype.capitalizeFirstLetter = function() {
+            return this.charAt(0).toUpperCase() + this.slice(1);
+        }
     }]);
