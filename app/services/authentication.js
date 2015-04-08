@@ -77,12 +77,20 @@
                 },
                 /**
                  *
-                 * @param key
                  * @returns {*}
                  */
-                getUser : function(key){
-                        console.log(key,$window.localStorage[key]);
-                        return $window.localStorage[key];
+                getUser : function(){
+
+                    try{
+                        var user=JSON.parse($window.localStorage['user']);
+
+                        return user;
+                    }
+                    catch(e){
+                        console.log(e);
+                        return;
+                    }
+
                 }
             }
         }])

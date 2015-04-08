@@ -16,19 +16,20 @@
     ])
 
         .run(["$rootScope","$route","AuthFactory","$location","NavService",function($rootScope,$route,AuthFactory,$location,NavService){
-            console.log("werwerw");
-            $rootScope.user=JSON.parse(AuthFactory.getUser('user'));
-            //$rootScope.user=AuthFactory.getUser('user');
+
+            $rootScope.user=AuthFactory.getUser();
 
             if(!_.isUndefined($rootScope.user)){
-                console.log("this");
+
                 $rootScope.username=$rootScope.user.name;
+
                 $rootScope.authFlag=true;
+
                 NavService.getMenu();
 
             }
             else{
-                console.log('qwe');
+
                 $location.path("/login");
             }
 
