@@ -16,18 +16,19 @@
     ])
 
         .run(["$rootScope","$route","AuthFactory","$location","NavService",function($rootScope,$route,AuthFactory,$location,NavService){
-
+            console.log("werwerw");
             $rootScope.user=JSON.parse(AuthFactory.getUser('user'));
-
-            $rootScope.username=$rootScope.user.name;
+            //$rootScope.user=AuthFactory.getUser('user');
 
             if(!_.isUndefined($rootScope.user)){
-
+                console.log("this");
+                $rootScope.username=$rootScope.user.name;
                 $rootScope.authFlag=true;
                 NavService.getMenu();
 
             }
             else{
+                console.log('qwe');
                 $location.path("/login");
             }
 
@@ -46,8 +47,10 @@
                 }
             )
                 .when("/index",
+
                 {
-                    templateUrl: "/app/views/startpage.html",
+                    templateUrl:
+                         "/app/views/startpage.html",
                     controller:"MainController"
                 }
             )

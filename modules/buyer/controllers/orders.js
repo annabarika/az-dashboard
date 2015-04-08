@@ -100,20 +100,9 @@ app.controller('OrderListController',
                         }
                     }
                 }
-                if(_.isUndefined($scope.data)){
-                    $scope.data=response;
-                    $scope.orders=$scope.data;
-                    console.log("data",$scope.data);
-                }
-                else{
-                    $scope.orders=response;
-                }
-                //_factoryForFilter();
+                $scope.orders=response;
             }
-
-
-
-            //Loading statuses
+              //Loading statuses
             RestFactory.request(config.API.host + "status/load")
                 .then(function(response){
                     var statusByType = [];
@@ -128,26 +117,6 @@ app.controller('OrderListController',
                 function(error){
                     console.log(error);
                 });
-
-            /**
-             * Factory getter
-             * @private
-             */
-            /*function _factoryForFilter(){
-                var factory = [];
-               // console.log($rootScope.fullFactories );
-                for( var i in $rootScope.fullFactories ){
-
-                    factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: $rootScope.fullFactories[i].factory.name } );
-                }
-                $scope.Factory=factory;
-                console.log(factory);
-            }*/
-
-
-
-
-
             /**
              *
              * @param item
@@ -247,7 +216,7 @@ app.controller('OrderListController',
              */
             $scope.makePayment=function(index,type){
                 event.stopPropagation();
-                console.log("payment type",type);
+               // console.log("payment type",type);
                 var modalInstance=$modal.open({
                     templateUrl: "/modules/buyer/views/orders/make_payment.html",
                     controller: function($scope,messageCenterService){
@@ -282,7 +251,7 @@ app.controller('OrderListController',
                     url=config.API.host+"payment/create";
                     data={
                         'currencyId'        :   $scope.orders[index].order.currencyId,
-                        //@TODO Узнать cashierId и cashierOfficeId от авторизации
+                        //@TODO Узнать cashierId от авторизации
                         'cashierId'         :   1,
                         'cashierOfficeId'   :   CO,
                         'orderId'           :   $scope.orders[index].order.id,
@@ -293,7 +262,7 @@ app.controller('OrderListController',
 
                     RestFactory.request(url,"POST",data).then(
                         function(response){
-                            console.log("payment",response);
+                           // console.log("payment",response);
                             if(_.isObject(response)&&response.id>0){
                                 messageCenterService.add('success', 'Payment created', {timeout: 3000});
                             }else{
@@ -304,14 +273,48 @@ app.controller('OrderListController',
 
                 })
             };
-
-            $scope.makeRefund=function(index){
-                event.stopPropagation();
-                console.log(index);
-            };
-
+            /**
+             * filters for orders
+             * @param filter
+             */
             $scope.filteredOrders=function(filter){
-                console.log(filter);
+                //console.log(filter);
+
+                url=config.API.host+"order/load-detailed/";
+
+                if(_.has(filter, "status") && filter.status!=null){
+
+
+                    url+="status/"+filter.status.id+"/";
+                }
+                if(_.has(filter, "paymentStatus")&& filter.paymentStatus!=null){
+
+                    url+="paymentStatus/"+filter.paymentStatus.id+"/";
+                }
+                if(_.has(filter, "factory") && filter.factory!=null){
+
+                    if(_.isUndefined(filter.factory.id)){
+                        return;
+                    }
+                    url+="factoryId/"+filter.factory.id+"/";
+                }
+
+                if(_.has(filter, "createDate") && filter.createDate!=null){
+                    filter.createDate.startDate= moment(filter.createDate.startDate).format('YYYY-MM-DD');
+                    filter.createDate.endDate= moment(filter.createDate.endDate).format('YYYY-MM-DD');
+                    url+="createDate/"+filter.createDate.startDate+","+filter.createDate.endDate+"/";
+                }
+
+                //console.log(url);
+
+                RestFactory.request(url)
+                    .then(
+                    function(response){
+                        _parseOrders(response)
+                    },
+                    function(error){
+                        console.log(error);
+                    });
             };
 
 
@@ -819,7 +822,7 @@ app.controller("OrderController",
                     url=config.API.host+"payment/create";
                     data={
                         'currencyId'        :   $scope.order.currency.id,
-                        //@TODO Узнать cashierId и cashierOfficeId от авторизации
+                        //@TODO Узнать cashierId от авторизации
                         'cashierId'         :   1,
                         'cashierOfficeId'   :   CO,
                         'orderId'           :   id,

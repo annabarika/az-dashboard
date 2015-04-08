@@ -81,7 +81,7 @@
                  * @returns {*}
                  */
                 getUser : function(key){
-
+                        console.log(key,$window.localStorage[key]);
                         return $window.localStorage[key];
                 }
             }
