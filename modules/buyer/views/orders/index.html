@@ -4,9 +4,9 @@
             <div class="col-md-2 col-sm-2 mb-5">
                 <div class="btn btn-info" ng-click="addNewOrder()"><i class="fa fa-plus"></i> New order</div>
             </div>
-            <div class="col-md-5 col-sm-12 mb-5">
-                <div class="col-md-3 col-sm-3 va-m">
-                    <multi-select
+            <!--<div class="col-md-5 col-sm-12 mb-5">
+                <div class="col-md-3 col-sm-3 va-m">-->
+                    <!--<multi-select
                             default-label="Status filter"
                             input-model="orderStatus"
                             output-model="resultData.order"
@@ -40,7 +40,29 @@
                             max-labels="2"
                             max-height="250px"
                             >
-                    </multi-select>
+                    </multi-select>-->
+
+            <div class="col-md-5 col-sm-12 mb-5">
+
+                <div class="col-md-3 col-sm-3 va-m">
+                    <select class="form-control" data-ng-model="filter.status" ng-change="filteredOrders(filter)"
+                        ng-options="opt as opt.name for opt in orderStatus">
+                        <option value="">Status filter</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 col-sm-4 va-m">
+                    <select class="form-control" data-ng-model="filter.paymentStatus" ng-change="filteredOrders(filter)"
+                        ng-options="opt as opt.name for opt in orderPaymentStatus">
+                        <option value="">Payment Status</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 col-sm-4 va-m">
+                    <select class="form-control" data-ng-model="filter.factory" ng-change="filteredOrders(filter)"
+                            ng-options="opt as opt.name for opt in Factory">
+                        <option value="">Factory status</option>
+                    </select>
                 </div>
             </div>
 
@@ -79,7 +101,7 @@
                     <tbody>
                     <tr ng-repeat="item in orders" ng-click="edit(item)">
                         <td>
-                            <span class="btn btn-default btn-rounded btn-sm">3</span>
+                            <span class="btn btn-default btn-rounded btn-sm">{{$index+1}}</span>
                         </td>
                         <td>
                             <h5 class="text-muted fw-sb">{{item.factoryName}}</h5>

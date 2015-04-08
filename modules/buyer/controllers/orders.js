@@ -11,7 +11,24 @@ app.run(
                 .success(function(data){
 
                      $rootScope.fullFactories=data;
+                    _factoryForFilter();
                 });
+
+
+            /**
+             * Factory getter
+             * @private
+             */
+            function _factoryForFilter(){
+                var factory = [];
+                // console.log($rootScope.fullFactories );
+                for( var i in $rootScope.fullFactories ){
+
+                    factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: $rootScope.fullFactories[i].factory.name } );
+                }
+                $rootScope.Factory=factory;
+               // console.log(factory);
+            }
         }
 
     ]);
@@ -58,27 +75,43 @@ app.controller('OrderListController',
 
             RestFactory.request(config.API.host+"order/load-detailed/").then(
                 function(response){
-                    //console.log(response);
-                   // $scope.orders=response;
-
-                    var length=response.length;
-                    for(var i=0;i<response.length;i++){
-
-                        for( var key in $rootScope.fullFactories){
-
-                            if(response[i].order.factoryId==key){
-
-                                response[i]['factoryName']=$rootScope.fullFactories[key].factory.name;
-                                response[i]['factoryPhone']=JSON.parse($rootScope.fullFactories[key].factory.phone);
-                                response[i]['factoryFiles']=$rootScope.fullFactories[key].factoryFiles;
-                            }
-                        }
-                    }
-
-                    $scope.orders=response;
-                    console.log($scope.orders);
+                    //console.log("all orders",response);
+                    _parseOrders(response);
                 }
             );
+            /**
+             * parser Orders array
+             * @param response
+             * @private
+             */
+            function _parseOrders(response){
+
+                var length=response.length;
+
+                for(var i=0;i<length;i++){
+
+                    for( var key in $rootScope.fullFactories){
+
+                        if(response[i].order.factoryId==key){
+
+                            response[i]['factoryName']=$rootScope.fullFactories[key].factory.name;
+                            response[i]['factoryPhone']=JSON.parse($rootScope.fullFactories[key].factory.phone);
+                            response[i]['factoryFiles']=$rootScope.fullFactories[key].factoryFiles;
+                        }
+                    }
+                }
+                if(_.isUndefined($scope.data)){
+                    $scope.data=response;
+                    $scope.orders=$scope.data;
+                    console.log("data",$scope.data);
+                }
+                else{
+                    $scope.orders=response;
+                }
+                //_factoryForFilter();
+            }
+
+
 
             //Loading statuses
             RestFactory.request(config.API.host + "status/load")
@@ -89,7 +122,7 @@ app.controller('OrderListController',
                         statusByType[response[i].type].push({ type: response[i].type, id: response[i].statusId, name: response[i].name });
                     }
                     $scope.orderStatus = statusByType['order'];
-                    //console.log( $scope.orderStatus);
+
                     $scope.orderPaymentStatus = statusByType['orderPayment'];
                 },
                 function(error){
@@ -100,16 +133,20 @@ app.controller('OrderListController',
              * Factory getter
              * @private
              */
-            function _factoryForFilter(){
+            /*function _factoryForFilter(){
                 var factory = [];
+               // console.log($rootScope.fullFactories );
                 for( var i in $rootScope.fullFactories ){
 
-                    factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: response[i].factory.name } );
+                    factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: $rootScope.fullFactories[i].factory.name } );
                 }
                 $scope.Factory=factory;
                 console.log(factory);
-            }
-            _factoryForFilter();
+            }*/
+
+
+
+
 
             /**
              *
@@ -185,7 +222,7 @@ app.controller('OrderListController',
                     backdrop:'static'
 
                 });
-                modalInstance.result.then(function(string){
+                modalInstance.result.then(function(){
 
                     url=config.API.host+"order/cancel";
 
@@ -273,13 +310,15 @@ app.controller('OrderListController',
                 console.log(index);
             };
 
+            $scope.filteredOrders=function(filter){
+                console.log(filter);
+            };
 
 
 
 
+             /*$scope.$watchCollection('resultData',function(newVal){
 
-             $scope.$watchCollection('resultData',function(newVal){
-                //console.log(newVal);
                 for(item in newVal){
                     var arr=[];
 
@@ -306,11 +345,10 @@ app.controller('OrderListController',
                         });
                     }
                 }
-                //console.log(filter);
 
                 if(!$.isEmptyObject(filter)){
 
-                    url=config.API.host+"order/load/";
+                    url=config.API.host+"order/load-detailed/";
 
                     if(filter.order){
 
@@ -336,7 +374,7 @@ app.controller('OrderListController',
                     RestFactory.request(url)
                         .then(
                         function(response){
-                            $scope.orders=response;
+                            _parseOrders(response)
                         },
                         function(error){
                             console.log(error);
@@ -345,7 +383,7 @@ app.controller('OrderListController',
                 else{
                     $scope.orders=$scope.data;
                 }
-            });
+            });*/
 
             $scope.addNewOrder = function () {
 
