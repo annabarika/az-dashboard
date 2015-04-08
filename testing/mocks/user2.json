@@ -14,9 +14,8 @@
         "name": "admin",
         "type": "admin",
         "password":"VP201b",
-        "cashierOffice":"1",
         "settings": {
-            "cashierOffice":": 1"
+            "cashierOffice":"1"
         }
     },
     {

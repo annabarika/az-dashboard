@@ -3,10 +3,15 @@
         <div class="row mb-xs">
             <div class="col-sm-3">
                 <div class="btn btn-info" ng-click="addNewPayment()"><i class="fa fa-plus"></i> New payment</div>
-                <div class="btn btn-default" ng-hide="userType!='admin'" ng-click="addNewCashOffice()"><i class="fa fa-plus"></i> New cashier office</div>
+                <!--<div class="btn btn-default" ng-hide="userType!='admin'" ng-click="addNewCashOffice()"><i class="fa fa-plus"></i> New cashier office</div>-->
             </div>
-
-            <div class=" col-sm-2">
+            <div class="col-sm-5">
+                <div class="col-sm-4 va-m">
+                    <input date-range-picker class="form-control date-picker" placeholder="Select date range" type="text"
+                           ng-model="filter.createDate" ng-change="filteredPayments(filter)"/>
+                </div>
+            </div>
+            <!--<div class=" col-sm-2">
                 <multi-select
                         default-label="Status filter"
                         input-model="status"
@@ -44,14 +49,43 @@
                         selection-mode="single"
                         >
                 </multi-select>
-            </div>
+            </div>-->
         </div>
 
     </div>
 </div>
+<h1>Draft payments:</h1>
+<div class="col-sm-12 col-md-12" >
+
+    <div class="pa-md">
+        <div class="row">
+
+            <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in draftPayments">
+                <div class="panel panel-body">
+                    <!--<ul class="row_collection">
+                        <li ng-repeat="file in item.factoryFiles" class="img-wrapper" ng-if="$index<2">
+
+                            <img ng-src="{{imagePath}}{{file.path}}"/>
+
+                        </li>
+                    </ul>-->
+
+                    <div>
+                        <div>{{item.payment.amount}}&nbsp{{item.currency.ISOCode}}</div>
+                        <p class="caption">{{item.factory.name}}&nbsp;&nbsp;<span class="date">{{item.payment.paymentDate}}</span></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<hr>
+<h1>Paid payments:</h1>
 
 <widget-table
-        datarows="payments"
+        datarows="paidPayments"
         dataheader="tableHeader"
         edit="edit()"
         row="row"

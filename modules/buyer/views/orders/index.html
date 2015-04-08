@@ -147,10 +147,10 @@
                             <!--<p class="text-muted text-right-sm" ng-repeat="p in item.payments">Changed: {{p.paymentDate}}</p>-->
                         </td>
                         <td>
-                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="sendToFactory($index)"><i class="fa fa-calendar"></i></button>
-                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="cancel($index)"><i class="fa fa-ban"></i></button>
-                            <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')">&#165;</button>
-                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="makePayment($index,'refund')">&#165;</button>
+                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="sendToFactory($index)" title="send to factory"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="cancel($index)" title="cancel order"><i class="fa fa-ban"></i></button>
+                            <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" title="make payment">&#165;</button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="makePayment($index,'refund')" title="make refund">&#165;</button>
                         </td>
                     </tr>
                     </tbody>

@@ -7,10 +7,15 @@ angular.module('widgets.autocomplete', [])
                 inputModel:"=",
                 outputModel:"=",
                 column:"=",
-                imagepath:"="
+                imagepath:"=",
+                placeholder:"@"
             },
             templateUrl:"/app/widgets/autocomplete.wgt.html",
             link:function($scope,elem, attr){
+
+                if($scope.placeholder==undefined){
+                    $scope.placeholder='search';
+                }
 
                 var ul=elem[0].children[0].children[1];
 

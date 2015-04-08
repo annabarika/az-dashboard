@@ -20,7 +20,7 @@
                 <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="uploadProducts(item)">
                     <div class="panel panel-body">
                         <ul class="row_collection">
-                            <li ng-repeat="file in item.factoryFiles" class="img-wrapper">
+                            <li ng-repeat="file in item.factoryFiles" class="img-wrapper" ng-if="$index<2">
 
                                 <img ng-src="{{imagePath}}{{file.path}}"/>
 
