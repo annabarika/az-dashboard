@@ -82,12 +82,10 @@
                 getUser : function(){
 
                     try{
-                        var user=JSON.parse($window.localStorage['user']);
-
-                        return user;
+                        return JSON.parse($window.localStorage['user']);
                     }
                     catch(e){
-                        console.log(e);
+
                         return;
                     }
 

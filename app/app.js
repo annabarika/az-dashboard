@@ -135,7 +135,10 @@
                                     }
                                     return;
                                 }
-                            })
+                            });
+                            if(_.isUndefined($rootScope.username)){
+                                messageCenterService.add('danger', "Wrong name or password", {timeout: 3000});
+                            }
                         }
                         else{
                             messageCenterService.add('danger', "Error: "+response, {timeout: 3000});

@@ -22,7 +22,10 @@
             "LOAD_PRODUCTS"         : config.API.host + "order/get-rows/id/",
             "UPDATE"                : config.API.host + "bestseller/update",
             "CREATE_PDF"            : config.API.host + "order/send-to-factory/id/",
-            "SEND_ORDER"            : config.API.host+"order/send-notification/id/"
+            "ORDER_PDF_REPORT"      : config.API.host + "order/report/id/",
+            "SEND_ORDER_NOTIFICATION" : config.API.host+"order/send-notification/id/",
+            "SEND_MODERATE"         : config.API.host+"report/send",
+            "LOAD_MODERATORS"       : "/testing/mocks/moderators.json"
         })
 
         .factory("BestsellersService", ['API', 'RestFactory',
@@ -150,7 +153,7 @@
                      */
                     sendCreatedOrder : function(id){
 
-                        var url = API.SEND_ORDER+id;
+                        var url = API.SEND_ORDER_NOTIFICATION+id;
 
                         return RestFactory.request(url);
                     },
@@ -226,20 +229,23 @@
                     },
 
                     /**
-                     * Get find articul uri
+                     * Get Order report
+                     *
+                     * @param int orderId
+                     * @returns {*}
                      */
-                    searchArticulUri: function() {
-                        return API.FIND_BY_ARTICUL;
+                    getOrderReport: function(orderId) {
+                        return RestFactory.request(API.ORDER_PDF_REPORT+parseInt(orderId));
                     },
 
                     /**
-                     * Add product to bestseller
+                     * Add product to bestseller (create)
                      *
                      * @param json product
                      * @param string date
                      * @returns {*}
                      */
-                    addToBestseller: function(product, date) {
+                    createBestseller: function(product, date) {
 
                         var params = {
                             "status": "0",
@@ -248,6 +254,20 @@
                         };
 
                         return RestFactory.request(API.ADD_TO_BESTSELLER, 'POST', params);
+                    },
+
+                    /**
+                     * Send report
+                     *
+                     * @param array data
+                     * @returns {*}
+                     */
+                    sendReport: function(data) {
+                        var emails = data.to.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+
+                        data.to = emails;
+
+                        return RestFactory.request(API.SEND_MODERATE, 'POST', data);
                     },
 
                     /**
@@ -281,7 +301,7 @@
                         return RestFactory.request(API.CREATE_ORDER, 'POST', order);
                     },
 
-                    prepareProducts: function(orderId, bestsellerId, product, sizes){
+                    prepareProducts: function(bestsellerId, product, sizes){
                         var products = [];
                         var size = '';
                         if( sizes.add ){
@@ -314,15 +334,26 @@
                         product.orderId = orderId;
                         return RestFactory.request(API.ADD_ORDER_PRODUCT_ROW, 'POST', product);
                     },
+
                     /**
+                     * Get order products
                      *
                      * @param id
                      * @returns {*}
                      */
                     getProducts: function(id){
-                        console.log("getProducts",id);
                         return RestFactory.request(API.LOAD_PRODUCTS+id)
                     },
+
+                    /**
+                     * Get all moderators
+                     *
+                     * @returns {*}
+                     */
+                    getModerators: function(){
+                        return RestFactory.request(API.LOAD_MODERATORS)
+                    },
+
                     /**
                      *
                      * @param sizes

@@ -1,141 +1,232 @@
-<div class="box-layout">
-<div  class="col-md-9 bg-white height-auto bdr-r-md">
-    <div class="scroll">
-        <!-- start page header -->
-        <div class="page-header clearfix">
-            <div class="row">
-                <div class="col-md-2">
-                        <span class="fc-header-title">
-                           <h2><button class="btn btn-default" ng-click="changeYear(-1)"><i class="fa fa-chevron-left"></i></button>
-                               {{currentYear}}
-                               <button class="btn btn-default" ng-click="changeYear(1)"><i class="fa fa-chevron-right"></i></button>
-                           </h2>
-                        </span>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-success" ng-click="createBestseller()"><i class="fa fa-plus"></i> Create Bestseller</button>
-                </div>
-            </div>
-        </div>
 
-        <div class="panel fullcalendar box-layout">
-            <!-- Repelled by total -->
-            <div class="page-header clearfix" ng-if="!bestsellers.total[currentYear]">
-                No bestsellers this year. Sorry :(
-            </div>
-            <div class="col-md-2 col-sm-2 fc" ng-if="bestsellers.total[currentYear]" ng-repeat="(key,value) in bestsellers.total[currentYear]">
-                <p class="fc-widget-header">
-                    {{months[key]}}
-                </p>
-                <span class="fc-day-grid-event fc-event mr-5 ml-5">
-                    <div class="fc-content">
-                        <!-- ng-click="selectMonth('total', key)" -->
-                        <span class="fc-title"><!--<a class="label label-primary hover">
-                            total: {{value}}</a>--> <a class="width100 label label-success hover" ng-click="selectMonth('ordered', key)">ordered {{bestsellers.ordered[currentYear][key]}}</a></span>
-                    </div>
-                </span>
-            </div>
-        </div>
-        <!-- end: panel -->
-    </div>
+<div class="page-header">
+    <button type="button" class="btn btn-default">Vip</button>
+    <button type="button" class="btn btn-info">Other</button>
 </div>
-<div  class="col-md-3 bg-auto height-auto bdr-b-sm bdr-b-xs">
-    <div class="scroll">
+
+<!-- start box layout -->
+<div class="box-layout">
+    <div class="col-md-12 bdr-l bg-auto height-auto">
+
         <!-- start page header -->
-        <div class="page-header clearfix">
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="mb-sm">{{currentMonth}} {{currentYear}}</h3>
+        <div class="page-header">
+            <div class="box-layout">
+                <div class="col-sm-3 va-m">
+                    <h4>Other: Очки</h4>
+                    <p class="text-muted mb-0">Phones: 13128222878, 15815899046, 1325963189</p>
+                </div>
+                <div class="col-sm-9 va-m">
+                    <div class="thumbnail img_sm pull-left">
+                        <img src="/assets/images/avatar/avatar9.jpg">
+                    </div>
                 </div>
             </div>
-            <p class="input-group">
-                <input type="text" class="form-control" ng-change="selectDate(date)" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-                    <span class="input-group-btn">
-                       <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-            </p>
         </div>
         <!--/ end page header -->
-        <accordion close-others="oneAtATime">
 
-            <!-- Ordered items -->
-            <accordion-group heading="Ordered" is-open="true">
-                <div ng-if="!bestsellersOrdered">Click on the calendar on the number of ordered items to see them</div>
-                <div ng-if="bestsellersOrdered && !bestsellersOrdered.length">Selected date has no items</div>
-                <table class="table table-bordered">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover dataTable no-footer" id="DataTable">
+                    <thead>
+                    <tr>
+                        <th> # </th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Photo</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Name</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Articul</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Vendor articul</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Order</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Approximate date of shipment</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Functions</a></th>
+                    </tr>
+                    </thead>
                     <tbody>
-                    <tr ng-repeat="ordered in bestsellersOrdered">
-                        <td class="text-center">
-                            <div class="media np">
-                                <div class="media-left">
-                                      <span class="img-wrapper img-rounded">
-                                          <img ng-src="http://back95.ru/f/catalogue/{{ordered.product.id}}/{{ordered.product.preview[1]}}"/>
-                                      </span>
-                                </div>
-                            </div>
+                    <tr>
+                        <td>
+                            <span>1</span>
                         </td>
-                        <td class="text-center">
-                            <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestsellers/item/{{ordered.bestseller.id}}">{{ordered.product.articul}}</a> {{ordered.product.title}} {{ordered.product.brand}}</h5>
-                            </div>
+                        <td>
+                            <a href="/assets/images/avatar/avatar16.jpg" class="thumbnail img_sm" target="_blank">
+                                <img src="/assets/images/avatar/avatar16.jpg"/>
+                            </a>
                         </td>
-                        <td class="text-center">
-                            <a href="/buyer/orders/id/{{ordered.bestseller.orderId}}">{{ordered.bestseller.orderId}}</a>
+                        <td>
+                            <p>очки Cartier</p>
+                            <p>Delay 266 days</p>
                         </td>
-                        <td class="text-center">
-                            {{ordered.bestseller.orderDate}}
+                        <td>
+                            <p>83427</p>
+                        </td>
+                        <td>
+                            <p>6125206</p>
+                        </td>
+                        <td>
+                            <ul class="list-inline">
+                                <li>0</li>
+                                <li>50</li>
+                            </ul>
+                            <hr>
+                        </td>
+                        <td>
+                            <p>18 th July 2014</p>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default">The requirement for more</button>
+                            <button type="button" class="btn btn-info btn-rounded btn-sm"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm"><i class="fa fa-ban"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>2</span>
+                        </td>
+                        <td>
+                            <a href="/assets/images/avatar/avatar15.jpg" class="thumbnail img_sm" target="_blank">
+                                <img src="/assets/images/avatar/avatar15.jpg"/>
+                            </a>
+                        </td>
+                        <td>
+                            <p>очки Cartier</p>
+                            <p>Delay 266 days</p>
+                        </td>
+                        <td>
+                            <p>83427</p>
+                        </td>
+                        <td>
+                            <p>6125206</p>
+                        </td>
+                        <td>
+                            <ul class="list-inline">
+                                <li>0</li>
+                                <li>50</li>
+                            </ul>
+                            <hr>
+                        </td>
+                        <td>
+                            <p>18 th July 2014</p>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default">The requirement for more</button>
+                            <button type="button" class="btn btn-info btn-rounded btn-sm"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm"><i class="fa fa-ban"></i></button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-            </accordion-group>
-            <!-- /Ordered items -->
-
-            <accordion-group heading="Total" ng-hide="true">
-                <div ng-if="!bestsellersTotal">Click on the calendar on the number of total items to see them</div>
-                <div ng-if="bestsellersTotal && !bestsellersTotal.length">Selected date has no items</div>
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr ng-repeat="total in bestsellersTotal">
-                        <td class="text-center">
-                            <div class="media np">
-                                <div class="media-left">
-                                      <span class="img-wrapper img-rounded">
-                                          <img ng-src="http://back95.ru/f/catalogue/{{total.product.id}}/{{total.product.preview[1]}}"/>
-                                      </span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <div class="media-body media-middle">
-                                <h5 class="media-heading mb-0 fw-sb"><a href="/buyer/bestsellers/item/{{total.bestseller.id}}">{{total.product.articul}}</a> {{total.product.title}} {{total.product.brand}}</h5>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            {{total.bestseller.orderDate}}
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </accordion-group>
-        </accordion>
-        <div class="pa-md">
-
-            <form role="form">
-                <div class="form-group">
-                    <label class="control-label">Coments</label>
-                    <textarea class="form-control" placeholder="" rows="3"></textarea>
-                </div>
-                <hr class="mnr-md mnl-md">
-                <div class="form-group">
-                    <label class="switch switch-sm switch-success">
-                        <input type="checkbox" checked="">
-                        <span class="switch"></span><span class="text ml-xs">All products</span>
-                    </label>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+<!--/ end box layout -->
+<!-- start box layout -->
+<div class="box-layout">
+    <div class="col-md-12 bdr-l bg-auto height-auto">
+
+        <!-- start page header -->
+        <div class="page-header">
+            <div class="box-layout">
+                <div class="col-sm-3 va-m">
+                    <h4>Other: Обувь</h4>
+                    <p class="text-muted mb-0">Phones: 13128222878, 15815899046, 1325963189</p>
+                </div>
+                <div class="col-sm-9 va-m">
+                    <div class="thumbnail img_sm pull-left">
+                        <img src="/assets/images/avatar/avatar17.jpg">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ end page header -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover dataTable no-footer" id="DataTable">
+                    <thead>
+                    <tr>
+                        <th> # </th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Photo</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Name</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Articul</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Vendor articul</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Order</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Approximate date of shipment</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Functions</a></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span>1</span>
+                        </td>
+                        <td>
+                            <a href="/assets/images/avatar/avatar6.jpg" class="thumbnail img_sm" target="_blank">
+                                <img src="/assets/images/avatar/avatar6.jpg"/>
+                            </a>
+                        </td>
+                        <td>
+                            <p>очки Cartier</p>
+                            <p>Delay 266 days</p>
+                        </td>
+                        <td>
+                            <p>83427</p>
+                        </td>
+                        <td>
+                            <p>6125206</p>
+                        </td>
+                        <td>
+                            <ul class="list-inline">
+                                <li>0</li>
+                                <li>50</li>
+                            </ul>
+                            <hr>
+                        </td>
+                        <td>
+                            <p>18 th July 2014</p>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default">The requirement for more</button>
+                            <button type="button" class="btn btn-info btn-rounded btn-sm"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm"><i class="fa fa-ban"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>2</span>
+                        </td>
+                        <td>
+                            <a href="/assets/images/avatar/avatar5.jpg" class="thumbnail img_sm" target="_blank">
+                                <img src="/assets/images/avatar/avatar5.jpg"/>
+                            </a>
+                        </td>
+                        <td>
+                            <p>очки Cartier</p>
+                            <p>Delay 266 days</p>
+                        </td>
+                        <td>
+                            <p>83427</p>
+                        </td>
+                        <td>
+                            <p>6125206</p>
+                        </td>
+                        <td>
+                            <ul class="list-inline">
+                                <li>0</li>
+                                <li>50</li>
+                            </ul>
+                            <hr>
+                        </td>
+                        <td>
+                            <p>18 th July 2014</p>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default">The requirement for more</button>
+                            <button type="button" class="btn btn-info btn-rounded btn-sm"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm"><i class="fa fa-ban"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-<!--/ end box-layout -->
+<!--/ end box layout -->

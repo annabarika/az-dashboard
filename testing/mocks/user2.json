@@ -3,6 +3,7 @@
         "id": "1",
         "email": "kostyanuch87@gmail.com",
         "name": "developer",
+        "phone": 38099000000,
         "type": "developer",
         "password":"111222333",
         "cashierOffice":"1"
