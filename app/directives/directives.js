@@ -5,80 +5,6 @@
         return {
             restrict: 'E',
             templateUrl: "/app/views/sidebar.html"
-           /* ,scope:true,
-            link:function($scope){
-                var isBusy = false;
-                $scope.toggleMenu=function($index){
-
-                    $navMenu=jQuery(".nav-group:eq("+$index+")");
-                    $navGroup=jQuery($navMenu).children();
-                    console.log($navGroup);
-                    openMenu($navMenu, $navGroup);
-
-                    // store menu height before animation begin
-                    $navMenu.data('height', $navMenu.height());
-
-                    if($navGroup.hasClass('active')) {
-                        //prevent rapid clicking
-                        if(isBusy) { return false; }
-
-                        // close menu
-                        closeMenu($navMenu, $navGroup);
-                    } else {
-                        // prevent rapid clicking
-                        if(isBusy) { return false; }
-
-                        // close other active menu
-                        jQuery('.nav-group').each(function (index, value) {
-                            if(jQuery(value).hasClass('active')) {
-                                jQuery(value).removeClass('active');
-                                closeMenu(jQuery(value).children('.nav-submenu'), jQuery(value));
-                            }
-                        });
-
-                        //open menu
-                        openMenu($navMenu, $navGroup);
-                    }
-                };
-
-                var openMenu = function ($navmenu, $navgroup) {
-
-                    $navmenu
-                        .css({ height: 0 })
-                        .velocity({ height: $navmenu.data('height') }, {
-                            duration: 300,
-                            begin: function () {
-                                $navgroup.addClass('active');
-                                isBusy = true;
-                            },
-                            complete: function () {
-                                $navmenu.removeAttr('style');
-                                isBusy = false;
-                            }
-                        }, 'ease-in-out');
-                };
-
-                var closeMenu = function ($navmenu, $navgroup) {
-                    $navmenu
-                        .css({ display: 'block', height: $navmenu.data('height') })
-                        .velocity({ height: 0 }, {
-                            duration: 300,
-                            begin: function () {
-                                $navgroup.removeClass('active');
-                                isBusy = true;
-                            },
-                            complete: function () {
-                                $navmenu.removeAttr('style');
-                                isBusy = false;
-                            }
-                        }, 'ease-in-out');
-                };
-
-
-
-
-            }*/
-
         };
     });
     app.directive("header", function () {
@@ -94,6 +20,49 @@
         };
     });
 
+    app.directive("navigation",
+        [
+        "$timeout",
+        "$window",
+
+        function($timeout,$window){
+
+            return{
+                restrict:   "EA",
+                templateUrl:   "/app/views/sidebar_two.html",
+                scope:{
+                    model:"="
+                },
+                link: function($scope){
+                    console.log($scope.model);
+
+                    $scope.getMenu=function(event,index){
+                        console.log(event);
+                        var navMenu=$scope.model[index];
+                    };
+
+                    function _openMenu($navmenu, $navgroup) {
+
+                        $navmenu
+                            .css({ height: 0 })
+                            .velocity({ height: $navmenu.data('height') }, {
+                                duration: 300,
+                                begin: function () {
+                                    $navgroup.addClass('active');
+                                    isBusy = true;
+                                },
+                                complete: function () {
+                                    $navmenu.removeAttr('style');
+                                    isBusy = false;
+                                }
+                            }, 'ease-in-out');
+                    };
+                }
+            }
+        }
+    ]);
+
+
 
 //widget sidebar
     app.directive('navSidebar', ['$timeout', function ($timeout) {
@@ -104,12 +73,13 @@
             link: function($scope, iElm) {
                 $timeout(function () {
                     var isBusy = false;
-                    //console.log(iElm);
+
                     var toggleMenu = function () {
+
                         var $this = jQuery(this),
                             $navGroup = $this.parent('.nav-group'),
                             $navMenu = $this.next('.nav-submenu');
-
+                            //console.log($navMenu);
                         // store menu height before animation begin
                         $navMenu.data('height', $navMenu.height());
 

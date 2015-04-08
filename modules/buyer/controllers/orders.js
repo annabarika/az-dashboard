@@ -247,12 +247,12 @@ app.controller('OrderListController',
                 });
 
                 modalInstance.result.then(function(payment){
-                    var CO=JSON.parse(localStorage['user']).cashierOffice;
+                    var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
+                    var cashierId=JSON.parse(localStorage['user']).id;
                     url=config.API.host+"payment/create";
                     data={
                         'currencyId'        :   $scope.orders[index].order.currencyId,
-                        //@TODO Узнать cashierId от авторизации
-                        'cashierId'         :   1,
+                        'cashierId'         :   cashierId,
                         'cashierOfficeId'   :   CO,
                         'orderId'           :   $scope.orders[index].order.id,
                         'paymentMethod'     :   payment.method.name,

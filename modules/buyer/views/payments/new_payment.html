@@ -3,18 +3,24 @@
     <h4 class="modal-title" id="myModalLabel">New payment</h4>
 </div>
 <div class="modal-body">
-    <label>Order id:</label>
-    <autocomplete input-model="orders" output-model="payment.id"></autocomplete>
+
+    <label><input type="radio" ng-model="paymentFlag" value="true">&emsp;Payment for order</input></label><br>
+    <label><input type="radio" ng-model="paymentFlag" value="false">&emsp;Other payment</input></label>
+    <autocomplete input-model="orders" output-model="payment.id" column="columnHeaders" placeholder="Order number" ng-show="paymentFlag=='true'"></autocomplete>
+
     <br>
     <label>Cashier Office:</label>
     <p>{{cashierOffice.name}}</p>
-    <label>Price:</label>
+    <label>Amount:</label>
     <input type="number" data-ng-model="payment.amount" class="form-control"/>
-    <label>Payment method</label>
-    <select class="form-control" data-ng-model="payment.method"
-            ng-options="opt as opt.name for opt in paymentMethod">
-        <option value="">Choose method</option>
-
+    <label>Payment type:</label>
+    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='true'"
+            ng-options="opt as opt.name for opt in orderType">
+        <option value="">Choose type</option>
+    </select>
+    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag!='true'"
+            ng-options="opt as opt.name for opt in otherType">
+        <option value="">Choose type</option>
     </select>
     <label>Note:</label>
     <textarea ng-model="payment.note" class="form-control" style="resize:none"></textarea>

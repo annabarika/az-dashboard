@@ -20,11 +20,15 @@
             return{
                 /**
                  *
+                 * @param i
                  * @returns {*}
                  */
-                getPayments: function(){
-
-                    return RestFactory.request(PATH.LOAD);
+                getPayments: function(i){
+                    var url=PATH.LOAD;
+                    if(i!=undefined){
+                       url+="/status/"+i;
+                    }
+                    return RestFactory.request(url);
                 },
                 /**
                  *
@@ -51,7 +55,7 @@
 
                     var payments=[];
 
-                    angular.forEach(array,function(item,i){
+                    angular.forEach(array,function(item){
                         // console.log(item,i);
                         this.push({
                             id              :   item.payment.id,
@@ -161,6 +165,11 @@
 
                         url+="/paymentType/"+filter.type.join();
                     }
+                    if(_.has(filter, "createDate") && filter.createDate!=null){
+                        filter.createDate.startDate= moment(filter.createDate.startDate).format('YYYY-MM-DD');
+                        filter.createDate.endDate= moment(filter.createDate.endDate).format('YYYY-MM-DD');
+                        url+="/paymentDate/"+filter.createDate.startDate+","+filter.createDate.endDate+"/";
+                    }
 
                     return url;
                 },
@@ -170,23 +179,24 @@
                  * @returns {*}
                  */
                 getFilteredData:function(url){
-                    console.log(url);
+
                     return RestFactory.request(url);
                 },
                 /**
                  *
                  * @param obj
+                 * @param user
                  * @returns {*}
                  */
-                createNewPayment:function(obj){
+                createNewPayment:function(obj,user){
                     var data={
                         'currencyId'        : (obj.id)?obj.id.currencyId:1,
-                        'cashierId'         : 3,
+                        'cashierId'         : parseInt(user.id),
                         'amount'            : obj.amount,
                         'orderId'           : (obj.id)?obj.id.id:0,
-                        'paymentType'       : "payment",
-                        'paymentMethod'     : obj.method.name,
-                        'cashierOfficeId'   : 3,
+                        'paymentType'       : obj.type.value,
+                        'paymentMethod'     : "bank",
+                        'cashierOfficeId'   : parseInt(user.settings.cashierOffice),
                         "note"              : (obj.note)?obj.note:""
                     };
                     //console.log(data);
