@@ -32,14 +32,14 @@ app.config(function($routeProvider){
             authRequired: 'developer'
         }
     )
-        .when('/buyer/bestsellers/calendar/ordered',
+        .when('/buyer/bestsellers',
         {
             templateUrl:"/modules/buyer/views/bestsellers/ordered.html",
             controller:"BestsellersOrderedController",
             authRequired: 'developer'
         })
 
-        .when('/buyer/bestsellers/',
+        .when('/buyer/bestsellers/ordered',
         {
             templateUrl:"/modules/buyer/views/bestsellers/index.html",
             controller:"BestsellersController",

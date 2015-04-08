@@ -3,12 +3,12 @@
     <h4 class="modal-title" id="myModalLabel">New payment</h4>
 </div>
 <div class="modal-body">
-    <label>Order id:</label>
+    <label>Payment for order:</label>
     <autocomplete input-model="orders" output-model="payment.id"></autocomplete>
     <br>
     <label>Cashier Office:</label>
     <p>{{cashierOffice.name}}</p>
-    <label>Price:</label>
+    <label>Amount:</label>
     <input type="number" data-ng-model="payment.amount" class="form-control"/>
     <label>Payment method</label>
     <select class="form-control" data-ng-model="payment.method"

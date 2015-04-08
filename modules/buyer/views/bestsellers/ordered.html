@@ -13,7 +13,8 @@
                         </span>
                 </div>
                 <div class="col-md-4">
-                    <button type="button" class="btn btn-success" ng-click="createBestseller()"><i class="fa fa-plus"></i> Create Bestseller</button>
+                    <button type="button" class="btn btn-info" ng-click="createBestseller()"><i class="fa fa-plus"></i> Quick buy</button>
+                    <button type="button" class="btn btn-success" ng-click="createBestseller()"><i class="fa fa-plus"></i> Add to calendar</button>
                 </div>
             </div>
         </div>
@@ -30,8 +31,7 @@
                 <span class="fc-day-grid-event fc-event mr-5 ml-5">
                     <div class="fc-content">
                         <!-- ng-click="selectMonth('total', key)" -->
-                        <span class="fc-title"><!--<a class="label label-primary hover">
-                            total: {{value}}</a>--> <a class="width100 label label-success hover" ng-click="selectMonth('ordered', key)">ordered {{bestsellers.ordered[currentYear][key]}}</a></span>
+                            <h3 ng-click="selectMonth('ordered', key)">{{bestsellers.ordered[currentYear][key]}}</h3>
                     </div>
                 </span>
             </div>
