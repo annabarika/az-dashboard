@@ -27,7 +27,6 @@
             "SEND_MODERATE"         : config.API.host+"report/send",
             "LOAD_MODERATORS"       : "/testing/mocks/moderators.json"
         })
-
         .factory("BestsellersService", ['API', 'RestFactory',
             function (API, RestFactory) {
 
@@ -289,10 +288,20 @@
 
                     createOrder: function(factoryId){
                         // Creating order
+                        // First delivery date
+                        var deliveryDate = new Date();
+                        var DD = deliveryDate.getDate()+3;
+                        var MM = deliveryDate.getMonth()+1; //January is 0!
+                        var YYYY = deliveryDate.getFullYear();
+                        if(DD<10) { DD='0'+DD }
+                        if(MM<10) { MM='0'+MM }
+                        deliveryDate = YYYY + '-' + MM + '-'+ DD;
+
                         var order = {
                             factoryId: factoryId,
                             buyerId: 328,
-                            type: 1
+                            type: 1,
+                            deliveryDate: deliveryDate
                         };
 
                         return RestFactory.request(API.CREATE_ORDER, 'POST', order);

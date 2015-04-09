@@ -119,7 +119,7 @@
                         </td>
                         <td>
                             <p ng-if="item.order.deliveryDate!=null">{{item.order.deliveryDate}}</p>
-                            <p ng-if="item.order.deliveryDate==null">none</p>
+                            <p ng-if="item.order.deliveryDate==null">&mdash;</p>
                         </td>
                         <td>
                             <span class="thumbnail media-left" ng-repeat="img in item.files track by $index">
@@ -135,7 +135,9 @@
                         <td>
                             <p class="fw-sb text-right">{{item.order.paidTotal}}</p>
                             <p class="text-muted text-right" ng-repeat="p in item.payments">
-                                + {{p.amount}} ({{p.paymentDate}} {{p.paymentMethod}})
+                                <span ng-if="p.paymentType == 'payment'">+</span>
+                                <span ng-if="p.paymentType == 'refund'">-</span>
+                                {{p.amount}} ({{p.paymentDate}} {{p.paymentMethod}})
                             </p>
                             <!--<p class="text-muted text-right">+1200 (Prepayment cash)</p>-->
                         </td>
@@ -147,11 +149,12 @@
                             <!--<p class="text-muted text-right-sm" ng-repeat="p in item.payments">Changed: {{p.paymentDate}}</p>-->
                         </td>
                         <td>
-                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="sendToFactory($index)" title="send to factory"><i class="fa fa-calendar"></i></button>
+                            <!-- <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="sendToFactory($index)" title="send to factory"><i class="fa fa-calendar"></i></button> -->
+                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="changeDate($index)" title="change delivery date"><i class="fa fa-calendar"></i></button>
                             <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="cancel($index)" title="cancel order"><i class="fa fa-ban"></i></button>
+                            <hr/>
                             <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" title="make payment">&#165;</button>
                             <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="makePayment($index,'refund')" title="make refund">&#165;</button>
-                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="changeDate($index)" title="change delivery date"><i class="glyphicon glyphicon-calendar"></i></button>
                         </td>
                     </tr>
                     </tbody>

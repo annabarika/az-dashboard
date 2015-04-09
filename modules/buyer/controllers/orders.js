@@ -90,7 +90,7 @@ app.controller('OrderListController',
 
                 for(var i=0;i<length;i++){
 
-                    response[i].order.deliveryDate=moment(response[i].order.deliveryDate).format('YYYY-MM-DD');
+                    response[i].order.deliveryDate = (response[i].order.deliveryDate) ? moment(response[i].order.deliveryDate).format('YYYY-MM-DD') : null;
                     response[i].order.createDate=moment(response[i].order.createDate).format('YYYY-MM-DD');
 
                     for( var key in $rootScope.fullFactories){
