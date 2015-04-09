@@ -459,7 +459,6 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
         /* ,{name:"phone"},
          {name:"email"},
          {name:"docs"}*/
-
     ];
 
 

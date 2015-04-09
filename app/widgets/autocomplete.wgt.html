@@ -1,14 +1,9 @@
-<div class='autocomplete_widget' class="input-group">
-    <input type='text' placeholder='{{placeholder}}' ng-model='filters'/>
+<div class="autocomplete_widget input-group">
+    <input type='text' placeholder='{{placeholder}}' ng-model='search' id="autocomplete"/>
 
-<div
-        style="max-height:300px;
-                overflow:scroll;
-                position:absolute;
-                max-width:inherit"
-        >
+<div ng-hide="flag" class="autocomplete_box">
 
-    <table  class="table table-bordered bg-white">
+    <table class="table table-bordered bg-white table-hover" id="autocomplete_table">
         <!--header-->
         <tr ng-if="column!=undefined">
             <th>#</th>
@@ -16,9 +11,9 @@
         </tr>
         <!--body-->
         <!--<tr ng-repeat="row in inputModel | filter:filters | orderBy:'name'" ng-click='getRow(row)'>-->
-        <tr ng-repeat="row in inputModel | tableFilter:filters:filterProperty | orderBy:'name'" ng-click='getRow(row)'>
+        <tr ng-repeat="row in inputModel | tableFilter : search : filterProperty | orderBy:'name' track by $index" ng-click='getRow(row)'>
 
-            <td>{{$index+1}}</td>
+            <td> <span class="btn btn-default btn-rounded btn-sm">{{$index+1}}</span></td>
             <td ng-if="column!=undefined " ng-repeat="col in column">
 
                 <table ng-if="col.name=='phone'">
@@ -41,9 +36,14 @@
 
                     <tr ng-repeat="img in row.preview">
                         <td>
-                          <span class="thumbnail img_sm">
+                            <span class="thumbnail media-left">
+
+                                     <img ng-src="{{imagepath}}{{img}}"/>
+
+                            </span>
+                         <!-- <span class="thumbnail img_sm">
                               <img ng-src="{{imagepath}}{{img}}"/>
-                          </span>
+                          </span>-->
                         </td>
                     </tr>
 

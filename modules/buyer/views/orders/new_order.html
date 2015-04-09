@@ -8,7 +8,13 @@
     <form>
         <p class="input-group">
             <label class="control-label">Choose factory</label>
-            <autocomplete input-model="Factory" output-model="newOrder.factory" column="columnHeaders"></autocomplete>
+            <autocomplete
+                    input-model="Factory"
+                    output-model="newOrder.factory"
+                    column="columnHeaders"
+                    >
+
+            </autocomplete>
                 <span class="input-group-btn autocomplete_btn">
                  <button type="button" class="btn btn-default"  ng-click="new_factory()">+</button>
                 </span>

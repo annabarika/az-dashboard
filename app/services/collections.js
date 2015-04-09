@@ -73,6 +73,39 @@
                  * @param factories
                  * @returns {Array}
                  */
+                getFactoriesByGroup:function(factories){
+
+                    var factory=[];
+
+                        /*factories[6].factoryGroup.id=2;
+                        factories[17].factoryGroup.id=2;*/
+
+                    for(var f in factories){
+
+                        if(factories[f].factoryGroup.id=="2"){
+
+                            factory.push(
+                                {
+                                    name        :   factories[f].factory.name,
+                                    phone       :  JSON.parse(factories[f].factory.phone),
+                                    email       :   factories[f].email,
+                                    address     :   factories[f].factoryAddress,
+                                    preview     :   _getArray(factories[f].factoryFiles),
+                                    id          :   f,
+                                    currencyId  :   factories[f].factory.currencyId
+                                }
+                            )
+                        }
+                    }
+                    console.log(factory);
+                    return factory;
+                },
+
+                /**
+                 *
+                 * @param factories
+                 * @returns {Array}
+                 */
                 parseFactory: function(factories){
                     //console.log(factories);
                     var factory=[];

@@ -665,8 +665,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 app.controller("ModalController", function ($scope, $rootScope, CollectionService, $modalInstance, $routeParams, $location, messageCenterService, $timeout) {
 
   // console.log("factories", $rootScope.factories);
+    //console.log($rootScope.fullFactories);
 
-    $scope.factoryAll=CollectionService.parseFactory($rootScope.fullFactories);
+
+    $scope.factoryAll=CollectionService.getFactoriesByGroup($rootScope.fullFactories);
 
 
 
