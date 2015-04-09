@@ -2,18 +2,10 @@
 
     <!-- start: left nav -->
 
-    <!--<div class="col-sm-3">
-        <label>Hello, {{user.name}}</label>
-        <br>
-        <a ng-href="/login" ng-click="logout()">logoff</a>
-    </div>-->
-    <!--<div ng-if="!Auth.isLoggedIn()">
-        <a ng-href="/login">Login</a>
-    </div>-->
-
     <ul class="nav navbar-nav navbar-left">
 
-        <li class="visible-xs" ng-init="index=0; classes=['app-sidebar', 'sidebar-open-ltr app-sidebar sidebar-left']" ng-click="index = index + 1">
+        <li class="visible-xs" ng-init="index=0; classes=['app-sidebar', 'sidebar-open-ltr app-sidebar sidebar-left']"
+            ng-click="index = index + 1">
 
             <a href="">
 
@@ -25,9 +17,12 @@
 
         <li class="hidden-xs" ng-click="collapsed = !collapsed">
 
-            <a href="" ng-init="index=0; classes=['no-csstransforms3d sidebar-open-ltr app-sidebar sidebar-left', 'csstransforms3d sidebar-open-ltr app-sidebar sidebar-left-collapse sidebar-left']" ng-click="index = index + 1">
+            <a href=""
+               ng-init="index=0; classes=['no-csstransforms3d sidebar-open-ltr app-sidebar sidebar-left', 'csstransforms3d sidebar-open-ltr app-sidebar sidebar-left-collapse sidebar-left']"
+               ng-click="index = index + 1">
 
-                <i class="ai fs-24 pos-t-5 ai-arrow-back" ng-class="{'ai-arrow-forward':collapsed, 'ai-arrow-back':!collapsed}"></i>
+                <i class="ai fs-24 pos-t-5 ai-arrow-back"
+                   ng-class="{'ai-arrow-forward':collapsed, 'ai-arrow-back':!collapsed}"></i>
 
             </a>
 
@@ -36,7 +31,6 @@
     </ul>
 
     <!--/ end left nav -->
-
 
 
     <!-- start navbar form -->
@@ -60,7 +54,6 @@
     </form>
 
     <!--/ end navbar form -->
-
 
 
     <!-- start right nav -->

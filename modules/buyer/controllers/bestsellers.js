@@ -255,7 +255,7 @@ app.controller('BestsellerItemController',[
                 $scope.sizes.push({});
                 $scope.sizes.push({});
                 //console.log($scope.sizes);
-				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
+				$rootScope.documentTitle = $scope.product.articul + " (FA: "+ $scope.product.factoryArticul +")";
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
                   /*  console.log("bests history",response);*/
