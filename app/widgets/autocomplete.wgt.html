@@ -24,13 +24,17 @@
 
                 </table>
 
-                <table ng-if="col.name=='address'">
+                <!--<table ng-if="col.name=='address'">
                     <tr><td>country: </td><td><b>{{row.address.country}}</b></td></tr>
-                    <tr><td>region: </td><td><b>{{row.address.region}}</b></td></tr>
+                   &lt;!&ndash; <tr><td>region: </td><td><b>{{row.address.region}}</b></td></tr>&ndash;&gt;
                     <tr><td>city: </td><td><b>{{row.address.city}}</b></td></tr>
                     <tr><td>address: </td><td><b>{{row.address.address}}</b></td></tr>
 
-                </table>
+                </table>-->
+
+                <span ng-if="col.name=='address'">
+                    {{row.address.country}}, {{row.address.city}}, {{row.address.address}}
+                </span>
 
                 <table ng-if="col.name=='preview'">
 

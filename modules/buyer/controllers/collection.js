@@ -793,7 +793,7 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
         {name   :   "name",     title:"Factory"},
         {name   :   "phone",    title:"Phone"},
         {name   :   "address",  title:"Address"},
-        {name   :   "preview",  title:"Visit cart"}
+        {name   :   "preview",  title:"Visit cards"}
     ];
 
     $scope.filterProperty=['name','phone'];

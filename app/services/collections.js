@@ -82,7 +82,7 @@
 
                     for(var f in factories){
 
-                        if(factories[f].factoryGroup.id=="2"){
+                        if(factories[f].factoryGroup.id=="1"){
 
                             factory.push(
                                 {
