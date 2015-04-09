@@ -788,12 +788,14 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
     };
 
     $scope.columnHeaders=[
-        {name  :   "name"},
-        {name   :   "phone"},
-        {name   :   "email"},
-        {name   :   "address"},
-        {name   :   "preview"}
+        {name   :   "name",     title:"Factory"},
+        {name   :   "phone",    title:"Phone"},
+        {name   :   "address",  title:"Address"},
+        {name   :   "preview",  title:"Visit cart"}
     ];
+
+    $scope.filterProperty=['name','phone'];
+
     $scope.imagePath = CollectionService.getImagePath();
 
     $scope.chooseCollection = function (collection) {
