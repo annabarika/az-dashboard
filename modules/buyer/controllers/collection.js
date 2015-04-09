@@ -668,8 +668,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
 app.controller("ModalController", function ($scope, $rootScope, CollectionService, $modalInstance, $routeParams, $location, messageCenterService, $timeout) {
 
   // console.log("factories", $rootScope.factories);
+    //console.log($rootScope.fullFactories);
 
-    $scope.factoryAll=CollectionService.parseFactory($rootScope.fullFactories);
+
+    $scope.factoryAll=CollectionService.getFactoriesByGroup($rootScope.fullFactories);
 
 
 
@@ -794,7 +796,7 @@ app.controller("ModalController", function ($scope, $rootScope, CollectionServic
         {name   :   "name",     title:"Factory"},
         {name   :   "phone",    title:"Phone"},
         {name   :   "address",  title:"Address"},
-        {name   :   "preview",  title:"Visit cart"}
+        {name   :   "preview",  title:"Visit cards"}
     ];
 
     $scope.filterProperty=['name','phone'];
