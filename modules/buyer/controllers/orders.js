@@ -71,7 +71,7 @@ app.controller('OrderListController',
             }
 
 
-            $scope.newOrder={};
+            //$scope.newOrder={};
 
             RestFactory.request(config.API.host+"order/load-detailed/").then(
                 function(response){
@@ -89,6 +89,9 @@ app.controller('OrderListController',
                 var length=response.length;
 
                 for(var i=0;i<length;i++){
+
+                    response[i].order.deliveryDate=moment(response[i].order.deliveryDate).format('YYYY-MM-DD');
+                    response[i].order.createDate=moment(response[i].order.createDate).format('YYYY-MM-DD');
 
                     for( var key in $rootScope.fullFactories){
 
@@ -215,15 +218,22 @@ app.controller('OrderListController',
              * make payment
              */
             $scope.makePayment=function(index,type){
+
                 event.stopPropagation();
-               // console.log("payment type",type);
+
+                if(type=='refund'){
+                    $scope.title="Refund from order #"+$scope.orders[index].order.id;
+                }
+                else{
+                    $scope.title="Make payment for order #"+$scope.orders[index].order.id;
+                }
+
                 var modalInstance=$modal.open({
                     templateUrl: "/modules/buyer/views/orders/make_payment.html",
-                    controller: function($scope,messageCenterService){
-                        $scope.methods=[
-                            {name:'cash'},
-                            {name:'bank'}
-                        ];
+                    controller: function($scope,messageCenterService,title){
+
+                        $scope.title=title;
+
                         $scope.make=function(payment){
                             if(_.isUndefined(payment)){
                                 messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
@@ -233,8 +243,8 @@ app.controller('OrderListController',
                                 messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
                                 return;
                             }
-                            if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
-                                messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+                            if(_.isNull(payment.note)|| _.isUndefined(payment.note)){
+                                messageCenterService.add('danger', 'Not entered note', {timeout: 3000});
                                 return;
                             }
                             else{
@@ -243,11 +253,17 @@ app.controller('OrderListController',
                         }
                     },
                     backdrop:'static',
-                    size:"sm"
+                    size:"sm",
+                    resolve:{
+                        title:function(){
+                            return $scope.title;
+                        }
+                    }
                 });
 
                 modalInstance.result.then(function(payment){
                     var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
+
                     var cashierId=JSON.parse(localStorage['user']).id;
                     url=config.API.host+"payment/create";
                     data={
@@ -255,14 +271,15 @@ app.controller('OrderListController',
                         'cashierId'         :   cashierId,
                         'cashierOfficeId'   :   CO,
                         'orderId'           :   $scope.orders[index].order.id,
-                        'paymentMethod'     :   payment.method.name,
+                        'paymentMethod'     :   "bank",
                         'paymentType'       :   type,
-                        'amount'            :   payment.amount
+                        'amount'            :   payment.amount,
+                        'note'              :   payment.note
                     };
 
                     RestFactory.request(url,"POST",data).then(
                         function(response){
-                           // console.log("payment",response);
+
                             if(_.isObject(response)&&response.id>0){
                                 messageCenterService.add('success', 'Payment created', {timeout: 3000});
                             }else{
@@ -273,6 +290,85 @@ app.controller('OrderListController',
 
                 })
             };
+
+            $scope.changeDate=function(index){
+
+                event.stopPropagation();
+
+                var modalInstance=$modal.open({
+                    templateUrl:"/modules/buyer/views/orders/change_date.html",
+                    controller:function($scope,messageCenterService){
+                        $scope.today = function() {
+                            $scope.dt = new Date();
+                        };
+                        $scope.today();
+
+                        $scope.clear = function () {
+                            $scope.dt = null;
+                        };
+
+                        $scope.disabled = function(date, mode) {
+                            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+                        };
+
+                        $scope.toggleMin = function() {
+                            $scope.minDate = $scope.minDate ? null : new Date();
+                        };
+                        $scope.toggleMin();
+
+                        $scope.open = function($event) {
+                            $event.preventDefault();
+                            $event.stopPropagation();
+
+                            $scope.opened = true;
+                        };
+
+                        $scope.dateOptions = {
+                            formatYear: 'yy',
+                            startingDay: 1
+                        };
+
+                        $scope.format ='dd-MMMM-yyyy';
+
+                        $scope.closeModal=function(date){
+                            if(_.isUndefined(date)||date==""){
+                                messageCenterService.add('danger',"You choose the delivery date",{timeout:3000});
+                                return;
+                            }
+                            modalInstance.close(moment(date).format('YYYY-MM-DD'));
+                        }
+
+                    },
+                    size:'sm',
+                    backdrop:'static'
+                });
+                modalInstance.result.then(function(date){
+                    console.log(date);
+
+                    url=config.API.host+"order/update";
+                    data={
+                        id:$scope.orders[index].order.id,
+                        deliveryDate:date
+                    };
+                    console.log(data);
+
+                    RestFactory.request(url,"PUT",data).then(
+                        function(response){
+                            console.log(response);
+                            if(response){
+                                messageCenterService.add('success',"Order #"+$scope.orders[index].order.id+", delivery date updated",{timeout:3000});
+                                $scope.orders[index].order.deliveryDate=date;
+                            }
+                            else{
+                                messageCenterService.add('danger',"Error"+response,{timeout:3000});
+                            }
+                        }
+                    )
+                })
+            };
+
+
+
             /**
              * filters for orders
              * @param filter
@@ -316,78 +412,9 @@ app.controller('OrderListController',
                         console.log(error);
                     });
             };
-
-
-
-
-             /*$scope.$watchCollection('resultData',function(newVal){
-
-                for(item in newVal){
-                    var arr=[];
-
-                    if($.isEmptyObject(newVal[item])){
-
-                        delete filter[item];
-                    }
-                    else{
-                        angular.forEach(newVal[item],function(value,key){
-
-
-                            if(key=="startDate"||key=="endDate"){
-
-                                arr.push(moment(value).format('YYYY-MM-DD'));
-                                filter[item]=arr;
-                            }
-
-                            if(value.ticked ===true){
-
-                                arr.push(value.id);
-                                filter[item]=arr;
-                            }
-
-                        });
-                    }
-                }
-
-                if(!$.isEmptyObject(filter)){
-
-                    url=config.API.host+"order/load-detailed/";
-
-                    if(filter.order){
-
-                        url+="status/"+filter.order.join()+"/";
-                    }
-
-                    if(filter.orderPayment){
-
-                        url+="paymentStatus/"+filter.orderPayment.join()+"/";
-                    }
-                    if(filter.factory){
-
-                        url+="factoryId/"+filter.factory.join()+"/";
-                    }
-                    if(filter.createDate){
-
-                        url+="createDate/"+filter.createDate.join(',')+"/";
-                    }
-
-                    console.log(url);
-
-
-                    RestFactory.request(url)
-                        .then(
-                        function(response){
-                            _parseOrders(response)
-                        },
-                        function(error){
-                            console.log(error);
-                        });
-                }
-                else{
-                    $scope.orders=$scope.data;
-                }
-            });*/
-
+            /**
+             * create new order
+             */
             $scope.addNewOrder = function () {
 
                 var modalInstance = $modal.open({
@@ -428,8 +455,8 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
 
 
     $scope.columnHeaders=[
-         {name:"name"},
-        /* {name:"phone"},
+         {name:"name",title:"Factory"}
+        /* ,{name:"phone"},
          {name:"email"},
          {name:"docs"}*/
 
@@ -587,7 +614,7 @@ app.controller("OrderController",
                     backdrop:'static'
 
                 });
-                modalInstance.result.then(function(string){
+                modalInstance.result.then(function(){
 
                     url=config.API.host+"order/cancel";
 
@@ -724,6 +751,7 @@ app.controller("OrderController",
              * send to factory
              */
             $scope.sendToFactory=function(){
+
                 var modalInstance=$modal.open({
                     templateUrl:"/modules/buyer/views/orders/send_to_factory.html",
                     controller:function($scope,orderId){
@@ -791,10 +819,9 @@ app.controller("OrderController",
                 var modalInstance=$modal.open({
                     templateUrl: "/modules/buyer/views/orders/make_payment.html",
                     controller: function($scope,messageCenterService){
-                        $scope.methods=[
-                            {name:'cash'},
-                            {name:'bank'}
-                        ];
+
+                        $scope.title="Make payment";
+
                         $scope.make=function(payment){
                             if(_.isUndefined(payment)){
                                 messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
@@ -804,8 +831,8 @@ app.controller("OrderController",
                                 messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
                                 return;
                             }
-                            if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
-                                messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+                            if(_.isNull(payment.note)|| _.isUndefined(payment.note)){
+                                messageCenterService.add('danger', 'Not entered note', {timeout: 3000});
                                 return;
                             }
                             else{
@@ -818,17 +845,18 @@ app.controller("OrderController",
                 });
 
                 modalInstance.result.then(function(payment){
-                    var CO=JSON.parse(localStorage['user']).cashierOffice;
+                    var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
+                    var cashierId=JSON.parse(localStorage['user']).id;
                     url=config.API.host+"payment/create";
                     data={
                         'currencyId'        :   $scope.order.currency.id,
-                        //@TODO Узнать cashierId от авторизации
-                        'cashierId'         :   1,
+                        'cashierId'         :   cashierId,
                         'cashierOfficeId'   :   CO,
                         'orderId'           :   id,
-                        'paymentMethod'     :   payment.method.name,
+                        'paymentMethod'     :   "bank",
                         'paymentType'       :   "payment",
-                        'amount'            :   payment.amount
+                        'amount'            :   payment.amount,
+                        'note'              :   payment.note
                     };
 
                     RestFactory.request(url,"POST",data).then(
@@ -846,7 +874,9 @@ app.controller("OrderController",
                 })
             };
 
-
+            /**
+             * upload files
+             */
             $scope.upload=function(){
                 $scope.uploadFlag=true;
                 var uploader=document.getElementById("uploader");
