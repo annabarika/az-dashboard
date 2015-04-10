@@ -1,0 +1,96 @@
+<div class="page-header">
+
+    <button class="btn btn-success" ng-click="receiveCargo()"><i class="fa fa-plus"></i>Receive cargo</button>
+</div>
+
+<div class="container-fluid pt-md pb-md">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- start panel -->
+            <div class="panel panel-default border-n mt-20">
+                <!-- start table responsive -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <input type="hidden" ng-model="cargo.id">
+                        <input type="hidden" ng-init="cargo.employeeId = 99">
+                        <tbody>
+                        <tr>
+                            <td>Factory</td>
+                            <td>{{ factory.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Total amount</td>
+                            <td>{{totalAmount}} &nbsp;&yen;</td>
+                        </tr>
+                        <tr>
+                            <td>Cargo company</td>
+                            <td>{{cargo.logisticCompany.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Cargo document</td>
+                            <td>{{cargo.document}}</td>
+                        </tr>
+                        <tr>
+                            <td>Insurance</td>
+                            <td>{{cargo.insurance}} &yen;</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--/ end table responsive -->
+            </div>
+            <!--/ end panel -->
+        </div>
+
+        <div class="col-md-6">
+            <!-- start panel -->
+            <div class="panel panel-default border-n mt-20">
+                <!-- start table responsive -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <tbody>
+                        <tr>
+                            <td>Weight shipped</td>
+                            <td>
+                                {{ cargo.incomeWeight }}&nbsp;kg
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Places shipped</td>
+                            <td>
+                                {{ cargo.incomePlaces }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Weight arrived</td>
+                            <td>
+                                <!--{{cargo.arriveWeight}}&nbsp;kg-->
+                               <input type="text" ng-model="cargo.arriveWeight" class="form-control sm"/>&nbsp;kg
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Places arrived</td>
+                            <td>
+                                <!--{{ cargo.arrivePlaces }}-->
+                                <input type="text" ng-model="cargo.arrivePlaces" class="form-control sm"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--/ end table responsive -->
+            </div>
+            <!--/ end panel -->
+        </div>
+    </div>
+</div>
+
+<widget-table
+        datarows="products"
+        dataheader="productsTableHeader"
+        edit="edit()"
+        row="row"
+        toolbar-battons="buttons"
+        button-action="buttonAction()"
+        >
+</widget-table>

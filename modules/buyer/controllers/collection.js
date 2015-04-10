@@ -14,7 +14,6 @@ app.run(
              */
             CollectionService.getFactories()
                 .success(function(data){
-
                     $rootScope.fullFactories=data;
 
                     var factories = [];

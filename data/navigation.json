@@ -29,7 +29,7 @@
         "url":"buyer/payments",
         "access":["admin","user"]
       },
-      {"title": "Cargo",
+      {"title": "Receiving office",
         "count": "3",
         "url":"buyer/cargo"
         ,"access":["admin","user"]
