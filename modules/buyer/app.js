@@ -118,6 +118,13 @@ app.config(function($routeProvider){
             authRequired: 'developer'
         }
     )
+        .when("/buyer/cargo/management",
+        {
+            templateUrl:"/modules/buyer/views/cargo/management.html",
+            controller:"CargoManagementController",
+            authRequired:"admin"
+        }
+    )
     ;
 });
 

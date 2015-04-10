@@ -36,6 +36,7 @@ class API {
 	 * @param $host
 	 */
 	function __construct($host){
+//		print_r($host);
 		$this->options = array(
 			CURLOPT_HEADER => false,
 			CURLOPT_RETURNTRANSFER => true,

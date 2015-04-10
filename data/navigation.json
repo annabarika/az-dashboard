@@ -33,6 +33,11 @@
         "count": "3",
         "url":"buyer/cargo"
         ,"access":["admin","user"]
+      },
+      {"title": "Cargo management",
+        "count": "3",
+        "url":"buyer/cargo/management"
+      ,"access":["admin"]
       }
     ]
   },

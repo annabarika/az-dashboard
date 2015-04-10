@@ -476,3 +476,107 @@ app.controller('CargoOrderProductsController',
             };
         }
     ]);
+
+app.controller("CargoManagementController",
+    [
+        "$scope",
+        "$rootScope",
+        "RestFactory",
+        "messageCenterService",
+        "$modal",
+
+        function($scope,$rootScope,RestFactory,messageCenterService,$modal){
+
+            RestFactory.request(config.API.host + "logisticCompany/load")
+                .then(function(response){
+                    $scope.logisticCompanies = response;
+                    //console.log(response);
+                });
+
+            RestFactory.request(config.API.host + "status/load/type/cargo")
+                .then(function(response){
+                    $scope.statuses = response;
+                    //console.log(response);
+                });
+
+            $scope.cargoCheckbox={};
+
+            RestFactory.request(config.API.host+"cargo/load").then(
+
+                function(response){
+
+                    console.log(response);
+                    if(_.isArray(response) && response.length!=0){
+
+                        var length=response.length,
+                            index;
+
+                        for(var i=0;i<length;i++){
+                            $scope.cargoCheckbox[i]=false;
+                                index=_.findIndex($scope.statuses,'statusId',response[i].cargo.status);
+                            if(index!=-1){
+                                response[i].cargo.statusName=$scope.statuses[index].name;
+                            }
+                            //if(response[i].cargo.document=""){
+                                response[i].cargo.document="Cargo doc.";
+                            //}
+                        }
+                        $scope.cargo=response;
+                    }
+                    else{
+                        messageCenterService.add('danger',"Error: cargos are not loaded",{timeout:3000});
+                    }
+                }
+            );
+
+            $scope.selectCargos=function(){
+
+                    for(key in $scope.cargoCheckbox){
+                        $scope.cargoCheckbox[key]=$scope.allCheck;
+                    }
+            };
+            $scope.$watchCollection('cargoCheckbox',function(val){
+                console.log(val);
+            });
+
+
+            $scope.makePayment=function(){
+
+                var array=[];
+                for(key in $scope.cargoCheckbox){
+                    if($scope.cargoCheckbox[key]==true){
+                        array.push($scope.cargo[key]);
+                    }
+                }
+
+                if(array.length==0){
+
+                    messageCenterService.add("danger","You are not choose cargo documents",{timeout:3000});
+                    return;
+                }
+
+
+                var modalInstance=$modal.open({
+                    templateUrl:"/modules/buyer/views/cargo/make_payment.html",
+
+                    controller:function($scope,cargo,messageCenterService){
+                        $scope.cargos=cargo;
+                        console.log($scope.cargos);
+
+                        $scope.title="Make payment";
+
+                    },
+
+                    resolve:{
+
+                        cargo:function(){
+
+                            return array;
+                        }
+                    },
+                    size:"sm",
+                    backdrop:"static"
+                })
+
+            }
+        }]);
