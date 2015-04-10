@@ -396,8 +396,24 @@
                     createPdf:function(id){
 
                         return RestFactory.request(API.CREATE_PDF+id);
-                    }
+                    },
+                    /**
+                     * Get find articul uri
+                     */
+                    searchArticulUri: function() {
+                        return API.FIND_BY_ARTICUL;
+                    },
 
+                    /**
+                     * Find products by articul
+                     *
+                     * @param string article
+                     */
+                    findProductsByArticle: function(articul) {
+
+                        return RestFactory.request(API.FIND_BY_ARTICUL+articul);
+
+                    }
                 }
             }]);
 })();
