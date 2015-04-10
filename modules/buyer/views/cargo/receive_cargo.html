@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$dismiss(reason)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
+</div>
+<div class="modal-body">
+    <label>Weight arrived:</label>
+    <input type="text" ng-model="cargo.arriveWeight" class="form-control"/>&nbsp;kg
+    <br>
+    <label>Places arrived:</label>
+     <input type="text" ng-model="cargo.arrivePlaces" class="form-control"/>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" ng-click="closeModal()">Make</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+</div>

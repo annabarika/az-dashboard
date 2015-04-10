@@ -801,8 +801,9 @@ app.controller("DocumentCargoController",
         "RestFactory",
         "$location",
         "messageCenterService",
+        "$modal",
 
-        function($scope,$rootScope,$route,RestFactory,$location,messageCenterService){
+        function($scope,$rootScope,$route,RestFactory,$location,messageCenterService,$modal){
 
             $scope.$route = $route;
             $scope.$location = $location;
@@ -859,28 +860,57 @@ app.controller("DocumentCargoController",
             };
 
             $scope.receiveCargo=function(){
-                console.log($scope.cargo);
-                var url=config.API.host+"cargo/update";
 
-                var data={
-                    id          :$scope.cargo.id,
-                    arriveWeight:$scope.cargo.arriveWeight,
-                    arrivePlaces:$scope.cargo.arrivePlaces,
-                    status:4
-                };
-                console.log(data);
+                var modalInstance=$modal.open({
+                    templateUrl:"/modules/buyer/views/cargo/receive_cargo.html",
+                    controller:function($scope,messageCenterService,cargo){
+                        $scope.cargo=cargo;
 
-                RestFactory.request(url,"PUT",data).then(
-                    function(response){
-                        //console.log(response);
-                        if(response){
-                            messageCenterService.add("success","Cargo received",{timeout:3000});
+                        $scope.title="Cargo #"+$scope.cargo.id;
+
+
+                        $scope.closeModal=function(){
+
+                            modalInstance.close($scope.cargo);
                         }
-                        else{
-                            messageCenterService.add("danger","Cargo id not received",{timeout:3000});
+                    },
+                    size:"sm",
+                    backdrop:"static",
+                    resolve:{
+                        cargo:function(){
+                            return $scope.cargo;
                         }
                     }
+                });
+                modalInstance.result.then(
+                    function(cargo){
+                        console.log(cargo);
+                        var url=config.API.host+"cargo/update";
+
+                        var data={
+                            id          :cargo.id,
+                            arriveWeight:cargo.arriveWeight,
+                            arrivePlaces:cargo.arrivePlaces,
+                            status:4
+                        };
+                        console.log(data);
+
+                        RestFactory.request(url,"PUT",data).then(
+                            function(response){
+                                console.log(response);
+                                if(response){
+                                    messageCenterService.add("success","Cargo received",{timeout:3000});
+                                }
+                                else{
+                                    messageCenterService.add("danger","Cargo id not received",{timeout:3000});
+                                }
+                            }
+                        )
+                    }
                 )
+
+
+
 
             }
 
