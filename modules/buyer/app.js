@@ -118,7 +118,20 @@ app.config(function($routeProvider){
             authRequired: 'developer'
         }
     )
-    ;
+        .when("/buyer/cargo/management",
+        {
+            templateUrl:"/modules/buyer/views/cargo/management.html",
+            controller:"CargoManagementController",
+            authRequired:"admin"
+        }
+    )
+        .when("/buyer/cargo/management/id/:id",
+        {
+            templateUrl:"/modules/buyer/views/cargo/doc_cargo.html",
+            controller:"DocumentCargoController",
+            authRequired:"admin"
+        }
+    )
 });
 
 app.run( function($rootScope, $location) {

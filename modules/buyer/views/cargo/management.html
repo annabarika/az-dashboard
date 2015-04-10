@@ -1,0 +1,169 @@
+
+<div class="col-md-12 col-sm-12 mb-5 bg-white" >
+    <div class="col-sm-1">
+      <!--  <button class="btn btn-success"><i class="fa fa-plus"></i> Add cargo</button>-->
+    </div>
+
+    <div class="col-md-2 col-sm-1 va-m">
+        <multi-select
+                default-label="Status filter"
+                input-model="statuses"
+                output-model="result.status"
+                button-label="icon name"
+                item-label="icon name maker"
+                tick-property="ticked"
+                max-labels="2"
+                >
+        </multi-select>
+    </div>
+    <div class="col-md-2 col-sm-1 va-m">
+            <multi-select
+                default-label="Suppliers"
+                input-model="logisticCompanies"
+                output-model="resultData.suppliers"
+                button-label="icon name"
+                item-label="icon name maker"
+                tick-property="ticked"
+                max-labels="2"
+                >
+        </multi-select>
+    </div>
+    <div class="col-md-4 col-sm-1 va-m">
+            <multi-select
+
+                default-label="Factory filter"
+                input-model="Factory"
+                output-model="result.factory"
+                button-label="icon name"
+                item-label="icon name maker"
+                tick-property="ticked"
+                max-labels="2"
+                max-height="250px"
+                >
+        </multi-select>
+    </div>
+    <div class="col-md-3 col-sm-1 va-m">
+        <span>Group operations:</span>
+        <button class="btn btn-info" ng-click="makePayment()"><i class="fa fa-plus"></i>Pay delivery</button>
+        <!--<button class="btn btn-warning"><i class="fa fa-plus"></i>Pay goods</button>-->
+    </div>
+
+</div>
+
+<div class="pa-md">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- start panel -->
+            <div class="panel panel-default">
+                <table class="table table-bordered table-hover dataTable no-footer" id="DataTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" ng-model="allCheck" ng-click="selectCargos()"/>
+                            </th>
+                            <th><a>#</a></th>
+                            <th><a>Status</a></th>
+                            <th><a>Cargo/Transporter</a></th>
+                            <th><a>Factory</a></th>
+                            <th><a><p>Weight /</p>Number of places</a></th>
+                            <th><a><p>Received weight /</p> Numbers of places</a></th>
+                            <th><a>Delivery cost</a></th>
+                            <th><a>Delivery paid</a></th>
+                            <th><a>Cost of the goods</a></th>
+                            <th><a>Paid of the goods</a></th>
+                            <th><a>Cost of the received items</a></th>
+                            <th><a>Stored</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in cargo" ng-click="edit(item)">
+                            <td>
+                                <input type="checkbox" ng-model="cargoCheckbox[$index]" ng-click="selectCargo(item)"/>
+                            </td>
+                            <td>
+                                {{item.cargo.id}}
+                            </td>
+                            <td>
+                                {{item.cargo.statusName}}
+                            </td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li><h4>{{item.cargo.document}} Kg</h4></li>
+                                    <li>{{item.cargo.logisticCompanyId}} place</li>
+                                </ul>
+                            </td>
+                            <td>
+                                {{item.factory.name}}
+                            </td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <h4>{{item.cargo.arriveWeight}} Kg</h4>
+                                    </li>
+                                    <li>{{item.cargo.arrivePlaces}} place</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <h4>{{item.cargo.incomeWeight}} Kg</h4>
+                                    </li>
+                                    <li>{{item.cargo.incomePlaces}} place</li>
+                                </ul>
+                            </td>
+                            <td><h4>${{item.cargo.deliveryPrice}}</h4></td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <h4>${{item.cargo.deliveryPaid}}</h4>
+                                    </li>
+                                    <li>remined $</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <h4>&yen;{{item.goodsCost}}</h4>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style="border-top: 2px solid grey" >
+                            <td colspan="5"><h4>TOTAL:</h4></td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <h4>{{totalArriveWeight}} Kg</h4>
+                                    </li>
+                                    <li>{{totalArrivePlaces}} places</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <h4>{{totalIncomeWeight}} Kg</h4>
+                                    </li>
+                                    <li>{{totalIncomePlaces}} places</li>
+                                </ul>
+                            </td>
+                            <td><h4>${{totalCost}}</h4></td>
+                            <td><ul class="list-unstyled">
+                                <li>
+                                    <h4>${{totalPaid}}</h4>
+                                </li>
+                                <li>remined $</li>
+                            </ul></td>
+                            <td>
+                                <h4>&yen;{{totalGoodsCost}}</h4>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
