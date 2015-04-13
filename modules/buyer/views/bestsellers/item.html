@@ -7,7 +7,7 @@
         <div class="page-header">
             <!-- basic info heading -->
             <div class="box-layout">
-                <div class="col-sm-12">
+                <div class="col-sm-12" ng-show="bestseller">
                     <!-- <div ng-show="bestseller.orderId && order.status == 0" class="btn btn-info" ng-click="saveBestseller()"><i class="fa fa-plus"></i> Save</div> -->
                     <button ng-hide="bestseller.orderId" type="submit" class="btn btn-success" ng-click="createOrder(sizes)"><span class="fa fa-check"> Create order</span></button>
                     <button ng-show="bestseller.orderId" type="submit" class="btn btn-success" ng-click="reOrder(sizes)"><i class="fa fa-check"></i> Create Order</button>

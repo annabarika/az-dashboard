@@ -6,6 +6,13 @@
     </div>
     <div class="modal-body">
         <form>
+            {{calendar}}
+            <p class="input-group" ng-show="addToCalendar">
+                <input type="text" class="form-control" datepicker-popup="{{format}}" min-date="minDate" ng-model="buyingDate" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
             <angucomplete id="articul"
                           placeholder="Search by articul"
                           pause="400"
@@ -22,7 +29,7 @@
     </div>
     <!--footer-->
     <div class="modal-footer">
-        <button type="button" class="btn btn-green" data-ng-controller="BestsellersController" ng-click="createBestseller(products)">Create</button>
+        <button type="button" class="btn btn-green" data-ng-controller="BestsellersOrderedController" ng-click="createBestseller(products, buyingDate)">Create</button>
         <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
     </div>
 </div>

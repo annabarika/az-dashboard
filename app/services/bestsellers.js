@@ -248,6 +248,9 @@
                             "productId": product.id,
                             "createDate": (!_.isUndefined(date)) ? date : moment().format('YYYY-MM-DD HH:mm:ss')
                         };
+                        if(product.orderDate != undefined ){
+                            params.orderDate = product.orderDate;
+                        }
 
                         return RestFactory.request(API.ADD_TO_BESTSELLER, 'POST', params);
                     },
