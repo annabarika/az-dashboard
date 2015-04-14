@@ -1,6 +1,6 @@
 <ul class="nav nav-sidebar">
-    <li class="nav-group"  ng-repeat="item in model" ng-click="getMenu($event,$index)">
-        <a class="nav-toggle" href="">
+    <li class="{{item.class}}" ng-repeat="item in model" >
+        <a class="nav-toggle" href="" ng-click="getMenu($event,$index)">
                          <span class="figure figure-left icon">
                          <i class="{{item.icon}}"></i>
                          </span>
@@ -10,7 +10,7 @@
                          </span>
         </a>
         <ul id="uielements" class="nav-submenu">
-            <li data-ui-sref-active="active" ng-repeat="submenu in item.menu">
+            <li ng-repeat="submenu in item.menu">
                 <a ng-href="/{{submenu.url}}">
                     <span class="text">{{submenu.title}}</span>
                                 <span class="figure figure-right">

@@ -22,10 +22,42 @@
 
     app.directive("navigation",
         [
-        "$timeout",
-        "$window",
+            "$timeout",
+            "$window",
+            "$location",
+            "$route",
+            "$animate",
+        function($timeout,$window,$location,$route,$animate){
 
-        function($timeout,$window){
+            //console.log($animate);
+            /**
+             *
+             * @type {c.originalPath|*}
+             * @private
+             */
+            var _path=$route.current.originalPath;
+            /**
+             *
+             * @param menu
+             * @private
+             */
+            function _openMenu(menu) {
+
+                $animate.addClass(menu, 'active');
+
+            }
+
+            /**
+             *
+             * @param menu
+             * @private
+             */
+            function _closeMenu(menu) {
+
+                $animate.removeClass(menu, 'active');
+
+
+            }
 
             return{
                 restrict:   "EA",
@@ -33,29 +65,58 @@
                 scope:{
                     model:"="
                 },
-                link: function($scope){
-                    console.log($scope.model);
+                link: function($scope,elm,attr){
 
+                    var length=$scope.model.length;
+
+                    for(var i=0;i<length;i++){
+
+                        $scope.model[i]['class']="nav-group";
+
+                        var subLength=$scope.model[i].menu.length;
+
+                        for(var j=0;j<subLength;j++){
+
+                            if(_path.indexOf($scope.model[i].menu[j].url)!=-1){
+
+                                $scope.model[i]['class']="nav-group active";
+                            }
+                        }
+                    }
+                    /**
+                     *
+                     * @param event
+                     * @param index
+                     */
                     $scope.getMenu=function(event,index){
-                        console.log(event);
-                        var navMenu=$scope.model[index];
-                    };
 
-                    function _openMenu($navmenu, $navgroup) {
+                        var navMenu=angular.element(event.currentTarget).parent();
+                        var navGroup=angular.element(navMenu).parent();
+                        console.log(navGroup[0].children[0]);
+                        if(navMenu.hasClass('active')) {
 
-                        $navmenu
-                            .css({ height: 0 })
-                            .velocity({ height: $navmenu.data('height') }, {
-                                duration: 300,
-                                begin: function () {
-                                    $navgroup.addClass('active');
-                                    isBusy = true;
-                                },
-                                complete: function () {
-                                    $navmenu.removeAttr('style');
-                                    isBusy = false;
+                            _closeMenu(navMenu);
+
+                        } else {
+
+                           /* for(var i=0;i<length;i++){
+
+                                if( $scope.model[i]['class']=="nav-group active"){
+                                    console.log("has active",$scope.model[i] );
+                                    $scope.model[i]['class']="nav-group";
                                 }
-                            }, 'ease-in-out');
+
+                            }*/
+                            for(var i=0;i<navGroup[0].children.length;i++){
+                                if(navGroup[0].children[i].classList.contains("active")){
+                                    _closeMenu(navGroup[0].children[i]);
+                                }
+                            }
+
+
+                           _openMenu(navMenu);
+
+                        }
                     };
                 }
             }
@@ -65,8 +126,8 @@
 
 
 //widget sidebar
-    app.directive('navSidebar', ['$timeout', function ($timeout) {
-
+    app.directive('navSidebar', ['$timeout',"$route", function ($timeout,$route) {
+        //console.log($route.current.originalPath);
         return {
             restrict: 'C',
             scope: {},
@@ -79,7 +140,8 @@
                         var $this = jQuery(this),
                             $navGroup = $this.parent('.nav-group'),
                             $navMenu = $this.next('.nav-submenu');
-                            //console.log($navMenu);
+                            console.log($navGroup);
+                            console.log($navMenu);
                         // store menu height before animation begin
                         $navMenu.data('height', $navMenu.height());
 
@@ -139,7 +201,7 @@
                             }, 'ease-in-out');
                     };
 
-                    iElm.on('click', '.nav-toggle', toggleMenu);
+                   // iElm.on('click', '.nav-toggle', toggleMenu);
                 });
             }
         };
@@ -211,24 +273,6 @@
             }
         }
     }]);
-
-    app.directive('dropzone', function () {
-        return function (scope, element, attrs) {
-            var config, dropzone;
-
-            config = scope[attrs.dropzone];
-
-            // create a Dropzone for the element with the given options
-            dropzone = new Dropzone(element[0], config.options);
-
-            // bind the given event handlers
-            angular.forEach(config.eventHandlers, function (handler, event) {
-                dropzone.on(event, handler);
-            });
-        };
-    });
-
-
 
     app.directive("imagedrop", function ($parse) {
             return {
