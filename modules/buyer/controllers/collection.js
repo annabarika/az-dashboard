@@ -294,7 +294,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
         //TODO избавить от watch
         $scope.$watch("photo", function (value) {
-
+            //console.log(value);
             $rootScope.photo = value;
         });
 
