@@ -164,7 +164,6 @@
                     function _eventBreak(event){
                         event.preventDefault();
                     }
-
                     /**
                      *
                      * @param event
@@ -172,7 +171,6 @@
                      */
                     function _dropFiles(event){
                         _eventBreak(event);
-
                         $parse(attrs.imageDropzone)
                             .assign(scope, event.dataTransfer.files);
                         scope.$apply();

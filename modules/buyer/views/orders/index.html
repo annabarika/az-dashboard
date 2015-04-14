@@ -122,9 +122,12 @@
                             <p ng-if="item.order.deliveryDate==null">none</p>
                         </td>
                         <td>
-                            <span class="thumbnail media-left" ng-repeat="img in item.files track by $index">
-                                 <a href="{{imagePath}}{{img.path}}" target="_blank" ng-if="$index<2">
-                                     <img ng-src="{{imagePath}}{{img.path}}"/>
+                            <span class="thumbnail media-left" ng-repeat="img in item.files track by $index" ng-if="$last">
+
+                                 <a  href="http://compass/files/orders/documents/{{img.path}}" target="_blank" >
+                                     <!--<img ng-src="{{imagePath}}{{img.path}}"/>-->
+                                     <img src="/assets/images/pdf-icon.gif"/>
+
                                  </a>
                             </span>
                         </td>
