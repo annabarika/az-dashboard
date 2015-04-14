@@ -1,9 +1,10 @@
 <div class="pa-md" ng-controller="UploadController">
-    <div class="row col-md-12 panel flow-upload mb-0">
+    <!--<div class="row col-md-12 panel flow-upload mb-0">-->
+    <div class="row col-md-12 panel mb-0">
         <div class="panel-body">
             <h4 class="mb-xs">Gallery Upload</h4>
             <hr class="mnr-md mnl-md">
-            <div class="flow-drop text-center">
+            <div class="dropzone text-center" image-dropzone="photo" >
                 <h4 class="fw-sb mb-md">Drag And Drop your file here</h4>
                 <div class="clearfix mb-sm">
                     <span class="btn btn-primary" ng-click="upload()">

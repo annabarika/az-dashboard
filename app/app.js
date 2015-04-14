@@ -12,6 +12,7 @@
         'MessageCenterModule',
         "ang-drag-drop",
         "ngSanitize",
+        'ngAnimate',
         "flow"//library for uploading files
     ])
 

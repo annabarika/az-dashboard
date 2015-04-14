@@ -104,6 +104,7 @@ app.controller('OrderListController',
                     }
                 }
                 $scope.orders=response;
+                console.log($scope.orders);
             }
               //Loading statuses
             RestFactory.request(config.API.host + "status/load")
