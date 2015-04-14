@@ -29,7 +29,6 @@
             "$animate",
         function($timeout,$window,$location,$route,$animate){
 
-            //console.log($animate);
             /**
              *
              * @type {c.originalPath|*}
@@ -44,7 +43,6 @@
             function _openMenu(menu) {
 
                 $animate.addClass(menu, 'active');
-
             }
 
             /**
@@ -55,8 +53,6 @@
             function _closeMenu(menu) {
 
                 $animate.removeClass(menu, 'active');
-
-
             }
 
             return{
@@ -65,7 +61,7 @@
                 scope:{
                     model:"="
                 },
-                link: function($scope,elm,attr){
+                link: function($scope){
 
                     var length=$scope.model.length;
 
@@ -92,27 +88,18 @@
 
                         var navMenu=angular.element(event.currentTarget).parent();
                         var navGroup=angular.element(navMenu).parent();
-                        console.log(navGroup[0].children[0]);
+
                         if(navMenu.hasClass('active')) {
 
                             _closeMenu(navMenu);
 
                         } else {
 
-                           /* for(var i=0;i<length;i++){
-
-                                if( $scope.model[i]['class']=="nav-group active"){
-                                    console.log("has active",$scope.model[i] );
-                                    $scope.model[i]['class']="nav-group";
-                                }
-
-                            }*/
                             for(var i=0;i<navGroup[0].children.length;i++){
                                 if(navGroup[0].children[i].classList.contains("active")){
                                     _closeMenu(navGroup[0].children[i]);
                                 }
                             }
-
 
                            _openMenu(navMenu);
 

@@ -10,7 +10,7 @@
                          </span>
         </a>
         <ul id="uielements" class="nav-submenu">
-            <li ng-repeat="submenu in item.menu">
+            <li ng-repeat="submenu in item.menu" ng-animate="'active'">
                 <a ng-href="/{{submenu.url}}">
                     <span class="text">{{submenu.title}}</span>
                                 <span class="figure figure-right">
