@@ -22,7 +22,6 @@ app.controller('PaymentListController',
 				url;
 
 			$rootScope.user=JSON.parse(localStorage['user']);
-			console.log("yes",$rootScope.user);
 			$scope.userType=$rootScope.user.type;
 
 			$scope.userCO=$rootScope.user.settings.cashierOffice;
@@ -30,49 +29,42 @@ app.controller('PaymentListController',
 			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				{ name: "id"				,	title: 'ID' },
-				{ name: "orderId"			, 	title: 'Order' },
+				//{ name: "id"				,	title: 'ID' },
+				{ name: "documentId"		, 	title: 'Document' },
 				{ name: "factory"			, 	title: 'Factory' },
 				{ name: "date"				, 	title: 'Payment date' },
 				{ name: "method"			, 	title: 'Payment method'},
-				/*{ name:"cashierOfficeId"	,	title:"CashierOffice"},*/
-				{ name:"cashierOfficeName"	,	title:"CashierOffice"},
-				{ name: "amount"			, 	title: 'Payment' },
+                { name:"cashierOfficeId"	,	title: "CashierOffice"},
+				{ name: "amount"			, 	title: 'Amount' },
 				{ name: "refund"			, 	title: 'Refund' }
 			];
 
-			function getPayments(){
+            /**
+             * Collect all payments
+             */
+			getPayments = function() {
+
 				/**
-				 * get draft payments
+				 * Get draft Order payments
 				 */
-				PaymentService.getPayments(0).then(
-
-					function(response){
-
-						if(_.isArray(response) ){
-
+				PaymentService.getPayments('order', 0).then(function(response) {
+						if(_.isArray(response)){
 							$scope.draftPayments = response;
-							//console.log("draft",$scope.draftPayments);
 						}
 					}
 				);
 
 				/**
-				 * get paid payments
+				 * Get paid Order Payments
 				 */
-				PaymentService.getPayments(1).then(
-
-					function(response){
-
+				PaymentService.getPayments('order', 1).then(function(response){
 						if(_.isArray(response)){
-
 							$scope.paidPayments = PaymentService.parseData(response,$scope.tableHeader);
-							//console.log("paid",$scope.paidPayments);
-
 						}
 					}
 				);
 			}
+
 			getPayments();
 
 			PaymentService.getStatuses().then(
@@ -107,7 +99,12 @@ app.controller('PaymentListController',
 				{name:'refund'}
 			];
 
-			$scope.filteredPayments=function(filter){
+            $scope.paymentMethod = [
+                {name:'cash'},
+                {name:'bank'}
+            ];
+
+            $scope.filteredPayments=function(filter){
 
 				url=PaymentService.parseFilters(filter);
 
@@ -193,28 +190,48 @@ app.controller('PaymentListController',
 
 						$scope.cashierOffice=cashierOffice;
 						$scope.cashierId=cashierId;
+                        $scope.filterProperty=['id'];
 
 						/**
-						 * get Orders
+						 * Get Orders for autocomplete
 						 */
-						PaymentService.getOrders().then(
-							function(response){
-								$scope.orders=response;
-								//console.log($scope.orders);
+						PaymentService.getOrders().then(function(response){
+								$scope.orders = response;
 							}
 						);
-						/**
-						 *
-						 * @type {{name: string}[]}
-						 */
-						$scope.otherType=[
+
+                        /**
+                         * Get Cargo for autocomplete
+                         */
+                        PaymentService.getCargo().then(function(response){
+                                var cargo = [];
+                                if(!_.isEmpty(response)) {
+                                    response.forEach(function(items) {
+                                        cargo.push(items.cargo);
+                                    });
+                                }
+                                $scope.cargo = cargo;
+                            }
+                        );
+
+                        $scope.orderType=[
+                            {name:"income",value:'refund'},
+                            {name:"outcome",value:'payment'}
+                        ];
+                        $scope.cargoType = [
+                            {name:"income",value:'refund'},
+                            {name:"outcome",value:'payment'}
+                        ];
+						$scope.otherType = [
 							{name:"payment to factory",value:'payment'},
 							{name:"refund from factory",value:'refund'}
 						];
-						$scope.orderType=[
-							{name:"income",value:'refund'},
-							{name:"outcome",value:'payment'}
-						];
+
+
+                        $scope.paymentMethod = [
+                            {name:"cash",value:'cash'},
+                            {name:"bank",value:'bank'}
+                        ];
 						$scope.columnHeaders=[
 							{name  : "id"}
 						];
@@ -233,9 +250,13 @@ app.controller('PaymentListController',
 								return;
 							}
 							if(_.isNull(payment.type)|| _.isUndefined(payment.type)){
-								messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+								messageCenterService.add('danger', 'Not choose type', {timeout: 3000});
 								return;
 							}
+                            if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
+                                messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+                                return;
+                            }
 							if(_.isNull(payment.note)|| _.isUndefined(payment.note)){
 								messageCenterService.add('danger', 'Please,enter the note', {timeout: 3000});
 								return;
@@ -259,11 +280,11 @@ app.controller('PaymentListController',
 				});
 				modalInstance.result.then(
 					function(payment){
-						PaymentService.createNewPayment(payment,$rootScope.user).then(
+						PaymentService.createPayment(payment,$rootScope.user).then(
 							function(response){
 								if(_.isObject(response)){
 									messageCenterService.add('success', 'Payment created', {timeout: 3000});
-									getPayments();
+                                    getPayments();
 								}
 								else{
 									messageCenterService.add('danger', 'Payment not created', {timeout: 3000});
