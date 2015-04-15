@@ -17,16 +17,19 @@
                         <i class="fa fa-folder-open" ></i> UPLOAD FOLDER
                     </span>
 
-                    <input type="file" id="fileUpload" file-input="photo" style="display: none"  multiple/>
+                    <input type="file" id="fileUpload" file-input="photo" style="display: none"  multiple accept=".jpg,.png,.pdf"/>
                 </div>
                 <p class="text-muted mb-0">Accept only *.jpg and *.png files</p>
             </div>
             <!-- start thumbnail row -->
             <div class="pa-md">
                 <div class="row">
-                    <div class="col-sm-2 col-md-2" ng-repeat="img in photo">
-                        <div class="thumbnail">
-                            <img file-preview="img" style="height:120px;"/>
+                    <div class="col-sm-2 col-md-2" ng-repeat="(key,value) in photo track by $index" >
+
+                        <div class="thumbnail" ng-if="key!='length'&& key!='item'">
+
+                           <!-- <a href="" ng-click="deleteFile(value)"><i class="fa fa-remove"></i></a>-->
+                            <img file-preview="value" style="height:120px;"/>
                         </div>
                     </div>
                 </div>

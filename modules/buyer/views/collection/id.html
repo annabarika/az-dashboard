@@ -6,11 +6,12 @@
             <!-- basic info heading -->
             <div class="box-layout">
                 <div class="col-sm-6 va-m">
-                    <button class="btn btn-green" ng-click="addToOrder()" ng-disabled="isOrderedAll"><span class="fa fa-check" ng-hide="isOrderedAll"></span>Create order</button>
+                    <button class="btn btn-green" ng-click="createOrder()" ng-disabled="isOrdered"><span class="fa fa-check" ng-hide="isOrdered"></span>Create order</button>
                     <button class="btn btn-red" ng-click="cancelCollection()" ng-disabled="isOrdered"><span class="fa fa-check" ng-hide="isOrdered"></span> Delete</button>
                     <button class="btn btn-default" ng-click="addCount(1)"><span class="fa fa-plus"> 1</span></button>
                     <button class="btn btn-default" ng-click="addCount(3)"><span class="fa fa-plus"> 3</span></button>
                     <button class="btn btn-default" ng-click="addCount(5)"><span class="fa fa-plus"> 5</span></button>
+                    <button class="btn btn-default" ng-click="removeCount()"><span class="fa fa-remove"></span></button>
 
                 </div>
             </div>
@@ -70,6 +71,7 @@
                                                 <button class="btn btn-default btn-xs" ng-click="addCount(1,$index,product)"><span class="fa fa-plus"> 1</span></button>
                                                 <button class="btn btn-default btn-xs" ng-click="addCount(3,$index,product)"><span class="fa fa-plus"> 3</span></button>
                                                 <button class="btn btn-default btn-xs" ng-click="addCount(5,$index,product)"><span class="fa fa-plus"> 5</span></button>
+                                                <button class="btn btn-default btn-xs" ng-click="removeCount($index,product)"><span class="fa fa-remove"> </span></button>
                                             </div>
 
 
@@ -86,13 +88,14 @@
                     </td>
                     <td>
                         <div class="btn-group" ng-hide="product.inOrder">
-                        <button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check"></span>Create order</button>
+                        <!--<button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check"></span>Create order</button>-->
                         <!--<button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>-->
                         <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check"></span>Delete</button>
 
                             <button class="btn btn-default" ng-click="addCount(1,$index)"><span class="fa fa-plus"> 1</span></button>
                             <button class="btn btn-default" ng-click="addCount(3,$index)"><span class="fa fa-plus"> 3</span></button>
                             <button class="btn btn-default" ng-click="addCount(5,$index)"><span class="fa fa-plus"> 5</span></button>
+                            <button class="btn btn-default" ng-click="removeCount($index)"><span class="fa fa-remove"></span></button>
 
 
 
