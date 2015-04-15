@@ -57,9 +57,6 @@ angular.module('widgets.autocomplete', [])
                 }
             }
 
-
-
-
             if(array.length!=0){
                 //console.log("success", array);
                 return array;
@@ -67,9 +64,6 @@ angular.module('widgets.autocomplete', [])
 
         }
     })
-
-
-
 
     .directive("autocomplete",function(){
 

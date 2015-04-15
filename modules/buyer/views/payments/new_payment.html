@@ -4,9 +4,26 @@
 </div>
 <div class="modal-body">
 
-    <label><input type="radio" ng-model="paymentFlag" value="true">&emsp;Payment for order</input></label><br>
-    <label><input type="radio" ng-model="paymentFlag" value="false">&emsp;Other payment</input></label>
-    <autocomplete input-model="orders" output-model="payment.id" column="columnHeaders" placeholder="Order number" ng-show="paymentFlag=='true'"></autocomplete>
+    <label><input type="radio" data-ng-model="paymentFlag" value="order">&emsp;Payment for order</input></label><br>
+    <label><input type="radio" data-ng-model="paymentFlag" value="cargo">&emsp;Payment for cargo</input></label><br>
+    <label><input type="radio" data-ng-model="paymentFlag" value="other">&emsp;Other payment</input></label>
+    <autocomplete
+            input-model="orders"
+            output-model="payment.order"
+            column="columnHeaders"
+            placeholder="Order number"
+            filter-property="filterProperty"
+            ng-show="paymentFlag=='order'"
+            ></autocomplete>
+
+    <autocomplete
+            input-model="cargo"
+            output-model="payment.cargo"
+            column="columnHeaders"
+            placeholder="Cargo number"
+            filter-property="filterProperty"
+            ng-show="paymentFlag=='cargo'"
+            ></autocomplete>
 
     <br>
     <label>Cashier Office:</label>
@@ -14,13 +31,22 @@
     <label>Amount:</label>
     <input type="number" data-ng-model="payment.amount" class="form-control"/>
     <label>Payment type:</label>
-    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='true'"
+    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='order'"
             ng-options="opt as opt.name for opt in orderType">
         <option value="">Choose type</option>
     </select>
-    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag!='true'"
+    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='cargo'"
+            ng-options="opt as opt.name for opt in orderType">
+        <option value="">Choose type</option>
+    </select>
+    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='other'"
             ng-options="opt as opt.name for opt in otherType">
         <option value="">Choose type</option>
+    </select>
+
+    <select class="form-control" data-ng-model="payment.method"
+            ng-options="opt as opt.name for opt in paymentMethod">
+        <option value="">Choose method</option>
     </select>
     <label>Note:</label>
     <textarea ng-model="payment.note" class="form-control" style="resize:none"></textarea>
