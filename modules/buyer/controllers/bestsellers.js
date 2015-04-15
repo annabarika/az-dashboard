@@ -2,7 +2,7 @@
 var app = angular.module("modules.buyer.bestsellers", ['angucomplete', 'commonFilters']);
 
 // Bestseller's representation
-app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
+/*app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
     function ($scope, $rootScope, $modal, BestsellersService, messageCenterService, $location) {
 
         // Document header title
@@ -11,10 +11,10 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         // Get bestsellers data
         $scope.bestsellers = {};
 
-        /**
+        *//**
          * Create bestseller
          * @uses autocomplete search
-         */
+         *//*
         $scope.createBestseller = function(product, calendar) {
 
             $scope.calendar = calendar;
@@ -54,14 +54,14 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
         };
 
     }
-]);
+]);*/
 
 // Bestseller's representation
 app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
     function ($scope, $rootScope, $modal, BestsellersService, messageCenterService, $location) {
 
         // Document header title
-        $rootScope.documentTitle = "Bestsellers Ordered";
+        $rootScope.documentTitle = "Ordered bestsellers";
 
         // Get current state of date
         $scope.currentYear  = moment().year();

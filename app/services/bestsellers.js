@@ -27,8 +27,14 @@
             "SEND_MODERATE"         : config.API.host+"report/send",
             "LOAD_MODERATORS"       : "/testing/mocks/moderators.json"
         })
-        .factory("BestsellersService", ['API', 'RestFactory',
-            function (API, RestFactory) {
+        .constant('SIZE_CALCULATE', {
+            "MIN_COUNT_TO_ADD_SIZES"    : 50,
+            "MAX_ITERATIONS"            : 20,
+            "ADDITIONAL_SIZES"          : { 'XS': 'S', 'S': 'XS', 'M': 'S', 'L': 'M', 'XL': 'L', 'XXL': 'XL', 'XXXL':'XXL' },
+            "SIZE_SORT"                 : ['XS','S','M','L','XL','XXL', 'XXXL', 'XXXXL']
+        })
+        .factory("BestsellersService", ['API', 'RestFactory', 'SIZE_CALCULATE',
+            function (API, RestFactory, SIZE_CALCULATE) {
 
                 /**
                  * Create calendar
@@ -113,34 +119,140 @@
                     },
 
 
+                    /**
+                     * Calculating count for ordering from bestsellers
+                     *
+                     * @param num
+                     * @param sizes
+                     * @returns {*}
+                     */
                     calculate : function(num, sizes) {
 
                         var totalSaleSpeed = 0,
-                            totalCount = 0;
-
-                        sizes.forEach(function(size) {
-                            if(!_.isUndefined(size.saleSpeed)) {
-                                totalSaleSpeed += parseInt(size.saleSpeed);
-                            }
-                        });
-                        sizes.forEach(function(size) {
-                            if(!_.isUndefined(size.saleSpeed)) {
-                                totalCount += size.count = Math.round( num * size.saleSpeed / totalSaleSpeed );
-                            }
-                        });
-                        // find min sales item
-
-                        var minSales = _.min(sizes, function(size) {
+                            minSaleSpeed = 0;
+                        /*
+                            Getting size with minimum sale speed
+                            for filling sizes with sale speed = 0
+                         */
+                        var itemWithMinSalesSpeed = _.min(sizes, function(size) {
                             return size.saleSpeed;
                         });
+                        minSaleSpeed = itemWithMinSalesSpeed.saleSpeed;
 
-                        // rest from chased count
-                        var rest = (num-totalCount);
-                        if( rest < 0 ) rest = 0;
-                        minSales.count = (minSales.count + rest);
+                        /*
+                            Calculating total salespeed
+                            Fixing min sale speed for size with 0
+                         */
+                        sizes.forEach(function(size) {
+                            if(!_.isUndefined(size.saleSpeed)) {
+                                if(size.saleSpeed == 0 ){
+                                    size.saleSpeed = (minSaleSpeed > 0) ? minSaleSpeed : 1;
+                                }
+                                totalSaleSpeed += parseInt(size.saleSpeed);
+                                size.count = 0;
+                            }
+                        });
+                        console.log("After cleaning", sizes);
+                        if( num > SIZE_CALCULATE.MIN_COUNT_TO_ADD_SIZES ){
+
+                            for( addSize in SIZE_CALCULATE.ADDITIONAL_SIZES ){
+                                if(! _.findWhere(sizes, { size: addSize} )){
+                                    sizes.push({
+                                        size: addSize,
+                                        count: 0,
+                                        saleSpeed: minSaleSpeed
+                                    });
+                                }
+                            }
+                        }
+                        this.distributeBySize(sizes, num, totalSaleSpeed);
+                        this.calculatorIterations = 0;
+                        return this.sortSizes( sizes );
+                    },
+
+                    sortSizes : function(sizes){
+                        function Comparator(a, b){
+                            if(a.size == undefined){
+                                return 2;
+                            }
+                            var tmp = SIZE_CALCULATE.SIZE_SORT;
+                            return _.indexOf(tmp, a.size) < _.indexOf(tmp, b.size) ? -1 : 1;
+                        }
+
+                        var newSizes = [];
+                        sizes = sizes.sort(Comparator);
+                        sizes.forEach(function(size, index, object) {
+                            console.log("Sort:", size, index, object);
+                            if ( size.saleSpeed != undefined ) {
+                                newSizes.push(size);
+                            }
+                        });
+                        newSizes.unshift({});
+                        newSizes.push({});
+                        return newSizes;
+                    },
+
+                    calculatorIterations : 0,
+
+                    distributeBySize : function(sizes, num, totalSaleSpeed){
+                        this.calculatorIterations ++;
+                        var totalDelta = 0;
+                        var keepGoing = true;
+                        var delta = 0;
+                        console.log("Distrib start:", sizes);
+                        sizes.forEach(function(size) {
+                            if(!_.isUndefined(size.saleSpeed) && keepGoing ) {
+                                delta = Math.ceil( num * size.saleSpeed / totalSaleSpeed );
+                                console.log("Delta ", size.size, delta);
+                                totalDelta += delta;
+                                console.log("TD: ", totalDelta);
+                                if( totalDelta > num ) {
+                                    keepGoing = false;
+                                    delta = delta - ( totalDelta - num) ;
+                                }
+                                console.log("Delta2: ", size.size, delta);
+                                size.count += delta;
+                            }
+                        });
+                        if(this.calculatorIterations < SIZE_CALCULATE.MAX_ITERATIONS ) {
+                            this.checkNormalization(sizes, totalSaleSpeed);
+                        }
+                        console.log("Distrib finish:", sizes);
                         return sizes;
                     },
 
+                    checkNormalization : function(sizes, totalSaleSpeed){
+                        var count = 0;
+                        var keepGoing = true;
+                        var slice = 0;
+                        console.log("Norm start:", sizes);
+                        /*
+                            Checking max count
+                         */
+                        sizes = _.sortBy(sizes, 'count');
+
+                        var prevSize = { count: 1000 };
+                        sizes.forEach(function(size) {
+                            if(!_.isUndefined(size.saleSpeed) && keepGoing ) {
+                                count = size.count;
+                                if( count > (prevSize.count * 2) ){
+                                    console.log("Coun > prevCount", count, prevSize.count);
+                                    // Cutting off 50%
+                                    slice = Math.round( count / 2);
+                                    size.count -= slice;
+                                    keepGoing = false;
+
+                                }
+                                prevSize = size;
+                            }
+                        });
+                        console.log("Norm end:", sizes);
+                        if(slice > 0) {
+                            console.log("Slice: ", slice);
+                            this.distributeBySize(sizes, slice, totalSaleSpeed);
+                        }
+                        return sizes;
+                    },
                     /**
                      * Send order created
                      *
