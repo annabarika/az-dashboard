@@ -97,7 +97,7 @@
                             )
                         }
                     }
-                    console.log(factory);
+                    //console.log(factory);
                     return factory;
                 },
 
@@ -322,19 +322,34 @@
                     });
                     return (sizes.length > 0);
                 },
+                /**
+                 *
+                 * @param products
+                 * @param allSizes
+                 * @returns {*}
+                 */
                 validationProducts:function(products,allSizes){
-                    console.log(allSizes);
-                    var length=products.length, sizes;
+                    //console.log("validation",products);
+
+                    var length=products.length,
+                        sizes,
+                        message;
 
                     for(var i=0;i<length;i++){
-
-                        if(products[i].article=="" || products[i].sizes=="" || products[i].price==""|| _.isNull(products[i].price)){
-                            return i;
+                        //article validation
+                        if(products[i].article==""){
+                            message="Please enter article in row #"+(i+1);
+                            return message;
+                        }
+                        //size validation
+                        if(products[i].sizes==""){
+                        message='Please enter size in row #'+(i+1);
+                        return message;
                         }
 
                         var sizes=products[i].sizes.split(/[,.\/]+/);
 
-                       // console.log(sizes);
+                        //console.log(sizes);
 
                         if(allSizes.length!=0){
 
@@ -342,22 +357,27 @@
 
                                 sizes[j]=sizes[j].toUpperCase();
 
-                                //console.log(_.findIndex(allSizes,{name:sizes[j]}));
-
                                 if(_.findIndex(allSizes,{name:sizes[j]})==-1){
 
-                                    return i;
+                                    message="Size in row #"+(i+1)+"is not valid";
+
+                                    return message;
                                 }
                             }
                         }
-
-
-
-
+                        //price validation
+                        if(products[i].price==""){
+                            message='Please enter price in row #'+(i+1);
+                            return message;
+                        }
+                        if( _.isNaN(parseFloat(products[i].price))){
+                            message='Please use only numbers and point in price fields. Row #'+(i+1);
+                            return message;
+                        }
 
                     }
-                    return -1;//true
 
+                    return -1;//true
                 },
                 /**
                  *
@@ -424,7 +444,7 @@
                  * @returns {Array}
                  */
                 extractProducts: function(data) {
-
+                    console.log("extract products",data);
                     for (var first in data) break;
                     var first = data[first], res = [];
 
@@ -461,7 +481,8 @@
                  */
                 cancelCollection: function (collectionId) {
 
-                    return RestFactory.request(PATHC.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
+                    //return RestFactory.request(PATHC.CANCELCOLLECTION, 'PUT', $.param({'id' : collectionId}));
+                    return RestFactory.request(PATHC.CANCELCOLLECTION, 'PUT', {'id' : collectionId});
                 },
 
                 /**
@@ -650,13 +671,35 @@
                             headers: {'Content-Type': undefined}
                         });
                 },
-
+                /**
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
                 deleteFiles: function(id){
 
                     return RestFactory.request(PATHC.DELETE_FILES,'POST',{id:id});
                 },
+                /**
+                 *
+                 * @param items
+                 * @param key
+                 * @param value
+                 * @param increment
+                 * @returns {*}
+                 */
+                completeProducts:function(items,key,value,increment){
 
-
+                    for(var i=0;i<items.length;i++){
+                        if(items[i][key]==""){
+                            items[i][key]=value;
+                            if(increment){
+                                value++;
+                            }
+                        }
+                    }
+                    return items;
+                },
 
 
                 /**
@@ -666,7 +709,7 @@
                     var params = {
                         'buyerId'       :   order.buyerId,
                         'factoryId'     :   order.collection.factoryId,
-                        'type'          :   order.type.id,
+                        'type'          :   1,//order.type.id,
                         'currencyId'    :   order.currencyId
                     };
 

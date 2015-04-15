@@ -25,10 +25,10 @@
                 </button>
             </td>
             <td>
-                <button class="btn btn-xs btn-success" ng-click="addPrices()" ng-hide="priceFlag">
+                <button class="btn btn-xs btn-success" ng-click="showInput()" ng-hide="priceFlag">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
-                <input ng-show="priceFlag" type="text" ng-model="commonPrice" ng-keyup="addPrices(commonPrice,$event)"/><!--ng-blur="priceFlag=!priceFlag"-->
+                <input ng-show="priceFlag" type="text" class="commonPrice" ng-model="commonPrice" ng-keyup="addPrices(commonPrice,$event)"/><!--ng-blur="priceFlag=!priceFlag"-->
             </td>
         </tr>
         <tr ng-repeat="item in items">
@@ -56,7 +56,7 @@
             </td>
             <td>
                 <!--<input class="form-control" type="number" ng-model="item.price" step="any">-->
-                <input class="form-control" type="text" ng-model="item.price" step="any">
+                <input class="form-control" type="text" ng-model="item.price" step="any" >
             </td>
             <td align="center">
                 <div class="toolbar">

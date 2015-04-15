@@ -122,6 +122,14 @@
         return{
             restrict:"A",
             link:function(scope,elm,attrs){
+                //console.log(attrs);
+
+                if(attrs.accept!=undefined){
+                    console.log(attrs.accept);
+                }
+
+
+
                 elm.bind("change",function(){
                     $parse(attrs.fileInput)
                         .assign(scope,elm[0].files);

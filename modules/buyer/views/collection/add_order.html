@@ -5,13 +5,12 @@
         <h4 class="modal-title" id="myModalLabel">Add to Order</h4>
     </div>
     <div class="modal-body">
-        <h4>Factory #{{order.collection.factoryId}} "{{order.collection.name}}"</h4>
-        <h4>Buyer {{order.buyerId}}</h4>
-        <hr>
-        <select class="form-control" data-ng-model="order.type"
+        <h4>Factory name:{{currentFactory}}</h4>
+        <!--<hr>-->
+       <!-- <select class="form-control" data-ng-model="order.type"
                 ng-options="opt as opt.name for opt in all_types">
             <option value="">Choose order type</option>
-        </select>
+        </select>-->
 
     </div>
     <!--footer-->
