@@ -130,11 +130,11 @@
                 /**
                  * Create new payment
                  *
-                 * @param object data request data
+                 * @param object obj request data
                  * @param object user auth user
                  * @returns {*}
                  */
-                createPayment: function (data, user) {
+                createPayment: function (obj, user) {
 
                     var data = {};
                     var url;
@@ -177,7 +177,7 @@
                             refund :  Number(_.sum(_.map(rows, function(value) {
                                 return parseFloat(value.refund);
                             }))).toFixed(2),
-                            currency : rows[0].currency
+                            currency : (!_.isEmpty(rows)) ? rows[0].currency : 'CNY'
                         };
 
                     summary.difference = Number(summary.refund - summary.amount).toFixed(2);

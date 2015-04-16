@@ -84,7 +84,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 			};
 
             // Show all collected payments
-            setTimeout(getPayments(), 1000);
+            getPayments();
 
 			PaymentService.getStatuses().then(
 				function(response){
