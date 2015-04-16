@@ -703,21 +703,25 @@
 
 
                 /**
-                 * Create order
+                 * create new order
+                 * @param buyerId
+                 * @param collection
+                 * @param currencyId
+                 * @returns {*}
                  */
-                orderCreate: function (order) {
+                orderCreate: function (buyerId,collection,currencyId) {
                     var params = {
-                        'buyerId'       :   order.buyerId,
-                        'factoryId'     :   order.collection.factoryId,
+                        'buyerId'       :   buyerId,
+                        'factoryId'     :   collection.factoryId,
                         'type'          :   1,//order.type.id,
-                        'currencyId'    :   order.currencyId
+                        'currencyId'    :   currencyId
                     };
 
                     return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response) {
 
                         if(response.id) {
                             var params = {
-                                'id'        :   parseInt(order.collection.id),
+                                'id'        :   parseInt(collection.id),
                                 'orderId'   :   parseInt(response.id)
                             };
 
@@ -734,8 +738,8 @@
                  * @returns {*}
                  */
                 productsCreate: function (data, orderId) {
-                    /*console.log(data);
-                     return;*/
+                   /*console.log("pc",data);*/
+
                     var create = [];
                     create.push({
                         'method' : 'catalogue.createProductsBatch',
@@ -764,9 +768,9 @@
                             create[0].params.products.push(product);
                         });
                     }
-
+                    /*console.log(create);*/
                     return RestFactory.request(PATHC.PRODUCTSCREATE, "POST", $.param({'data' : create})).then(function(backend) {
-
+                            console.log("backend",backend);
                         if (backend.result) {
 
                             var response = JSON.parse(backend.result),
@@ -818,21 +822,24 @@
                                         });
                                     }
                                 });
-                                RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",
-                                    {
-                                        id:data.collection.id,
-                                        factoryId:data.collection.factoryId,
-                                        status:1
-                                    }).then(
-                                    function(response){
-                                        console.log("PUT ",response);
-                                    }
-                                );
                                 return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                             }
                         }
                     });
                 }
+
+                /*updateCollection:function(collection){
+                    RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",
+                        {
+                            id:data.collection.id,
+                            factoryId:data.collection.factoryId,
+                            status:1
+                        }).then(
+                        function(response){
+                            console.log("PUT ",response);
+                        }
+                    );
+                }*/
             };
         }]);
 })();
