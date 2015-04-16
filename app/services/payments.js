@@ -130,11 +130,11 @@
                 /**
                  * Create new payment
                  *
-                 * @param object data request data
+                 * @param object obj request data
                  * @param object user auth user
                  * @returns {*}
                  */
-                createPayment: function (data, user) {
+                createPayment: function (obj, user) {
 
                     var data = {};
                     var url;
