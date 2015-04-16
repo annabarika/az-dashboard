@@ -41,6 +41,23 @@
             };
 
             /**
+             * Format date range
+             *
+             * @param createDate Date
+             * @access private
+             * @returns object
+             */
+            var dateRangeFormat = function (date) {
+
+                var range = {
+                    start : moment(date.startDate).format("YYYY-MM-DD"),
+                    end   : moment(date.endDate).format('YYYY-MM-DD')
+                }
+
+                return range;
+            };
+
+            /**
              * Get payment (switcher)
              *
              * @param string type
@@ -92,7 +109,6 @@
 
                     var data = '';
                     var range = '';
-                    var payments = {};
 
                     if (!_.isUndefined(status)) {
                         // use status
@@ -101,13 +117,14 @@
 
                     if (!_.isUndefined(date)) {
                         // use selected date
+                        data += 'paymentDate/'+ date.start + ',' + date.end;
                     }
                     else {
                         // use current month by default
                         range = getCurrentMonthRange(moment().year(), moment().month())
-                        data += range.start + ',' + range.end;
+                        data += 'paymentDate/'+ range.start + ',' + range.end;
                     }
-                    return getPayment(type,data);
+                    return getPayment(type, data);
                 },
 
                 /**
@@ -135,26 +152,14 @@
                     }
 
                     data.currencyId = 1,
-                        data.cashierId  = user.id,
-                        data.cashierOfficeId = parseInt(user.settings.cashierOffice),
-                        data.paymentType    = obj.type.value,
-                        data.amount     = obj.amount,
-                        data.paymentMethod = obj.method.value,
-                        data.note = (obj.note) ? obj.note: "";
+                    data.cashierId  = user.id,
+                    data.cashierOfficeId = parseInt(user.settings.cashierOffice),
+                    data.paymentType    = obj.type.value,
+                    data.amount     = obj.amount,
+                    data.paymentMethod = obj.method.value,
+                    data.note = (obj.note) ? obj.note: "";
 
                     return RestFactory.request(url, "POST", data);
-                },
-
-
-
-                /**
-                 *
-                 * @param id
-                 * @returns {*}
-                 */
-                getOrderPayments: function (id) {
-
-                    return RestFactory.request(PATH.ORDERPAYMENTS + id);
                 },
 
                 /**
@@ -162,17 +167,17 @@
                  * @param array
                  * @returns {Array}
                  */
-                parseData: function (array) {
+                resolvePaymentData: function (array) {
 
                     var payments = [];
 
                     angular.forEach(array, function (item) {
-                        // console.log(item,i);
-                        this.push({
+
+                        payments.push({
                             id:                 item.payment.id,
                             documentId:         item.payment.documentId,
-                            factoryId:          item.factory.id,
-                            factory:            item.factory.name,
+                            factoryId:          (item.hasOwnProperty('factory')) ? item.factory.id : '?',
+                            factory:            (item.hasOwnProperty('factory')) ? item.factory.name : '?',
                             date:               item.payment.paymentDate,
                             method:             item.payment.paymentMethod,
                             cashierOfficeId:    item.payment.cashierOfficeId,
@@ -181,9 +186,50 @@
                             currency:           item.currency.ISOCode
 
                         });
-                    }, payments);
+                    });
+
                     return payments;
                 },
+
+                /**
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                getOrderPayments: function (id) {
+                    return RestFactory.request(PATH.ORDERPAYMENTS + id);
+                },
+
+                /**
+                 * Nav bar filter's parser
+                 *
+                 * @param object filter
+                 * @returns object result
+                 */
+                parseFilters: function (filter) {
+
+                    var result = {};
+                    if(filter.hasOwnProperty('createDate')) {
+
+                        result.date =  dateRangeFormat(filter.createDate);
+                    }
+
+                    return result;
+                },
+
+
+
+                // @TODO untouched area
+
+
+
+
+
+
+
+
+
+
                 /**
                  *
                  * @param payments
@@ -256,34 +302,7 @@
                     //console.log("new Cash.Off.",data);
                     return RestFactory.request(PATH.CREATE, "POST", data);
                 },
-                /**
-                 *
-                 * @param filter
-                 * @returns {string}
-                 */
-                parseFilters: function (filter) {
-                    var url = PATH.LOAD;
 
-                    if (filter.status) {
-
-                        url += "/status/" + filter.status.join();
-                    }
-                    if (filter.cashierOffice) {
-
-                        url += "/cashierId/" + filter.cashierOffice.join();
-                    }
-                    if (filter.type) {
-
-                        url += "/paymentType/" + filter.type.join();
-                    }
-                    if (_.has(filter, "createDate") && filter.createDate != null) {
-                        filter.createDate.startDate = moment(filter.createDate.startDate).format('YYYY-MM-DD');
-                        filter.createDate.endDate = moment(filter.createDate.endDate).format('YYYY-MM-DD');
-                        url += "/paymentDate/" + filter.createDate.startDate + "," + filter.createDate.endDate + "/";
-                    }
-
-                    return url;
-                },
                 /**
                  *
                  * @param url

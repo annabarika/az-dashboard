@@ -1,40 +1,24 @@
-var app = angular.module("modules.buyer.payments", [
+var app = angular.module("modules.buyer.payments", []);
 
-]);
-
-app.controller('PaymentListController',
-
-	[
-		'$scope',
-		'$rootScope',
-		"$location",
-		"$route",
-		"PaymentService",
-		"$modal",
-		"messageCenterService",
-
-
-		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService){
+app.controller('PaymentListController', ['$scope','$rootScope','$location','$route','PaymentService','$modal','messageCenterService',
+		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService) {
 
 			$scope.$route = $route;
 			$scope.$location = $location;
-			var filter={},
-				url;
+			var filter = {},
+				url, date;
 
-			$rootScope.user=JSON.parse(localStorage['user']);
-			$scope.userType=$rootScope.user.type;
+            // Get authorized user
+			$rootScope.user = JSON.parse(localStorage['user']);
+			$scope.userCO = $rootScope.user.settings.cashierOffice;
 
-			$scope.userCO=$rootScope.user.settings.cashierOffice;
-
-			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				//{ name: "id"				,	title: 'ID' },
 				{ name: "documentId"		, 	title: 'Document' },
 				{ name: "factory"			, 	title: 'Factory' },
 				{ name: "date"				, 	title: 'Payment date' },
 				{ name: "method"			, 	title: 'Payment method'},
-                { name:"cashierOfficeId"	,	title: "CashierOffice"},
+                { name: "cashierOfficeId"	,	title: "CashierOffice"},
 				{ name: "amount"			, 	title: 'Amount' },
 				{ name: "refund"			, 	title: 'Refund' }
 			];
@@ -42,30 +26,66 @@ app.controller('PaymentListController',
             /**
              * Collect all payments
              */
-			getPayments = function() {
+			getPayments = function(date) {
 
-				/**
-				 * Get draft Order payments
-				 */
-				PaymentService.getPayments('order', 0).then(function(response) {
+                var paymentsDraft = [], paymentsPaid = [];
+
+				// Get draft Order payments
+				PaymentService.getPayments('order', 0, date).then(function(response) {
 						if(_.isArray(response)){
-							$scope.draftPayments = response;
+                            paymentsDraft = response;
+
+                            // Get draft Cargo payments
+                            PaymentService.getPayments('cargo', 0, date).then(function(response) {
+                                    if(_.isArray(response)){
+                                        paymentsDraft = response.concat(paymentsDraft);
+
+                                        // Get draft Other payments
+                                        PaymentService.getPayments('other', 0, date).then(function(response) {
+                                                if(_.isArray(response)){
+                                                    paymentsDraft = response.concat(paymentsDraft);
+                                                    $scope.draftPayments = paymentsDraft;
+                                                }
+                                            }
+                                        );
+                                    }
+                                }
+                            );
 						}
 					}
 				);
 
-				/**
-				 * Get paid Order Payments
-				 */
-				PaymentService.getPayments('order', 1).then(function(response){
-						if(_.isArray(response)){
-							$scope.paidPayments = PaymentService.parseData(response,$scope.tableHeader);
-						}
-					}
-				);
-			}
+                // Get paid Order Payments
+                PaymentService.getPayments('order', 1, date).then(function(response) {
+                        if(_.isArray(response)){
+                            paymentsPaid = PaymentService.resolvePaymentData(response);
 
-			getPayments();
+                            // Get paid Cargo payments
+                            PaymentService.getPayments('cargo', 1, date).then(function(response) {
+                                    if(_.isArray(response)){
+                                        paymentsPaid = PaymentService.resolvePaymentData(response).concat(paymentsPaid);
+
+                                        // Get paid Other payments
+                                        PaymentService.getPayments('other', 1, date).then(function(response) {
+                                                if(_.isArray(response)){
+                                                    paymentsPaid = PaymentService.resolvePaymentData(response).concat(paymentsPaid);
+
+                                                    $scope.paidPayments = paymentsPaid;
+                                                }
+                                            }
+                                        );
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+			};
+
+
+            // Show all collected payments
+            setTimeout(getPayments(), 1000);
+
 
 			PaymentService.getStatuses().then(
 				function(response){
@@ -94,92 +114,20 @@ app.controller('PaymentListController',
 				}
 			);
 
-			$scope.paymentType=[
-				{name:'payment'},
-				{name:'refund'}
-			];
+            /**
+             * Load by filters
+             *
+             * @param filter
+             */
+            $scope.filteredPayments = function(filter) {
 
-            $scope.paymentMethod = [
-                {name:'cash'},
-                {name:'bank'}
-            ];
+                var filter = PaymentService.parseFilters(filter);
 
-            $scope.filteredPayments=function(filter){
-
-				url=PaymentService.parseFilters(filter);
-
-				console.log(url);
-
-				PaymentService.getFilteredData(url+"/status/0").then(
-					function(response){
-						if(_.isArray(response)){
-							console.log("draft filter",response);
-							$scope.draftPayments=response;
-						}else{
-							messageCenterService.add('danger', 'Filter does not work', {timeout: 3000});
-						}
-					}
-				);
-				PaymentService.getFilteredData(url+"/status/1").then(
-					function(response){
-						if(_.isArray(response)){
-							console.log(response);
-							$scope.paidPayments=PaymentService.parseData(response);
-						}else{
-							messageCenterService.add('danger', 'Filter does not work', {timeout: 3000});
-						}
-					}
-				);
+                if(filter.hasOwnProperty('date')) {
+                    getPayments(filter.date);
+                }
 			};
 
-
-			/**
-			 * filters for data
-			 */
-			/*$scope.$watchCollection('resultData',function(newVal){
-
-				for(item in newVal){
-					var arr=[];
-
-					if($.isEmptyObject(newVal[item])){
-
-						delete filter[item];
-					}
-					else{
-						angular.forEach(newVal[item],function(value,key){
-
-
-							if(value.ticked ===true){
-								(value.statusId)? arr.push(value.statusId):
-									(value.id)?arr.push(value.id):
-										arr.push(value.name);
-								filter[item]=arr;
-							}
-
-						});
-					}
-				}
-
-				if(!$.isEmptyObject(filter)){
-					console.log(filter);
-
-					url=PaymentService.parseFilters(filter);
-
-					PaymentService.getFilteredData(url).then(
-						function(response){
-							//console.log(response);
-							if(_.isArray(response)){
-								$scope.payments=PaymentService.parseData(response);
-							}else{
-								messageCenterService.add('danger', 'Filter does not work', {timeout: 3000});
-							}
-						}
-					);
-				}
-				else{
-					$scope.payments=$scope.data;
-				}
-			});*/
 			/**
 			 * Add new payment
 			 */
@@ -371,6 +319,8 @@ app.controller('PaymentListController',
 			};
 		}]);
 
+
+
 app.controller("PaymentOrderController",[
 	'$scope',
 	'$rootScope',
@@ -411,7 +361,7 @@ app.controller("PaymentOrderController",[
 			function(response){
 				console.log("orderpayment",response);
 				if(_.isArray(response)){
-					$scope.data = PaymentService.parseData(response,$scope.tableHeader);
+					$scope.data = PaymentService.resolvePaymentData(response,$scope.tableHeader);
 					$scope.orderPayments=$scope.data;
 				}
 				else{

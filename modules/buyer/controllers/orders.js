@@ -266,16 +266,17 @@ app.controller('OrderListController',
                     var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
 
                     var cashierId=JSON.parse(localStorage['user']).id;
-                    url=config.API.host+"payment/create";
-                    data={
-                        'currencyId'        :   $scope.orders[index].order.currencyId,
-                        'cashierId'         :   cashierId,
-                        'cashierOfficeId'   :   CO,
-                        'orderId'           :   $scope.orders[index].order.id,
-                        'paymentMethod'     :   "bank",
-                        'paymentType'       :   type,
-                        'amount'            :   payment.amount,
-                        'note'              :   payment.note
+
+                    url = config.API.host + "payment/create-order-payment";
+                    data = {
+                        documentId      : $scope.orders[index].order.id,
+                        currencyId      : $scope.orders[index].order.currencyId,
+                        cashierId       : cashierId,
+                        cashierOfficeId : parseInt(CO),
+                        paymentType     : type,
+                        paymentMethod   : "bank",
+                        amount          : payment.amount,
+                        note            : payment.note
                     };
 
                     RestFactory.request(url,"POST",data).then(
@@ -847,16 +848,16 @@ app.controller("OrderController",
                 modalInstance.result.then(function(payment){
                     var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
                     var cashierId=JSON.parse(localStorage['user']).id;
-                    url=config.API.host+"payment/create";
-                    data={
-                        'currencyId'        :   $scope.order.currency.id,
-                        'cashierId'         :   cashierId,
-                        'cashierOfficeId'   :   CO,
-                        'orderId'           :   id,
-                        'paymentMethod'     :   "bank",
-                        'paymentType'       :   "payment",
-                        'amount'            :   payment.amount,
-                        'note'              :   payment.note
+                    url = config.API.host + "payment/create-order-payment";
+                    data = {
+                        documentId      : id,
+                        currencyId      : $scope.order.currency.id,
+                        cashierId       : cashierId,
+                        cashierOfficeId : parseInt(CO),
+                        paymentType     : "payment",
+                        paymentMethod   : "bank",
+                        amount          : payment.amount,
+                        note            : payment.note
                     };
 
                     RestFactory.request(url,"POST",data).then(
