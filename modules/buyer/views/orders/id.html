@@ -49,10 +49,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        Orderred total
+                                                        Ordered total
                                                     </td>
                                                     <td>
-                                                        {{order.order.orderedTotal}}{{order.currency.ISOCode}}
+                                                        <span ng-show="order.order.type != 1">{{order.order.orderedTotal}}</span>
+                                                        <input numbers-only ng-show="order.order.type == 1" tooltip="press ENTER to save" class="form-control sm" type="text" ng-keyup="totalUpdate(order.order)" ng-model="order.order.orderedTotal" ng-init="order.order.orderedTotal= order.order.orderedTotal">
+                                                        {{order.currency.ISOCode}}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -111,12 +113,14 @@
                     <td>{{item.product.title}}</td>
                     <td>{{item.size}}</td>
                     <td class="col-lg-1">
-                        <input class="form-control" type="text" ng-model="productModel.count" ng-init="productModel.count= item.count" ng-keyup="saveProduct($event,item,productModel)">
+                        <input ng-show="order.order.type == 1" numbers-only class="form-control" type="text" ng-model="productModel.count" ng-init="productModel.count= item.count" tooltip="press ENTER to save" ng-keyup="saveProduct($event,item,productModel)">
                     </td>
                     <td class="col-lg-1">
-                        <input class="form-control" type="text" ng-model="productModel.price" ng-init="productModel.price= item.price" ng-keyup="saveProduct($event,item,productModel)">
+                        <input ng-show="order.order.type == 1" numbers-only class="form-control" type="text" ng-model="productModel.price" ng-init="productModel.price= item.price" tooltip="press ENTER to save" ng-keyup="saveProduct($event,item,productModel)">
                     </td>
-                    <td>{{item.count *item.price||0}}</td>
+                    <td>
+                        {{productModel.count *productModel.price||0}}
+                    </td>
                     <td ng-hide="orderFlag">
                         <button class="btn-default" ng-click="deleteProduct($index)">
                             <i class="fa fa-ban"></i>
