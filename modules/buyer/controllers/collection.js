@@ -494,7 +494,9 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                          * @private
                          */
                         function _Upload(i){
+                            $scope.start=0;
                             image=$scope.photo[keyArray[i]];
+
                             CollectionService.uploadFiles(image).success(function (data) {
                                 if (_.isArray(data)) {
                                     $scope.items.push({
@@ -503,6 +505,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                         sizes:"",
                                         price:""
                                     });
+
                                     $timeout(function(){
                                         $scope.dynamic ++;
                                     }, 200);

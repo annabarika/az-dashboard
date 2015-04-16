@@ -1,19 +1,39 @@
 <div class="modal-header">
-        <h3>New Factory</h3>
+    <button type="button" class="close" ng-click="$dismiss()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
 </div>
 <div class="modal-body">
-    <form>
+    <!--<form>
         <table>
             <tr>
                 <td>Please enter factory name&nbsp;</td>
                 <td><input class="form-control" type="text" data-ng-model="newFactory.name"></td>
             </tr>
         </table>
-    </form>
+    </form>-->
+    <label>Factory name:</label><br>
+    <input type="text" ng-model="newFactory.name" class="form-control" placeholder="name"/>
+    <label>Group id:</label><br>
+    <input type="text" ng-model="newFactory.groupId" class="form-control"  placeholder="group"/>
+    <label>Production days:</label><br>
+    <input type="text" ng-model="newFactory.productionDays" class="form-control"  placeholder="days"/>
+    <label>Phone:</label><br>
+    <input type="text" ng-model="newFactory.phone" class="form-control"  placeholder="phone"/>
+    <label>Email:</label><br>
+    <input type="email" ng-model="newFactory.email" class="form-control"  placeholder="email@com"/>
+    <label>CurrencyId:</label><br>
+    <input type="text" ng-model="newFactory.currencyId" class="form-control"  placeholder="currency"/>
+    <!--<div class="form-control" >
+        <input type="file" file-input="files" multiple/>
+    </div>
+-->
+    <div class="form-group">
+        <li ng-repeat="file in files"><i class="fa fa-file-o"></i>{{file.name}}</li>
+    </div>
 </div>
 
 <!--footer-->
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="$close(newFactory)">save</button>
-    <button type="button" class="btn btn-default" ng-click="$close()">return</button>
+    <button type="button" class="btn btn-primary" ng-click="create(newFactory)">Create</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
 </div>
