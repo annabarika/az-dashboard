@@ -197,7 +197,7 @@
                                 }
                                 else{
 
-                                    num = parseInt(value);
+                                    num = parseFloat(value);
 
                                     if(num){
 
