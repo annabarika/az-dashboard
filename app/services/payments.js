@@ -155,7 +155,7 @@
                     data.cashierId  = user.id,
                     data.cashierOfficeId = parseInt(user.settings.cashierOffice),
                     data.paymentType    = obj.type.value,
-                    data.amount     = obj.amount,
+                    data.amount         = parseFloat(obj.amount),
                     data.paymentMethod = obj.method.value,
                     data.note = (obj.note) ? obj.note: "";
 
@@ -163,6 +163,29 @@
                 },
 
                 /**
+                 * Calculate paid rows
+                 *
+                 * @param array rows
+                 * @returns {Array}
+                 */
+                calculatePaidRows: function (rows) {
+
+                    var summary = {
+                            amount : Number(_.sum(_.map(rows, function(value) {
+                                    return parseFloat(value.amount);
+                            }))).toFixed(2),
+                            refund :  Number(_.sum(_.map(rows, function(value) {
+                                return parseFloat(value.refund);
+                            }))).toFixed(2),
+                            currency : rows[0].currency
+                        };
+
+                    summary.difference = Number(summary.refund - summary.amount).toFixed(2);
+
+                    return summary;
+                },
+                /**
+                 * Resolve payments data for DataTable
                  *
                  * @param array
                  * @returns {Array}
@@ -175,30 +198,21 @@
 
                         payments.push({
                             id:                 item.payment.id,
-                            documentId:         item.payment.documentId,
-                            factoryId:          (item.hasOwnProperty('factory')) ? item.factory.id : '?',
-                            factory:            (item.hasOwnProperty('factory')) ? item.factory.name : '?',
+                            documentId:         (!_.isNull(item.payment.documentId)) ? item.payment.documentId : 'Other',
+                            factoryId:          (item.hasOwnProperty('factory') && !_.isUndefined(item.factory.id)) ? item.factory.id : '?',
+                            factory:            (item.hasOwnProperty('factory') && !_.isUndefined(item.factory.name)) ? item.factory.name : '?',
                             date:               item.payment.paymentDate,
                             method:             item.payment.paymentMethod,
                             cashierOfficeId:    item.payment.cashierOfficeId,
-                            amount:             (item.payment.paymentType == 'payment') ? item.payment.amount : "",
-                            refund:             (item.payment.paymentType == 'refund') ? item.payment.amount : "",
+                            amount:             (item.payment.paymentType == 'payment') ? parseFloat(item.payment.amount) : "",
+                            refund:             (item.payment.paymentType == 'refund') ? parseFloat(item.payment.amount) : "",
                             currency:           item.currency.ISOCode
-
                         });
                     });
 
                     return payments;
                 },
 
-                /**
-                 *
-                 * @param id
-                 * @returns {*}
-                 */
-                getOrderPayments: function (id) {
-                    return RestFactory.request(PATH.ORDERPAYMENTS + id);
-                },
 
                 /**
                  * Nav bar filter's parser
@@ -213,7 +227,6 @@
 
                         result.date =  dateRangeFormat(filter.createDate);
                     }
-
                     return result;
                 },
 
@@ -229,6 +242,14 @@
 
 
 
+                /**
+                 *
+                 * @param id
+                 * @returns {*}
+                 */
+                getOrderPayments: function (id) {
+                    return RestFactory.request(PATH.ORDERPAYMENTS + id);
+                },
 
                 /**
                  *

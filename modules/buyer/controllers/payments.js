@@ -70,6 +70,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
                                                 if(_.isArray(response)){
                                                     paymentsPaid = PaymentService.resolvePaymentData(response).concat(paymentsPaid);
 
+                                                    $scope.paidSummary = PaymentService.calculatePaidRows(paymentsPaid);
                                                     $scope.paidPayments = paymentsPaid;
                                                 }
                                             }
@@ -82,10 +83,8 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
                 );
 			};
 
-
             // Show all collected payments
             setTimeout(getPayments(), 1000);
-
 
 			PaymentService.getStatuses().then(
 				function(response){

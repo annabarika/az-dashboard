@@ -84,11 +84,27 @@
 <div ng-show="paidPayments">
 <h3 style="margin:0 0 0 40px;">Paid payments:</h3>
 
-<widget-table
-        datarows="paidPayments"
-        dataheader="tableHeader"
-        edit="edit()"
-        row="row"
-        >
-</widget-table>
+    <widget-table
+            datarows="paidPayments"
+            dataheader="tableHeader"
+            edit="edit()"
+            row="row"
+            >
+    </widget-table>
+    <div class="pa-md">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped dataTable no-footer">
+                    <tbody>
+                    <tr>
+                        <td colspan="7"><strong>Total</strong></td>
+                        <td>Amount : {{paidSummary.amount}} {{paidSummary.currency}}</td>
+                        <td>Refund : {{paidSummary.refund}} {{paidSummary.currency}}</td>
+                        <td>Difference : {{paidSummary.difference}} {{paidSummary.currency}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
