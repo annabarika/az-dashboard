@@ -621,10 +621,10 @@
                     return RestFactory.request(PATHC.CREATECOLLECTION,"POST",data);
                 },
 
-                updateCollection: function(id){
+                updateCollection: function(id,status){
                     console.log(id);
 
-                    return RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",{'id' : id,status:1});
+                    return RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",{'id' : id,status:status});
                 },
                 /**
                  *
@@ -689,7 +689,7 @@
                  * @returns {*}
                  */
                 completeProducts:function(items,key,value,increment){
-
+                    console.log(key);
                     for(var i=0;i<items.length;i++){
                         if(items[i][key]==""){
                             items[i][key]=value;
@@ -738,7 +738,7 @@
                  * @returns {*}
                  */
                 productsCreate: function (data, orderId) {
-                   /*console.log("pc",data);*/
+                  /* console.log("pc",data);*/
 
                     var create = [];
                     create.push({
@@ -770,7 +770,7 @@
                     }
                     /*console.log(create);*/
                     return RestFactory.request(PATHC.PRODUCTSCREATE, "POST", $.param({'data' : create})).then(function(backend) {
-                            console.log("backend",backend);
+                            /*console.log("backend",backend);*/
                         if (backend.result) {
 
                             var response = JSON.parse(backend.result),
@@ -822,24 +822,22 @@
                                         });
                                     }
                                 });
+                                /*RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",
+                                    {
+                                        id:data.collection.id,
+                                        factoryId:data.collection.factoryId,
+                                        status:1
+                                    }).then(
+                                    function(response){
+                                        console.log("PUT ",response);
+                                    }
+                                );*/
+                                console.log("products",products);
                                 return RestFactory.request(PATHC.CREATEPRODUCTFACTORY,"POST", products);
                             }
                         }
                     });
                 }
-
-                /*updateCollection:function(collection){
-                    RestFactory.request(PATHC.UPDATECOLLECTION,"PUT",
-                        {
-                            id:data.collection.id,
-                            factoryId:data.collection.factoryId,
-                            status:1
-                        }).then(
-                        function(response){
-                            console.log("PUT ",response);
-                        }
-                    );
-                }*/
             };
         }]);
 })();
