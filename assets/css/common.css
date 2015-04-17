@@ -5947,6 +5947,7 @@ tr td.status_4{
 }
 .col-bt-2{
     min-height: 275px;
+    cursor: pointer;
 }
 ul.row_collection{
     width: 100%;

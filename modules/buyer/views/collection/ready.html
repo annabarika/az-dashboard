@@ -19,8 +19,8 @@
                     <div class="row_collection" >
 
                         <ul class="row_collection" ng-repeat="products in item.products ">
-                            <li class="img-wrapper" ng-if="$index<3"  ng-repeat="product in products track by $index">
-                                <img ng-src="{{imagePath}}{{product[0].files[0].path}}"/>
+                            <li class="img-wrapper" ng-if="$index < 3"  ng-repeat="product in products track by $index">
+                                <img style="height:100px" ng-src="{{imagePath}}{{product[0].files[0].path}}"/>
                             </li>
 
                         </ul>
