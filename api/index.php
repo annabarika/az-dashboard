@@ -71,6 +71,7 @@ try {
 
     $response = $APIService->setURL($request)->call();
 
+    //var_dump($response);
     echo json_encode($response);
 
 }catch( \Exception $e ){

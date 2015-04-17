@@ -109,7 +109,7 @@ angular.module('widgets.autocomplete', [])
                 });
 
                 $scope.getRow=function(obj){
-                    console.log(obj);
+                    /*console.log(obj);*/
                     $scope.search = obj.name||obj.id;
                     $scope.outputModel = obj;
                 };

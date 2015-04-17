@@ -660,9 +660,6 @@
 
                     var fd=new FormData();
 
-                    /*angular.forEach(files,function(file){
-                        fd.append('file[]',file);
-                    });*/
                     fd.append('file[]',file);
 
                     return $http.post(PATHC.LOADFILES,fd,

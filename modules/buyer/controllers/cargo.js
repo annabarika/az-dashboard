@@ -21,46 +21,57 @@ app.controller('CargoController',
 
             $scope.cargoDocuments   = [];
             $scope.factories        = [];
+            /**
+             * table header
+             * @type {{name: string, title: string}[]}
+             */
+            $scope.cargoDocumentsHeader = [
+                { name: "id", title: 'ID' },
+                { name: "factory", title: 'Factory' },
+                { name: "document", title: 'Cargo document' },
+                { name: "createDate", title: 'Create date' },
+                { name: "status", title: 'Status' }
+            ];
 
             RestFactory.request(config.API.host + "factory/load")
                 .then(function(response){
                     for( var i in response ){
                         $scope.factories[response[i].factory.id] = { id: response[i].factory.id, name: response[i].factory.name };
                     }
-                    $scope.loadCargos();
+                    //$scope.loadCargos();
                 });
 
-            $scope.loadCargos = function(){
+           // $scope.loadCargos = function(){
                 RestFactory.request(config.API.host + "cargo/load")
                     .then(function(response){
-
-                        $scope.cargoDocumentsHeader = [
-                            { name: "id", title: 'ID' },
-                            { name: "factory", title: 'Factory' },
-                            { name: "document", title: 'Cargo document' },
-                            { name: "createDate", title: 'Create date' },
-                            { name: "status", title: 'Status' }
-                        ];
+                        var  create;
+                        //console.log(response);
                         for(var i in response){
-                            var factoryName = ( $scope.factories[response[i].factoryId] ) ? $scope.factories[response[i].factoryId].name : '';
 
+                            if(response[i].cargo.shippingDate){
+                                create= moment(response[i].cargo.shippingDate).from(moment(response[i].cargo.createDate));
+                                var regexp=/[0-9]/;
+                                var reg = regexp.exec(create);
+                            }
+                            //console.log(response[i]);
                             $scope.cargoDocuments.push({
-                                id: response[i].id,
-                                factory: factoryName,
-                                document: response[i].document,
-                                createDate: response[i].createDate,
-                                status: response[i].status
+                                id: response[i].cargo.id,
+                                factory: response[i].factory.name,
+                                document: response[i].cargo.document,
+                                createDate:  response[i].cargo.createDate,
+                                status: response[i].cargo.status,
+                                cargoCreate: (reg!=null)?reg[0]:null
                             });
+
                         }
                     });
-
-            };
+           // };
 
             $scope.edit = function(){
                 $location.path( '/buyer/cargo/id/'+ $rootScope.row.id );
             };
             /* bulding new cargo*/
-            $scope.addNewCargo = function(){
+            /*$scope.addNewCargo = function(){
 
                 $rootScope.modalInstance = $modal.open({
                     templateUrl: "/modules/buyer/views/cargo/new_cargo.html",
@@ -96,7 +107,7 @@ app.controller('CargoController',
                     },function(error){
                         console.log(error);
                     });
-            };
+            };*/
         }
     ]);
 
