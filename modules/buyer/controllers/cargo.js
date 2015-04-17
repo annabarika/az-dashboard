@@ -44,14 +44,11 @@ app.controller('CargoController',
            // $scope.loadCargos = function(){
                 RestFactory.request(config.API.host + "cargo/load")
                     .then(function(response){
-                        var  create;
-                        //console.log(response);
+
                         for(var i in response){
 
                             if(response[i].cargo.shippingDate){
-                                create= moment(response[i].cargo.shippingDate).from(moment(response[i].cargo.createDate));
-                                var regexp=/[0-9]/;
-                                var reg = regexp.exec(create);
+                                var dayCount=parseInt(moment.preciseDiff(response[i].cargo.shippingDate,response[i].cargo.createDate));
                             }
                             //console.log(response[i]);
                             $scope.cargoDocuments.push({
@@ -60,7 +57,7 @@ app.controller('CargoController',
                                 document: response[i].cargo.document,
                                 createDate:  response[i].cargo.createDate,
                                 status: response[i].cargo.status,
-                                cargoCreate: (reg!=null)?reg[0]:null
+                                cargoCreate: dayCount
                             });
 
                         }
