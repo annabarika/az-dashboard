@@ -4,11 +4,11 @@
 
         // create config API ROUTES
         .constant('API', {
-            "LOAD_ORDERED"          : config.API.host + 'bestseller/calendar/status/1/orderDate/',
-            "LOAD_ORDERED_DETAILS"  : config.API.host + 'bestseller/load-detailed/status/1/orderDate/',
+            "LOAD_ORDERED"          : config.API.host + 'bestseller/calendar/status/1,3/orderDate/',
+            "LOAD_ORDERED_DETAILS"  : config.API.host + 'bestseller/load-detailed/status/1,3/orderDate/',
 
-            "LOAD_TOTAL"            : config.API.host + 'bestseller/calendar/status/0,1/createDate/',
-            "LOAD_TOTAL_DETAILS"    : config.API.host + 'bestseller/load-detailed/status/0,1/createDate/',
+            "LOAD_TOTAL"            : config.API.host + 'bestseller/calendar/status/0,1,3/createDate/',
+            "LOAD_TOTAL_DETAILS"    : config.API.host + 'bestseller/load-detailed/status/0,1,3/createDate/',
 
             "FIND_BY_ARTICUL"       : config.API.host + 'product/search/query/',
             "ADD_TO_BESTSELLER"     : config.API.host + 'bestseller/create/',
@@ -112,7 +112,7 @@
                         else {
                             // format date range by default
                             range.push(year + '-01-01');
-                            range.push(moment().format(year+'-MM-DD HH:mm:ss'));
+                            range.push(moment().format(year+'-12-31 HH:mm:ss'));
                         }
 
                         return RestFactory.request(url + range.join(','));
@@ -356,12 +356,13 @@
                     createBestseller: function(product, date) {
 
                         var params = {
-                            "status": "0",
+                            "status": 0,
                             "productId": product.id,
                             "createDate": (!_.isUndefined(date)) ? date : moment().format('YYYY-MM-DD HH:mm:ss')
                         };
                         if(product.orderDate != undefined ){
                             params.orderDate = product.orderDate;
+                            params.status = 1;
                         }
 
                         return RestFactory.request(API.ADD_TO_BESTSELLER, 'POST', params);

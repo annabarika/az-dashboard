@@ -1,62 +1,7 @@
 // Create module @require angucomple for remote search
 var app = angular.module("modules.buyer.bestsellers", ['angucomplete', 'commonFilters']);
 
-// Bestseller's representation
-/*app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
-    function ($scope, $rootScope, $modal, BestsellersService, messageCenterService, $location) {
-
-        // Document header title
-        $rootScope.documentTitle = "Bestsellers";
-
-        // Get bestsellers data
-        $scope.bestsellers = {};
-
-        *//**
-         * Create bestseller
-         * @uses autocomplete search
-         *//*
-        $scope.createBestseller = function(product, calendar) {
-
-            $scope.calendar = calendar;
-            if(_.isUndefined(product) || product == null ) {
-
-                $rootScope.modalInstance = $modal.open({
-                    templateUrl: "/modules/buyer/views/bestsellers/create.html",
-                    controller: 'BestsellersAddController',
-                    backdrop:'static',
-                    size: 'sm',
-                    resolve :  {
-                        searchUri : function() {
-                            // resolve the search uri to autocomplete directive
-                            return BestsellersService.searchArticulUri()
-                        }
-                    }
-                });
-            }
-            else {
-                if('originalObject' in product) {
-                    BestsellersService.createBestseller(product.originalObject).then(function(response) {
-
-                        if(response.id) {
-
-                            $rootScope.modalInstance.close();
-                            $location.path('/buyer/bestsellers/item/'+response.id);
-                        }
-                        else {
-                            messageCenterService.add('danger', 'Product is not created. Undefined error', {timeout: 3000});
-                        }
-                    });
-                }
-                else {
-                    messageCenterService.add('danger', 'Try to add unfounded product', {timeout: 3000});
-                }
-            }
-        };
-
-    }
-]);*/
-
-// Bestseller's representation
+// Bestseller representation
 app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 'BestsellersService', 'messageCenterService', '$location',
     function ($scope, $rootScope, $modal, BestsellersService, messageCenterService, $location) {
 
@@ -267,6 +212,7 @@ app.controller('BestsellerItemController',[
         $scope.documentTitle = 'Loading..';
 
         $rootScope.hideHeader = 'hideHeader';
+        $scope.count = parseInt($location.hash());
 
         BestsellersService.getModerators().then(function(response) {
             $scope.moderators = response;
@@ -295,6 +241,8 @@ app.controller('BestsellerItemController',[
                 $scope.sizes.push({});
                 //console.log($scope.sizes);
 				$rootScope.documentTitle = $scope.product.articul + " (FA: "+ $scope.product.factoryArticul +")";
+
+                BestsellersService.calculate($scope.count, $scope.sizes);
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
                   /*  console.log("bests history",response);*/
