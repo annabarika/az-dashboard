@@ -567,6 +567,26 @@ app.controller('OrderListController',
                                 messageCenterService.add("danger","Please entered form",{timeout:3000});
                                 return;
                             }
+                            if(factory.groupId==""||!parseInt(factory.groupId)||factory.groupId==undefined){
+                                messageCenterService.add("danger","Group id must be numeric",{timeout:3000});
+                                return;
+                            }
+                            if(factory.productionDays==""||!parseInt(factory.productionDays)||factory.productionDays==undefined){
+                                messageCenterService.add("danger","Please enter valid production days count",{timeout:3000});
+                                return;
+                            }
+                            if(factory.name==""&&factory.phone==""||factory.name==undefined&&factory.phone==undefined){
+                                messageCenterService.add("danger","Please enter name or phone",{timeout:3000});
+                                return;
+                            }
+                            if(factory.email==""||factory.email==undefined){
+                                messageCenterService.add("danger","Please enter email",{timeout:3000});
+                                return;
+                            }
+                            if(factory.currencyId==""||factory.currencyId==undefined||!parseInt(factory.currencyId)){
+                                messageCenterService.add("danger","Please enter currency",{timeout:3000});
+                                return;
+                            }
                             modalInstance.close(factory);
                         }
                     },
