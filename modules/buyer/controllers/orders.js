@@ -449,7 +449,6 @@ app.controller('OrderListController',
                             {name   :   "address",  title:"Address"},
                             {name   :   "preview",  title:"Visit cards"}
                         ];
-                        console.log($rootScope.fullFactories);
                         /**
                          * parse factories
                          */
@@ -540,7 +539,7 @@ app.controller('OrderListController',
              * @param factory
              */
             $scope.createOrder=function(factory){
-                console.log(factory);
+
                 var modalInstance = $modal.open({
                     templateUrl: '/modules/buyer/views/orders/new_order.html',
                     controller: 'OrderEditController',
@@ -575,18 +574,18 @@ app.controller('OrderListController',
                     size:"sm"
                 });
                 modalInstance.result.then(function(factory){
-                    console.log(factory);
+                    console.log("",factory);
                     url=config.API.host+"factory/create";
                     //@TODO переделать добавление в массив параметров
                     data={
                         name            :   factory.name,
                         groupId         :   factory.groupId,
                         productionDays  :   factory.productionDays,
-                        phone           :   JSON.stringify([factory.phone]),
+                        phone           :   JSON.stringify([]),
                         email           :   JSON.stringify([factory.email]),
                         currencyId      :   factory.currencyId
                     };
-                    RestFactory.request(url,"POST",data).then(
+                    RestFactory.request(url,"POST", data).then(
                         function(response){
                             console.log("createFactory",response);
                             if(_.has(response,"id")){
@@ -600,7 +599,127 @@ app.controller('OrderListController',
                     )
                 })
             };
+            $scope.addNewCargo = function(){
 
+                var modalInstance = $modal.open({
+                    templateUrl: "/modules/buyer/views/orders/new_cargo.html",
+                    controller: function($scope,$rootScope,imagePath,messageCenterService){
+                        /**
+                         * modal title
+                         * @type {string}
+                         */
+                        $scope.title="Choose factory";
+                        /**
+                         * image path
+                         */
+                        $scope.imagePath=imagePath;
+                        /**
+                         * filter property for autocomplete
+                         * @type {string[]}
+                         */
+                        $scope.filterProperty=["name","phone"];
+                        /**
+                         * column headers for autocomplete
+                         * @type {{name: string, title: string}[]}
+                         */
+                        $scope.columnHeaders=[
+                            {name   :   "name",     title:"Factory"},
+                            {name   :   "phone",    title:"Phone"},
+                            {name   :   "address",  title:"Address"},
+                            {name   :   "preview",  title:"Visit cards"}
+                        ];
+                        /**
+                         * parse factories
+                         */
+                        $scope.allFactories=_getFactoriesByGroup($rootScope.fullFactories);
+                        /**
+                         *
+                         * @param files
+                         * @returns {Array}
+                         * @private
+                         */
+                        function _getArray(files){
+
+                            var array=[];
+
+                            for (var i=0;i<files.length;i++){
+
+                                array.push(files[i].path);
+                            }
+
+                            return array;
+                        }
+                        /**
+                         *
+                         * @param factories
+                         * @returns {Array}
+                         * @private
+                         */
+                        function _getFactoriesByGroup(factories){
+                            var factory=[];
+                            for(var f in factories){
+                                if(factories[f].factoryGroup.id=="1"){
+                                    factory.push(
+                                        {
+                                            name        :   factories[f].factory.name,
+                                            phone       :  JSON.parse(factories[f].factory.phone),
+                                            email       :   factories[f].email,
+                                            address     :   factories[f].factoryAddress,
+                                            preview     :   _getArray(factories[f].factoryFiles),
+                                            id          :   f,
+                                            currencyId  :   factories[f].factory.currencyId
+                                        }
+                                    )
+                                }
+                            }
+                            return factory;
+                        }
+                        /**
+                         * get factory and close modal dialog
+                         * @param factory
+                         */
+                        $scope.createCargo=function(factory){
+                            if(factory){
+                                modalInstance.close(factory);
+                            }
+                            else{
+                                messageCenterService.add("danger","You are njot choose factory",{timeout:3000});
+                            }
+                        }
+                    },
+                    backdrop:'static',
+                    size:'lg',
+                    resolve:{
+                        imagePath:function(){
+                            return $scope.imagePath;
+                        }
+                    }
+                });
+                modalInstance.result.then(function(factory){
+                        console.log("cargo",factory);
+                        var cargo = {
+                            'parentId' : 0,
+                            'factoryId': factory.id,
+                            'document': '',
+                            'status': 0,
+                            'employeeId': $rootScope.user.id
+                        };
+
+                        RestFactory.request(config.API.host+"cargo/create" , "POST", cargo)
+                            .then(function(response){
+                                console.log("new cargo", response);
+                                if( response.cargo.id ){
+                                    //$rootScope.modalInstance.close();
+                                    $location.path( '/buyer/cargo/id/'+ response.cargo.id );
+                                }
+                                else{
+                                    messageCenterService.add("danger","Cargo is mot created",{timeout:3000});
+                                }
+                            },function(error){
+                                messageCenterService.add("danger","ERROR: "+error,{timeout:3000});
+                            });
+                })
+            };
         }]);
 
 app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$location,$modalInstance,$modal,$http,factory,type,messageCenterService){

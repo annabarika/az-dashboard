@@ -1,10 +1,10 @@
 <div class="page-header">
     <div class="box-layout">
         <div class="row mb-xs">
-            <div class="col-sm-2">
+           <!-- <div class="col-sm-2">
                 <div class="btn btn-info" ng-click="addNewCargo()"><i class="fa fa-plus"></i> New cargo</div>
-            </div>
-            <div class="col-sm-5">
+            </div>-->
+           <!--<div class="col-sm-5">
 
                 <div class="col-sm-4 va-m">
                     <multi-select
@@ -30,13 +30,13 @@
                             >
                     </multi-select>
                 </div>
-            </div>
-            <div class="col-sm-5">
+           </div>
+           <div class="col-sm-5">
                 <div class="col-sm-4 va-m">
                     <input date-range-picker class="form-control date-picker" placeholder="Select date range" type="text"
                            ng-model="resultData.createDate" />
                 </div>
-            </div>
+           </div>-->
         </div>
     </div>
 </div>
@@ -50,3 +50,21 @@
         button-action="buttonAction()"
         >
 </widget-table>
+      <!-- <table class="table table-bordered table-striped dataTable no-footer" id="DataTable">
+           <thead>
+               <tr>
+                   <th>#</th>
+                   <th ng-repeat="col in cargoDocumentsHeader">{{col.name}}</th>
+               </tr>
+           </thead>
+           <tbody>
+                <tr ng-repeat="row in cargoDocuments track by $index">
+                    <td class="status_3">
+                        <span class="btn btn-default btn-rounded btn-sm">{{$index+1}}</span>{{row.create}}
+                    </td>
+                    <td ng-repeat="col in cargoDocumentsHeader">
+                        {{row[col.name]}}
+                    </td>
+                </tr>
+           </tbody>
+       </table>-->

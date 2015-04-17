@@ -34,7 +34,10 @@
                         <tbody>
                         <tr ng-repeat="row in datarows | filter:searchText | orderByEx:dataheader:sortBy() track by $index" ng-class="row.active">
 
-                            <td class="status_{{row.status}}">
+                            <td class="status_{{row.status}}" ng-if="row.cargoCreate==undefined||row.cargoCreate<3">
+                                {{$index+1}}
+                            </td>
+                            <td class="status_2" ng-if="row.cargoCreate>3">
                                 {{$index+1}}
                             </td>
 
