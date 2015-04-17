@@ -15,9 +15,10 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
          * Create bestseller
          * @uses autocomplete search
          */
-        $scope.createBestseller = function(product) {
+        $scope.createBestseller = function(product, calendar) {
 
-            if(_.isUndefined(product)) {
+            $scope.calendar = calendar;
+            if(_.isUndefined(product) || product == null ) {
 
                 $rootScope.modalInstance = $modal.open({
                     templateUrl: "/modules/buyer/views/bestsellers/create.html",
@@ -42,7 +43,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
                             $location.path('/buyer/bestsellers/item/'+response.id);
                         }
                         else {
-                            messageCenterService.add('danger', 'Product does not created. Undefined error', {timeout: 3000});
+                            messageCenterService.add('danger', 'Product is not created. Undefined error', {timeout: 3000});
                         }
                     });
                 }
@@ -51,6 +52,7 @@ app.controller('BestsellersController', ['$scope','$rootScope','$modal', 'Bestse
                 }
             }
         };
+
     }
 ]);
 
@@ -138,8 +140,11 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
          * Create bestseller
          * @uses autocomplete search
          */
-        $scope.createBestseller = function(product) {
+        $scope.createBestseller = function(product, calendar) {
 
+            if(calendar !== undefined){
+                $rootScope.addToCalendar = calendar;
+            }
             if(_.isUndefined(product)) {
 
                 $rootScope.modalInstance = $modal.open({
@@ -156,6 +161,9 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
                 });
             }
             else {
+                if(calendar != undefined){
+                    product.originalObject.orderDate = moment(calendar).format('YYYY-MM-DD');
+                }
                 if('originalObject' in product) {
                     BestsellersService.createBestseller(product.originalObject).then(function(response) {
 
@@ -207,6 +215,37 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
 app.controller('BestsellersAddController', function ($scope, $rootScope, searchUri) {
         // provide search action to autocomplete
         $scope.searchUri = searchUri;
+        $scope.today = function() {
+            $scope.dt = new Date();
+        };
+        $scope.today();
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        $scope.disabled = function(date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+        };
+
+        $scope.toggleMin = function() {
+            $scope.minDate = $scope.minDate ? null : new Date();
+        };
+        $scope.toggleMin();
+
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.format ='dd-MMMM-yyyy';
     }
 );
 
@@ -255,7 +294,7 @@ app.controller('BestsellerItemController',[
                 $scope.sizes.push({});
                 $scope.sizes.push({});
                 //console.log($scope.sizes);
-				$rootScope.documentTitle = $scope.product.articul + " ( FA: "+ $scope.product.factoryArticul +")";
+				$rootScope.documentTitle = $scope.product.articul + " (FA: "+ $scope.product.factoryArticul +")";
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
                   /*  console.log("bests history",response);*/
@@ -360,7 +399,7 @@ app.controller('BestsellerItemController',[
                         );
                     }
                     BestsellersService.sendCreatedOrder(orderId).then(function(response) {
-                        if(response.file) {
+                        if(response.path) {
 
                             if(products.length == 0){
                                 window.location.reload();

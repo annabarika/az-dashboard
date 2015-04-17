@@ -1,79 +1,52 @@
-var app = angular.module("modules.buyer.payments", [
+var app = angular.module("modules.buyer.payments", []);
 
-]);
-
-app.controller('PaymentListController',
-
-	[
-		'$scope',
-		'$rootScope',
-		"$location",
-		"$route",
-		"PaymentService",
-		"$modal",
-		"messageCenterService",
-
-
-		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService){
+app.controller('PaymentListController', ['$scope','$rootScope','$location','$route','PaymentService','$modal','messageCenterService',
+		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService) {
 
 			$scope.$route = $route;
 			$scope.$location = $location;
-			var filter={},
-				url;
+			var filter = {},
+				url, date;
 
-			$rootScope.user=JSON.parse(localStorage['user']);
-			console.log("yes",$rootScope.user);
-			$scope.userType=$rootScope.user.type;
+            // Get authorized user
+			$rootScope.user = JSON.parse(localStorage['user']);
+			$scope.userCO = $rootScope.user.settings.cashierOffice;
 
-			$scope.userCO=$rootScope.user.settings.cashierOffice;
-
-			/* Getting payments */
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				{ name: "id"				,	title: 'ID' },
-				{ name: "orderId"			, 	title: 'Order' },
+				{ name: "documentId"		, 	title: 'Document' },
 				{ name: "factory"			, 	title: 'Factory' },
 				{ name: "date"				, 	title: 'Payment date' },
 				{ name: "method"			, 	title: 'Payment method'},
-				/*{ name:"cashierOfficeId"	,	title:"CashierOffice"},*/
-				{ name:"cashierOfficeName"	,	title:"CashierOffice"},
-				{ name: "amount"			, 	title: 'Payment' },
+                { name: "cashierOfficeId"	,	title: "CashierOffice"},
+				{ name: "amount"			, 	title: 'Amount' },
 				{ name: "refund"			, 	title: 'Refund' }
 			];
 
-			function getPayments(){
-				/**
-				 * get draft payments
-				 */
-				PaymentService.getPayments(0).then(
+            /**
+             * Collect all payments
+             */
+			getPayments = function(date) {
 
-					function(response){
-
-						if(_.isArray(response) ){
-
-							$scope.draftPayments = response;
-							//console.log("draft",$scope.draftPayments);
-						}
-					}
-				);
-
-				/**
-				 * get paid payments
-				 */
-				PaymentService.getPayments(1).then(
-
-					function(response){
-
+				// Get draft payments
+				PaymentService.getPayments(0, date).then(function(response) {
 						if(_.isArray(response)){
-
-							$scope.paidPayments = PaymentService.parseData(response,$scope.tableHeader);
-							//console.log("paid",$scope.paidPayments);
-
+                            $scope.draftPayments = response;
 						}
 					}
 				);
-			}
-			getPayments();
+                // Get paid Payments
+                PaymentService.getPayments(1, date).then(function(response) {
+                        if(_.isArray(response)){
+                            $scope.paidPayments = PaymentService.resolvePaymentData(response);
+                            $scope.paidSummary = PaymentService.calculatePaidRows($scope.paidPayments);
+                        }
+                    }
+                );
+			};
+
+            // Show all collected payments
+            getPayments();
 
 			PaymentService.getStatuses().then(
 				function(response){
@@ -102,87 +75,20 @@ app.controller('PaymentListController',
 				}
 			);
 
-			$scope.paymentType=[
-				{name:'payment'},
-				{name:'refund'}
-			];
+            /**
+             * Load by filters
+             *
+             * @param filter
+             */
+            $scope.filteredPayments = function(filter) {
 
-			$scope.filteredPayments=function(filter){
+                var filter = PaymentService.parseFilters(filter);
 
-				url=PaymentService.parseFilters(filter);
-
-				console.log(url);
-
-				PaymentService.getFilteredData(url+"/status/0").then(
-					function(response){
-						if(_.isArray(response)){
-							console.log("draft filter",response);
-							$scope.draftPayments=response;
-						}else{
-							messageCenterService.add('danger', 'Filter does not work', {timeout: 3000});
-						}
-					}
-				);
-				PaymentService.getFilteredData(url+"/status/1").then(
-					function(response){
-						if(_.isArray(response)){
-							console.log(response);
-							$scope.paidPayments=PaymentService.parseData(response);
-						}else{
-							messageCenterService.add('danger', 'Filter does not work', {timeout: 3000});
-						}
-					}
-				);
+                if(filter.hasOwnProperty('date')) {
+                    getPayments(filter.date);
+                }
 			};
 
-
-			/**
-			 * filters for data
-			 */
-			/*$scope.$watchCollection('resultData',function(newVal){
-
-				for(item in newVal){
-					var arr=[];
-
-					if($.isEmptyObject(newVal[item])){
-
-						delete filter[item];
-					}
-					else{
-						angular.forEach(newVal[item],function(value,key){
-
-
-							if(value.ticked ===true){
-								(value.statusId)? arr.push(value.statusId):
-									(value.id)?arr.push(value.id):
-										arr.push(value.name);
-								filter[item]=arr;
-							}
-
-						});
-					}
-				}
-
-				if(!$.isEmptyObject(filter)){
-					console.log(filter);
-
-					url=PaymentService.parseFilters(filter);
-
-					PaymentService.getFilteredData(url).then(
-						function(response){
-							//console.log(response);
-							if(_.isArray(response)){
-								$scope.payments=PaymentService.parseData(response);
-							}else{
-								messageCenterService.add('danger', 'Filter does not work', {timeout: 3000});
-							}
-						}
-					);
-				}
-				else{
-					$scope.payments=$scope.data;
-				}
-			});*/
 			/**
 			 * Add new payment
 			 */
@@ -193,28 +99,48 @@ app.controller('PaymentListController',
 
 						$scope.cashierOffice=cashierOffice;
 						$scope.cashierId=cashierId;
+                        $scope.filterProperty=['id'];
 
 						/**
-						 * get Orders
+						 * Get Orders for autocomplete
 						 */
-						PaymentService.getOrders().then(
-							function(response){
-								$scope.orders=response;
-								//console.log($scope.orders);
+						PaymentService.getOrders().then(function(response){
+								$scope.orders = response;
 							}
 						);
-						/**
-						 *
-						 * @type {{name: string}[]}
-						 */
-						$scope.otherType=[
+
+                        /**
+                         * Get Cargo for autocomplete
+                         */
+                        PaymentService.getCargo().then(function(response){
+                                var cargo = [];
+                                if(!_.isEmpty(response)) {
+                                    response.forEach(function(items) {
+                                        cargo.push(items.cargo);
+                                    });
+                                }
+                                $scope.cargo = cargo;
+                            }
+                        );
+
+                        $scope.orderType=[
+                            {name:"income",value:'refund'},
+                            {name:"outcome",value:'payment'}
+                        ];
+                        $scope.cargoType = [
+                            {name:"income",value:'refund'},
+                            {name:"outcome",value:'payment'}
+                        ];
+						$scope.otherType = [
 							{name:"payment to factory",value:'payment'},
 							{name:"refund from factory",value:'refund'}
 						];
-						$scope.orderType=[
-							{name:"income",value:'refund'},
-							{name:"outcome",value:'payment'}
-						];
+
+
+                        $scope.paymentMethod = [
+                            {name:"cash",value:'cash'},
+                            {name:"bank",value:'bank'}
+                        ];
 						$scope.columnHeaders=[
 							{name  : "id"}
 						];
@@ -233,9 +159,13 @@ app.controller('PaymentListController',
 								return;
 							}
 							if(_.isNull(payment.type)|| _.isUndefined(payment.type)){
-								messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+								messageCenterService.add('danger', 'Not choose type', {timeout: 3000});
 								return;
 							}
+                            if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
+                                messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
+                                return;
+                            }
 							if(_.isNull(payment.note)|| _.isUndefined(payment.note)){
 								messageCenterService.add('danger', 'Please,enter the note', {timeout: 3000});
 								return;
@@ -259,11 +189,12 @@ app.controller('PaymentListController',
 				});
 				modalInstance.result.then(
 					function(payment){
-						PaymentService.createNewPayment(payment,$rootScope.user).then(
+						PaymentService.createPayment(payment,$rootScope.user).then(
 							function(response){
-								if(_.isObject(response)){
+
+								if(_.isObject(response) && response.hasOwnProperty('id')) {
 									messageCenterService.add('success', 'Payment created', {timeout: 3000});
-									getPayments();
+                                    getPayments();
 								}
 								else{
 									messageCenterService.add('danger', 'Payment not created', {timeout: 3000});
@@ -350,6 +281,8 @@ app.controller('PaymentListController',
 			};
 		}]);
 
+
+
 app.controller("PaymentOrderController",[
 	'$scope',
 	'$rootScope',
@@ -390,7 +323,7 @@ app.controller("PaymentOrderController",[
 			function(response){
 				console.log("orderpayment",response);
 				if(_.isArray(response)){
-					$scope.data = PaymentService.parseData(response,$scope.tableHeader);
+					$scope.data = PaymentService.resolvePaymentData(response,$scope.tableHeader);
 					$scope.orderPayments=$scope.data;
 				}
 				else{

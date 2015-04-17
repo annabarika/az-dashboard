@@ -8,12 +8,6 @@
         "url":"buyer/collection"
       ,"access":["admin","user"]
       },
-      {
-        "title": "Ready collections",
-        "count": "2",
-        "url":"buyer/collection/ready",
-        "access":["admin","user"]
-      },
       {"title": "Bestsellers",
         "count": "0",
         "url":"buyer/bestsellers",

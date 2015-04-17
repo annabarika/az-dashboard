@@ -54,12 +54,12 @@
 
     </div>
 </div>
-<h1>Draft payments:</h1>
+
 <div class="col-sm-12 col-md-12" >
+    <div class="pa-md" ng-show="draftPayments.length">
+        <h3 style="margin-bottom:10px;">Draft payments:</h3>
 
-    <div class="pa-md">
         <div class="row">
-
             <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in draftPayments">
                 <div class="panel panel-body">
                     <!--<ul class="row_collection">
@@ -69,25 +69,41 @@
 
                         </li>
                     </ul>-->
-
                     <div>
                         <div>{{item.payment.amount}}&nbsp{{item.currency.ISOCode}}</div>
                         <p class="caption">{{item.factory.name}}&nbsp;&nbsp;<span class="date">{{item.payment.paymentDate}}</span></p>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
-<hr>
-<h1>Paid payments:</h1>
-
-<widget-table
-        datarows="paidPayments"
-        dataheader="tableHeader"
-        edit="edit()"
-        row="row"
-        >
-</widget-table>
+<div class="col-sm-12 col-md-12" >
+    <div ng-show="paidPayments.length">
+        <h3 style="margin:0 0 0 40px;">Paid payments:</h3>
+        <widget-table
+                datarows="paidPayments"
+                dataheader="tableHeader"
+                edit="edit()"
+                row="row"
+                >
+        </widget-table>
+        <div class="pa-md">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped dataTable no-footer">
+                        <tbody>
+                        <tr>
+                            <td colspan="7"><strong>Total</strong></td>
+                            <td>Amount : {{paidSummary.amount}} {{paidSummary.currency}}</td>
+                            <td>Refund : {{paidSummary.refund}} {{paidSummary.currency}}</td>
+                            <td>Difference : {{paidSummary.difference}} {{paidSummary.currency}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

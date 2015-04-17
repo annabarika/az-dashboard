@@ -116,6 +116,9 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
         };
 
+        $scope.readyCollections = function(){
+            $location.path("buyer/collection/ready");
+        };
         /*
          * Add new collection*/
         $scope.newCollection = function () {

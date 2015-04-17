@@ -53,7 +53,10 @@
 
                                 <div ng-if="headerRow.name!='photo' && headerRow.name!='count_list' && headerRow.name!='size_list'">
                                     <span ng-if="headerRow.name!='orderId'">{{row[headerRow.name]}}
-                                        <span ng-if="headerRow.name=='amount'">
+                                        <span ng-if="headerRow.name=='amount' && row[headerRow.name] !=''">
+                                            {{row.currency}}
+                                        </span>
+                                        <span ng-if="headerRow.name=='refund' && row[headerRow.name] !=''">
                                             {{row.currency}}
                                         </span>
                                     </span>

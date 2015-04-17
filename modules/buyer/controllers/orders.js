@@ -55,7 +55,8 @@ app.controller('OrderListController',
 
             $rootScope.documentTitle = "Orders";
 
-            var url,
+            var modalWindow,
+                url,
                 method,
                 data,
                 filter={};
@@ -88,7 +89,7 @@ app.controller('OrderListController',
 
                 for(var i=0;i<length;i++){
 
-                    response[i].order.deliveryDate=moment(response[i].order.deliveryDate).format('YYYY-MM-DD');
+                    response[i].order.deliveryDate = (response[i].order.deliveryDate) ? moment(response[i].order.deliveryDate).format('YYYY-MM-DD') : null;
                     response[i].order.createDate=moment(response[i].order.createDate).format('YYYY-MM-DD');
 
                     for( var key in $rootScope.fullFactories){
@@ -173,17 +174,15 @@ app.controller('OrderListController',
 
             /**
              *  Cancel order
+             *
              * @param index
              */
-            $scope.cancel=function(index){
+            $scope.cancel=function(index) {
                 event.stopPropagation();
                 //console.log(index);
 
                 if($scope.orders[index].order.status==2){
                     messageCenterService.add('danger', 'Order has been canceled', {timeout: 3000});
-                    $timeout(function(){
-                        $scope.orders.splice(index,1);
-                    },2000);
                     return;
                 }
 
@@ -200,10 +199,8 @@ app.controller('OrderListController',
                     RestFactory.request(url,"PUT",{id:$scope.orders[index].order.id}).then(
                         function(response){
                             if(response.status==2){
+                                $scope.orders[index].order.status = 2;
                                 messageCenterService.add('success', 'Order cancelled', {timeout: 3000});
-                                $timeout(function(){
-                                    $scope.orders.splice(index,1);
-                                },2000)
                             }
                             else{
                                 messageCenterService.add('danger', 'Order is not cancelled', {timeout: 3000});
@@ -213,10 +210,44 @@ app.controller('OrderListController',
                     )
                 })
             };
+
+            /**
+             * Finish order
+             *
+             * @param index
+             */
+            $scope.finish = function(index) {
+                event.stopPropagation();
+
+                var modalInstance = $modal.open({
+                    templateUrl:"/modules/buyer/views/orders/finish.html",
+                    size:"sm",
+                    backdrop: 'static'
+
+                });
+                modalInstance.result.then(function(){
+
+                    url=config.API.host+"order/update";
+
+                    RestFactory.request(url,"PUT",{id:$scope.orders[index].order.id, status: 3}).then(
+                        function(response) {
+                            if(response.status==3){
+                                $scope.orders[index].order.status = 3;
+                                messageCenterService.add('success', 'Order finished', {timeout: 3000});
+                            }
+                            else{
+                                messageCenterService.add('danger', 'Order is not finished', {timeout: 3000});
+                            }
+
+                        }
+                    )
+                })
+            };
+
             /**
              * make payment
              */
-            $scope.makePayment=function(index,type){
+            $scope.makePayment=function(index,type) {
 
                 event.stopPropagation();
 
@@ -231,10 +262,11 @@ app.controller('OrderListController',
                     templateUrl: "/modules/buyer/views/orders/make_payment.html",
                     controller: function($scope,messageCenterService,title){
 
-                        $scope.title=title;
+                        $scope.title= title;
 
-                        $scope.make=function(payment){
-                            if(_.isUndefined(payment)){
+                        $scope.make = function(payment) {
+
+                            if(_.isUndefined(payment)) {
                                 messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
                                 return;
                             }
@@ -246,7 +278,8 @@ app.controller('OrderListController',
                                 messageCenterService.add('danger', 'Not entered note', {timeout: 3000});
                                 return;
                             }
-                            else{
+                            else {
+
                                 modalInstance.close(payment);
                             }
                         }
@@ -260,26 +293,43 @@ app.controller('OrderListController',
                     }
                 });
 
-                modalInstance.result.then(function(payment){
+                modalInstance.result.then(function(payment) {
+
                     var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
 
                     var cashierId=JSON.parse(localStorage['user']).id;
-                    url=config.API.host+"payment/create";
-                    data={
-                        'currencyId'        :   $scope.orders[index].order.currencyId,
-                        'cashierId'         :   cashierId,
-                        'cashierOfficeId'   :   CO,
-                        'orderId'           :   $scope.orders[index].order.id,
-                        'paymentMethod'     :   "bank",
-                        'paymentType'       :   type,
-                        'amount'            :   payment.amount,
-                        'note'              :   payment.note
+
+                    url = config.API.host + 'payment/create';
+
+                    data = {
+                        documentId      : $scope.orders[index].order.id,
+                        currencyId      : $scope.orders[index].order.currencyId,
+                        cashierId       : cashierId,
+                        cashierOfficeId : parseInt(CO),
+                        paymentMethod   : "bank",
+                        paymentDocumentType : 1,
+                        paymentType     : type,
+                        amount          : payment.amount,
+                        note            : payment.note
                     };
 
-                    RestFactory.request(url,"POST",data).then(
-                        function(response){
+                    RestFactory.request(url,"POST",data).then(function(response){
 
-                            if(_.isObject(response)&&response.id>0){
+                            if(_.isObject(response)&&response.id>0) {
+
+                                if(type == 'refund') {
+                                    $scope.orders[index].order.paidTotal = Number(parseFloat($scope.orders[index].order.paidTotal) - data.amount).toFixed(2);
+                                }
+                                else {
+
+                                    $scope.orders[index].order.paidTotal = Number(parseFloat($scope.orders[index].order.paidTotal) + data.amount).toFixed(2);
+                                }
+
+                                data.paymentType = type;
+                                data.paymentDate = moment().format('YYYY-MM-DD hh:mm:ss');
+
+                                $scope.orders[index].payments.push(data);
+
                                 messageCenterService.add('success', 'Payment created', {timeout: 3000});
                             }else{
                                 messageCenterService.add('danger', 'Payment is not created', {timeout: 3000});
@@ -1049,9 +1099,38 @@ app.controller("OrderController",
                 }
             );
 
+            /**
+             * Update ordered Total value
+             *
+             * @param object order
+             */
+            $scope.totalUpdate = function(order) {
+
+                // ENTER
+                if(event.keyCode == 13) {
+
+                    if(order.orderedTotal == "") {
+                        messageCenterService.add("danger", "Ordered total can not be empty",{timeout:3000});
+                        return;
+                    }
+                    RestFactory.request(config.API.host+"/order/update","PUT",{
+                        id:             order.id,
+                        orderedTotal:   order.orderedTotal
+                    }).then(function(response){
+
+                            if(_.isObject(response)){
+                                messageCenterService.add("success", "Ordered total updated",{timeout:3000});
+                            }
+                            else{
+                                messageCenterService.add("danger", "Ordered total is not updated",{timeout:3000});
+                            }
+                        }
+                    )}
+            }
+
             $scope.saveProduct=function(event,product,model){
 
-                if(event.keyCode==13){
+                if(event.keyCode==13) {
 
                     if(model.price==""||model.count==""){
 
@@ -1059,8 +1138,6 @@ app.controller("OrderController",
 
                         return;
                     }
-
-
 
                     console.log("new", product);
                     url=config.API.host+"/order/update-row";
@@ -1213,16 +1290,16 @@ app.controller("OrderController",
                 modalInstance.result.then(function(payment){
                     var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
                     var cashierId=JSON.parse(localStorage['user']).id;
-                    url=config.API.host+"payment/create";
-                    data={
-                        'currencyId'        :   $scope.order.currency.id,
-                        'cashierId'         :   cashierId,
-                        'cashierOfficeId'   :   CO,
-                        'orderId'           :   id,
-                        'paymentMethod'     :   "bank",
-                        'paymentType'       :   "payment",
-                        'amount'            :   payment.amount,
-                        'note'              :   payment.note
+                    url = config.API.host + "payment/create-order-payment";
+                    data = {
+                        documentId      : id,
+                        currencyId      : $scope.order.currency.id,
+                        cashierId       : cashierId,
+                        cashierOfficeId : parseInt(CO),
+                        paymentType     : "payment",
+                        paymentMethod   : "bank",
+                        amount          : payment.amount,
+                        note            : payment.note
                     };
 
                     RestFactory.request(url,"POST",data).then(

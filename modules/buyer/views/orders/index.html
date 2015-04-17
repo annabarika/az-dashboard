@@ -62,7 +62,7 @@
                 <div class="col-md-4 col-sm-4 va-m">
                     <select class="form-control" data-ng-model="filter.factory" ng-change="filteredOrders(filter)"
                             ng-options="opt as opt.name for opt in Factory">
-                        <option value="">Factory status</option>
+                        <option value="">Factories</option>
                     </select>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                     <thead>
                     <tr>
                         <th> # </th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Vendor</a></th>
+                        <th class="sorting ng-scope"><a href="" class="ng-binding">Factory</a></th>
                         <th></th>
                         <th class="sorting ng-scope"><a href="" class="ng-binding">Created</a></th>
                         <th class="sorting ng-scope"><a href="" class="ng-binding">Delivery date</a></th>
@@ -120,7 +120,7 @@
                         </td>
                         <td>
                             <p ng-if="item.order.deliveryDate!=null">{{item.order.deliveryDate}}</p>
-                            <p ng-if="item.order.deliveryDate==null">none</p>
+                            <p ng-if="item.order.deliveryDate==null">&mdash;</p>
                         </td>
                         <td>
                             <span class="thumbnail media-left" ng-repeat="img in item.files track by $index" ng-if="$last" >
@@ -139,7 +139,9 @@
                         <td>
                             <p class="fw-sb text-right">{{item.order.paidTotal}}</p>
                             <p class="text-muted text-right" ng-repeat="p in item.payments">
-                                + {{p.amount}} ({{p.paymentDate}} {{p.paymentMethod}})
+                                <span ng-if="p.paymentType == 'payment'">+</span>
+                                <span ng-if="p.paymentType == 'refund'">-</span>
+                                {{p.amount}} ({{p.paymentDate}} {{p.paymentMethod}})
                             </p>
                             <!--<p class="text-muted text-right">+1200 (Prepayment cash)</p>-->
                         </td>
@@ -151,11 +153,13 @@
                             <!--<p class="text-muted text-right-sm" ng-repeat="p in item.payments">Changed: {{p.paymentDate}}</p>-->
                         </td>
                         <td>
-                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="sendToFactory($index)" title="send to factory"><i class="fa fa-calendar"></i></button>
-                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="cancel($index)" title="cancel order"><i class="fa fa-ban"></i></button>
+                            <!-- <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="sendToFactory($index)" title="send to factory"><i class="fa fa-calendar"></i></button> -->
+                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="changeDate($index)" title="change delivery date"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.status == 2" ng-click="cancel($index)" title="cancel order"><i class="fa fa-ban"></i></button>
+                            <hr/>
                             <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" title="make payment">&#165;</button>
-                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="makePayment($index,'refund')" title="make refund">&#165;</button>
-                            <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="changeDate($index)" title="change delivery date"><i class="glyphicon glyphicon-calendar"></i></button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.paidTotal < 1" ng-click="makePayment($index,'refund')" title="make refund">&#165;</button>
+                            <button ng-show="user.type == 'admin'" ng-disabled="item.order.status == 3" type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="finish($index)" title="finish"><i class="fa fa-times"></i></button>
                         </td>
                     </tr>
                     </tbody>

@@ -82,8 +82,8 @@
 
                     for(var f in factories){
 
-                        if(factories[f].factoryGroup.id=="1"){
-
+                        if(factories[f].factoryGroup.id=="2"){
+                            if( factories[f].factory.name == '') factories[f].factory.name = 'Other'
                             factory.push(
                                 {
                                     name        :   factories[f].factory.name,

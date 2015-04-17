@@ -27,7 +27,6 @@
             "SEND_MODERATE"         : config.API.host+"report/send",
             "LOAD_MODERATORS"       : "/testing/mocks/moderators.json"
         })
-
         .factory("BestsellersService", ['API', 'RestFactory',
             function (API, RestFactory) {
 
@@ -120,18 +119,15 @@
                             totalCount = 0;
 
                         sizes.forEach(function(size) {
-
                             if(!_.isUndefined(size.saleSpeed)) {
                                 totalSaleSpeed += parseInt(size.saleSpeed);
                             }
                         });
                         sizes.forEach(function(size) {
-
                             if(!_.isUndefined(size.saleSpeed)) {
-                                totalCount += size.count = Math.ceil( num * size.saleSpeed / totalSaleSpeed );
+                                totalCount += size.count = Math.round( num * size.saleSpeed / totalSaleSpeed );
                             }
                         });
-
                         // find min sales item
 
                         var minSales = _.min(sizes, function(size) {
@@ -140,7 +136,7 @@
 
                         // rest from chased count
                         var rest = (num-totalCount);
-
+                        if( rest < 0 ) rest = 0;
                         minSales.count = (minSales.count + rest);
                         return sizes;
                     },
@@ -252,6 +248,9 @@
                             "productId": product.id,
                             "createDate": (!_.isUndefined(date)) ? date : moment().format('YYYY-MM-DD HH:mm:ss')
                         };
+                        if(product.orderDate != undefined ){
+                            params.orderDate = product.orderDate;
+                        }
 
                         return RestFactory.request(API.ADD_TO_BESTSELLER, 'POST', params);
                     },
@@ -292,10 +291,20 @@
 
                     createOrder: function(factoryId){
                         // Creating order
+                        // First delivery date
+                        var deliveryDate = new Date();
+                        var DD = deliveryDate.getDate()+3;
+                        var MM = deliveryDate.getMonth()+1; //January is 0!
+                        var YYYY = deliveryDate.getFullYear();
+                        if(DD<10) { DD='0'+DD }
+                        if(MM<10) { MM='0'+MM }
+                        deliveryDate = YYYY + '-' + MM + '-'+ DD;
+
                         var order = {
                             factoryId: factoryId,
                             buyerId: 328,
-                            type: 1
+                            type: 1,
+                            deliveryDate: deliveryDate
                         };
 
                         return RestFactory.request(API.CREATE_ORDER, 'POST', order);
@@ -390,8 +399,24 @@
                     createPdf:function(id){
 
                         return RestFactory.request(API.CREATE_PDF+id);
-                    }
+                    },
+                    /**
+                     * Get find articul uri
+                     */
+                    searchArticulUri: function() {
+                        return API.FIND_BY_ARTICUL;
+                    },
 
+                    /**
+                     * Find products by articul
+                     *
+                     * @param string article
+                     */
+                    findProductsByArticle: function(articul) {
+
+                        return RestFactory.request(API.FIND_BY_ARTICUL+articul);
+
+                    }
                 }
             }]);
 })();

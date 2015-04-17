@@ -4,13 +4,17 @@
             <div class="col-sm-1">
                 <div class="btn btn-info" ng-click="newCollection()"><i class="fa fa-plus"></i> New collection</div>
             </div>
+            <div class="col-sm-1">
+                <div class="btn btn-success" ng-click="readyCollections()"><i class="fa fa-upload"></i> Uploaded collections</div>
+            </div>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-12" >
-
         <div class="pa-md">
+            <h3>Collections need to be updated</h3>
+            <hr/>
             <div class="row">
 
                 <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="uploadProducts(item)">
@@ -24,7 +28,7 @@
                         </ul>
 
                         <div>
-                            <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<span class="date">{{item.createDate}}</span></p>
+                            <p class="caption">{{item.factoryName}}<br/><span class="date">{{item.createDate}}</span></p>
                         </div>
                     </div>
                 </div>
