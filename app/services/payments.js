@@ -3,9 +3,7 @@
     var app = angular.module("services.payments", []);
 
     app.constant("PATH", {
-        LOAD_ORDER_PAYMENT: config.API.host + "payment/load-order",
-        LOAD_CARGO_PAYMENT: config.API.host + "payment/load-cargo",
-        LOAD_OTHER_PAYMENT: config.API.host + "payment/load-other",
+        LOAD_PAYMENT: config.API.host + "payment/load",
         LOADORDERS: config.API.host + "order/load",
         LOADCARGO: config.API.host + "cargo/load",
         STATUSES: config.API.host + "status/load/type/payment",
@@ -13,9 +11,7 @@
         CREATE: config.API.host + "cashier-office/create",
         ORDERTYPE: config.API.host + "order-type/load",
         CURRENCY: config.API.host + "currency/load",
-        CREATE_ORDER_PAYMENT: config.API.host + "payment/create-order-payment",
-        CREATE_CARGO_PAYMENT: config.API.host + "payment/create-cargo-payment",
-        CREATE_OTHER_PAYMENT: config.API.host + "payment/create-other-payment",
+        CREATE_PAYMENT: config.API.host + "payment/create",
         ORDERPAYMENTS: config.API.host + "/payment/load/orderId/"
     });
 
@@ -57,26 +53,6 @@
                 return range;
             };
 
-            /**
-             * Get payment (switcher)
-             *
-             * @param string type
-             * @param Date date
-             * @returns {*}
-             */
-            var getPayment =  function (type, data) {
-
-                if(type === 'order') {
-                    return RestFactory.request(PATH.LOAD_ORDER_PAYMENT + data);
-                }
-                else if(type === 'cargo') {
-                    return RestFactory.request(PATH.LOAD_CARGO_PAYMENT + data);
-                }
-                else {
-                    return RestFactory.request(PATH.LOAD_OTHER_PAYMENT + data);
-                }
-            };
-
             return {
 
                 /**
@@ -100,12 +76,11 @@
                 /**
                  * Combine payments by date & status / Calling by type
                  *
-                 * @param string type
                  * @param int status
                  * @param Date date
                  * @returns {*}
                  */
-                getPayments: function (type, status, date) {
+                getPayments: function (status, date) {
 
                     var data = '';
                     var range = '';
@@ -124,7 +99,8 @@
                         range = getCurrentMonthRange(moment().year(), moment().month())
                         data += 'paymentDate/'+ range.start + ',' + range.end;
                     }
-                    return getPayment(type, data);
+
+                    return RestFactory.request(PATH.LOAD_PAYMENT + data);
                 },
 
                 /**
@@ -137,18 +113,17 @@
                 createPayment: function (obj, user) {
 
                     var data = {};
-                    var url;
 
                     if (obj.hasOwnProperty('order') && !_.isEmpty(obj.order)) {
                         data.documentId = obj.order.id;
-                        url = PATH.CREATE_ORDER_PAYMENT;
+                        data.paymentDocumentType = 1;
                     }
                     else if(obj.hasOwnProperty('cargo') && !_.isEmpty(obj.cargo)) {
                         data.documentId = obj.cargo.id;
-                        url = PATH.CREATE_CARGO_PAYMENT;
+                        data.paymentDocumentType = 2;
                     }
                     else {
-                        url = PATH.CREATE_OTHER_PAYMENT;
+                        data.paymentDocumentType = 0;
                     }
 
                     data.currencyId = 1,
@@ -159,7 +134,7 @@
                     data.paymentMethod = obj.method.value,
                     data.note = (obj.note) ? obj.note: "";
 
-                    return RestFactory.request(url, "POST", data);
+                    return RestFactory.request(PATH.CREATE_PAYMENT, "POST", data);
                 },
 
                 /**
@@ -199,8 +174,7 @@
                         payments.push({
                             id:                 item.payment.id,
                             documentId:         (!_.isNull(item.payment.documentId)) ? item.payment.documentId : 'Other',
-                            factoryId:          (item.hasOwnProperty('factory') && !_.isUndefined(item.factory.id)) ? item.factory.id : '?',
-                            factory:            (item.hasOwnProperty('factory') && !_.isUndefined(item.factory.name)) ? item.factory.name : '?',
+                            factory:            (item.hasOwnProperty('document') && !_.isUndefined(item.document.factoryId)) ? item.document.factoryId : '?',
                             date:               item.payment.paymentDate,
                             method:             item.payment.paymentMethod,
                             cashierOfficeId:    item.payment.cashierOfficeId,

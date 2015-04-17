@@ -28,56 +28,18 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
              */
 			getPayments = function(date) {
 
-                var paymentsDraft = [], paymentsPaid = [];
-
-				// Get draft Order payments
-				PaymentService.getPayments('order', 0, date).then(function(response) {
+				// Get draft payments
+				PaymentService.getPayments(0, date).then(function(response) {
 						if(_.isArray(response)){
-                            paymentsDraft = response;
-
-                            // Get draft Cargo payments
-                            PaymentService.getPayments('cargo', 0, date).then(function(response) {
-                                    if(_.isArray(response)){
-                                        paymentsDraft = response.concat(paymentsDraft);
-
-                                        // Get draft Other payments
-                                        PaymentService.getPayments('other', 0, date).then(function(response) {
-                                                if(_.isArray(response)){
-                                                    paymentsDraft = response.concat(paymentsDraft);
-                                                    $scope.draftPayments = paymentsDraft;
-                                                }
-                                            }
-                                        );
-                                    }
-                                }
-                            );
+                            $scope.draftPayments = response;
 						}
 					}
 				);
-
-                // Get paid Order Payments
-                PaymentService.getPayments('order', 1, date).then(function(response) {
+                // Get paid Payments
+                PaymentService.getPayments(1, date).then(function(response) {
                         if(_.isArray(response)){
-                            paymentsPaid = PaymentService.resolvePaymentData(response);
-
-                            // Get paid Cargo payments
-                            PaymentService.getPayments('cargo', 1, date).then(function(response) {
-                                    if(_.isArray(response)){
-                                        paymentsPaid = PaymentService.resolvePaymentData(response).concat(paymentsPaid);
-
-                                        // Get paid Other payments
-                                        PaymentService.getPayments('other', 1, date).then(function(response) {
-                                                if(_.isArray(response)){
-                                                    paymentsPaid = PaymentService.resolvePaymentData(response).concat(paymentsPaid);
-
-                                                    $scope.paidSummary = PaymentService.calculatePaidRows(paymentsPaid);
-                                                    $scope.paidPayments = paymentsPaid;
-                                                }
-                                            }
-                                        );
-                                    }
-                                }
-                            );
+                            $scope.paidPayments = PaymentService.resolvePaymentData(response);
+                            $scope.paidSummary = PaymentService.calculatePaidRows($scope.paidPayments);
                         }
                     }
                 );
@@ -229,7 +191,8 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 					function(payment){
 						PaymentService.createPayment(payment,$rootScope.user).then(
 							function(response){
-								if(_.isObject(response)){
+
+								if(_.isObject(response) && response.hasOwnProperty('id')) {
 									messageCenterService.add('success', 'Payment created', {timeout: 3000});
                                     getPayments();
 								}
