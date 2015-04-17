@@ -44,8 +44,9 @@ app.controller('OrderListController',
         "RestFactory",
         "messageCenterService",
         "$timeout",
+        "$http",
 
-        function ($scope, $rootScope, $modal, $location, $route, RestFactory, messageCenterService,$timeout){
+        function ($scope, $rootScope, $modal, $location, $route, RestFactory, messageCenterService,$timeout,$http){
 
             $scope.$route = $route;
             $scope.$location = $location;
@@ -605,36 +606,76 @@ app.controller('OrderListController',
                     backdrop:'static'
                 });
             };
-            /*function add new factory*/
+            /**
+             * create new factory
+             */
             $scope.newFactory=function(){
                 var modalInstance=$modal.open({
                     templateUrl: "/modules/buyer/views/orders/new_factory.html",
-                    controller: function($scope,messageCenterService){
+                    controller: function($scope,$rootScope,messageCenterService){
+                        /**
+                         * modal window title
+                         * @type {string}
+                         */
                         $scope.title='Create new factory';
+                        /**
+                         * watch file uploader
+                         */
+                        $scope.$watch('files',function(val){
+                            if(val){
+                                console.log(val);
+                                $rootScope.factoryAttachment=val;
+                            }
+                        });
+                        /**
+                         * close modal window and validate form data
+                         * @param factory
+                         */
                         $scope.create=function(factory){
                             console.log(factory);
                             if(!factory){
-                                messageCenterService.add("danger","Please entered form",{timeout:3000});
+                                messageCenterService.add("danger","Please, entered form",{timeout:3000});
                                 return;
                             }
-                            if(factory.groupId==""||!parseInt(factory.groupId)||factory.groupId==undefined){
-                                messageCenterService.add("danger","Group id must be numeric",{timeout:3000});
+                            if(factory.name==""||factory.name==undefined){
+                                messageCenterService.add("danger","Please, enter name field",{timeout:3000});
                                 return;
                             }
-                            if(factory.productionDays==""||!parseInt(factory.productionDays)||factory.productionDays==undefined){
-                                messageCenterService.add("danger","Please enter valid production days count",{timeout:3000});
+                            if(factory.groupId==""||factory.groupId==undefined){
+                                messageCenterService.add("danger","Please, enter group Id field",{timeout:3000});
                                 return;
                             }
-                            if(factory.name==""&&factory.phone==""||factory.name==undefined&&factory.phone==undefined){
-                                messageCenterService.add("danger","Please enter name or phone",{timeout:3000});
+                            if(!parseInt(factory.groupId)){
+                                messageCenterService.add("danger","Please, use only numbers in group Id field",{timeout:3000});
+                                return;
+                            }
+
+                            if(factory.productionDays==""||factory.productionDays==undefined){
+                                messageCenterService.add("danger","Please, enter valid production days count",{timeout:3000});
+                                return;
+                            }
+                            if(!parseInt(factory.productionDays)){
+                                messageCenterService.add("danger","Please, use only numbers in production days field",{timeout:3000});
+                                return;
+                            }
+                            if(factory.phone==""||factory.phone==undefined){
+                                messageCenterService.add("danger","Please, enter phone field",{timeout:3000});
+                                return;
+                            }
+                            if(!parseInt(factory.phone)){
+                                messageCenterService.add("danger","Please, use numbers in phone field",{timeout:3000});
                                 return;
                             }
                             if(factory.email==""||factory.email==undefined){
-                                messageCenterService.add("danger","Please enter email",{timeout:3000});
+                                messageCenterService.add("danger","Please, enter email",{timeout:3000});
                                 return;
                             }
                             if(factory.currencyId==""||factory.currencyId==undefined||!parseInt(factory.currencyId)){
-                                messageCenterService.add("danger","Please enter currency",{timeout:3000});
+                                messageCenterService.add("danger","Please, enter currency",{timeout:3000});
+                                return;
+                            }
+                            if(!parseInt(factory.currencyId)){
+                                messageCenterService.add("danger","Please, use only numbers",{timeout:3000});
                                 return;
                             }
                             modalInstance.close(factory);
@@ -644,7 +685,7 @@ app.controller('OrderListController',
                     size:"sm"
                 });
                 modalInstance.result.then(function(factory){
-                    console.log("",factory);
+                    console.log("make new factory",factory,$rootScope.factoryAttachment);
                     url=config.API.host+"factory/create";
                     //@TODO переделать добавление в массив параметров
                     data={
@@ -660,6 +701,7 @@ app.controller('OrderListController',
                             console.log("createFactory",response);
                             if(_.has(response,"id")){
                                 messageCenterService.add("success","Factory created",{timeout:3000});
+                                $scope.uploadFiles(response);
                                 $scope.createOrder(response);
                             }
                             else{
@@ -669,6 +711,34 @@ app.controller('OrderListController',
                     )
                 })
             };
+            /**
+             * upload files
+             */
+            $scope.uploadFiles=function(response){
+                url=config.API.host+'factory/loadfiles';
+
+                var fd = new FormData();
+                angular.forEach($rootScope.factoryAttachment, function(file){
+                    fd.append('file[]', file);
+                });
+                fd.append("id",response.id);
+                console.log(fd);
+                $http.post(url,fd,
+                    {
+                        transformRequest: angular.identity,
+                        headers: {'Content-Type': undefined}
+                    })
+                    .success(function(data){
+                        console.log("fileData",data);
+                        messageCenterService.add("success","Files uploaded",{timeout:3000});
+                    })
+                    .error(function(data,status){
+                        messageCenterService.add("danger","Files is not uploaded",{timeout:3000});
+                    })
+            };
+            /**
+             * create new cargo
+             */
             $scope.addNewCargo = function(){
 
                 var modalInstance = $modal.open({
