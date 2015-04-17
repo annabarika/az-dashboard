@@ -299,7 +299,7 @@ app.controller('OrderListController',
 
                     var cashierId=JSON.parse(localStorage['user']).id;
 
-                    url = config.API.host + 'payment/create-order-'+ type;
+                    url = config.API.host + 'payment/create';
 
                     data = {
                         documentId      : $scope.orders[index].order.id,
@@ -307,6 +307,8 @@ app.controller('OrderListController',
                         cashierId       : cashierId,
                         cashierOfficeId : parseInt(CO),
                         paymentMethod   : "bank",
+                        paymentDocumentType : 1,
+                        paymentType     : type,
                         amount          : payment.amount,
                         note            : payment.note
                     };
