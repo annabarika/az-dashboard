@@ -55,7 +55,8 @@ app.controller('OrderListController',
 
             $rootScope.documentTitle = "Orders";
 
-            var url,
+            var modalWindow,
+                url,
                 method,
                 data,
                 filter={};
@@ -554,7 +555,7 @@ app.controller('OrderListController',
                         $timeout(function(){
                             //if($scope.factory==undefined) $scope.factoryFlag=true;
                             $scope.factoryFlag=true;
-                        },1000);
+                        },3000);
 
                         $scope.chooseFactory=function(factory){
                             if(!factory){
@@ -868,9 +869,9 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
 
     $scope.factory=factory;
     $scope.type=type;
-    var fileinput;
-    console.log($rootScope.user);
-    console.log($scope.factory);
+
+    /*console.log($rootScope.user);
+    console.log($scope.factory);*/
     $scope.statusModel=1;
     /**
      * create and save new order
@@ -898,26 +899,29 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             'currencyId'    :   $scope.factory.currencyId,
             'status'        :   $scope.statusModel
         };
-        console.log("params",params);
+        console.log("order params",params);
         var url = config.API.host + "order/create";
 
         RestFactory.request(url,"POST",params)
             .then(function(response){
-                console.log("create order",response);
+                console.log("create order",response, typeof response);
                 if(response=='null'){
                     messageCenterService.add('danger', 'Order is not created', {timeout: 3000});
                 }
                 else{
-                    if(!_.isObject(response)){
+                    if(_.isObject(response)){
                         url=config.API.host+"order/create-manual-row";
                         params={
                             orderId: response.id,
                             price: amount
                         };
-                        console.log(params);
+                        console.log("row params",params);
                         RestFactory.request(url,"POST",params).then(
-                            function(resp){
-                                console.log("resp",resp);
+                            function(response){
+                                console.log("create-manual-row",response);
+                                if(response==null){
+                                    messageCenterService.add("danger","Row is not created",{timeout:3000});
+                                }
                             }
                         );
 
@@ -935,12 +939,13 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                             })
                             .error(function(data,status){
                                 console.log(data,status);
+                                messageCenterService.add("danger","ERROR: files is not upload, "+status,{timeout:3000});
                             })
                     }
                      console.log(response);
                     messageCenterService.add('success', 'Order is created', {timeout: 3000});
-                   $location.path( '/buyer/orders/id/'+ response.id );
-                   $modalInstance.close();
+                  /* $location.path( '/buyer/orders/id/'+ response.id );
+                   $modalInstance.close();*/
                 }
             },
             function(error) {
