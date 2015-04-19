@@ -42,10 +42,10 @@
 <div  class="col-md-5 bg-auto height-auto bdr-b-sm bdr-b-xs">
     <div class="scroll">
         <!-- start page header -->
-<!--        <div class="page-header clearfix">
+        <div class="page-header clearfix">
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="mb-sm">{{currentMonth}} {{currentYear}}</h3>
+                    <h3 class="mb-sm">Select bestsellers by date</h3>
                 </div>
             </div>
             <p class="input-group">
@@ -54,12 +54,12 @@
                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
             </p>
-        </div>-->
+        </div>
         <!--/ end page header -->
         <accordion close-others="oneAtATime">
 
             <!-- Ordered items -->
-            <accordion-group heading="Ordered {{currentMonth}} {{currentYear}}" is-open="true">
+            <accordion-group heading="Products {{currentMonth}} {{currentYear}}" is-open="true">
                 <div ng-if="!bestsellersOrdered">Click on the calendar on the number of ordered items to see them</div>
                 <div ng-if="bestsellersOrdered && !bestsellersOrdered.length">Selected date has no items</div>
                 <table class="table table-bordered">
