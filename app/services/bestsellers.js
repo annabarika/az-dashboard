@@ -292,7 +292,7 @@
 
                         var date = moment(date).format('YYYY-MM-DD'),
                             url = (type == 'ordered') ? API.LOAD_ORDERED_DETAILS : API.LOAD_TOTAL_DETAILS;
-
+                        console.log(url+date);
                         return RestFactory.request(url + date);
                     },
 

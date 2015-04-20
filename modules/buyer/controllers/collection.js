@@ -889,6 +889,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 messageCenterService.add('danger', 'Can not create order with empty sizes count', {timeout: 3000});
                 return false;
             }
+
             /**
              * if orderId==null create new order
              */

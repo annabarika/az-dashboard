@@ -49,7 +49,7 @@
                 </div>
             </div>
             <p class="input-group">
-                <input type="text" class="form-control" ng-change="selectDate(date)" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="date" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                <input type="text" class="form-control" ng-change="selectDate(date)" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="date" is-open="opened" datepicker-options="dateOptions" show-weeks="true" ng-required="true" close-text="Close" />
                     <span class="input-group-btn">
                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -92,9 +92,10 @@
             <!-- /Ordered items -->
 
             <accordion-group heading="Total" ng-hide="true">
-                <div ng-if="!bestsellersTotal">Click on the calendar on the number of total items to see them</div>
-                <div ng-if="bestsellersTotal && !bestsellersTotal.length">Selected date has no items</div>
-                <table class="table table-bordered">
+
+                <div ng-if="!bestsellersTotal">{{bestsellersTotal}},Click on the calendar on the number of total items to see them</div>
+                <div ng-if="bestsellersTotal && bestsellersTotal.length==0">Selected date has no items</div>
+                <table class="table table-bordered" ng-if="bestsellersTotal.length>0">
                     <tbody>
                     <tr ng-repeat="total in bestsellersTotal">
                         <td class="text-center">

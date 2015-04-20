@@ -311,16 +311,13 @@
                  */
                 isSizesExists: function(items) {
 
-                    var sizes = [];
-                    angular.forEach(items, function(item) {
-
-                        angular.forEach(item.sizes, function(size) {
-                            if(size.count != '0' && size.count != '') {
-                                sizes.push(1);
-                            }
-                        });
-                    });
-                    return (sizes.length > 0);
+                    var i,length=items.length;
+                    for(i=0;i<length;i++){
+                        if(_.findKey(items[i].sizes,"count","0")||_.findKey(items[i].sizes,"count","")){
+                            return false;
+                        }
+                    }
+                    return true
                 },
                 /**
                  *
@@ -349,22 +346,18 @@
 
                         var sizes=products[i].sizes.split(/[,.\/]+/);
 
-                        //console.log(sizes);
-
-                        if(allSizes.length!=0){
-
                             for(var j=0;j<sizes.length;j++){
 
                                 sizes[j]=sizes[j].toUpperCase();
 
-                                if(_.findIndex(allSizes,{name:sizes[j]})==-1){
+                                if(!_.findKey(allSizes, 'name', sizes[j])){
 
                                     message="Size in row #"+(i+1)+"is not valid";
 
                                     return message;
                                 }
                             }
-                        }
+
                         //price validation
                         if(products[i].price==""){
                             message='Please enter price in row #'+(i+1);

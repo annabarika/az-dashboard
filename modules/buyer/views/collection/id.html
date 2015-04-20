@@ -64,7 +64,7 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    <ul ng-if="product.sizes[0]" ng-hide="product.inOrder" class="media-list mb-sm lg">
+                                    <ul ng-if="product.sizes" ng-hide="product.inOrder" class="media-list mb-sm lg">
                                         <li ng-repeat="size in product.sizes" class="media">
                                             <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="product.inOrder" value="0"/>
                                             <div class="btn-group" role="group" aria-label="...">

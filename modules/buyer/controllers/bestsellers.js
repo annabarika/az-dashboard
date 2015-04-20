@@ -72,13 +72,20 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
 
             $scope.currentYear = moment(date).year();
 
-            BestsellersService.getDayDetailed('ordered', date).then(function(response) {
+           /* BestsellersService.getDayDetailed('ordered', date).then(function(response) {
                 $scope.bestsellersOrdered = response;
-
+                console.log(response);
                 BestsellersService.getDayDetailed('total', date).then(function(response) {
                     $scope.bestsellersTotal = response;
+                    console.log(response);
                 });
+            });*/
+
+            BestsellersService.getDayDetailed('total', date).then(function(response) {
+                $scope.bestsellersOrdered = response;
+                console.log(response);
             });
+
         };
 
         /**
@@ -132,7 +139,7 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
          * Datepickers functions
          */
 
-        $scope.date = new Date();
+        $scope.date = moment(new Date()).format('DD-MMMM-YYYY');
 
         $scope.clear = function () {
             $scope.date = null;
@@ -152,7 +159,7 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
             formatYear: 'yy',
             startingDay: 1
         };
-        $scope.format = 'EEE MMM dd yyyy HH:mm:ss Z';
+        $scope.format = ' dd-MMMM-yyyy';
     }
 ]);
 

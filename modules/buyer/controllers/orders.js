@@ -944,8 +944,8 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
                     }
                      console.log(response);
                     messageCenterService.add('success', 'Order is created', {timeout: 3000});
-                  /* $location.path( '/buyer/orders/id/'+ response.id );
-                   $modalInstance.close();*/
+                    $location.path( '/buyer/orders/id/'+ response.id );
+                    $modalInstance.close();
                 }
             },
             function(error) {
@@ -1115,14 +1115,27 @@ app.controller("OrderController",
 
                 // ENTER
                 if(event.keyCode == 13) {
-
                     if(order.orderedTotal == "") {
                         messageCenterService.add("danger", "Ordered total can not be empty",{timeout:3000});
                         return;
                     }
-                    RestFactory.request(config.API.host+"/order/update","PUT",{
+                    /*RestFactory.request(config.API.host+"/order/update","PUT",{
                         id:             order.id,
                         orderedTotal:   order.orderedTotal
+                    }).then(function(response){
+
+                            if(_.isObject(response)){
+                                messageCenterService.add("success", "Ordered total updated",{timeout:3000});
+                            }
+                            else{
+                                messageCenterService.add("danger", "Ordered total is not updated",{timeout:3000});
+                            }
+                        }
+                    )}*/
+                    RestFactory.request(config.API.host+"order/update-row","PUT",{
+                        id          :   order.id,
+                        orderedTotal:   order.orderedTotal,
+                        size        :   $scope.orderProducts[0].size
                     }).then(function(response){
 
                             if(_.isObject(response)){
