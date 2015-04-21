@@ -729,6 +729,9 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             $scope.collection = _.first(response);
             $scope.orderId = $scope.collection.orderId;
         });
+
+
+        $scope.type= _.find($rootScope.types,{entity:'order',name:"collection"});
         /**
          * Header for table widget
          * @type {{name: string, title: string}[]}
@@ -895,7 +898,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
              */
             if(_.isNull($scope.orderId)){
 
-                CollectionService.orderCreate($rootScope.user.id,$scope.collection,$scope.currencyId).then(function(response){
+                CollectionService.orderCreate($rootScope.user.id,$scope.collection,$scope.currencyId,$scope.type).then(function(response){
                     if(_.has(response,'id')){
                         console.log("success create order",response);
                         $scope.orderId =response.id;

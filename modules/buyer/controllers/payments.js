@@ -140,7 +140,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 
 
                         $scope.paymentMethod = [
-                            {name:"cash",value:'cash'},
+                            //{name:"cash",value:'cash'},
                             {name:"bank",value:'bank'}
                         ];
 						$scope.columnHeaders=[
@@ -164,10 +164,10 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 								messageCenterService.add('danger', 'Not choose type', {timeout: 3000});
 								return;
 							}
-                            if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
+                            /*if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
                                 messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
                                 return;
-                            }
+                            }*/
 							if(_.isNull(payment.note)|| _.isUndefined(payment.note)){
 								messageCenterService.add('danger', 'Please,enter the note', {timeout: 3000});
 								return;
@@ -382,7 +382,8 @@ app.controller('PaymentCartController',
 
 			console.log($route);
 			PaymentService.getCurrentPayment($route.current.params.id).then(function(response){
-				$scope.payment=response;
+				$scope.payment=response[0];
+				console.log(response[0]);
 			})
 		}
 	]);

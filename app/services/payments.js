@@ -134,7 +134,7 @@
                     data.cashierOfficeId = parseInt(user.settings.cashierOffice),
                     data.paymentType    = obj.type.value,
                     data.amount         = parseFloat(obj.amount),
-                    data.paymentMethod = obj.method.value,
+                    data.paymentMethod = "bank",
                     data.note = (obj.note) ? obj.note: "";
 
                     return RestFactory.request(PATH.CREATE_PAYMENT, "POST", data);

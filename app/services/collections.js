@@ -699,11 +699,11 @@
                  * @param currencyId
                  * @returns {*}
                  */
-                orderCreate: function (buyerId,collection,currencyId) {
+                orderCreate: function (buyerId,collection,currencyId,type) {
                     var params = {
                         'buyerId'       :   buyerId,
                         'factoryId'     :   collection.factoryId,
-                        'type'          :   1,//order.type.id,
+                        'type'          :   type.typeId,//1,order.type.id,
                         'currencyId'    :   currencyId
                     };
 

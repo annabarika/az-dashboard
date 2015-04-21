@@ -10,7 +10,10 @@
                         <input id="uploader" type="file" file-input="files" style="display: none" multiple/>
 
                     <div class="btn btn-success" ng-click="upload()">Upload</div>
-                    <div class="btn btn-warning" ng-click="sendToFactory()"><i class="fa fa-check"></i> Send to Factory</div>
+                    <div class="btn btn-warning" ng-click="sendToFactory()" ng-disabled="order.order.status==1">
+                        <i class="fa fa-check" ng-hide="order.order.status==1"></i>
+                        Send to Factory
+                    </div>
                     <div class="btn btn-info" ng-click="makePayment()"><i class="fa fa-plus"></i> Make Payment</div>
                     <div class="btn btn-default" ng-click="cancel()" ng-disabled="orderFlag"><i class="fa fa-ban"></i> Cancel</div>
                 </div>

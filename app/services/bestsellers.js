@@ -416,7 +416,7 @@
                         var order = {
                             factoryId: factoryId,
                             buyerId: 328,
-                            type: 1,
+                            type: 2,
                             deliveryDate: deliveryDate
                         };
 

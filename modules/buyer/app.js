@@ -142,14 +142,22 @@ app.config(function($routeProvider){
     )
 });
 
-app.run( function($rootScope, $location) {
+app.run( function($rootScope, $location ,$http) {
 
     $rootScope.$on( "$routeChangeStart", function() {
         if ( $rootScope.row == null ) {
 
             //$location.path('/buyer/orders');
 
-        }})
+        }});
+    /**
+     * get types
+     */
+    $http.get(config.API.host+"/type/load")
+        .success(function(data){
+            $rootScope.types=data;
+            console.log("run",$rootScope.types);
+        });
 });
 
 app.controller('DatepickerCtrl', function ($scope) {

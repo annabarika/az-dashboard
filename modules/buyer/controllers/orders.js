@@ -6,7 +6,9 @@ app.run(
         "$http",
 
         function($rootScope,$http){
-
+            /**
+             * get factories
+             */
             $http.get(config.API.host + "factory/load")
                 .success(function(data){
 
@@ -68,6 +70,7 @@ app.controller('OrderListController',
                 RestFactory.request(url).then(
                     function(response){
                         $scope.type= _.first(response);
+                        console.log(response);
                     }
                 )
             }
@@ -83,11 +86,21 @@ app.controller('OrderListController',
             /**
              * get payment type for orders
              */
-            $http.get(config.API.host+"/type/load/entity/payment/name/order")
-                .success(function(data){
-                    $scope.paymentType=data[0];
-                    console.log($scope.paymentType);
-                });
+            $scope.$watch('types',function(val){
+                if(val){
+                    _getPaymentType();
+                }
+            });
+            /**
+             * get payment Type
+             * @private
+             */
+            function _getPaymentType(){
+                var index=_.findIndex($rootScope.types,{'entity':'payment','name':'Order'});
+                if(index!=-1){
+                    $scope.paymentType=$rootScope.types[index];
+                }
+            }
             /**
              * parser Orders array
              * @param response
@@ -622,7 +635,8 @@ app.controller('OrderListController',
                             return factory;
                         },
                         type:function(){
-                            return $scope.type;
+                            var index= _.findIndex($rootScope.types,{entity:'order',name:'other'});
+                            return $rootScope.types[index];
                         }
                     },
                     backdrop:'static'
@@ -888,9 +902,11 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
 
     $scope.factory=factory;
     $scope.type=type;
-
-    /*console.log($rootScope.user);
-    console.log($scope.factory);*/
+    console.log($scope.type);
+    /**
+     * order status
+     * @type {number}
+     */
     $scope.statusModel=1;
     /**
      * create and save new order
@@ -914,7 +930,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
         var params = {
             'buyerId'       :   $rootScope.user.id,
             'factoryId'     :   $scope.factory.id,
-            'type'          :   $scope.type.id,
+            'type'          :   $scope.type.typeId,
             'currencyId'    :   $scope.factory.currencyId,
             'status'        :   $scope.statusModel
         };
@@ -996,8 +1012,11 @@ app.controller("OrderController",
 
             $scope.$route = $route;
             var id = $route.current.params.orderId,
-                url,data;
-
+                url,
+                data;
+            /**
+             * get type China/Guangzhou
+             */
             getTypes();
             function getTypes(){
                 url=config.API.host+"/order-type/load";
@@ -1010,11 +1029,22 @@ app.controller("OrderController",
             /**
              * get payment type for orders
              */
-            $http.get(config.API.host+"/type/load/entity/payment/name/order")
-                .success(function(data){
-                    $scope.paymentType=data[0];
-                    console.log($scope.paymentType);
-                });
+            $scope.$watch('types',function(val){
+                if(val){
+                    _getPaymentType();
+                }
+            });
+            /**
+             * get payment Type
+             * @private
+             */
+            function _getPaymentType(){
+                var index=_.findIndex($rootScope.types,{'entity':'payment','name':'Order'});
+                if(index!=-1){
+                    $scope.paymentType=$rootScope.types[index];
+                }
+                console.log(index,$scope.paymentType);
+            }
             /**
              *
              * @param status
@@ -1256,13 +1286,14 @@ app.controller("OrderController",
                 });
                 modalInstance.result.then(function(){
 
-                    url=config.API.host+'order/send-to-factory/id/'+id;//update status
-                    console.log(url);
-                    RestFactory.request(url).then(
+                   // url=config.API.host+'order/send-to-factory/id/'+id;//update status
+                    url=config.API.host+'order/update';//update status
+                    RestFactory.request(url,"PUT",{id:id,status:1}).then(
                         function(response){
                             console.log("send to factory",response);
-                            if(response=='true'){
+                            if(response.status=='1'){
                                 messageCenterService.add('success', 'Order sended', {timeout: 3000});
+                                $scope.order.order.status=response.status;
                             }
                             else{
                                 messageCenterService.add('danger', 'Error: '+response, {timeout: 3000});
