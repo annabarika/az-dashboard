@@ -97,13 +97,15 @@
                     else {
                         // use current month by default
                         range = getCurrentMonthRange(moment().year(), moment().month());
-                        console.log(range);
+                        //console.log(range);
                         data += 'paymentDate/'+ range.start + ',' + range.end;
                     }
 
                     return RestFactory.request(PATH.LOAD_PAYMENT + data);
                 },
-
+                getCurrentPayment:function(id){
+                    return RestFactory.request(PATH.LOAD_PAYMENT + "/id/"+id);
+                },
                 /**
                  * Create new payment
                  *

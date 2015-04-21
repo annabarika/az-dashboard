@@ -277,9 +277,16 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 			/**
 			 *	Location to Payment orders
 			 */
-			$scope.edit = function(){
-				console.log($rootScope.row);
-				$location.path( '/buyer/payments/payment_order/'+ $rootScope.row.orderId);
+			$scope.edit = function(item){
+				if(item){
+					console.log(item);
+					$location.path( '/buyer/payments/id/'+ item.payment.id);
+				}
+				else{
+					console.log($rootScope.row);
+					$location.path( '/buyer/payments/payment_order/'+ $rootScope.row.orderId);
+				}
+
 			};
 		}]);
 
@@ -357,6 +364,25 @@ app.controller("PaymentOrderController",[
 		$scope.back=function(){
 			$location.path("buyer/payments")
 		}
-
-
 	}]);
+app.controller('PaymentCartController',
+	[
+		"$scope",
+		"$rootScope",
+		"PaymentService",
+		"$location",
+		"$route",
+
+		function($scope,$rootScope,PaymentService,$location,$route){
+			/**
+			 * document title
+			 * @type {string}
+			 */
+			$rootScope.documentTitle='Payment cart: payment #'+$route.current.params.id;
+
+			console.log($route);
+			PaymentService.getCurrentPayment($route.current.params.id).then(function(response){
+				$scope.payment=response;
+			})
+		}
+	]);

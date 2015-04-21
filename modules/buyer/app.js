@@ -65,7 +65,15 @@ app.config(function($routeProvider){
             templateUrl:"/modules/buyer/views/payments/payment_order.html",
             controller:"PaymentOrderController",
             authRequired: 'developer'
-        })
+        }
+    )
+        .when("/buyer/payments/id/:id",
+        {
+            templateUrl:"/modules/buyer/views/payments/id.html",
+            controller:"PaymentCartController",
+            authRequired: 'developer'
+        }
+    )
         .when('/buyer/collection',
         {
             templateUrl:"/modules/buyer/views/collection/index.html",
