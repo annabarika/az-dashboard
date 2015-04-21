@@ -1,8 +1,9 @@
 angular.module('widgets.autocomplete', [])
 
-    .filter('tableFilter', function () {
+    .filter('tableFilter', function ($rootScope) {
 
         return function (dataArray, search, properties) {
+            $rootScope.filteredData=[];
 
             if (!dataArray) return;
 
@@ -56,22 +57,24 @@ angular.module('widgets.autocomplete', [])
                     }
                 }
             }
-
             if(array.length!=0){
-                //console.log("success", array);
+               /* console.log("success", array);*/
+                $rootScope.filteredData=array;
                 return array;
             }
 
         }
     })
 
-    .directive("autocomplete",function(){
-
+    .directive("autocomplete",function($rootScope){
+        /**
+         * set style width for 'autocomplete_box'
+         * @private
+         */
         function _setStyles(){
             var width = getComputedStyle((document.getElementById("autocomplete"))).width;
             document.getElementsByClassName('autocomplete_box')[0].style.width=width;
         }
-
 
         return{
             restrict:"EA",
@@ -85,41 +88,67 @@ angular.module('widgets.autocomplete', [])
             },
             templateUrl:"/app/widgets/autocomplete.wgt.html",
             link:function($scope,elem, attr){
-
-                //console.log($scope.inputModel);
-
+                /**
+                 * setStyles for table
+                 */
+                _setStyles();
+                /**
+                 * placeholder
+                 */
                 if($scope.placeholder==undefined){
                     $scope.placeholder='search';
                 }
-
-                var ul=elem[0].children[0].children[1];
-
+                /**
+                 * flag for table
+                 * @type {boolean}
+                 */
                 $scope.flag=true;
+                /**
+                 * show table,and get table row
+                 * @param event
+                 */
+                $scope.showTable=function(event){
+                    event.stopPropagation();
+                    if(event.keyCode==13){
+                        /*console.log($rootScope.filteredData);*/
+                        if($rootScope.filteredData.length>=1 && $scope.search!=""){
+                            $scope.outputModel=$rootScope.filteredData[0];
+                            console.log($scope.outputModel);
+                            $scope.search=$scope.outputModel.name;
+                            $scope.flag=true;
 
-                $scope.$watch('search',function(val){
-                    _setStyles();
-                    if(val!=undefined && val!=""){
-
-                        $scope.flag=false;
-
+                        }
+                        else{
+                            $scope.search="";
+                            $scope.outputModel="";
+                            $scope.flag=true;
+                        }
                     }
                     else{
-                        $scope.flag=true;
+                        if($scope.search!=undefined && $scope.search!=""){
+                            $scope.flag=false;
+                        }
+                        else{
+                            $scope.flag=true;
+                        }
                     }
-                });
-
-                $scope.getRow=function(obj){
-                    /*console.log(obj);*/
-                    $scope.search = obj.name||obj.id;
-                    $scope.outputModel = obj;
                 };
-
-                $scope.$watch('outputModel',function(newVal){
-
-                    if(newVal){
-                        $scope.flag=true;
+                /**
+                 * get table row
+                 * @param obj
+                 */
+                $scope.getRow=function(obj){
+                    console.log(obj);
+                    if(obj){
+                        $scope.search = obj.name||obj.id;
+                        $scope.outputModel = obj;
                     }
-                })
+                    else{
+                        $scope.search="";
+                        $scope.outputModel="";
+                    }
+                    $scope.flag=true;
+                };
             }
         }
     });

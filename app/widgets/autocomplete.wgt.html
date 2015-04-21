@@ -1,5 +1,5 @@
 <div class="autocomplete_widget input-group">
-    <input type='text' placeholder='{{placeholder}}' ng-model='search' id="autocomplete"/>
+    <input type='text' placeholder='{{placeholder}}' ng-model='search' id="autocomplete" ng-keyup="showTable($event)" title="write and press ENTER"/>
 
 <div ng-hide="flag" class="autocomplete_box">
 
@@ -12,17 +12,13 @@
         <!--body-->
         <!--<tr ng-repeat="row in inputModel | filter:filters | orderBy:'name'" ng-click='getRow(row)'>-->
         <tr ng-repeat="row in inputModel | tableFilter : search : filterProperty | orderBy:'name' track by $index" ng-click='getRow(row)'>
-
             <td> <span class="btn btn-default btn-rounded btn-sm">{{$index+1}}</span></td>
             <td ng-if="column!=undefined " ng-repeat="col in column">
-
-                <table ng-if="col.name=='phone'">
-
-                    <tr ng-repeat="phone in row.phone">
-                        <td>{{phone}}</td>
-                    </tr>
-
-                </table>
+                <ul ng-if="col.name=='phone'">
+                    <li ng-repeat="phone in row.phone">
+                        {{phone}}
+                    </li>
+                </ul>
 
                 <!--<table ng-if="col.name=='address'">
                     <tr><td>country: </td><td><b>{{row.address.country}}</b></td></tr>
@@ -36,28 +32,19 @@
                     {{row.address.country}}, {{row.address.city}}, {{row.address.address}}
                 </span>
 
-                <table ng-if="col.name=='preview'">
-
-                    <tr ng-repeat="img in row.preview">
-                        <td>
+                <ul ng-if="col.name=='preview'">
+                    <li ng-repeat="img in row.preview">
                             <span class="thumbnail media-left">
-
-                                     <img ng-src="{{imagepath}}{{img}}"/>
-
+                                <img ng-src="{{imagepath}}{{img}}"/>
                             </span>
                          <!-- <span class="thumbnail img_sm">
                               <img ng-src="{{imagepath}}{{img}}"/>
                           </span>-->
-                        </td>
-                    </tr>
-
-                </table>
-
-
+                    </li>
+                </ul>
                 <span ng-if="col.name!='phone' && col.name!='preview' && col.name!='address'">
                     {{row[col.name]}}
                 </span>
-
             </td>
             <td ng-if="column==undefined">{{row}}</td>
         </tr>

@@ -5,8 +5,6 @@
         <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
     </div>
     <div class="modal-body">
-        <!--<button class="btn btn-success" ng-show="factoryFlag" ng-click="createNewFactory()"><i class="fa fa-plus"></i>Create new</button>-->
-        <button class="btn btn-success" ng-show="factoryFlag" ng-click="createNewFactory()"><i class="fa fa-plus"></i>Create new</button>
         <form>
             <autocomplete
                     input-model="allFactories"
@@ -19,6 +17,7 @@
     </div>
     <!--footer-->
     <div class="modal-footer">
+        <button class="btn btn-success" ng-show="factoryFlag" ng-click="createNewFactory()"><i class="fa fa-plus"></i>Create new</button>
         <button type="button" class="btn btn-primary" ng-click="chooseFactory(factory)">Choose</button>
         <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
     </div>

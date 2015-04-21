@@ -32,6 +32,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 				PaymentService.getPayments(0, date).then(function(response) {
 						if(_.isArray(response)){
                             $scope.draftPayments = response;
+							console.log($scope.draftPayments);
 						}
 					}
 				);
@@ -40,6 +41,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
                         if(_.isArray(response)){
                             $scope.paidPayments = PaymentService.resolvePaymentData(response);
                             $scope.paidSummary = PaymentService.calculatePaidRows($scope.paidPayments);
+							console.log($scope.paidPayments);
                         }
                     }
                 );

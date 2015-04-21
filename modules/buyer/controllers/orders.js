@@ -13,8 +13,6 @@ app.run(
                      $rootScope.fullFactories=data;
                     _factoryForFilter();
                 });
-
-
             /**
              * Factory getter
              * @private
@@ -30,7 +28,6 @@ app.run(
                // console.log(factory);
             }
         }
-
     ]);
 
 app.controller('OrderListController',
@@ -61,8 +58,12 @@ app.controller('OrderListController',
                 data,
                 filter={};
 
-            getTypes();
-            function getTypes(){
+            _getTypes();
+            /**
+             * get types
+             * @private
+             */
+            function _getTypes(){
                 url=config.API.host+"/order-type/load";
                 RestFactory.request(url).then(
                     function(response){
@@ -70,14 +71,23 @@ app.controller('OrderListController',
                     }
                 )
             }
-            //$scope.newOrder={};
-
+            /**
+             * get orders
+             */
             RestFactory.request(config.API.host+"order/load-detailed/").then(
                 function(response){
                     //console.log("all orders",response);
                     _parseOrders(response);
                 }
             );
+            /**
+             * get payment type for orders
+             */
+            $http.get(config.API.host+"/type/load/entity/payment/name/order")
+                .success(function(data){
+                    $scope.paymentType=data[0];
+                    console.log($scope.paymentType);
+                });
             /**
              * parser Orders array
              * @param response
@@ -310,8 +320,7 @@ app.controller('OrderListController',
                         cashierOfficeId : parseInt(CO),
                         paymentType     : type,
                         paymentMethod   : "bank",
-                        paymentDocumentType : 1,
-                        paymentType     : type,
+                        paymentDocumentType : $scope.paymentType.typeId,//1,
                         amount          : payment.amount,
                         note            : payment.note
                     };
@@ -487,7 +496,7 @@ app.controller('OrderListController',
                          * flag for button 'create factory'
                          * @type {boolean}
                          */
-                        $scope.factoryFlag=false;
+                        //$scope.factoryFlag=false;
                         /**
                          * filter property for autocomplete
                          * @type {string[]}
@@ -552,10 +561,20 @@ app.controller('OrderListController',
                         /**
                          * show button 'create factory' after 3000mc
                          */
-                        $timeout(function(){
-                            //if($scope.factory==undefined) $scope.factoryFlag=true;
+                      /*  $timeout(function(){
                             $scope.factoryFlag=true;
-                        },3000);
+                        },3000);*/
+
+
+                        $scope.$watch('factory',function(val){
+                            if(val==""){
+                                $scope.factoryFlag=true;
+                            }
+                            else{
+                                $scope.factoryFlag=false;
+                            }
+                        });
+
 
                         $scope.chooseFactory=function(factory){
                             if(!factory){
@@ -988,7 +1007,14 @@ app.controller("OrderController",
                     }
                 )
             }
-
+            /**
+             * get payment type for orders
+             */
+            $http.get(config.API.host+"/type/load/entity/payment/name/order")
+                .success(function(data){
+                    $scope.paymentType=data[0];
+                    console.log($scope.paymentType);
+                });
             /**
              *
              * @param status
@@ -1146,7 +1172,7 @@ app.controller("OrderController",
                             }
                         }
                     )}
-            }
+            };
 
             $scope.saveProduct=function(event,product,model){
 
@@ -1230,7 +1256,7 @@ app.controller("OrderController",
                 });
                 modalInstance.result.then(function(){
 
-                    url=config.API.host+'order/send-to-factory/id/'+id;
+                    url=config.API.host+'order/send-to-factory/id/'+id;//update status
                     console.log(url);
                     RestFactory.request(url).then(
                         function(response){
@@ -1241,7 +1267,6 @@ app.controller("OrderController",
                             else{
                                 messageCenterService.add('danger', 'Error: '+response, {timeout: 3000});
                             }
-
                         },
                         function(error){
                             messageCenterService.add('danger', 'Error: '+error, {timeout: 3000});
@@ -1262,13 +1287,9 @@ app.controller("OrderController",
                         if(response=='true'){
                             $scope.orderProducts.splice(index,1);
                             messageCenterService.add('success', 'Product deleted', {timeout: 3000});
-
                         }else{
                             messageCenterService.add('danger', 'Error! Product is not deleted', {timeout: 3000});
                         }
-
-
-
                     },
                     function(error){
                         messageCenterService.add('danger', 'Error: '+error, {timeout: 3000});
@@ -1307,21 +1328,21 @@ app.controller("OrderController",
                     size:"sm"
                 });
 
-                modalInstance.result.then(function(payment){
+                modalInstance.result.then(function(payment) {
                     var CO=JSON.parse(localStorage['user']).settings.cashierOffice;
                     var cashierId=JSON.parse(localStorage['user']).id;
-                    url = config.API.host + "payment/create-order-payment";
+                    url = config.API.host + 'payment/create';
                     data = {
-                        documentId      : id,
-                        currencyId      : $scope.order.currency.id,
-                        cashierId       : cashierId,
-                        cashierOfficeId : parseInt(CO),
-                        paymentType     : "payment",
-                        paymentMethod   : "bank",
-                        amount          : payment.amount,
-                        note            : payment.note
+                        documentId          :   id,
+                        currencyId          :   $scope.order.currency.id,
+                        cashierId           :   cashierId,
+                        cashierOfficeId     :   parseInt(CO),
+                        paymentType         :   "payment",
+                        paymentMethod       :   "bank",
+                        paymentDocumentType :   $scope.paymentType.typeId,
+                        amount              :   payment.amount,
+                        note                :   payment.note
                     };
-
                     RestFactory.request(url,"POST",data).then(
                         function(response){
                             console.log("payment",response);
@@ -1333,7 +1354,6 @@ app.controller("OrderController",
                             }
                         }
                     );
-
                 })
             };
 

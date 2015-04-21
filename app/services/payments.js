@@ -30,8 +30,8 @@
 
                 var range = {
                     start : moment([year, iso, 1]).format("YYYY-MM-DD"),
-                    end   : moment().format('YYYY-MM-DD')
-                }
+                    end   : moment().format('YYYY-MM-DD')+" 23:59:59"
+                };
 
                 return range;
             };
@@ -96,7 +96,8 @@
                     }
                     else {
                         // use current month by default
-                        range = getCurrentMonthRange(moment().year(), moment().month())
+                        range = getCurrentMonthRange(moment().year(), moment().month());
+                        console.log(range);
                         data += 'paymentDate/'+ range.start + ',' + range.end;
                     }
 
