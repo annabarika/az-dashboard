@@ -775,7 +775,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
          * @param index
          * @param product
          */
-        $scope.addCount=function(count,index,product){
+        $scope.addCount=function(count,index,product,size){
 
             function _counter(n){
                 if(typeof n.count=='string') n.count=parseInt(n.count);
@@ -792,13 +792,15 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                     _.map($scope.items[index].sizes,_counter);
                 }
                 else{
+                    console.log($scope.items,size);
                     var length=$scope.items.length;
                     for (var i=0;i<length;i++){
                         if($scope.items[i].catalogueProduct.id==product.catalogueProduct.id){
-                            if(typeof $scope.items[i].sizes[index].count=='string')
-                                $scope.items[i].sizes[index].count=parseInt($scope.items[i].sizes[index].count);
-                            $scope.items[i].sizes[index].count+=count;
+                            if(typeof $scope.items[i].sizes[size.id].count=='string')
+                                $scope.items[i].sizes[size.id].count=parseInt($scope.items[i].sizes[size.id].count);
+                            $scope.items[i].sizes[size.id].count+=count;
                             return;
+
                         }
                     }
                 }
@@ -809,7 +811,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
          * @param index
          * @param product
          */
-        $scope.removeCount=function(index,product){
+        $scope.removeCount=function(index,product,size){
 
             function _reCount(i){
                 return i.count=0;
@@ -826,9 +828,10 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 }
                 else{
                     var length=$scope.items.length;
+                    console.log($scope.items,index);
                     for (var i=0;i<length;i++){
                         if($scope.items[i].catalogueProduct.id==product.catalogueProduct.id){
-                            $scope.items[i].sizes[index].count=0;
+                            $scope.items[i].sizes[size.id].count=0;
                             return;
                         }
                     }
@@ -840,10 +843,10 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             var modalInstance=CollectionService.showModal("CANCEL_COLLECTION");
             modalInstance.result.then(function(){
                 CollectionService.cancelCollection($routeParams.collectionId).then(function (response) {
-                        console.log(response);
+                        console.log("cancel collection",response);
 
                     if (response.status==2) {
-                        $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
+                        //$rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
                         messageCenterService.add('success', 'The collection has been successfully removed', {timeout: 2000});
 
                         $timeout(function () {

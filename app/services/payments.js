@@ -13,7 +13,7 @@
         CURRENCY: config.API.host + "currency/load",
         CREATE_PAYMENT: config.API.host + "payment/create",
         UPDATE_PAYMENT: config.API.host + "payment/update",
-        ORDERPAYMENTS: config.API.host + "/payment/load/orderId/"
+        ORDERPAYMENTS: config.API.host + "/payment/load/documentId/"
     });
 
     app.factory("PaymentService", ["PATH", 'RestFactory',

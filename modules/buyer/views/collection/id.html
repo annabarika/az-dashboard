@@ -66,12 +66,12 @@
                                 <td>
                                     <ul ng-if="product.sizes" ng-hide="product.inOrder" class="media-list mb-sm lg">
                                         <li ng-repeat="size in product.sizes" class="media">
-                                            <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="product.inOrder" value="0"/>
+                                            <input type="text" class="sm form-control" ng-model="size.count" numbers-only ng-disabled="collection.orderId" value="0"/>
                                             <div class="btn-group" role="group" aria-label="...">
-                                                <button class="btn btn-default btn-xs" ng-click="addCount(1,$index,product)"><span class="fa fa-plus"> 1</span></button>
-                                                <button class="btn btn-default btn-xs" ng-click="addCount(3,$index,product)"><span class="fa fa-plus"> 3</span></button>
-                                                <button class="btn btn-default btn-xs" ng-click="addCount(5,$index,product)"><span class="fa fa-plus"> 5</span></button>
-                                                <button class="btn btn-default btn-xs" ng-click="removeCount($index,product)"><span class="fa fa-remove"> </span></button>
+                                                <button class="btn btn-default btn-xs" ng-click="addCount(1,$index,product,size)"><span class="fa fa-plus"> 1</span></button>
+                                                <button class="btn btn-default btn-xs" ng-click="addCount(3,$index,product,size)"><span class="fa fa-plus"> 3</span></button>
+                                                <button class="btn btn-default btn-xs" ng-click="addCount(5,$index,product,size)"><span class="fa fa-plus"> 5</span></button>
+                                                <button class="btn btn-default btn-xs" ng-click="removeCount($index,product,size)"><span class="fa fa-remove"> </span></button>
                                             </div>
 
 
@@ -87,7 +87,7 @@
                         </table>
                     </td>
                     <td>
-                        <div class="btn-group" ng-hide="product.inOrder">
+                        <div class="btn-group" ng-hide="collection.orderId">
                         <!--<button class="btn btn-green" ng-click="addToOrder(product, $index)"><span class="fa fa-check"></span>Create order</button>-->
                         <!--<button class="btn btn-yellow" ng-click="saveProduct(product)"><span class="fa fa-check">Save</span></button>-->
                         <button class="btn btn-red" ng-click="deleteProduct(product.catalogueProduct.id, $index)"><span class="fa fa-check"></span>Delete</button>
@@ -100,7 +100,7 @@
 
 
                         </div>
-                        <div ng-show="product.inOrder">Order ID # <a ng-href="/buyer/orders/id/{{orderId}}">{{orderId}}</a></div>
+                        <div ng-show="collection.orderId">Order ID # <a ng-href="/buyer/orders/id/{{orderId}}">{{orderId}}</a></div>
                     </td>
                 </tr>
                 </tbody>

@@ -82,7 +82,7 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
             });*/
 
             BestsellersService.getDayDetailed('total', date).then(function(response) {
-                $scope.bestsellersOrdered = response;
+                $scope.bestsellersTotal = response;
                 console.log(response);
             });
 

@@ -77,7 +77,7 @@
                     var range = {
                         start : moment().subtract(iso, 'months').startOf('month').format(year+'-'+iso+'-DD'),
                         end   : moment(new Date(year, iso, 0)).format('YYYY-MM-DD HH:mm:ss')
-                    }
+                    };
 
                     return range;
                 };

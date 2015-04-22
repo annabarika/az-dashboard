@@ -162,13 +162,12 @@
                  * @returns {Array}
                  */
                 filterCollections : function(response, factories, statuses) {
-                    //console.log(factories,statuses);
+                    console.log(response);
                     var collections = [];
 
                     angular.forEach(response, function(value) {
 
                         angular.forEach(factories, function(factory) {
-
                             if(factory.id == value.factoryId) {
                                 value.factoryName = factory.name;
                                 value.factoryFiles = factory.files;
@@ -660,6 +659,8 @@
                             transformRequest: angular.identity,
                             headers: {'Content-Type': undefined}
                         });
+
+                   // RestFactory.uploader(PATHC.LOADFILES,file);
                 },
                 /**
                  *
@@ -700,10 +701,11 @@
                  * @returns {*}
                  */
                 orderCreate: function (buyerId,collection,currencyId,type) {
+                    console.log(type);
                     var params = {
                         'buyerId'       :   buyerId,
                         'factoryId'     :   collection.factoryId,
-                        'type'          :   type.typeId,//1,order.type.id,
+                        'type'          :   1,//type.typeId,
                         'currencyId'    :   currencyId
                     };
 
