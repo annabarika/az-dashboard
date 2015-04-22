@@ -12,6 +12,7 @@
         ORDERTYPE: config.API.host + "order-type/load",
         CURRENCY: config.API.host + "currency/load",
         CREATE_PAYMENT: config.API.host + "payment/create",
+        UPDATE_PAYMENT: config.API.host + "payment/update",
         ORDERPAYMENTS: config.API.host + "/payment/load/orderId/"
     });
 
@@ -103,8 +104,18 @@
 
                     return RestFactory.request(PATH.LOAD_PAYMENT + data);
                 },
+                /**
+                 * Get currernt payment by id
+                 * @param id
+                 * @returns {*}
+                 */
                 getCurrentPayment:function(id){
                     return RestFactory.request(PATH.LOAD_PAYMENT + "/id/"+id);
+                },
+
+                updatePayment:function(data){
+
+                    return RestFactory.request(PATH.UPDATE_PAYMENT,"PUT",data);
                 },
                 /**
                  * Create new payment
@@ -206,19 +217,7 @@
                     }
                     return result;
                 },
-
-
-
                 // @TODO untouched area
-
-
-
-
-
-
-
-
-
                 /**
                  *
                  * @param id

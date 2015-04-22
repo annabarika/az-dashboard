@@ -156,7 +156,7 @@ app.run( function($rootScope, $location ,$http) {
     $http.get(config.API.host+"/type/load")
         .success(function(data){
             $rootScope.types=data;
-            console.log("run",$rootScope.types);
+           /* console.log("run types",$rootScope.types);*/
         });
 });
 

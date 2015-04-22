@@ -372,18 +372,39 @@ app.controller('PaymentCartController',
 		"PaymentService",
 		"$location",
 		"$route",
+		"messageCenterService",
 
-		function($scope,$rootScope,PaymentService,$location,$route){
+		function($scope,$rootScope,PaymentService,$location,$route,messageCenterService){
 			/**
 			 * document title
 			 * @type {string}
 			 */
 			$rootScope.documentTitle='Payment cart: payment #'+$route.current.params.id;
-
-			console.log($route);
+			/**
+			 * get current payment
+			 */
 			PaymentService.getCurrentPayment($route.current.params.id).then(function(response){
-				$scope.payment=response[0];
-				console.log(response[0]);
-			})
+				if(response){
+					$scope.payment= _.first(response);
+				}
+			});
+			/**
+			 * confirm or canceled payment
+			 */
+			$scope.upload=function(){
+				PaymentService.updatePayment($scope.payment.payment).then(function(response){
+					if(_.has(response,'status')){
+						if(response.status==1){
+							messageCenterService.add('success','Payment paid',{timeout:3000});
+						}
+						if(response.status==2){
+							messageCenterService.add('success','Payment canceled',{timeout:3000});
+						}
+						else{
+							messageCenterService.add('danger','Payment is not update: '+response,{timeout:3000});
+						}
+					}
+				})
+			};
 		}
 	]);
