@@ -70,14 +70,15 @@
                 var xhr=new XMLHttpRequest();
                 /**
                  * progress
-                 * @param e
+                 * @param event
                  */
-                xhr.upload.onprogress = function(e) {
-                    console.log(e);
+                xhr.upload.onprogress = function(event) {
+                    console.log(event);
+                    console.log(event.loaded + ' / ' + event.total);
                     $rootScope.$apply (function() {
                         var percentCompleted;
-                        if (e.lengthComputable) {
-                            percentCompleted = Math.round(e.loaded / e.total * 100);
+                        if (event.lengthComputable) {
+                            percentCompleted = Math.round(event.loaded / event.total * 100);
                             if (progress) {
                                 progress(percentCompleted);
                             } else if (deferred.notify) {

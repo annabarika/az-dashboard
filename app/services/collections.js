@@ -660,7 +660,7 @@
                             headers: {'Content-Type': undefined}
                         });
 
-                   // RestFactory.uploader(PATHC.LOADFILES,file);
+                    //RestFactory.uploader(PATHC.LOADFILES,file);
                 },
                 /**
                  *
@@ -702,10 +702,13 @@
                  */
                 orderCreate: function (buyerId,collection,currencyId,type) {
                     console.log(type);
+                    var typeId;
+                    (!type)?typeId=1:typeId=type.typeId;
+
                     var params = {
                         'buyerId'       :   buyerId,
                         'factoryId'     :   collection.factoryId,
-                        'type'          :   1,//type.typeId,
+                        'type'          :   typeId,//type.typeId,
                         'currencyId'    :   currencyId
                     };
 

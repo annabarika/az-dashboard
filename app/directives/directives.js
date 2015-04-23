@@ -118,6 +118,47 @@
     });
   /* file Uploader directive*/
     app.directive("fileInput",["$parse",function($parse){
+        /**
+         * validation for files types
+         * @param files
+         * @param accept
+         * @returns {*}
+         * @private
+         */
+        function _validFiles(files,accept){
+
+            if(!accept){return files}
+
+            var obj={},
+                accept=accept.split(','),
+                length=accept.length,
+                counter=0;
+
+            for(var i=0;i<length;i++){
+                accept[i]=accept[i].replace(".","/");
+                accept[i]=accept[i].replace("jpg","jp");
+                accept[i]=accept[i].replace("jpeg","jp");
+            }
+
+            for (key in files){
+
+                if(!files[key].hasOwnProperty('type')){
+                    continue;
+                }
+                if(files[key].type==""){
+                    continue;
+                }
+                for (var i=0;i<length;i++){
+                    if(files[key].type.indexOf(accept[i])!=-1){
+                        obj[counter]=files[key];
+                        counter++;
+                    }
+                }
+            }
+            obj['length']=counter;
+            /*console.log(obj);*/
+            return obj;
+        }
 
         return{
             restrict:"A",
@@ -125,14 +166,15 @@
                 //console.log(attrs);
 
                 if(attrs.accept!=undefined){
-                    console.log(attrs.accept);
+                    //console.log(attrs.accept);
                 }
 
-
-
                 elm.bind("change",function(){
+
+                    var files=_validFiles(elm[0].files,attrs.accept);
+
                     $parse(attrs.fileInput)
-                        .assign(scope,elm[0].files);
+                        .assign(scope,files);
                         scope.$apply();
                 });
             }
