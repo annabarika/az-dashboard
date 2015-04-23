@@ -134,11 +134,10 @@
                 length=accept.length,
                 counter=0;
 
-            for(var i=0;i<length;i++){
-                accept[i]=accept[i].replace(".","/");
-                accept[i]=accept[i].replace("jpg","jp");
-                accept[i]=accept[i].replace("jpeg","jp");
-            }
+            accept=accept.map(function(i){
+                return i.replace(".","/").slice(0,3);
+            });
+            console.log(accept);
 
             for (key in files){
 
