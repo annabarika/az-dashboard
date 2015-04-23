@@ -497,8 +497,44 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                          * @private
                          */
                         function _Upload(i){
-                            $scope.start=0;
+                            $scope.uploadLoaded=0;
                             image=$scope.photo[keyArray[i]];
+                            /*CollectionService.uploadFiles(image);
+
+                            $scope.$watch('uploadLoaded',function(val){
+                                if(val){
+                                    console.log(val);
+                                }
+                            });
+
+                            $scope.$watch('resultUploadData',function(val){
+                                if(val){
+                                    if (_.isArray(val)) {
+                                        $scope.items.push({
+                                            photos:val,
+                                            article:"",
+                                            sizes:"",
+                                            price:""
+                                        });
+
+                                        $rootScope.resultUploadData=undefined;
+
+                                        $timeout(function(){
+                                            $scope.dynamic ++;
+                                        }, 200);
+                                        i++;
+                                        if(i<$scope.max && $scope.flagUpload==true){
+                                            _Upload(i);
+                                        }else{
+                                            if($scope.items.length==$scope.max){
+                                                $timeout(function(){
+                                                    modalInstance.close($scope.items);
+                                                }, 1000);
+                                            }
+                                        }
+                                    }
+                                }
+                            });*/
 
                             CollectionService.uploadFiles(image).success(function (data) {
                                 if (_.isArray(data)) {

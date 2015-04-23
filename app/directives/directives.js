@@ -185,6 +185,7 @@
             scope: {
                 filePreview: '='
             },
+            //@TODO add spinner of progress bar while image not show
             link: function (scope, element, attrs) {
                 scope.$watch('filePreview', function (filePreview) {
                     if (filePreview && Object.keys(filePreview).length !== 0) {

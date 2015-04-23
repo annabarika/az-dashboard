@@ -63,72 +63,57 @@
             * @param data
             * @param progress
             */
-            service.uploader=function(url,files,data,progress){
+            service.uploader=function(url,files){
 
-                var deferred = $q.defer();
-
-                var xhr=new XMLHttpRequest();
+                var _resultData;
                 /**
-                 * progress
-                 * @param event
+                 * start uploading
                  */
-                xhr.upload.onprogress = function(event) {
-                    console.log(event);
-                    console.log(event.loaded + ' / ' + event.total);
-                    $rootScope.$apply (function() {
-                        var percentCompleted;
-                        if (event.lengthComputable) {
-                            percentCompleted = Math.round(event.loaded / event.total * 100);
-                            if (progress) {
-                                progress(percentCompleted);
-                            } else if (deferred.notify) {
-                                deferred.notify(percentCompleted);
-                            }
+                _makeXHR(url,files,_result);
+                /**
+                 * callback function
+                 * @param data
+                 * @returns {*}
+                 * @private
+                 */
+                function _result(data){
+                    //_resultData = data;
+                    $rootScope.$apply(function(){
+                        $rootScope.resultUploadData=data;
+                    });
+                }
+                /**
+                 * make Ajax request
+                 * @param url
+                 * @param files
+                 * @param callback
+                 * @private
+                 */
+                function _makeXHR(url,files,callback){
+                    var xhr=new XMLHttpRequest();
+
+                    xhr.upload.onprogress=function(event){
+                        $rootScope.$apply(function(){
+                            $rootScope.uploadLoaded=event.loaded;
+                            $rootScope.uploadTotal=event.total;
+                        })
+                    };
+                    xhr.onload = xhr.onerror = function(event) {
+
+                        if (this.status == 200) {
+                            var data=JSON.parse(event.currentTarget.response);
+                            callback(data);
                         }
-                    });
-                };
-                /**
-                 * upload complete
-                 * @param e
-                 */
-                xhr.onload = function(e) {
-                    $rootScope.$apply (function() {
-                        var ret = {
-                            files: files,
-                            data: angular.fromJson(xhr.responseText)
-                        };
-                        deferred.resolve(ret);
-                    })
-                };
-                /**
-                 * XHR error
-                 * @param e
-                 */
-                xhr.upload.onerror = function(e) {
-                    var msg = xhr.responseText ? xhr.responseText : "An unknown error occurred posting to '" + url + "'";
-                    $rootScope.$apply (function() {
-                        deferred.reject(msg);
-                    });
-                };
-
-                var formData = new FormData();
-
-                if (data) {
-                    Object.keys(data).forEach(function(key) {
-                        formData.append(key, data[key]);
-                    });
+                        else {
+                            console.log("error " + this.status);
+                            callback(this.status)
+                        }
+                    };
+                    xhr.open("POST", url, true);
+                    xhr.send(files);
                 }
-
-                for (var idx = 0; idx < files.length; idx++) {
-                    formData.append(files[idx].name, files[idx]);
-                }
-
-                xhr.open("POST", url);
-                xhr.send(formData);
-
-                return deferred.promise;
-
             };
+
             return service;
         }]);
 })();

@@ -660,7 +660,11 @@
                             headers: {'Content-Type': undefined}
                         });
 
-                    //RestFactory.uploader(PATHC.LOADFILES,file);
+                    /*var fd=new FormData();
+                    fd.append('file[]',file);
+                    RestFactory.uploader(PATHC.LOADFILES,fd);*/
+
+
                 },
                 /**
                  *
