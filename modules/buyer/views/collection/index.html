@@ -18,17 +18,28 @@
             <div class="row">
 
                 <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in collections" ng-click="uploadProducts(item)" style="min-height:100px; cursor: pointer;">
+                    <!--<pre>{{imagePath}}</pre>-->
                     <div class="panel panel-body">
                         <ul class="row_collection">
                             <li ng-repeat="file in item.factoryFiles" class="img-wrapper" ng-if="$index<2">
-
-                                <img ng-src="{{imagePath}}{{file.path}}"/>
-
+                                <a href="http:{{imagePath}}{{file.path}}" target="_blank" ng-click="$event.stopPropagation()">
+                                    <img ng-src="{{imagePath}}{{file.path}}"/>
+                                </a>
                             </li>
                         </ul>
 
                         <div>
-                            <p class="caption">{{item.factoryName}}<br/><span class="date">{{item.createDate}}</span></p>
+                            <p class="caption">
+                            <a ng-href="buyer/factory/{{item.factoryId}}" target="_blank" ng-click="$event.stopPropagation()">
+                                {{item.factoryName}}
+                            </a>
+                                <br/>
+                                <span class="date">{{item.createDate}}</span></p>
+                            <p>
+                                <ul style="list-style: none">
+                                  <li ng-repeat="phone in item.factoryPhone">{{phone}}</li>
+                                </ul>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -73,7 +73,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
         function _loadCollections(url){
             CollectionService.getCollections(url).then(function (response) {
-
+                /*console.log($rootScope.factories);*/
                 $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
 
                 var length=$rootScope.collections.length;
@@ -989,3 +989,14 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
         };
     }
 ]);
+
+app.controller('FactoryController',[
+    "$scope",
+    '$rootScope',
+    '$route',
+    function($scope,$rootScope,$route){
+
+        $rootScope.documentTitle='Factory Cart';
+        $scope.test='hello world';
+    }
+])

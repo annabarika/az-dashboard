@@ -140,6 +140,12 @@ app.config(function($routeProvider){
             authRequired:"admin"
         }
     )
+        .when("/buyer/factory/:id",
+        {
+            templateUrl:"/modules/buyer/views/factory/index.html",
+            controller:"FactoryController",
+            authRequired:"admin"
+        })
 });
 
 app.run( function($rootScope, $location ,$http) {

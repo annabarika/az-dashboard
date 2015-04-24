@@ -171,6 +171,8 @@
                             if(factory.id == value.factoryId) {
                                 value.factoryName = factory.name;
                                 value.factoryFiles = factory.files;
+                                value.factoryPhone = JSON.parse(factory.phone);
+                                value.factoryId = factory.id;
                             }
                         });
 
