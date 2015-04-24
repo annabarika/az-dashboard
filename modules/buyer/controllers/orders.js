@@ -278,10 +278,10 @@ app.controller('OrderListController',
                 event.stopPropagation();
 
                 if(type=='refund'){
-                    $scope.title="Refund from order #"+$scope.orders[index].order.id;
+                    $scope.title="Ask for refund from order #"+$scope.orders[index].order.id;
                 }
                 else{
-                    $scope.title="Make payment for order #"+$scope.orders[index].order.id;
+                    $scope.title="Ask for payment for order #"+$scope.orders[index].order.id;
                 }
 
                 var modalInstance=$modal.open({
@@ -1335,7 +1335,7 @@ app.controller("OrderController",
                     templateUrl: "/modules/buyer/views/orders/make_payment.html",
                     controller: function($scope,messageCenterService){
 
-                        $scope.title="Make payment";
+                        $scope.title="Ask for payment";
 
                         $scope.make=function(payment){
                             if(_.isUndefined(payment)){

@@ -157,8 +157,8 @@
                             <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="changeDate($index)" tooltip="change delivery date"><i class="fa fa-calendar"></i></button>
                             <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.status == 2" ng-click="cancel($index)" tooltip="cancel order"><i class="fa fa-ban"></i></button>
                             <hr/>
-                            <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" tooltip="make payment">&#165;</button>
-                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.paidTotal < 1" ng-click="makePayment($index,'refund')" tooltip="make refund">&#165;</button>
+                            <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" tooltip="Ask for payment">&#165;</button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.paidTotal < 1" ng-click="makePayment($index,'refund')" tooltip="Ask for refund">&#165;</button>
                             <button ng-show="user.type == 'admin'" ng-disabled="item.order.status == 3" type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="finish($index)" tooltip="finish"><i class="fa fa-times"></i></button>
                         </td>
                     </tr>
