@@ -57,7 +57,7 @@
                 return deferred.promise;
             };
             /**
-            * FILE UPLOAD METHOD
+            * FILE UPLOAD METHOD 1
             * @param url
             * @param files
             * @param data
@@ -93,9 +93,10 @@
                     var xhr=new XMLHttpRequest();
 
                     xhr.upload.onprogress=function(event){
+                        console.log((event.loaded / event.total) * 100);
                         $rootScope.$apply(function(){
-                            $rootScope.uploadLoaded=event.loaded;
-                            $rootScope.uploadTotal=event.total;
+                            $rootScope.uploadProgress=(event.loaded / event.total) * 100;
+
                         })
                     };
                     xhr.onload = xhr.onerror = function(event) {
@@ -112,6 +113,61 @@
                     xhr.open("POST", url, true);
                     xhr.send(files);
                 }
+            };
+                /**
+                 * uploader method 2
+                 * @param url
+                 * @param files
+                 * @returns {service.UploadConstructor}
+                 */
+            service.fileUploader=function(url,files){
+
+                function UploadConstructor(){};
+
+                UploadConstructor.prototype._getXHR=function(){
+                    var xhr=new XMLHttpRequest();
+                    return xhr;
+                };
+
+                UploadConstructor.prototype._setUrl=function(url){
+                    this.url=url;
+                };
+
+                UploadConstructor.prototype._setFiles=function(files){
+                    this.files=files;
+                };
+
+                UploadConstructor.prototype._makeXHR=function(){
+                    console.log(this.url);
+                    console.log(this.files);
+                    console.log(this._getXHR());
+                };
+
+                UploadConstructor._run=function(url,files){
+                    this._setUrl(url);
+                    this._setFiles(files);
+                    this._makeXHR();
+                };
+
+                UploadConstructor.prototype._successUpload=function(){
+
+                };
+                UploadConstructor.prototype._errorUpload=function(){
+
+                };
+                UploadConstructor.prototype._progressUpload=function(){
+
+                };
+
+
+
+
+                var myUploader=new UploadConstructor();
+
+                myUploader._run(url,files);
+                //myUploader._makeXHR();
+                return myUploader;
+
             };
 
             return service;

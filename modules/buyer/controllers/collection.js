@@ -481,6 +481,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                         $scope.photo=photo;
                         $scope.max=$scope.photo.length;
                         $scope.dynamic=0;
+
                         $scope.items = [];
                         $scope.flagUpload=true;
                         $scope.type='success';
@@ -499,14 +500,18 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                         function _Upload(i){
                             $scope.uploadLoaded=0;
                             image=$scope.photo[keyArray[i]];
-                            /*CollectionService.uploadFiles(image);
+                            /**
+                             * ITS CODE FOR FILE UPLOADER SERVICE
+                             */
+                           /* CollectionService.uploadFiles(image);
 
-                            $scope.$watch('uploadLoaded',function(val){
+                            $scope.$watch('uploadProgress',function(val){
                                 if(val){
-                                    console.log(val);
+                                    $timeout(function(){
+                                        $scope.uploadLoaded=val;
+                                    },10);
                                 }
                             });
-
                             $scope.$watch('resultUploadData',function(val){
                                 if(val){
                                     if (_.isArray(val)) {
@@ -550,9 +555,10 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                     }, 200);
                                     i++;
                                     if(i<$scope.max && $scope.flagUpload==true){
+                                        console.log($scope.flagUpload);
                                         _Upload(i);
                                     }else{
-                                        if($scope.items.length==$scope.max){
+                                        if($scope.items.length==$scope.max && $scope.flagUpload==true){
                                             $timeout(function(){
                                                 modalInstance.close($scope.items);
                                             }, 1000);
@@ -591,6 +597,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                          */
                         $scope.cancelUpload=function(){
                             $scope.flagUpload=false;
+                            console.log($scope.flagUpload);
                             $scope.type='danger';
                             //console.log($scope.items);
                             _deleteFiles(0);
@@ -606,10 +613,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 });
                 modalInstance.result.then(function(array){
                     $scope.items=array;
-
                     $scope.imagePath = CollectionService.getImagePath();
-
-                    //console.log("result",$scope.items);
                     $scope.step++;
                     $scope.priceFlag=false;
                 });
@@ -642,10 +646,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                             //console.log("update col.status",response);
                                         }
                                     );
-
                                     $scope.step++;
                                 }
-
                             }
                         )
                     }
@@ -653,8 +655,6 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 else{
                     messageCenterService.add("danger", validation,{timeout:3000});
                 }
-
-
             }
         };
         /**

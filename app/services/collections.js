@@ -329,7 +329,9 @@
 
                     var length=products.length,
                         sizes,
-                        message;
+                        message,
+                        reg=/^[,.\/-]/,
+                        index;
 
                     for(var i=0;i<length;i++){
                         //article validation
@@ -342,21 +344,19 @@
                         message='Please enter size in row #'+(i+1);
                         return message;
                         }
-
-                        var sizes=products[i].sizes.split(/[,.\/]+/);
-
-                            for(var j=0;j<sizes.length;j++){
-
-                                sizes[j]=sizes[j].toUpperCase();
-
-                                if(!_.findKey(allSizes, 'name', sizes[j])){
-
-                                    message="Size in row #"+(i+1)+"is not valid";
-
-                                    return message;
-                                }
-                            }
-
+                        //slice first symbols if not size
+                        if(reg.exec(products[i].sizes)){
+                            index=reg.exec(products[i].sizes).index;
+                            products[i].sizes=products[i].sizes.slice(index+1);
+                        }
+                        //make size array
+                        if(typeof products[i].sizes==='string'){
+                            products[i].sizes=products[i].sizes.split(/[,.\/-]+/);
+                        }
+                        //convert to UpperCase
+                        for(var j=0;j<products[i].sizes.length;j++){
+                            products[i].sizes[j]=products[i].sizes[j].toUpperCase();
+                        }
                         //price validation
                         if(products[i].price==""){
                             message='Please enter price in row #'+(i+1);
@@ -366,9 +366,11 @@
                             message='Please use only numbers and point in price fields. Row #'+(i+1);
                             return message;
                         }
-
+                        else{
+                            products[i].price=products[i].price.replace(",",".");
+                        }
                     }
-
+                    console.log(products);
                     return -1;//true
                 },
                 /**
@@ -384,34 +386,25 @@
 
                     angular.forEach(data,function(value,i){
 
-                        var sizes=value.sizes.split(/[,.\/]+/);
-
-                        for(var j=0;j<sizes.length;j++){
-                            sizes[j]=sizes[j].toUpperCase();
-                        }
-
-                        var price=value.price.replace(",",".");
-
                         var photos = [];
                         angular.forEach(value.photos,function(img) {
                             this.push(img.id);
                         },photos);
                         //console.log(sizes);
                         var product = {
-                            articul:value.article,
-                            price:price,
-                            collectionId:collection.id,
-                            photos:photos,
-                            sizes:sizes,
-                            currencyId:currency,
-                            factoryId:parseInt(collection.factoryId)
+                            articul     :   value.article,
+                            price       :   value.price,
+                            collectionId:   collection.id,
+                            photos      :   photos,
+                            sizes       :   value.sizes,
+                            currencyId  :   currency,
+                            factoryId   :   parseInt(collection.factoryId)
 
                         };
-
                         this.push(product);
 
                     },array);
-
+                    console.log(array);
                     return array;
                 },
 
@@ -684,7 +677,7 @@
                  * @returns {*}
                  */
                 completeProducts:function(items,key,value,increment){
-                    console.log(key);
+                    //console.log(key);
                     for(var i=0;i<items.length;i++){
                         if(items[i][key]==""){
                             items[i][key]=value;
