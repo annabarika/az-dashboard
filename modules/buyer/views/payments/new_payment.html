@@ -5,7 +5,7 @@
 <div class="modal-body">
 
     <label><input type="radio" data-ng-model="paymentFlag" value="order">&emsp;Payment for order</input></label><br>
-    <label><input type="radio" data-ng-model="paymentFlag" value="cargo">&emsp;Payment for cargo</input></label><br>
+    <label><input type="radio" data-ng-model="paymentFlag" value="refund">&emsp;Refund for order</input></label><br>
     <label><input type="radio" data-ng-model="paymentFlag" value="other">&emsp;Other payment</input></label>
     <autocomplete
             input-model="orders"
@@ -26,10 +26,13 @@
             ></autocomplete>
 
     <br>
+    <!--
     <label>Cashier Office:</label>
     <p>{{cashierOffice.name}}</p>
+    -->
     <label>Amount:</label>
-    <input type="number" data-ng-model="payment.amount" class="form-control"/>
+    <input type="text" data-ng-model="payment.amount" class="form-control"/>
+    <!--
     <label>Payment type:</label>
     <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='order'"
             ng-options="opt as opt.name for opt in orderType">
@@ -43,7 +46,7 @@
             ng-options="opt as opt.name for opt in otherType">
         <option value="">Choose type</option>
     </select>
-
+-->
     <!--<select class="form-control" data-ng-model="payment.method"
             ng-options="opt as opt.name for opt in paymentMethod">
         <option value="">Choose method</option>

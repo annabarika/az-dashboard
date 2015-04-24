@@ -60,7 +60,7 @@
         <h3 style="margin-bottom:10px;">Draft payments:</h3>
 
         <div class="row">
-            <div class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)">
+            <div  style="min-height:100px;" class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)">
                 <div class="panel panel-body">
                     <!--<ul class="row_collection">
                         <li ng-repeat="file in item.factoryFiles" class="img-wrapper" ng-if="$index<2">
@@ -81,7 +81,7 @@
 
 <div class="col-sm-12 col-md-12" >
     <div ng-show="paidPayments.length">
-        <h3 style="margin:0 0 0 40px;">Paid payments:</h3>
+        <h3 style="margin:0 0 0 40px;">Balance:</h3>
         <widget-table
                 datarows="paidPayments"
                 dataheader="tableHeader"
@@ -96,9 +96,9 @@
                         <tbody>
                         <tr>
                             <td colspan="7"><strong>Total</strong></td>
-                            <td>Amount : {{paidSummary.amount}} {{paidSummary.currency}}</td>
-                            <td>Refund : {{paidSummary.refund}} {{paidSummary.currency}}</td>
-                            <td>Difference : {{paidSummary.difference}} {{paidSummary.currency}}</td>
+                            <td>Credit: {{paidSummary.amount}} {{paidSummary.currency}}</td>
+                            <td>Debit: {{paidSummary.refund}} {{paidSummary.currency}}</td>
+                            <td>Balance: {{paidSummary.difference}} {{paidSummary.currency}}</td>
                         </tr>
                         </tbody>
                     </table>

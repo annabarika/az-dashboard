@@ -14,13 +14,12 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				{ name: "documentId"		, 	title: 'Document' },
+                { name: "date"				, 	title: 'Payment date' },
+                { name: "documentId"		, 	title: 'Orders' },
 				{ name: "factory"			, 	title: 'Factory' },
-				{ name: "date"				, 	title: 'Payment date' },
 				{ name: "method"			, 	title: 'Payment method'},
-                { name: "cashierOfficeId"	,	title: "CashierOffice"},
-				{ name: "amount"			, 	title: 'Amount' },
-				{ name: "refund"			, 	title: 'Refund' }
+				{ name: "amount"			, 	title: 'Credit' },
+				{ name: "refund"			, 	title: 'Debit' }
 			];
 
             /**
