@@ -9,12 +9,17 @@ app.run(
             /**
              * get factories
              */
-            $http.get(config.API.host + "factory/load")
-                .success(function(data){
+            if($rootScope.fullFactories!=undefined){
+                _factoryForFilter();
+            }
+            else{
+                $http.get(config.API.host + "factory/load")
+                    .success(function(data){
 
-                     $rootScope.fullFactories=data;
-                    _factoryForFilter();
-                });
+                        $rootScope.fullFactories=data;
+                        _factoryForFilter();
+                    });
+            }
             /**
              * Factory getter
              * @private

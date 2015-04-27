@@ -2,7 +2,9 @@
     <div class="box-layout">
         <div class="row mb-xs">
             <div class="col-sm-3">
-                <div class="btn btn-info" ng-click="addNewPayment()"><i class="fa fa-plus"></i> New payment</div>
+                <!--<div class="btn btn-info" ng-click="addNewPayment()"><i class="fa fa-plus"></i> New payment</div>-->
+                <div class="btn btn-info" ng-click="addNewPayment('payment')"><i class="fa fa-plus"></i> New credit</div>
+                <div class="btn btn-warning" ng-click="addNewPayment('refund')"><i class="fa fa-plus"></i> New debit</div>
                 <!--<div class="btn btn-default" ng-hide="userType!='admin'" ng-click="addNewCashOffice()"><i class="fa fa-plus"></i> New cashier office</div>-->
             </div>
             <div class="col-sm-5">
@@ -60,19 +62,44 @@
         <h3 style="margin-bottom:10px;">Draft payments:</h3>
 
         <div class="row">
-            <div  style="min-height:100px;" class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)">
+            <div  style="min-height:100px;" class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)"><!--
                 <div class="panel panel-body">
-                    <!--<ul class="row_collection">
-                        <li ng-repeat="file in item.factoryFiles" class="img-wrapper" ng-if="$index<2">
-
-                            <img ng-src="{{imagePath}}{{file.path}}"/>
-
-                        </li>
-                    </ul>-->
                     <div>
-                        <div>{{item.payment.amount}}&nbsp{{item.currency.ISOCode}}</div>
-                        <p class="caption">{{item.factory.name}}&nbsp;&nbsp;<span class="date">{{item.payment.paymentDate}}</span></p>
+                        <p ng-if="item.documentId!='Other'">Order #{{item.documentId}}</p>
+                        <p ng-if="item.documentId=='Other'">Other payment</p>
                     </div>
+                    <div>
+                        <div>{{item.amount}}&nbsp{{item.currency}}&nbsp;&nbsp;{{item.type}}</div>
+                        <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<span class="date">{{item.paymentDate}}</span></p>
+                    </div>
+                </div>-->
+                <div class="panel panel-body">
+                    <table>
+                        <tr>
+                            <td>Document:</td>
+                            <td ng-if="item.documentId!='Other'">
+                                <a ng-href="buyer/orders/id/{{item.documentId}}" target="_blank" ng-click="$event.stopPropagation()">Order #{{item.documentId}}</a>
+                            </td>
+                            <td ng-if="item.documentId=='Other'">{{item.documentId}} payment</td>
+                        </tr>
+                        <tr>
+                            <td>Factory:</td>
+                            <td>{{item.factoryName||"none"}}</td>
+                        </tr>
+                        <tr>
+                            <td>Type:</td>
+                            <td>{{item.type}}</td>
+                        </tr>
+                        <tr>
+                            <td>Amount:</td>
+                            <td ng-if="item.type=='payment'">{{item.amount}} {{item.currency}}</td>
+                            <td ng-if="item.type=='refund'">{{item.refund}} {{item.currency}}</td>
+                        </tr>
+                        <tr>
+                            <td>Note:</td>
+                            <td>{{item.notes}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

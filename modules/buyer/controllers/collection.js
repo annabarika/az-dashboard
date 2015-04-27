@@ -12,7 +12,7 @@ app.run(
             /**
              * load factory
              */
-            CollectionService.getFactories()
+            /*CollectionService.getFactories()
                 .success(function(data){
                     $rootScope.fullFactories=data;
                     //console.log("full",$rootScope.fullFactories);
@@ -26,8 +26,8 @@ app.run(
                      });
 
                     $rootScope.factories = factories;
-                   /* console.log("success factory", $rootScope.factories);*/
-                });
+                   *//* console.log("success factory", $rootScope.factories);*//*
+                });*/
 
             /**
              * load statusses

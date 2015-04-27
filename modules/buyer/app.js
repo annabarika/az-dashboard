@@ -164,6 +164,26 @@ app.run( function($rootScope, $location ,$http) {
             $rootScope.types=data;
            /* console.log("run types",$rootScope.types);*/
         });
+    /**
+    * get factories
+    */
+    $http.get(config.API.host + "factory/load")
+        .success(function(data){
+        //console.log(data);
+        $rootScope.fullFactories=data;
+        //console.log("full",$rootScope.fullFactories);
+        var factories = [];
+        angular.forEach(data, function (value) {
+            var files=value.factoryFiles;
+            value.factory['files']=files;
+            factories.push(value.factory);
+            });
+        $rootScope.factories = factories;
+            /*console.log("success factory", $rootScope.factories);*/
+    });
+
+
+
 });
 
 app.controller('DatepickerCtrl', function ($scope) {

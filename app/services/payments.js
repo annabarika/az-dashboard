@@ -143,11 +143,11 @@
                     data.currencyId = 1,
                     data.cashierId  = user.id,
                     data.cashierOfficeId = parseInt(user.settings.cashierOffice),
-                    data.paymentType    = obj.type.value,
+                    data.paymentType    = obj.type,
                     data.amount         = parseFloat(obj.amount),
                     data.paymentMethod = "bank",
                     data.note = (obj.note) ? obj.note: "";
-
+                    /*console.log(data);*/
                     return RestFactory.request(PATH.CREATE_PAYMENT, "POST", data);
                 },
 
@@ -179,22 +179,28 @@
                  * @param array
                  * @returns {Array}
                  */
-                resolvePaymentData: function (array) {
+                resolvePaymentData: function (array,factories) {
 
-                    var payments = [];
+                    var payments = [],factory;
 
                     angular.forEach(array, function (item) {
+
+                        factory = _.find(factories,{id:item.document.factoryId},'name') ;
+                        /*console.log(factory);*/
 
                         payments.push({
                             id:                 item.payment.id,
                             documentId:         (!_.isNull(item.payment.documentId)) ? item.payment.documentId : 'Other',
                             factory:            (item.hasOwnProperty('document') && !_.isUndefined(item.document.factoryId)) ? item.document.factoryId : '?',
-                            date:               item.payment.paymentDate,
+                            factoryName:        (factory)?factory.name:"",
+                            date:               moment(item.payment.paymentDate).format("L"),
                             method:             item.payment.paymentMethod,
                             cashierOfficeId:    item.payment.cashierOfficeId,
                             amount:             (item.payment.paymentType == 'payment') ? parseFloat(item.payment.amount) : "",
                             refund:             (item.payment.paymentType == 'refund') ? parseFloat(item.payment.amount) : "",
-                            currency:           item.currency.ISOCode
+                            currency:           item.currency.ISOCode,
+                            notes:              item.payment.note,
+                            type:               item.payment.paymentType
                         });
                     });
 

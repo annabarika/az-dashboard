@@ -113,7 +113,7 @@ angular.module('widgets.autocomplete', [])
                         /*console.log($rootScope.filteredData);*/
                         if($rootScope.filteredData.length>=1 && $scope.search!=""){
                             $scope.outputModel=$rootScope.filteredData[0];
-                            console.log($scope.outputModel);
+                           /* console.log($scope.outputModel);*/
                             $scope.search=$scope.outputModel.name;
                             $scope.flag=true;
 
@@ -138,7 +138,7 @@ angular.module('widgets.autocomplete', [])
                  * @param obj
                  */
                 $scope.getRow=function(obj){
-                    console.log(obj);
+                   /* console.log(obj);*/
                     if(obj){
                         $scope.search = obj.name||obj.id;
                         $scope.outputModel = obj;
@@ -149,6 +149,15 @@ angular.module('widgets.autocomplete', [])
                     }
                     $scope.flag=true;
                 };
+                /**
+                 * clear the model if the search input is empty
+                 */
+                $scope.$watch('search',function(val){
+                    if(val==""){
+                        $scope.outputModel="";
+                    }
+                })
+
             }
         }
     });

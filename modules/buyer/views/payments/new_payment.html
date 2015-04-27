@@ -1,56 +1,28 @@
 <div class="modal-header">
     <button type="button" class="close" ng-click="$dismiss(reason)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title" id="myModalLabel">New payment</h4>
+    <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
 </div>
 <div class="modal-body">
-
-    <label><input type="radio" data-ng-model="paymentFlag" value="order">&emsp;Payment for order</input></label><br>
-    <label><input type="radio" data-ng-model="paymentFlag" value="refund">&emsp;Refund for order</input></label><br>
-    <label><input type="radio" data-ng-model="paymentFlag" value="other">&emsp;Other payment</input></label>
+    <div ng-if="payment.type=='payment'">
+        <input type="radio" ng-model="payment.method" value="payment"/><label>Payment for order</label><br>
+        <input type="radio" ng-model="payment.method" value="other"/>Other payments
+    </div>
+    <div ng-if="payment.type=='refund'">
+        <input type="radio" ng-model="payment.method" value="refund"/>Refund for order<br>
+        <input type="radio" ng-model="payment.method" value="other"/>Other payments
+    </div>
     <autocomplete
             input-model="orders"
             output-model="payment.order"
             column="columnHeaders"
             placeholder="Order number"
             filter-property="filterProperty"
-            ng-show="paymentFlag=='order'"
+            ng-show="payment.method=='payment' || payment.method=='refund'"
             ></autocomplete>
-
-    <autocomplete
-            input-model="cargo"
-            output-model="payment.cargo"
-            column="columnHeaders"
-            placeholder="Cargo number"
-            filter-property="filterProperty"
-            ng-show="paymentFlag=='cargo'"
-            ></autocomplete>
-
     <br>
-    <!--
-    <label>Cashier Office:</label>
-    <p>{{cashierOffice.name}}</p>
-    -->
     <label>Amount:</label>
     <input type="text" data-ng-model="payment.amount" class="form-control"/>
-    <!--
-    <label>Payment type:</label>
-    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='order'"
-            ng-options="opt as opt.name for opt in orderType">
-        <option value="">Choose type</option>
-    </select>
-    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='cargo'"
-            ng-options="opt as opt.name for opt in orderType">
-        <option value="">Choose type</option>
-    </select>
-    <select class="form-control" data-ng-model="payment.type" ng-show="paymentFlag=='other'"
-            ng-options="opt as opt.name for opt in otherType">
-        <option value="">Choose type</option>
-    </select>
--->
-    <!--<select class="form-control" data-ng-model="payment.method"
-            ng-options="opt as opt.name for opt in paymentMethod">
-        <option value="">Choose method</option>
-    </select>-->
+
     <label>Note:</label>
     <textarea ng-model="payment.note" class="form-control" style="resize:none"></textarea>
 
