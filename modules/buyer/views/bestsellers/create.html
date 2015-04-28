@@ -7,12 +7,15 @@
     <div class="modal-body">
         <form>
             {{calendar}}
-            <p class="input-group" ng-show="addToCalendar">
-                <input type="text" class="form-control" datepicker-popup="{{format}}" min-date="minDate" ng-model="buyingDate" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+            <!--<p class="input-group" ng-show="addToCalendar">
+                <input type="text" class="form-control" datepicker-popup="{{format}}" min-date="minDate" ng-model="buyingDate" is-open="opened" datepicker-options="dateOptions" show-weeks="true" ng-required="true" close-text="Close" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
-            </p>
+            </p>-->
+            <div style="display:inline-block; min-height:290px;">
+                <datepicker ng-model="buyingDate" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+            </div>
             <angucomplete id="articul"
                           placeholder="Search by articul"
                           pause="400"

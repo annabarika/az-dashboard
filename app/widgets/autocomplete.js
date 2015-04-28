@@ -4,7 +4,6 @@ angular.module('widgets.autocomplete', [])
 
         return function (dataArray, search, properties) {
             $rootScope.filteredData=[];
-
             if (!dataArray) return;
 
             if (search==undefined||search=="") {
@@ -62,7 +61,6 @@ angular.module('widgets.autocomplete', [])
                 $rootScope.filteredData=array;
                 return array;
             }
-
         }
     })
 
@@ -125,11 +123,12 @@ angular.module('widgets.autocomplete', [])
                         }
                     }
                     else{
-                        if($scope.search!=undefined && $scope.search!=""){
+                        if($scope.search!=undefined && $scope.search!="" && $rootScope.filteredData.length>0){
                             $scope.flag=false;
                         }
                         else{
                             $scope.flag=true;
+                            $scope.outputModel="";
                         }
                     }
                 };
@@ -156,8 +155,21 @@ angular.module('widgets.autocomplete', [])
                     if(val==""){
                         $scope.outputModel="";
                     }
-                })
+                });
+/*
+                $scope.$watch(
+                    function() {
+                        return $rootScope.filteredData;
+                        },
+                    function(val) {
+                        if(val){
+                            if(val.length==0){
+                                console.log(val.length);
+                                $scope.flag=true;
+                            }
+                        }
 
+                    }, true);*/
             }
         }
     });

@@ -127,6 +127,7 @@
                 ,cellsButton:"&"
                 ,useBadge:"@"
                 ,path:"@"
+                ,sort:"@"
             },
 
             link:function($scope){

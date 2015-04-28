@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-5">
                 <div class="col-sm-4 va-m">
-                    <input date-range-picker class="form-control date-picker" placeholder="Select date range" type="text"
+                    <input date-range-picker class="form-control date-picker" placeholder="Start date" type="text"
                            ng-model="filter.createDate" ng-change="filteredPayments(filter)"/>
                 </div>
             </div>
@@ -114,6 +114,7 @@
                 dataheader="tableHeader"
                 edit="edit()"
                 row="row"
+                sort="date"
                 >
         </widget-table>
         <div class="pa-md">

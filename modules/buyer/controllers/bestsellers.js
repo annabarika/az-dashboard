@@ -82,7 +82,8 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
             });*/
 
             BestsellersService.getDayDetailed('total', date).then(function(response) {
-                $scope.bestsellersTotal = response;
+               // $scope.bestsellersTotal = response;
+                $scope.bestsellersOrdered = response;
                 console.log(response);
             });
 
@@ -145,10 +146,6 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
             $scope.date = null;
         };
 
-        // Disable weekend selection
-        $scope.disabled = function(date, mode) {
-            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-        };
 
         $scope.open = function($event) {
             $event.preventDefault();
@@ -176,16 +173,16 @@ app.controller('BestsellersAddController', function ($scope, $rootScope, searchU
             $scope.dt = null;
         };
 
-        $scope.disabled = function(date, mode) {
+        /*$scope.disabled = function(date, mode) {
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-        };
+        };*/
 
         $scope.toggleMin = function() {
             $scope.minDate = $scope.minDate ? null : new Date();
         };
         $scope.toggleMin();
 
-        $scope.open = function($event) {
+        /*$scope.open = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
 
@@ -195,9 +192,16 @@ app.controller('BestsellersAddController', function ($scope, $rootScope, searchU
         $scope.dateOptions = {
             formatYear: 'yy',
             startingDay: 1
-        };
+        };*/
 
         $scope.format ='dd-MMMM-yyyy';
+
+        $scope.$watch('buyingDate',function(val){
+            if(val){
+                console.log(val);
+            }
+        })
+
     }
 );
 

@@ -82,12 +82,15 @@ app.controller('OrderListController',
             /**
              * get orders
              */
-            RestFactory.request(config.API.host+"order/load-detailed/").then(
-                function(response){
-                    //console.log("all orders",response);
-                    _parseOrders(response);
-                }
-            );
+            $scope.getOrders=function(){
+                RestFactory.request(config.API.host+"order/load-detailed/").then(
+                    function(response){
+                        console.log("all orders",response);
+                        _parseOrders(response);
+                    }
+                );
+            };
+            $scope.getOrders();
             /**
              * get payment type for orders
              */

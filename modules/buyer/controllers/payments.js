@@ -1,3 +1,4 @@
+'use strict';
 var app = angular.module("modules.buyer.payments", []);
 
 app.controller('PaymentListController',
@@ -11,6 +12,24 @@ app.controller('PaymentListController',
 		'messageCenterService',
 
 		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService) {
+
+			$scope.getDate=function(){
+				var startDate,
+					currentDate,
+					endDate;
+
+				startDate=moment().date(1).format('YYYY-MM-DD');
+				endDate=moment().format('YYYY-MM-DD');
+				currentDate=PaymentService.getDate();
+				if(!startDate==currentDate) {
+					PaymentService.saveDate(startDate);
+					currentDate=startDate;
+				}
+				// Show all collected payments
+				setTimeout(getPayments({'start':currentDate,'end':endDate}),80);
+
+			};
+			$scope.getDate();
 
 			$scope.$route = $route;
 			$scope.$location = $location;
@@ -34,7 +53,7 @@ app.controller('PaymentListController',
             /**
              * Collect all payments
              */
-			getPayments = function(date) {
+			 function getPayments(date){
 
 				// Get draft payments
 				PaymentService.getPayments(0, date).then(function(response) {
@@ -57,8 +76,7 @@ app.controller('PaymentListController',
                 );
 			};
 
-            // Show all collected payments
-            getPayments();
+
 
 			PaymentService.getStatuses().then(
 				function(response){
@@ -93,7 +111,7 @@ app.controller('PaymentListController',
              * @param filter
              */
             $scope.filteredPayments = function(filter) {
-
+				console.log(filter);
                 var filter = PaymentService.parseFilters(filter);
 
                 if(filter.hasOwnProperty('date')) {
@@ -378,7 +396,7 @@ app.controller('PaymentListController',
 			$scope.edit = function(item){
 				if(item){
 					console.log(item);
-					$location.path( '/buyer/payments/id/'+ item.payment.id);
+					$location.path( '/buyer/payments/id/'+ item.id);
 				}
 				else{
 					console.log($rootScope.row);
