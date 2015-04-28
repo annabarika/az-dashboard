@@ -1,9 +1,10 @@
 angular.module('widgets.autocomplete', [])
 
-    .filter('tableFilter', function ($rootScope) {
+    .filter('tableFilter', function () {
 
         return function (dataArray, search, properties) {
-            $rootScope.filteredData=[];
+            //$rootScope.filteredData=[];
+            //console.log(dataArray);
             if (!dataArray) return;
 
             if (search==undefined||search=="") {
@@ -45,7 +46,7 @@ angular.module('widgets.autocomplete', [])
 
                                 value=dataArray[i][properties[j]][k].toLowerCase();
 
-                                if(value.indexOf(search)!=-1){
+                                if(value.indexOf(search)==0){
 
                                     if(_.findIndex(array,'id',dataArray[i].id)==-1){
                                         array.push(dataArray[i]);
@@ -58,13 +59,13 @@ angular.module('widgets.autocomplete', [])
             }
             if(array.length!=0){
                /* console.log("success", array);*/
-                $rootScope.filteredData=array;
+               // $rootScope.filteredData=array;
                 return array;
             }
         }
     })
 
-    .directive("autocomplete",function($rootScope){
+    .directive("autocomplete",function(){
         /**
          * set style width for 'autocomplete_box'
          * @private
@@ -96,6 +97,8 @@ angular.module('widgets.autocomplete', [])
                 if($scope.placeholder==undefined){
                     $scope.placeholder='search';
                 }
+
+                $scope.autoCompleteModel=[];
                 /**
                  * flag for table
                  * @type {boolean}
@@ -109,8 +112,8 @@ angular.module('widgets.autocomplete', [])
                     event.stopPropagation();
                     if(event.keyCode==13){
                         /*console.log($rootScope.filteredData);*/
-                        if($rootScope.filteredData.length>=1 && $scope.search!=""){
-                            $scope.outputModel=$rootScope.filteredData[0];
+                        if($scope.autoCompleteModel.length>=1 && $scope.search!=""){
+                            $scope.outputModel=$scope.autoCompleteModel[0];
                            /* console.log($scope.outputModel);*/
                             $scope.search=$scope.outputModel.name;
                             $scope.flag=true;
@@ -123,7 +126,18 @@ angular.module('widgets.autocomplete', [])
                         }
                     }
                     else{
-                        if($scope.search!=undefined && $scope.search!="" && $rootScope.filteredData.length>0){
+                        /*if($scope.search!=undefined && $scope.search!="" && $rootScope.filteredData.length>0){
+                            $scope.flag=false;
+                        }
+                        else{
+                            $scope.flag=true;
+                            $scope.outputModel="";
+                        }*/
+                        $scope.autoCompleteModel=_getModel();
+                        //console.log($scope.autoCompleteModel);
+                        if($scope.search!=undefined && $scope.search!=""&& $scope.autoCompleteModel.length>0){
+
+
                             $scope.flag=false;
                         }
                         else{
@@ -170,6 +184,70 @@ angular.module('widgets.autocomplete', [])
                         }
 
                     }, true);*/
+
+                function _getModel(){
+                    /*console.log(dataArray);
+                     console.log(search,properties);*/
+
+                    //console.log(dataArray);
+                    if (!$scope.inputModel) return;
+
+                    if ($scope.search==undefined||$scope.search=="") {
+                        return [];
+                    }
+
+                    if(!$scope.filterProperty){
+                        $scope.filterProperty=["name"];
+                    }
+
+                    var search=$scope.search.toLowerCase();
+                    //console.log(search);
+
+                    var array=[],
+                        length=$scope.inputModel.length,
+                        value;
+
+                    for(var i=0;i<length;i++){
+
+                        for(var j=0;j<$scope.filterProperty.length;j++){
+
+                            if(typeof $scope.inputModel[i][$scope.filterProperty[j]]=='string'){
+
+                                value=$scope.inputModel[i][$scope.filterProperty[j]].toLowerCase();
+
+                                if(value.indexOf(search)!=-1){
+                                    //array.push(dataArray[i]);
+                                    if(_.findIndex(array,'id',$scope.inputModel[i].id)==-1){
+                                        array.push($scope.inputModel[i]);
+                                    }
+                                }
+                            }
+                            else{
+
+                                if(typeof $scope.inputModel[i][$scope.filterProperty[j]]=='object'){
+
+                                    for(var k=0;k<$scope.inputModel[i][$scope.filterProperty[j]].length;k++){
+
+                                        value=$scope.inputModel[i][$scope.filterProperty[j]][k].toLowerCase();
+
+                                        if(value.indexOf(search)==0){
+
+                                            if(_.findIndex(array,'id',$scope.inputModel[i].id)==-1){
+                                                array.push($scope.inputModel[i]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //if(array.length!=0){
+                        return array;
+                    /*}
+                    else{
+                        return [];
+                    }*/
+                }
             }
         }
     });

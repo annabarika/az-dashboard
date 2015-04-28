@@ -239,9 +239,9 @@ app.controller('PaymentListController',
 							$scope.title='Make new debit payment';
 							$scope.paymentFlag='refund';
 						}
-						$scope.$watch('payment.order',function(val){
+						/*$scope.$watch('payment.order',function(val){
 							console.log(val);
-						})
+						});*/
 
 
 						$scope.cashierOffice=cashierOffice;

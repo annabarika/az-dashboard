@@ -161,7 +161,7 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
 ]);
 
 // Bestseller's add item
-app.controller('BestsellersAddController', function ($scope, $rootScope, searchUri) {
+app.controller('BestsellersAddController', function ($scope, searchUri) {
         // provide search action to autocomplete
         $scope.searchUri = searchUri;
         $scope.today = function() {

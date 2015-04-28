@@ -10,8 +10,8 @@
             <th ng-repeat="col in column">{{col.title||col.name}}</th>
         </tr>
         <!--body-->
-        <!--<tr ng-repeat="row in inputModel | filter:filters | orderBy:'name'" ng-click='getRow(row)'>-->
-        <tr ng-repeat="row in inputModel | tableFilter : search : filterProperty | orderBy:'name' track by $index" ng-click='getRow(row)'>
+        <tr ng-repeat="row in autoCompleteModel | orderBy:'name'" ng-click='getRow(row)'>
+        <!--<tr ng-repeat="row in inputModel | tableFilter : search : filterProperty | orderBy:'name' track by $index" ng-click='getRow(row)'>-->
             <td>
                 <span class="btn btn-default btn-rounded btn-sm">{{$index+1}}</span></td>
             <td ng-if="column!=undefined " ng-repeat="col in column">
