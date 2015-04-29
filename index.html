@@ -79,12 +79,17 @@
                     <div class="col-sm-6 va-m">
                         <h1 style="float:left">{{documentTitle}}</h1>
                     </div>
-                    <div class="col-sm-6 va-m">
-                        <ol class="breadcrumb pull-right-sm mb-0">
-                            <li><a href="#">Buying office</a></li>
-                            <li class="active">Orders</li>
+                    <bread-crumbs></bread-crumbs>
+                    <!--<div class="col-sm-6 va-m">
+                        <ol class="breadcrumb pull-right-sm mb-0" >
+                            <li ng-repeat="crumb in breadcrumbsModel">
+                                <a href="{{crumb.path}}">
+                                    {{crumb.name}}
+                                </a>
+                            </li>
+                            &lt;!&ndash;<li class="active">Orders</li>&ndash;&gt;
                         </ol>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <!-- start: box layout -->

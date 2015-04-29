@@ -482,7 +482,7 @@
                      * @returns {Array}
                      */
                     sizeCheck:function(sizes){
-
+                        console.log(sizes);
                         var array=[],
                             length=sizes.length;
 

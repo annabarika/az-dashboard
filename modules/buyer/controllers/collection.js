@@ -12,7 +12,7 @@ app.run(
             /**
              * load factory
              */
-            /*CollectionService.getFactories()
+            CollectionService.getFactories()
                 .success(function(data){
                     $rootScope.fullFactories=data;
                     //console.log("full",$rootScope.fullFactories);
@@ -26,8 +26,8 @@ app.run(
                      });
 
                     $rootScope.factories = factories;
-                   *//* console.log("success factory", $rootScope.factories);*//*
-                });*/
+                   /* console.log("success factory", $rootScope.factories);*/
+                });
 
             /**
              * load statusses
@@ -828,7 +828,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                     _.map($scope.items[index].sizes,_counter);
                 }
                 else{
-                    console.log($scope.items,size);
+                    //console.log($scope.items,size);
                     var length=$scope.items.length;
                     for (var i=0;i<length;i++){
                         if($scope.items[i].catalogueProduct.id==product.catalogueProduct.id){
@@ -879,7 +879,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             var modalInstance=CollectionService.showModal("CANCEL_COLLECTION");
             modalInstance.result.then(function(){
                 CollectionService.cancelCollection($routeParams.collectionId).then(function (response) {
-                        console.log("cancel collection",response);
+                        //console.log("cancel collection",response);
 
                     if (response.status==2) {
                         //$rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
@@ -931,7 +931,6 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 messageCenterService.add('danger', 'Can not create order with empty sizes count', {timeout: 3000});
                 return false;
             }
-
             /**
              * if orderId==null create new order
              */
@@ -996,7 +995,6 @@ app.controller('FactoryController',[
     '$route',
     function($scope,$rootScope,$route){
 
-        $rootScope.documentTitle='Factory Cart';
-        $scope.test='hello world';
+        $rootScope.documentTitle='Factory Crt'
     }
 ])

@@ -137,7 +137,6 @@ angular.module('widgets.autocomplete', [])
                         //console.log($scope.autoCompleteModel);
                         if($scope.search!=undefined && $scope.search!=""&& $scope.autoCompleteModel.length>0){
 
-
                             $scope.flag=false;
                         }
                         else{

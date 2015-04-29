@@ -311,10 +311,11 @@
                  * @return boolean
                  */
                 isSizesExists: function(items) {
-
+                    console.log(items);
                     var i,length=items.length;
                     for(i=0;i<length;i++){
-                        if(_.findKey(items[i].sizes,"count","0")||_.findKey(items[i].sizes,"count","")){
+
+                        if(_.findKey(items[i].sizes,"count","0")||_.findKey(items[i].sizes,"count","")||_.findKey(items[i].sizes,"count",0)){
                             return false;
                         }
                     }

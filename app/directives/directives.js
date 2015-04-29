@@ -110,7 +110,6 @@
                         modelCtrl.$setViewValue(transformedInput);
                         modelCtrl.$render();
                     }
-
                     return transformedInput;
                 });
             }
@@ -179,6 +178,9 @@
             }
         }
     }]);
+    /**
+     * File preview
+     */
     app.directive('filePreview', function (FileReader) {
         return {
             restrict: 'A',
@@ -197,6 +199,9 @@
             }
         };
     });
+    /**
+     * DropZone
+     */
     app.directive("imageDropzone",["$parse", function ($parse) {
 
             return {
@@ -229,4 +234,54 @@
             };
         }]);
 
+    app.directive("breadCrumbs",function($location){
+        /**
+         * get breadcrumbs array
+         * @param path
+         * @returns {Array}
+         * @private
+         */
+            function _getCrumbs(path){
+                var array=[],
+                    result=[],
+                    index,
+                    way;
+                array=path.split("/");
+                for(var i=0;i<array.length;i++){
+                    if(array[i]!="" && !parseInt(array[i])){
+                        index=path.indexOf(array[i])+array[i].length;
+                        way=path.slice(0,index);
+                        result.push({
+                            name:array[i],
+                            path:way
+                        })
+                    }
+                }
+                return result;
+            }
+
+        return{
+            restrict:"EA",
+            template:'<ol class="breadcrumb pull-right-sm mb-0" ><li ng-repeat="crumb in breadcrumbsModel"><a href="" ng-click="relocation(crumb.path)" ng-if="!$last">{{crumb.name}}</a><span ng-if="$last">{{crumb.name}}</span></li></ol>',
+            link:function(scope){
+                /**
+                 * relocation
+                 * @param path
+                 */
+                scope.relocation=function(path){
+                    console.log(path);
+                    $location.path(path);
+                };
+                /**
+                 * watch location changes
+                 */
+                scope.$watch(
+                    function(){return $location.$$path},
+                    function(val){
+                    scope.breadcrumbsModel=_getCrumbs($location.$$path);
+                });
+
+            }
+        }
+    })
 })();

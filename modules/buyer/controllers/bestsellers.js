@@ -326,12 +326,11 @@ app.controller('BestsellerItemController',[
          */
         $scope.createOrder = function( sizes ){
 
-            //console.log("sizes",sizes);
+            console.log("sizes",sizes);
 
             var _sizeArray=BestsellersService.sizeCheck(sizes);
 
             //console.log("sizeArray",_sizeArray);
-
             if(_sizeArray.length==0){
 
                 messageCenterService.add("danger","size or count is empty",{timeout:3000});
