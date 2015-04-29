@@ -577,7 +577,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                             CollectionService.deleteFiles(id).then(
                                 function(response){
                                     if(response=='true'){
-                                        $scope.dynamic --;
+                                        $scope.dynamic--;
                                         i++;
                                         if(i<$scope.items.length){
                                             _deleteFiles(i);
@@ -612,6 +612,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                     }
                 });
                 modalInstance.result.then(function(array){
+                    console.log(array);
                     $scope.items=array;
                     $scope.imagePath = CollectionService.getImagePath();
                     $scope.step++;

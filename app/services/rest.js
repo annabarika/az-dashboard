@@ -36,7 +36,8 @@
 					method: method,
 					url: url,
 					data: data,
-                    headers : headers
+                    headers : headers,
+                    timeout:60000
 				};
                 usSpinnerService.spin('loader');
 				$http(req)

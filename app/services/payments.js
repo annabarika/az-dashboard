@@ -16,8 +16,8 @@
         ORDERPAYMENTS: config.API.host + "/payment/load/documentId/"
     });
 
-    app.factory("PaymentService", ["PATH", 'RestFactory',"$window",
-        function (PATH, RestFactory,$window) {
+    app.factory("PaymentService", ["PATH", 'RestFactory',
+        function (PATH, RestFactory) {
             /**
              * Get current month range
              *
@@ -55,7 +55,7 @@
 
             return {
 
-                getDate:function(){
+                /*getDate:function(){
                     try{
                         return JSON.parse($window.localStorage['paymentsDate'])
                     }
@@ -63,10 +63,10 @@
                         return undefined;
                     }
 
-                },
-                saveDate:function(data){
+                },*/
+               /* saveDate:function(data){
                     $window.localStorage['paymentsDate']=JSON.stringify(data);
-                },
+                },*/
                 /**
                  * Get orders for autocomplete
                  *

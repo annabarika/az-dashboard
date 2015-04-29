@@ -1,10 +1,38 @@
 
 <div class="col-md-12 col-sm-12 mb-5 bg-white" >
-    <div class="col-sm-1">
+    <!--<div class="col-sm-1">-->
       <!--  <button class="btn btn-success"><i class="fa fa-plus"></i> Add cargo</button>-->
-    </div>
+    <!--</div>-->
+    <table class="table">
+            <tr>
+                <td>
+                    <b>Status:</b>
+                </td>
+                <td>
+                    <span ng-repeat="status in statuses" ng-click="filterCargo(status)">
+                        <input type="checkbox" ng-model="status.checked" ng-true-value="true" ng-false-value="false"/>{{status.name}}&nbsp
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Suppliers:</td>
+                <td>
+                     <span ng-repeat="supplier in logisticCompanies" ng-click="filterCargo(supplier)">
+                        <input type="checkbox" ng-model="supplier.checked" ng-true-value="true" ng-false-value="false"/>{{supplier.name}}&nbsp
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Factory:</td>
+                <td>
+                    <span ng-repeat="factory in factoryFilter" ng-click="filterCargo(factory)">
+                        <input type="checkbox" ng-model="factory.checked" ng-true-value="true" ng-false-value="false"/>{{factory.name||factory.phone[0]}}&nbsp
+                    </span>
+                </td>
+            </tr>
+    </table>
 
-    <div class="col-md-2 col-sm-1 va-m">
+    <!--<div class="col-md-2 col-sm-1 va-m">
         <multi-select
                 default-label="Status filter"
                 input-model="statuses"
@@ -41,7 +69,7 @@
                 max-height="250px"
                 >
         </multi-select>
-    </div>
+    </div>-->
     <div class="col-md-3 col-sm-1 va-m">
         <span>Group operations:</span>
         <button class="btn btn-info" ng-click="makePayment()"><i class="fa fa-plus"></i>Pay delivery</button>

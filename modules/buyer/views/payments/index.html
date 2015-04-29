@@ -8,7 +8,7 @@
                 <!--<div class="btn btn-default" ng-hide="userType!='admin'" ng-click="addNewCashOffice()"><i class="fa fa-plus"></i> New cashier office</div>-->
             </div>
             <div class="col-sm-5">
-                <div class="col-sm-4 va-m">
+                <div class="col-sm-4 va-m" ng-init="filter.createDate.startDate=firstDay">
                     <input date-range-picker class="form-control date-picker" placeholder="Start date" type="text"
                            ng-model="filter.createDate" ng-change="filteredPayments(filter)"/>
                 </div>

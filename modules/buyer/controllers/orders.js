@@ -1,14 +1,14 @@
 var app = angular.module("modules.buyer.orders", []);
 
-app.run(
+/*app.run(
     [
         "$rootScope",
         "$http",
 
         function($rootScope,$http){
-            /**
+            *//**
              * get factories
-             */
+             *//*
             if($rootScope.fullFactories!=undefined){
                 _factoryForFilter();
             }
@@ -20,13 +20,13 @@ app.run(
                         _factoryForFilter();
                     });
             }
-            /**
+            *//**
              * Factory getter
              * @private
-             */
+             *//*
             function _factoryForFilter(){
                 var factory = [];
-                 /*console.log($rootScope.fullFactories );*/
+                 *//*console.log($rootScope.fullFactories );*//*
                 for( var i in $rootScope.fullFactories ){
 
                     factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: $rootScope.fullFactories[i].factory.name } );
@@ -35,7 +35,7 @@ app.run(
                // console.log(factory);
             }
         }
-    ]);
+    ]);*/
 
 app.controller('OrderListController',
 
@@ -79,6 +79,23 @@ app.controller('OrderListController',
                     }
                 )
             }
+            _factoryForFilter();
+            /**
+             * Factory getter
+             * @private
+             */
+            function _factoryForFilter(){
+                var factory = [];
+                /*console.log($rootScope.fullFactories );*/
+                for( var i in $rootScope.fullFactories ){
+
+                    factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: $rootScope.fullFactories[i].factory.name } );
+                }
+                $rootScope.Factory=factory;
+                // console.log(factory);
+            }
+
+
             /**
              * get orders
              */

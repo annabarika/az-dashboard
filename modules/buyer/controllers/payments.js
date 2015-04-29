@@ -12,24 +12,16 @@ app.controller('PaymentListController',
 		'messageCenterService',
 
 		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService) {
-
-			$scope.getDate=function(){
+			function getDate(){
 				var startDate,
-					currentDate,
 					endDate;
-
 				startDate=moment().date(1).format('YYYY-MM-DD');
+				$scope.firstDay=new Date(startDate);
 				endDate=moment().format('YYYY-MM-DD');
-				currentDate=PaymentService.getDate();
-				if(!startDate==currentDate) {
-					PaymentService.saveDate(startDate);
-					currentDate=startDate;
-				}
 				// Show all collected payments
-				setTimeout(getPayments({'start':currentDate,'end':endDate}),80);
-
+				setTimeout(getPayments({'start':startDate,'end':endDate}),80);
 			};
-			$scope.getDate();
+			getDate();
 
 			$scope.$route = $route;
 			$scope.$location = $location;
@@ -111,7 +103,7 @@ app.controller('PaymentListController',
              * @param filter
              */
             $scope.filteredPayments = function(filter) {
-				console.log(filter);
+				console.log("this",filter);
                 var filter = PaymentService.parseFilters(filter);
 
                 if(filter.hasOwnProperty('date')) {
