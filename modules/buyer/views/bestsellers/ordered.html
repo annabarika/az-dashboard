@@ -64,6 +64,20 @@
                 <div ng-if="bestsellersOrdered && !bestsellersOrdered.length">Selected date has no items</div>
                 <table class="table table-bordered">
                     <tbody>
+                    <tr class="btn-default" ng-if="bestsellersOrdered && bestsellersOrdered.length">
+                        <td class="text-center">
+                            Photo
+                        </td>
+                        <td class="text-center">
+                          Product
+                        </td>
+                        <td class="text-center">
+                          Order Id
+                        </td>
+                        <td class="text-center">
+                          Order Date
+                        </td>
+                    </tr>
                     <tr ng-repeat="ordered in bestsellersOrdered">
                         <td class="text-center">
                             <div class="media np">
@@ -91,9 +105,9 @@
             </accordion-group>
             <!-- /Ordered items -->
 
-            <accordion-group heading="Total" ng-hide="true">
+            <accordion-group heading="Total">
 
-                <div ng-if="!bestsellersTotal">{{bestsellersTotal}},Click on the calendar on the number of total items to see them</div>
+                <div ng-if="!bestsellersTotal">{{bestsellersTotal}} Click on the calendar on the number of total items to see them</div>
                 <div ng-if="bestsellersTotal && bestsellersTotal.length==0">Selected date has no items</div>
                 <table class="table table-bordered" ng-if="bestsellersTotal.length>0">
                     <tbody>
