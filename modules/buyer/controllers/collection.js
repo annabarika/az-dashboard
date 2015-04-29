@@ -550,19 +550,19 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                         price:""
                                     });
 
-                                    $timeout(function(){
+                                    //$timeout(function(){
                                         $scope.dynamic ++;
-                                    }, 200);
+                                    //}, 200);
                                     i++;
                                     if(i<$scope.max && $scope.flagUpload==true){
                                         console.log($scope.flagUpload);
                                         _Upload(i);
                                     }else{
-                                        if($scope.items.length==$scope.max && $scope.flagUpload==true){
-                                            $timeout(function(){
+                                        $timeout(function(){
+                                            if($scope.items.length==$scope.max && $scope.flagUpload==true){
                                                 modalInstance.close($scope.items);
-                                            }, 1000);
-                                        }
+                                            }
+                                        }, 1000);
                                     }
                                 }
                             });
@@ -576,6 +576,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                             id=$scope.items[i].photos[0].id;
                             CollectionService.deleteFiles(id).then(
                                 function(response){
+
                                     if(response=='true'){
                                         $scope.dynamic--;
                                         i++;
