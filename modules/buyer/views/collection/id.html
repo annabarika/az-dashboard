@@ -32,11 +32,20 @@
                 <tr ng-repeat="product in items track by $index">
                     <td>{{$index+1}}</td>
                     <td>
-                        <div ng-if="product.files[0]" class="media np">
+                        <!--<div ng-if="product.files[0]" class="media np">
                             <div class="media-left">
                                 <span class="img-wrapper img-rounded">
-                                    <img ng-src="{{imagePath}}{{product.files[0].path}}" >
-                                    <!--{{imagePath}}{{product.files[0].path}}-->
+                                    <img ng-src="{{imagePath}}{{product.files[last].path}}">
+                                    &lt;!&ndash;{{imagePath}}{{product.files[0].path}}&ndash;&gt;
+                                </span>
+                            </div>
+                        </div>-->
+                        <div ng-repeat="file in product.files" class="media np">
+                            <!--<div class="media-left" ng-if="product.catalogueProduct.id==file.relativeId">-->
+                            <div class="media-left" ng-if="$last">
+                                <span class="img-wrapper img-rounded">
+                                    <img ng-src="{{imagePath}}{{file.path}}" >
+                                    <!--{{imagePath}}{{file.path}}-->
                                 </span>
                             </div>
                         </div>
