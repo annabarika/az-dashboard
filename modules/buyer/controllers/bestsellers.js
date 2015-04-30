@@ -326,19 +326,17 @@ app.controller('BestsellerItemController',[
          */
         $scope.createOrder = function( sizes ){
 
-            console.log("sizes",sizes);
-
+            console.log("user",$rootScope.user);
             var _sizeArray=BestsellersService.sizeCheck(sizes);
+            console.log("sizeArray",_sizeArray);
 
-            //console.log("sizeArray",_sizeArray);
             if(_sizeArray.length==0){
-
                 messageCenterService.add("danger","size or count is empty",{timeout:3000});
                 return;
             }
-
-            BestsellersService.createOrder( $scope.product.factoryId).then(function(response){
-                if(response.id){
+            var factory= _.find($rootScope.factories,{id:$scope.product.factoryId});
+            BestsellersService.createOrder(factory,$rootScope.user).then(function(response){
+                if(_.has(response,'id')){
                     var orderId = response.id;
                     var products = BestsellersService.prepareProducts($scope.bestseller.id, $scope.product, _sizeArray);
                     // Adding items to order
@@ -346,8 +344,8 @@ app.controller('BestsellerItemController',[
                         BestsellersService.addOrderProductRow(orderId, products[i]).then(
                             function(response){
                                 //console.log(response);
-                                if(response.id){
-
+                                if(_.has(response,'id')){
+                                    messageCenterService.add('success','Order created',{timeout:3000});
                                     products.splice(0, 1);
                                 }
                             },
@@ -364,6 +362,9 @@ app.controller('BestsellerItemController',[
                             }
                         }
                     });
+                }
+                else{
+                    messageCenterService.add("danger","Sorry,order is not created. Error: "+response,{timeout:3000});
                 }
             });
         };
@@ -389,8 +390,9 @@ app.controller('BestsellerItemController',[
                         create.betsellerId = response.id;
 
                         // Create Order
-                        BestsellersService.createOrder($scope.product.factoryId).then(function (response) {
-
+                        var factory= _.find($rootScope.factories,{id:$scope.product.factoryId});
+                        BestsellersService.createOrder(factory,$rootScope.user).then(function(response){
+                        //BestsellersService.createOrder($scope.product.factoryId).then(function (response) {
                             if (response.id) {
                                 create.orderId = response.id;
                                 create.products = BestsellersService.prepareProducts(create.betsellerId, $scope.product, create.sizes);

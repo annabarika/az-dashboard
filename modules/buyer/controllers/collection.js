@@ -250,10 +250,8 @@ app.controller("CollectionsReadyController",
              * @private
              */
             function _getAllProducts(i,keys){
-
                 CollectionService.getCollectionCard(keys[i].id).then(
                     function(response){
-
                         if(response.length!=0){
                             $scope.collections[keys[i].position]['products']=response;
                         }
@@ -267,10 +265,8 @@ app.controller("CollectionsReadyController",
                         else{
                              //console.log("final",$scope.collections);
                         }
-
                     });
             }
-
             /**
              *
              * @param item
@@ -281,9 +277,6 @@ app.controller("CollectionsReadyController",
             };
         }
     ]);
-
-
-
 /**
  * Upload photos controller
  */
@@ -973,7 +966,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                                             console.log($scope.collection);
                                             $scope.isOrdered = true;
                                             $rootScope.isOrderedAll = true;
-                                            window.location.reload();
+                                           // window.location.reload();
                                         }
                                     }
                                 );

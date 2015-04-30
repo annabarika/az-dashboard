@@ -152,7 +152,7 @@
                                 size.count = 0;
                             }
                         });
-                        console.log("After cleaning", sizes);
+                       // console.log("After cleaning", sizes);
                         if( num > SIZE_CALCULATE.MIN_COUNT_TO_ADD_SIZES ){
 
                             for( addSize in SIZE_CALCULATE.ADDITIONAL_SIZES ){
@@ -182,7 +182,7 @@
                         var newSizes = [];
                         sizes = sizes.sort(Comparator);
                         sizes.forEach(function(size, index, object) {
-                            console.log("Sort:", size, index, object);
+                           // console.log("Sort:", size, index, object);
                             if ( size.saleSpeed != undefined ) {
                                 newSizes.push(size);
                             }
@@ -199,25 +199,25 @@
                         var totalDelta = 0;
                         var keepGoing = true;
                         var delta = 0;
-                        console.log("Distrib start:", sizes);
+                       // console.log("Distrib start:", sizes);
                         sizes.forEach(function(size) {
                             if(!_.isUndefined(size.saleSpeed) && keepGoing ) {
                                 delta = Math.ceil( num * size.saleSpeed / totalSaleSpeed );
-                                console.log("Delta ", size.size, delta);
+                                //console.log("Delta ", size.size, delta);
                                 totalDelta += delta;
-                                console.log("TD: ", totalDelta);
+                                //console.log("TD: ", totalDelta);
                                 if( totalDelta > num ) {
                                     keepGoing = false;
                                     delta = delta - ( totalDelta - num) ;
                                 }
-                                console.log("Delta2: ", size.size, delta);
+                               // console.log("Delta2: ", size.size, delta);
                                 size.count += delta;
                             }
                         });
                         if(this.calculatorIterations < SIZE_CALCULATE.MAX_ITERATIONS ) {
                             this.checkNormalization(sizes, totalSaleSpeed);
                         }
-                        console.log("Distrib finish:", sizes);
+                        //console.log("Distrib finish:", sizes);
                         return sizes;
                     },
 
@@ -225,7 +225,7 @@
                         var count = 0;
                         var keepGoing = true;
                         var slice = 0;
-                        console.log("Norm start:", sizes);
+                       // console.log("Norm start:", sizes);
                         /*
                             Checking max count
                          */
@@ -236,7 +236,7 @@
                             if(!_.isUndefined(size.saleSpeed) && keepGoing ) {
                                 count = size.count;
                                 if( count > (prevSize.count * 2) ){
-                                    console.log("Coun > prevCount", count, prevSize.count);
+                                   // console.log("Coun > prevCount", count, prevSize.count);
                                     // Cutting off 50%
                                     slice = Math.round( count / 2);
                                     size.count -= slice;
@@ -246,9 +246,9 @@
                                 prevSize = size;
                             }
                         });
-                        console.log("Norm end:", sizes);
+                        //console.log("Norm end:", sizes);
                         if(slice > 0) {
-                            console.log("Slice: ", slice);
+                           // console.log("Slice: ", slice);
                             this.distributeBySize(sizes, slice, totalSaleSpeed);
                         }
                         return sizes;
@@ -402,7 +402,8 @@
 						return RestFactory.request(API.GET_HISTORY + parseInt(productId));
 					},
 
-                    createOrder: function(factoryId){
+                   // createOrder: function(factoryId){
+                    createOrder: function(factory,user){
                         // Creating order
                         // First delivery date
                         var deliveryDate = new Date();
@@ -414,10 +415,12 @@
                         deliveryDate = YYYY + '-' + MM + '-'+ DD;
 
                         var order = {
-                            factoryId: factoryId,
-                            buyerId: 328,
-                            type: 2,
-                            deliveryDate: deliveryDate
+                            factoryId   :   factory.id,
+                            buyerId     :   user.id,
+                            type        :   2,
+                            currencyId  :   factory.currencyId,
+                           // deliveryDate:   deliveryDate,
+                            status      :   0
                         };
 
                         return RestFactory.request(API.CREATE_ORDER, 'POST', order);
@@ -482,7 +485,7 @@
                      * @returns {Array}
                      */
                     sizeCheck:function(sizes){
-                        console.log(sizes);
+                        //console.log(sizes);
                         var array=[],
                             length=sizes.length;
 
@@ -490,7 +493,7 @@
 
                             if(_.has(sizes[i],"count") && _.has(sizes[i],"size")){
 
-                                if(sizes[i].count!="" && sizes[i].count!=0 && sizes[i].size!=""){
+                                if(sizes[i].count!="" && sizes[i].count!=0 && sizes[i].size!="" && !_.isNaN(sizes[i].count)){
                                     array.push(sizes[i]);
                                 }
 

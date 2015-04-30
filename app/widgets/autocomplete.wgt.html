@@ -7,16 +7,16 @@
         <!--header-->
         <tr ng-if="column!=undefined">
             <th>#</th>
-            <th ng-repeat="col in column">{{col.title||col.name}}</th>
+            <th ng-repeat="col in ::column">{{col.title||col.name}}</th>
         </tr>
         <!--body-->
         <tr ng-repeat="row in autoCompleteModel | orderBy:'name'" ng-click='getRow(row)'>
         <!--<tr ng-repeat="row in inputModel | tableFilter : search : filterProperty | orderBy:'name' track by $index" ng-click='getRow(row)'>-->
             <td>
                 <span class="btn btn-default btn-rounded btn-sm">{{$index+1}}</span></td>
-            <td ng-if="column!=undefined " ng-repeat="col in column">
+            <td ng-if="column!=undefined " ng-repeat="col in ::column">
                 <ul ng-if="col.name=='phone'">
-                    <li ng-repeat="phone in row.phone">
+                    <li ng-repeat="phone in ::row.phone">
                         {{phone}}
                     </li>
                 </ul>
@@ -34,7 +34,7 @@
                 </span>
 
                 <ul ng-if="col.name=='preview'">
-                    <li ng-repeat="img in row.preview">
+                    <li ng-repeat="img in ::row.preview">
                             <span class="thumbnail media-left">
                                 <img ng-src="{{imagepath}}{{img}}"/>
                             </span>

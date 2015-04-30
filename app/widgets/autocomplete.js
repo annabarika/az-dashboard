@@ -133,6 +133,9 @@ angular.module('widgets.autocomplete', [])
                             $scope.flag=true;
                             $scope.outputModel="";
                         }*/
+                        if($scope.search.length<2){
+                            return;
+                        }
                         $scope.autoCompleteModel=_getModel();
                         //console.log($scope.autoCompleteModel);
                         if($scope.search!=undefined && $scope.search!=""&& $scope.autoCompleteModel.length>0){

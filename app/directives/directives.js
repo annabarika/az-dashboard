@@ -190,7 +190,7 @@
             //@TODO add spinner of progress bar while image not show
             link: function (scope, element, attrs) {
                 scope.$watch('filePreview', function (filePreview) {
-                    if (filePreview && Object.keys(filePreview).length !== 0) {
+                    if (filePreview) {
                         FileReader.readAsDataUrl(filePreview).then(function (result) {
                             element.attr('src', result);
                         });
@@ -207,7 +207,24 @@
             return {
                 restrict: "A",
                 link: function (scope, elm, attrs) {
-                    scope.files={};
+                    /**
+                     * file type validator
+                     * @type array
+                     */
+                    if(attrs.accept!=undefined){
+                        var accept=attrs.accept.split(",");
+                        accept=accept.map(function(i){
+                            return i.replace(".","/").slice(0,3);
+                        });
+                    }
+                    /**
+                     * array for files
+                     * @type {Array}
+                     */
+                    var array=[];
+                    /**
+                     * element events for drag'n'drop
+                     */
                     elm.bind("dragover",_eventBreak);
                     elm.bind("dragleave",_eventBreak);
                     elm.bind("drop",_dropFiles);
@@ -226,10 +243,119 @@
                      */
                     function _dropFiles(event){
                         _eventBreak(event);
-                        $parse(attrs.imageDropzone)
-                            .assign(scope, event.dataTransfer.files);
-                        scope.$apply();
+
+                        if(navigator.userAgent.indexOf('Chrome')!=-1){
+                            _chromeFileTransfer(event);
+                        }
+                        else{
+                            console.log(navigator.userAgent);
+                            _fileTransfer(event);
+                        }
                     }
+
+                    /**
+                     * Chrome file transfer
+                     * @param event
+                     * @private
+                     */
+                    function _chromeFileTransfer(event){
+                        var items = event.dataTransfer.items;
+                        for (var i=0; i<items.length; i++) {
+                            var item = items[i].webkitGetAsEntry();
+                            if (item) {
+                                _traverseFileTree(item);
+                            }
+                        }
+                    }
+
+                    /**
+                     * common fileTransfer without folder transfer
+                     * @param event
+                     * @private
+                     */
+                    function _fileTransfer(event){
+                        var files=_validAllTypes(event.dataTransfer.files);
+
+                            $parse(attrs.imageDropzone)
+                                .assign(scope, files);
+                            scope.$apply();
+
+
+                    }
+
+                    /**
+                     * get all files from folders if exist
+                     * @param item
+                     * @param path
+                     * @private
+                     */
+                    function _traverseFileTree(item, path){
+                       var path = path || "";
+                        if (item.isFile){
+                            item.file(function(file) {
+                                var validType=_validType(file);
+                                if(validType){
+                                    array.push(file);
+                                    $parse(attrs.imageDropzone)
+                                        .assign(scope, array);
+                                    scope.$apply();
+                                }
+                            });
+                        } else if (item.isDirectory) {
+                            var dirReader = item.createReader();
+                            dirReader.readEntries(function(entries) {
+                                for (var i=0; i<entries.length; i++) {
+                                    _traverseFileTree(entries[i], path + item.name + "/");
+                                }
+                            });
+                        }
+                    }
+                    /**
+                     * validation file type
+                     * @param file
+                     * @returns {boolean}
+                     * @private
+                     */
+                    function _validType(file){
+                        if(!accept) return true;
+                        var bool=false;
+                        for(var i=0,length=accept.length;i<length;i++){
+                            if(file.type.indexOf(accept[i])!=-1){
+                                console.log(file.type.indexOf(accept[i]));
+                                bool=true;
+                            }
+                        }
+                        return bool;
+                    }
+
+                    /**
+                     * validation files array
+                     * @param files []
+                     * @returns {{}}
+                     * @private
+                     */
+                    function _validAllTypes(files){
+                        var obj={},
+                            counter=0;
+                            for(var i= 0,length=files.length;i<length;i++){
+                                /*if(!files[i].hasOwnProperty('type')){
+                                    continue;
+                                }
+                                if(files[i].type==""){
+                                    continue;
+                                }*/
+                                for(var j=0;j<accept.length;j++){
+                                    if(files[i].type.indexOf(accept[j])!=-1){
+                                        obj[counter]=files[i];
+                                        counter++;
+                                    }
+                                }
+                            }
+                        obj['length']=counter;
+                        console.log(obj);
+                        return obj;
+                    }
+
                 }
             };
         }]);

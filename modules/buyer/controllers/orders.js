@@ -745,12 +745,16 @@ app.controller('OrderListController',
                                 return;
                             }
                             modalInstance.close(factory);
-                        }
+                        };
                     },
                     backdrop:'static',
                     size:"sm"
                 });
                 modalInstance.result.then(function(factory){
+                    if(!factory){
+                        $scope.addNewOrder();
+                        return;
+                    }
                     console.log("make new factory",factory,$rootScope.factoryAttachment);
                     url=config.API.host+"factory/create";
                     //@TODO переделать добавление в массив параметров
