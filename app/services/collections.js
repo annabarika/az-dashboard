@@ -701,25 +701,20 @@
                  * @returns {*}
                  */
                 orderCreate: function (buyerId,collection,currencyId,type) {
-                    console.log(type);
                     var typeId;
                     (!type)?typeId=1:typeId=type.typeId;
-
                     var params = {
                         'buyerId'       :   buyerId,
                         'factoryId'     :   collection.factoryId,
                         'type'          :   typeId,//type.typeId,
                         'currencyId'    :   currencyId
                     };
-
-                    return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response) {
-
+                    return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response){
                         if(response.id) {
                             var params = {
                                 'id'        :   parseInt(collection.id),
                                 'orderId'   :   parseInt(response.id)
                             };
-
                             return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", params);
                         }
                         else return false;

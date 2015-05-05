@@ -1195,6 +1195,8 @@ app.controller("OrderController",
                 .then(function(response){
                     console.log("order",response);
                     $scope.order=response;
+                    $scope.price=response.order.orderedTotal;
+                    //$scope.files=response.files;
                     setFlag($scope.order.order.status);
                     _getProductRows();
                     angular.forEach($scope.type,function(value,index){
@@ -1320,8 +1322,6 @@ app.controller("OrderController",
 
                 }
             };
-
-
             /**
              * location to cargo cart
              * @param id
@@ -1495,14 +1495,12 @@ app.controller("OrderController",
                 $scope.uploadFlag=false;
 
                 var fd = new FormData();
-
+                fd.append("id",id);
                 angular.forEach($scope.files, function(file){
                     fd.append('file[]', file);
                 });
-
                 url = config.API.host + "order/loadfiles";
-                fd.append("id",id);
-                console.log("fd",fd);
+
                 $http.post(url,fd,
                     {
                         transformRequest: angular.identity,
@@ -1512,6 +1510,10 @@ app.controller("OrderController",
                         console.log("data upload",data);
                         if(_.isArray(data)){
                             messageCenterService.add('success', 'Files uploaded', {timeout: 3000});
+                            for(var i=0,length=data.length;i<length;i++){
+                                $scope.order.files.push(data[i]);
+                            }
+                            $scope.files=undefined;
                         }
                         else{
                             messageCenterService.add('danger', 'Download failed: '+data, {timeout: 3000});
@@ -1542,7 +1544,6 @@ app.controller("OrderController",
                 else{
                     $scope.files=obj;
                 }
-
             }
 
         }]);

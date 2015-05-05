@@ -18,13 +18,15 @@ try {
 
     else if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!empty($_FILES)) {
-            $post = [];
+            $post = $_POST;
+
             if(!file_exists($_SERVER['DOCUMENT_ROOT'].'f/tmp')) {
                 mkdir($_SERVER['DOCUMENT_ROOT'].'f/tmp', 0777);
             }
+            $url=substr($_SERVER['REQUEST_URI'],4);
+
             foreach ($_FILES as $files) {
                 $file_count = count($files['name']);
-
                 for($i = 0; $i < $file_count; $i++) {
                     $file = $_SERVER['DOCUMENT_ROOT'].'f/tmp/'.$files['name'][$i];
 
@@ -36,12 +38,11 @@ try {
                     }
                 }
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].'/catalogue/loadfiles');
+                curl_setopt($ch, CURLOPT_URL, 'http://'.$API['host'].$url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-                //			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 
                 $response = curl_exec($ch);
 
@@ -50,7 +51,6 @@ try {
                 die;
             }
         }else {
-
             $APIService->setMethod('POST');
             $_POST = json_decode(file_get_contents("php://input"), true);
             $APIService->setData($_POST);
@@ -71,7 +71,6 @@ try {
 
     $response = $APIService->setURL($request)->call();
 
-    //var_dump($response);
     echo json_encode($response);
 
 }catch( \Exception $e ){

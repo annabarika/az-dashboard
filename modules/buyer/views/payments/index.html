@@ -84,7 +84,11 @@
                         </tr>
                         <tr>
                             <td>Factory:</td>
-                            <td>{{item.factoryName||"none"}}</td>
+                            <td>
+                                <a ng-if="item.factoryName" href="buyer/factory/{{item.factory}}" target="_blank" ng-click="$event.stopPropagation()">{{item.factoryName}}</a>
+                                <span ng-if="!item.factoryName">none</span>
+                            </td>
+
                         </tr>
                         <tr>
                             <td>Type:</td>

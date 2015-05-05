@@ -26,7 +26,21 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<br/><span class="date">{{item.createDate}}</span></p>
+                        <p class="caption">
+                            <a ng-href="buyer/factory/{{item.factoryId}}" target="_blank" ng-click="$event.stopPropagation()">
+                                {{item.factoryName}}
+                            </a>
+                            &nbsp;&nbsp;<br/>
+                            <span class="date">
+                                {{item.createDate}}
+                            </span>
+                        </p>
+                        <p class="caption">
+                            <span>Phone:</span>
+
+                                <span ng-repeat="p in item.factoryPhone" class="date">{{p}}&nbsp;</span>
+
+                        </p>
                     </div>
                 </div>
             </div>

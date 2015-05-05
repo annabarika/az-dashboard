@@ -35,7 +35,7 @@ app.controller('PaymentListController',
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
                 { name: "date"				, 	title: 'Payment date' },
-                { name: "documentId"		, 	title: 'Orders' },
+                { name: "documentId"		, 	title: 'Document #' },
 				{ name: "factoryName"		, 	title: 'Factory name' },
 				{ name: "method"			, 	title: 'Payment method'},
 				{ name: "amount"			, 	title: 'Credit' },
@@ -52,7 +52,7 @@ app.controller('PaymentListController',
 						if(_.isArray(response)){
 							console.log(response);
                             $scope.draftPayments = PaymentService.resolvePaymentData(response,$rootScope.factories);
-							console.log($scope.draftPayments);
+							//console.log($scope.draftPayments);
 						}
 					}
 				);
@@ -62,7 +62,7 @@ app.controller('PaymentListController',
 							//console.log($rootScope.factories);
                             $scope.paidPayments = PaymentService.resolvePaymentData(response,$rootScope.factories);
                             $scope.paidSummary = PaymentService.calculatePaidRows($scope.paidPayments);
-							//console.log($scope.paidPayments);
+							console.log($scope.paidPayments);
                         }
                     }
                 );
@@ -512,6 +512,7 @@ app.controller('PaymentCartController',
 				var now =moment().format("YYYY-MM-DD HH:mm");
 				$scope.payment.payment.paymentDate=now;
 				PaymentService.updatePayment($scope.payment.payment).then(function(response){
+					console.log(response);
 					if(_.has(response,'status')){
 						if(response.status==1){
 							messageCenterService.add('success','Payment paid',{timeout:3000});

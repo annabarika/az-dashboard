@@ -4,6 +4,7 @@ var app = angular.module('modules.buyer', [
     "modules.buyer.bestsellers",
     "modules.buyer.collection",
     "modules.buyer.cargo",
+    "modules.buyer.factory",
     "daterangepicker"
 ]);
 
@@ -173,11 +174,16 @@ app.run( function($rootScope, $location ,$http) {
         $rootScope.fullFactories=data;
         //console.log("full",$rootScope.fullFactories);
         var factories = [];
-        angular.forEach(data, function (value) {
-            var files=value.factoryFiles;
-            value.factory['files']=files;
-            factories.push(value.factory);
-            });
+        angular.forEach(data, function (value,i) {
+
+            /*if(i=='debug'){
+                console.log(value);
+            }
+            else{*/
+                var files=value.factoryFiles;
+                this.push(value.factory);
+            //}
+            },factories);
         $rootScope.factories = factories;
             /*console.log("success factory", $rootScope.factories);*/
     });
