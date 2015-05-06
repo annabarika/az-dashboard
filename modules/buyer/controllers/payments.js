@@ -392,6 +392,10 @@ app.controller('PaymentListController',
 				}
 				else{
 					console.log($rootScope.row);
+					if($rootScope.row.documentId=='Other'){
+						messageCenterService.add("danger","Sorry! But this payment does not include order",{timeout:3000});
+						return;
+					}
 					$location.path( '/buyer/payments/payment_order/'+ $rootScope.row.documentId);
 				}
 

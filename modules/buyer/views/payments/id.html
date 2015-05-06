@@ -2,7 +2,8 @@
     <div class="box-layout">
         <div class="row mb-xs">
             <div class="col-md-12">
-                <div class="pull-left" ng-if="payment.payment.documentId!=null">
+                <!--<div class="pull-left" ng-if="payment.payment.documentId!=null">-->
+                <div class="pull-left">
                     <div class="btn btn-success" ng-click="upload();payment.payment.status=1" ng-disabled="payment.payment.status!=0"><i class="fa fa-plus" ng-hide="payment.payment.status==1"></i> Confirm</div>
                     <div class="btn btn-danger" ng-click="upload();payment.payment.status=2" ng-disabled="payment.payment.status!=0"><i class="fa fa-remove" ng-hide="payment.payment.status==2"></i> Cancel </div>
                 </div>
@@ -51,7 +52,7 @@
                                         <td>Credit</td>
                                         <td>
                                             <!--{{payment.payment.amount}}-->
-                                            <input type="text" class="form-control sm" style="float:left" numbers-only ng-model="payment.payment.amount" tooltip="enter amount" ng-disabled="payment.payment.documentId==null"/>
+                                            <input type="text" class="form-control sm" style="float:left" numbers-only ng-model="payment.payment.amount" tooltip="enter amount"/>
                                             <div style="padding:7px">
                                                 {{payment.currency.ISOCode}}
                                             </div>

@@ -21,7 +21,7 @@
                     <!--<pre>{{imagePath}}</pre>-->
                     <div class="panel panel-body">
                         <ul class="row_collection">
-                            <li ng-repeat="file in item.factoryFiles" class="img-wrapper" ng-if="$index<2">
+                            <li ng-repeat="file in ::item.factoryFiles" class="img-wrapper" ng-if="$index<2">
                                 <a href="http:{{imagePath}}{{file.path}}" target="_blank" ng-click="$event.stopPropagation()">
                                     <img ng-src="{{imagePath}}{{file.path}}"/>
                                 </a>
@@ -29,16 +29,17 @@
                         </ul>
 
                         <div>
-                            <p class="caption">
+                            <p class="caption">Factory:
                             <a ng-href="buyer/factory/{{item.factoryId}}" target="_blank" ng-click="$event.stopPropagation()">
                                 {{item.factoryName}}
                             </a>
                                 <br/>
+                                Create date:
                                 <span class="date">{{item.createDate}}</span></p>
-                            <p>
-                                <ul style="list-style: none">
-                                  <li ng-repeat="phone in item.factoryPhone">{{phone}}</li>
-                                </ul>
+                            <p class="caption">
+                                Phone:
+                                <span ng-repeat="p in item.factoryPhone" class="date">{{p}}&nbsp;</span>
+
                             </p>
                         </div>
                     </div>
