@@ -6,9 +6,7 @@
             </div>
             <div class="col-md-9">
                 <div class="pull-right">
-
-                        <input id="uploader" type="file" file-input="files" style="display: none" multiple/>
-
+                    <input id="uploader" type="file" file-input="files" style="display: none" multiple/>
                     <div class="btn btn-success" ng-click="upload()">Upload</div>
                     <div class="btn btn-warning" ng-click="sendToFactory()" ng-disabled="order.order.status==1">
                         <i class="fa fa-check" ng-hide="order.order.status==1"></i>
@@ -97,12 +95,12 @@
                 </div>
                 <div class="col-md-6">
                     <div ng-repeat="file in order.files" style="float:left">
-                        <button ng-click="removeFiles(file.name)" class="btn btn-link">
+                         <!--<button ng-click="removeFiles(file.name)" class="btn btn-link">
                             <i class="fa fa-remove"></i>
-                        </button>
-                        <div class="thumbnail sm">
-                            <img ng-src="{{imagePath}}{{file.path}}"/>
-                        </div>
+                        </button>-->
+                        <span class="col-md-2">
+                             <img class="img_sm thumbnail" ng-src="{{imagePath}}{{file.path}}">
+                        </span>
                     </div>
                    <!-- <img ng-src={{imagePath}}{{order[0].files.path}}"/>-->
                 </div>
@@ -122,7 +120,6 @@
                     <td>
                         <img ng-show="item.product.preview[1]" ng-src="http://back95.ru/f/catalogue/{{item.product.id}}/{{item.product.preview[1]}}"/>
                         <img style="width:100px" ng-hide="item.product.preview[1]" ng-src="http://compass/files/factory/attachments/{{item.product.tmpPhotos[0]}}"/>
-
                     </td>
                     <td>{{item.product.articul}}</td>
                     <td>{{item.product.factoryArticul}}</td>

@@ -18,16 +18,22 @@
                 <div class="panel panel-body">
                     <div class="row_collection" >
 
-                        <ul class="row_collection" ng-repeat="products in item.products ">
-                            <li class="img-wrapper" ng-if="$index < 3"  ng-repeat="product in products track by $index">
-                                <img style="height:100px" ng-src="{{imagePath}}{{product[0].files[0].path}}"/>
+                        <ul class="row_collection" ng-repeat="products in ::item.products ">
+                            <li class="img-wrapper" ng-if="$index < 3"  ng-repeat="product in ::products track by $index">
+                                <!--<img style="height:100px" ng-src="{{imagePath}}{{product[0].files[0].path}}"/>-->
+
+                                <span ng-repeat="file in ::product[0].files">
+                                    <!--{{file}}-->
+                                    <img style="height:100px" ng-if="$last" ng-src="{{imagePath}}{{file.path}}" />
+                                </span>
+                                <!--<img style="height:100px" ng-src="{{imagePath}}{{product[0].files[0].path}}"/>-->
                             </li>
 
                         </ul>
                     </div>
                     <div>
                         <p class="caption">
-                            <a ng-href="buyer/factory/{{item.factoryId}}" target="_blank" ng-click="$event.stopPropagation()">
+                            <a href="">
                                 {{item.factoryName}}
                             </a>
                             &nbsp;&nbsp;<br/>
