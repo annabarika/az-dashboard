@@ -232,7 +232,7 @@ app.controller('BestsellerItemController',[
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
-
+                console.log(response);
                 $scope.bestseller = response.bestseller;
                 $scope.notes=$scope.bestseller.notes;
 				$scope.factory = response.factory;
@@ -256,7 +256,7 @@ app.controller('BestsellerItemController',[
                 BestsellersService.calculate($scope.count, $scope.sizes);
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
-                  /*  console.log("bests history",response);*/
+                    console.log("bests history",response);
                     $scope.tmp = response;
                     angular.forEach( $scope.tmp,function(item){
                         BestsellersService.getProducts(item.orderId).then(

@@ -205,6 +205,7 @@
                             factory:            (item.hasOwnProperty('document') && !_.isUndefined(item.document.factoryId)) ? item.document.factoryId : '?',
                             factoryName:        (factory)?factory.name:"",
                             date:               moment(item.payment.paymentDate).format("L"),
+                            createDate:         moment(item.payment.createDate).format("L"),
                             method:             item.payment.paymentMethod,
                             cashierOfficeId:    item.payment.cashierOfficeId,
                             amount:             (item.payment.paymentType == 'payment') ? parseFloat(item.payment.amount) : "",

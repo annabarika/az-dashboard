@@ -17,6 +17,8 @@ app.controller('PaymentListController',
 					endDate;
 				startDate=moment().date(1).format('YYYY-MM-DD');
 				$scope.firstDay=new Date(startDate);
+				$scope.maxDate=new Date();
+				console.log($scope.maxDate);
 				endDate=moment().format('YYYY-MM-DD');
 				// Show all collected payments
 				setTimeout(getPayments({'start':startDate,'end':endDate}),80);
@@ -35,6 +37,7 @@ app.controller('PaymentListController',
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
                 { name: "date"				, 	title: 'Payment date' },
+                { name: "createDate"		, 	title: 'Create date' },
                 { name: "documentId"		, 	title: 'Document #' },
 				{ name: "factoryName"		, 	title: 'Factory name' },
 				{ name: "method"			, 	title: 'Payment method'},

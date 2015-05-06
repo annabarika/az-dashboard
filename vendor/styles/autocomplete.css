@@ -32,7 +32,7 @@
     overflow:scroll;
     position:absolute;
     border:1px solid #f2f5f8;
-    box-shadow: 10px 10px 5px #666666;
+/*    box-shadow: 10px 10px 5px #666666;*/
     background-color:white;
     opacity:1;
 }
