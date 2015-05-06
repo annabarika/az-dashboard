@@ -163,6 +163,16 @@ class API
             ];
             //throw new \Exception(curl_error($this->getHandle()));
         }
-        return json_decode($result, true);
+        /*return array_merge([
+            'debug' => [
+                'code'                          =>  $HttpCode,
+                'totalTime (Transfer Time)'     => $totalTime,
+                'connectTime'                   => $connectTime,
+                'nameLookupTime'                => $nameLookupTime,
+                'difference'                    => $timeDiff
+            ]
+        ],
+            json_decode($result, true));*/
+        return json_decode($result,true);
     }
 }

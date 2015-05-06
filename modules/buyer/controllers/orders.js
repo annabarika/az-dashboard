@@ -1153,17 +1153,20 @@ app.controller("OrderController",
                 2:'<span class="label label-success">Cancelled</span>',
                 3:'<span class="label label-warning">Finished</span>'
             };
-
+            /**
+             *  set title
+             * @type {string}
+             */
             $rootScope.documentTitle = 'Order #'+ id;
-
+            /**
+             * canceled order
+             */
             $scope.cancel=function(){
 
                 if($scope.order.order.status==2){
                     messageCenterService.add('danger', 'Order has been canceled', {timeout: 3000});
                     return;
                 }
-
-
                 var modalInstance=$modal.open({
                     templateUrl:"/modules/buyer/views/orders/cancel.html",
                     size:"sm",
@@ -1171,14 +1174,12 @@ app.controller("OrderController",
 
                 });
                 modalInstance.result.then(function(){
-
                     url=config.API.host+"order/cancel";
-
                     RestFactory.request(url,"PUT",{id:id}).then(
                         function(response){
-
                             if(response.status==2){
                                 messageCenterService.add('success', 'Order cancelled', {timeout: 3000});
+                                $scope.order.order.status=response.status;
                             }
                             else{
                                 messageCenterService.add('danger', 'Order is not cancelled', {timeout: 3000});
@@ -1195,6 +1196,8 @@ app.controller("OrderController",
                 .then(function(response){
                     console.log("order",response);
                     $scope.order=response;
+                    $scope.price=response.order.orderedTotal;
+                    //$scope.files=response.files;
                     setFlag($scope.order.order.status);
                     _getProductRows();
                     angular.forEach($scope.type,function(value,index){
@@ -1229,11 +1232,8 @@ app.controller("OrderController",
                         $scope.orderProducts=response;
                         console.log(response);
                         angular.forEach(response,function(value){
-
                             if(_.has(value, 'count')){
-
                                 $scope.totalCount+=parseInt(value.count);
-
                             }
                             if(_.has(value.product, 'price')) {
                                 $scope.totalPrice += parseInt(value.price);
@@ -1242,8 +1242,6 @@ app.controller("OrderController",
                     }
                 );
             }
-
-
             /**
              * Update ordered Total value
              *
@@ -1286,7 +1284,7 @@ app.controller("OrderController",
                     }
                     )}
             };
-
+/*
             $scope.saveProduct=function(event,product,model){
 
                 if(event.keyCode==13) {
@@ -1319,9 +1317,7 @@ app.controller("OrderController",
                     )
 
                 }
-            };
-
-
+            };*/
             /**
              * location to cargo cart
              * @param id
@@ -1335,9 +1331,15 @@ app.controller("OrderController",
             $scope.showPayment=function(){
                 $location.path('/buyer/payments/payment_order/'+id);
             };
-
+            /**
+             * imagePath for products
+             * @type {string}
+             */
             $scope.imagePath=config.API.imagehost+'/files/factory/attachments/';
-
+            /**
+             * table header for products
+             * @type {{name: string, title: string}[]}
+             */
             $scope.tableHeader = [
                 { name: "photo", title: 'Photo' },
                 { name: "articul", title: 'Articul' },
@@ -1491,18 +1493,13 @@ app.controller("OrderController",
              * upload files
              */
             function runUpload(){
-
                 $scope.uploadFlag=false;
-
                 var fd = new FormData();
-
+                fd.append("id",id);
                 angular.forEach($scope.files, function(file){
                     fd.append('file[]', file);
                 });
-
                 url = config.API.host + "order/loadfiles";
-                fd.append("id",id);
-                console.log("fd",fd);
                 $http.post(url,fd,
                     {
                         transformRequest: angular.identity,
@@ -1512,18 +1509,21 @@ app.controller("OrderController",
                         console.log("data upload",data);
                         if(_.isArray(data)){
                             messageCenterService.add('success', 'Files uploaded', {timeout: 3000});
+                            for(var i=0,length=data.length;i<length;i++){
+                                $scope.order.files.push(data[i]);
+                            }
+                            $scope.files=undefined;
                         }
                         else{
                             messageCenterService.add('danger', 'Download failed: '+data, {timeout: 3000});
                         }
-
                     })
                     .error(function(data,status){
                         messageCenterService.add('danger', 'Error: '+data+" "+status, {timeout: 3000});
                     })
             }
 
-            $scope.removeFiles=function(name){
+            /*$scope.removeFiles=function(name){
 
                 var obj={};
 
@@ -1542,7 +1542,6 @@ app.controller("OrderController",
                 else{
                     $scope.files=obj;
                 }
-
-            }
+            }*/
 
         }]);

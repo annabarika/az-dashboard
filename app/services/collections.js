@@ -83,7 +83,7 @@
                     for(var f in factories){
 
                         if(factories[f].factoryGroup.id=="2"){
-                            if( factories[f].factory.name == '') factories[f].factory.name = 'Other'
+                            if( factories[f].factory.name == '') factories[f].factory.name = 'Other';
                             factory.push(
                                 {
                                     name        :   factories[f].factory.name,
@@ -162,7 +162,7 @@
                  * @returns {Array}
                  */
                 filterCollections : function(response, factories, statuses) {
-                    console.log(response);
+                    //console.log(response);
                     var collections = [];
 
                     angular.forEach(response, function(value) {
@@ -373,7 +373,7 @@
                             products[i].price=products[i].price.replace(",",".");
                         }
                     }
-                    console.log(products);
+                    //console.log(products);
                     return -1;//true
                 },
                 /**
@@ -384,7 +384,7 @@
                  * @returns {Array}
                  */
                 buildProductsArray: function(data,collection,currency) {
-                    console.log(data,collection,currency);
+                   // console.log(data,collection,currency);
                     var array=[];
 
                     angular.forEach(data,function(value,i){
@@ -407,7 +407,7 @@
                         this.push(product);
 
                     },array);
-                    console.log(array);
+                   // console.log(array);
                     return array;
                 },
 
@@ -701,25 +701,20 @@
                  * @returns {*}
                  */
                 orderCreate: function (buyerId,collection,currencyId,type) {
-                    console.log(type);
                     var typeId;
                     (!type)?typeId=1:typeId=type.typeId;
-
                     var params = {
                         'buyerId'       :   buyerId,
                         'factoryId'     :   collection.factoryId,
                         'type'          :   typeId,//type.typeId,
                         'currencyId'    :   currencyId
                     };
-
-                    return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response) {
-
+                    return RestFactory.request(PATHC.ORDERCREATE,"POST", params).then(function(response){
                         if(response.id) {
                             var params = {
                                 'id'        :   parseInt(collection.id),
                                 'orderId'   :   parseInt(response.id)
                             };
-
                             return RestFactory.request(PATHC.ADDORDERTOCOLLECTION,"PUT", params);
                         }
                         else return false;

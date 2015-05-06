@@ -12,7 +12,7 @@ app.run(
             /**
              * load factory
              */
-            CollectionService.getFactories()
+           /* CollectionService.getFactories()
                 .success(function(data){
                     $rootScope.fullFactories=data;
                     //console.log("full",$rootScope.fullFactories);
@@ -26,8 +26,8 @@ app.run(
                      });
 
                     $rootScope.factories = factories;
-                   /* console.log("success factory", $rootScope.factories);*/
-                });
+                   *//* console.log("success factory", $rootScope.factories);*//*
+                });*/
 
             /**
              * load statusses
@@ -217,7 +217,7 @@ app.controller("CollectionsReadyController",
                 CollectionService.getCollections(url).then(function (response) {
 
                     $scope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-                     //console.log($scope.collections);
+                     //console.log("ready",$scope.collections);
                     var keys=[],
                         length=$scope.collections.length;
 
@@ -231,7 +231,7 @@ app.controller("CollectionsReadyController",
                             });
 
                         }
-                        //console.log("keys",keys);
+                        console.log("keys",keys);
                         _getAllProducts(0,keys);
                     }
                     else{
@@ -252,6 +252,7 @@ app.controller("CollectionsReadyController",
             function _getAllProducts(i,keys){
                 CollectionService.getCollectionCard(keys[i].id).then(
                     function(response){
+                        console.log(response);
                         if(response.length!=0){
                             $scope.collections[keys[i].position]['products']=response;
                         }
@@ -882,7 +883,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
                         $timeout(function () {
                             $location.path("buyer/collection");
-                        }, 2000);
+                        }, 1000);
                     }
                     else {
                         messageCenterService.add('danger', 'Failed', {timeout: 3000});
@@ -932,9 +933,10 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             if(_.isNull($scope.orderId)){
 
                 CollectionService.orderCreate($rootScope.user.id,$scope.collection,$scope.currencyId,$scope.type).then(function(response){
+                    console.log(response);
                     if(_.has(response,'id')){
                         console.log("success create order",response);
-                        $scope.orderId =response.id;
+                        $scope.orderId =response.orderId;
                         $scope.createOrder();
                     }
                 });
@@ -977,19 +979,8 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                             }
                         });
                     }
-
                 });
             }
         };
     }
 ]);
-
-app.controller('FactoryController',[
-    "$scope",
-    '$rootScope',
-    '$route',
-    function($scope,$rootScope,$route){
-
-        $rootScope.documentTitle='Factory Crt'
-    }
-])
