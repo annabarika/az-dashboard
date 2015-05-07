@@ -59,10 +59,10 @@
 
 <div class="col-sm-12 col-md-12" >
     <div class="pa-md" ng-show="draftPayments.length">
-        <h3 style="margin-bottom:10px;">Draft payments:</h3>
+        <h3 style="margin-bottom:30px;">Draft payments:</h3>
 
         <div class="row">
-            <div  style="min-height:100px;" class="col-sm-2 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)"><!--
+            <div  style="min-height:160px;" class="col-sm-4 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)"><!--
                 <div class="panel panel-body">
                     <div>
                         <p ng-if="item.documentId!='Other'">Order #{{item.documentId}}</p>
@@ -76,13 +76,12 @@
                 <div class="panel panel-body">
                     <table>
                         <tr>
-                            <td>Document:</td>
-                            <td ng-if="item.documentId!='Other'">
+                            <td colspan="2" ng-if="item.documentId!='Other'">
                                 <a ng-href="buyer/orders/id/{{item.documentId}}" target="_blank" ng-click="$event.stopPropagation()">Order #{{item.documentId}}</a>
                             </td>
-                            <td ng-if="item.documentId=='Other'">{{item.documentId}} payment</td>
+                            <td colspan="2" ng-if="item.documentId=='Other'">{{item.documentId}} payment</td>
                         </tr>
-                        <tr>
+                        <tr ng-if="item.documentId!='Other'">
                             <td>Factory:</td>
                             <td>
                                 <a ng-if="item.factoryName" href="buyer/factory/{{item.factory}}" target="_blank" ng-click="$event.stopPropagation()">{{item.factoryName}}</a>

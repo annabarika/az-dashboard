@@ -91,7 +91,7 @@
                     <tr>
                         <th> # </th>
                         <th class="sorting ng-scope"><a class="ng-binding">Factory</a></th>
-                        <th class="sorting ng-scope"><a class="ng-binding">Factory preview</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Factory card</a></th>
                         <th class="sorting ng-scope"><a class="ng-binding">Created</a></th>
                         <th class="sorting ng-scope"><a class="ng-binding">Delivery date</a></th>
                         <th class="sorting ng-scope"><a class="ng-binding">Invoices</a></th>
@@ -162,7 +162,7 @@
                             <hr/>
                             <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" tooltip="Ask for payment">&#165;</button>
                             <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.paidTotal < 1" ng-click="makePayment($index,'refund')" tooltip="Ask for refund">&#165;</button>
-                            <button ng-show="user.type == 'admin'" ng-disabled="item.order.status == 3" type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="finish($index)" tooltip="finish"><i class="glyphicon glyphicon-ok"></i></button>
+                            <button ng-show="user.type == 'admin'" ng-disabled="item.order.status == 3" type="button" class="btn btn-success btn-rounded btn-sm" ng-click="finish($index)" tooltip="finish"><i class="glyphicon glyphicon-ok"></i></button>
                         </td>
                     </tr>
                     </tbody>
