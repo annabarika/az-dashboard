@@ -19,12 +19,11 @@
             <!--/ basic info heading -->
         </div>
         <!--/ end page header -->
-
         <div class="container-fluid">
             <div class="pa-md">
                 <div class="row">
                 <div class="col-md-6">
-                    <div class="col-md-6 col-lg-4" ng-repeat="photo in product.photos">
+                    <div class="col-md-6 col-lg-4" ng-repeat="photo in ::product.photos track by $index">
                         <!-- thumbnail -->
                         <a href="http://back95.ru/f/catalogue/{{product.id}}/{{photo}}" target="_blank">
                             <img src="http://back95.ru/f/p400x400/catalogue/{{product.id}}/{{photo}}" class="photos_gallery"/>

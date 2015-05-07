@@ -998,8 +998,9 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
     function _createPayment(order, user,advance) {
 
         var data = {
+            documentId          : order.id,
             currencyId          : order.currencyId,
-            paymentDocumentType :1,
+            paymentDocumentType : 1,
             cashierId           : user.id,
             cashierOfficeId     : parseInt(user.settings.cashierOffice),
             paymentType         : "payment",
@@ -1107,6 +1108,7 @@ app.controller("OrderController",
              * get payment type for orders
              */
             $scope.$watch('types',function(val){
+                console.log("watch",val);
                 if(val){
                     _getPaymentType();
                 }
@@ -1137,15 +1139,19 @@ app.controller("OrderController",
                 }
             }
 
-            $scope.currentType=function (){
-                console.log($scope.type);
+            /**
+             * get current type
+             * @private
+             */
+            /*function _currentType(){
+                console.log("type",$scope.type);
                 angular.forEach($scope.type,function(value){
 
                     if(value.id==$scope.order.order.type){
-                        return value;
+                        $scope.currentType= value;
                     }
                 });
-            };
+            };*/
 
             $scope.statusTemplates = {
                 0:'<span class="label label-info">Draft</span>',
@@ -1201,7 +1207,9 @@ app.controller("OrderController",
                     setFlag($scope.order.order.status);
                     _getProductRows();
                     angular.forEach($scope.type,function(value,index){
+                        //console.log(value.id==$scope.order.order.type,value.id,$scope.order.order.type);
                         if(value.id==$scope.order.order.type){
+
                             $scope.currentType=$scope.type[index];
                         }
                     });
