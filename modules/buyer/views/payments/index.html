@@ -81,32 +81,37 @@
                     </div>
                 </div>-->
                 <div class="panel panel-body payment-type-{{item.type}} payment-document-{{item.documentId}}">
-                    <h4 ng-if="item.documentId!='Other'">
-                        <a ng-href="buyer/orders/id/{{item.documentId}}" target="_blank" ng-click="$event.stopPropagation()">Order #{{item.documentId}}</a>
-                    </h4>
 
-                    <table>
-                        <tr ng-if="item.documentId!='Other'">
-                            <td style="color: gray;">Factory:</td>
-                            <td>
-                                <a ng-if="item.factoryName" href="buyer/factory/{{item.factory}}" target="_blank" ng-click="$event.stopPropagation()">{{item.factoryName}}</a>
-                                <span ng-if="!item.factoryName">none</span>
-                            </td>
+                    <div class="marker_success">
+                        <!--class="marker_danger marker_info"-->
 
-                        </tr>
-                        <tr>
-                            <td style="color: gray;">Note:</td>
-                            <td>{{item.notes}}</td>
-                        </tr>
-                        <!--
-                        <tr>
-                            <td>Type:</td>
-                            <td>{{item.type}}</td>
-                        </tr>
-                        -->
-                    </table>
-                    <h4 ng-if="item.type=='payment'">{{item.amount}} <small>{{item.currency}}</small></h4>
-                    <h4 ng-if="item.type=='refund'">{{item.refund}} {{item.currency}}</h4>
+                        <h4 ng-if="item.documentId!='Other'">
+                            <a ng-href="buyer/orders/id/{{item.documentId}}" target="_blank" ng-click="$event.stopPropagation()">Order #{{item.documentId}}</a>
+                        </h4>
+
+                        <table>
+                            <tr ng-if="item.documentId!='Other'">
+                                <td style="color: gray;">Factory:</td>
+                                <td>
+                                    <a ng-if="item.factoryName" href="buyer/factory/{{item.factory}}" target="_blank" ng-click="$event.stopPropagation()">{{item.factoryName}}</a>
+                                    <span ng-if="!item.factoryName">none</span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td style="color: gray;">Note:</td>
+                                <td>{{item.notes}}</td>
+                            </tr>
+                            <!--
+                            <tr>
+                                <td>Type:</td>
+                                <td>{{item.type}}</td>
+                            </tr>
+                            -->
+                        </table>
+                        <h4 ng-if="item.type=='payment'">{{item.amount}} <small>{{item.currency}}</small></h4>
+                        <h4 ng-if="item.type=='refund'">{{item.refund}} {{item.currency}}</h4>
+                    </div>
                 </div>
             </div>
         </div>
