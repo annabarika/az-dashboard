@@ -4,6 +4,7 @@ var app = angular.module('modules.buyer', [
     "modules.buyer.bestsellers",
     "modules.buyer.collection",
     "modules.buyer.cargo",
+    "modules.buyer.factory",
     "daterangepicker"
 ]);
 
@@ -140,6 +141,12 @@ app.config(function($routeProvider){
             authRequired:"admin"
         }
     )
+        .when("/buyer/factory/:id",
+        {
+            templateUrl:"/modules/buyer/views/factory/index.html",
+            controller:"FactoryController",
+            authRequired:"admin"
+        })
 });
 
 app.run( function($rootScope, $location ,$http) {
@@ -158,6 +165,31 @@ app.run( function($rootScope, $location ,$http) {
             $rootScope.types=data;
            /* console.log("run types",$rootScope.types);*/
         });
+    /**
+    * get factories
+    */
+    $http.get(config.API.host + "factory/load")
+        .success(function(data){
+        //console.log(data);
+        $rootScope.fullFactories=data;
+        //console.log("full",$rootScope.fullFactories);
+        var factories = [];
+        angular.forEach(data, function (value,i) {
+
+            /*if(i=='debug'){
+                console.log(value);
+            }
+            else{*/
+                var files=value.factoryFiles;
+                this.push(value.factory);
+            //}
+            },factories);
+        $rootScope.factories = factories;
+            /*console.log("success factory", $rootScope.factories);*/
+    });
+
+
+
 });
 
 app.controller('DatepickerCtrl', function ($scope) {

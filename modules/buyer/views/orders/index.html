@@ -43,7 +43,7 @@
                             >
                     </multi-select>-->
 
-            <div class="col-md-5 col-sm-12 mb-5">
+            <!--<div class="col-md-5 col-sm-12 mb-5">
 
                 <div class="col-md-3 col-sm-3 va-m">
                     <select class="form-control" data-ng-model="filter.status" ng-change="filteredOrders(filter)"
@@ -65,13 +65,16 @@
                         <option value="">Factories</option>
                     </select>
                 </div>
-            </div>
+            </div>-->
 
-            <div class="col-sm-5">
-                <div class="col-sm-4 va-m">
-                    <input date-range-picker class="form-control date-picker" placeholder="Select date range" type="text"
+            <div class="col-sm-2">
+                <div class="col-sm-11 va-m">
+                    <input date-range-picker class="form-control date-picker" placeholder="Select all orders by period:" type="text"
                            ng-model="filter.createDate" ng-change="filteredOrders(filter)"/>
                 </div>
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-warning" ng-click="getOrders()">Show all orders</button>
             </div>
         </div>
     </div>
@@ -87,15 +90,15 @@
                     <thead>
                     <tr>
                         <th> # </th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Factory</a></th>
-                        <th></th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Created</a></th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Delivery date</a></th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Invoices</a></th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Order total (&#165;)</a></th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Paid (&#165;)</a></th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Received (&#165;)</a></th>
-                        <th class="sorting ng-scope"><a href="" class="ng-binding">Notes</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Factory</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Factory card</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Created</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Delivery date</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Invoices</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Order total (&#165;)</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Paid (&#165;)</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Received (&#165;)</a></th>
+                        <th class="sorting ng-scope"><a class="ng-binding">Notes</a></th>
                         <th class="sorting ng-scope"><a class="ng-binding">Actions</a></th>
                     </tr>
                     </thead>
@@ -125,7 +128,7 @@
                         <td>
                             <span class="thumbnail media-left" ng-repeat="img in item.files track by $index" ng-if="$last" >
 
-                                 <a  href="http://compass/files/orders/documents/{{img.path}}" target="_blank" ng-click="$event.stopPropagation()">
+                                 <a  href="http://bo.back95.ru/files/orders/documents/{{img.path}}" target="_blank" ng-click="$event.stopPropagation()">
                                      <!--<img ng-src="{{imagePath}}{{img.path}}"/>-->
                                      <img src="/assets/images/pdf-icon.gif"/>
 
@@ -148,7 +151,7 @@
                         <td>
                             <p class="text-right">0</p>
                         </td>
-                        <td>
+                        <td class="col-lg-2">
                             <p class="text-right" ng-repeat="p in item.payments">{{p.note}}</p>
                             <!--<p class="text-muted text-right-sm" ng-repeat="p in item.payments">Changed: {{p.paymentDate}}</p>-->
                         </td>
@@ -157,9 +160,9 @@
                             <button type="button" class="btn btn-info btn-rounded btn-sm" ng-click="changeDate($index)" tooltip="change delivery date"><i class="fa fa-calendar"></i></button>
                             <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.status == 2" ng-click="cancel($index)" tooltip="cancel order"><i class="fa fa-ban"></i></button>
                             <hr/>
-                            <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" tooltip="make payment">&#165;</button>
-                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.paidTotal < 1" ng-click="makePayment($index,'refund')" tooltip="make refund">&#165;</button>
-                            <button ng-show="user.type == 'admin'" ng-disabled="item.order.status == 3" type="button" class="btn btn-danger btn-rounded btn-sm" ng-click="finish($index)" tooltip="finish"><i class="fa fa-times"></i></button>
+                            <button type="button" class="btn btn-success btn-rounded btn-sm" ng-click="makePayment($index,'payment')" tooltip="Ask for payment">&#165;</button>
+                            <button type="button" class="btn btn-danger btn-rounded btn-sm" ng-disabled="item.order.paidTotal < 1" ng-click="makePayment($index,'refund')" tooltip="Ask for refund">&#165;</button>
+                            <button ng-show="user.type == 'admin'" ng-disabled="item.order.status == 3" type="button" class="btn btn-success btn-rounded btn-sm" ng-click="finish($index)" tooltip="finish"><i class="glyphicon glyphicon-ok"></i></button>
                         </td>
                     </tr>
                     </tbody>

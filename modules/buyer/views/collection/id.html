@@ -32,11 +32,20 @@
                 <tr ng-repeat="product in items track by $index">
                     <td>{{$index+1}}</td>
                     <td>
-                        <div ng-if="product.files[0]" class="media np">
+                        <!--<div ng-if="product.files[0]" class="media np">
                             <div class="media-left">
                                 <span class="img-wrapper img-rounded">
-                                    <img ng-src="{{imagePath}}{{product.files[0].path}}" >
-                                    <!--{{imagePath}}{{product.files[0].path}}-->
+                                    <img ng-src="{{imagePath}}{{product.files[last].path}}">
+                                    &lt;!&ndash;{{imagePath}}{{product.files[0].path}}&ndash;&gt;
+                                </span>
+                            </div>
+                        </div>-->
+                        <div ng-repeat="file in product.files" class="media np">
+                            <!--<div class="media-left" ng-if="product.catalogueProduct.id==file.relativeId">-->
+                            <div class="media-left" ng-if="$last">
+                                <span class="img-wrapper img-rounded">
+                                    <img ng-src="{{imagePath}}{{file.path}}" >
+                                    <!--{{imagePath}}{{file.path}}-->
                                 </span>
                             </div>
                         </div>
@@ -105,6 +114,21 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="page-header">
+            <!-- basic info heading -->
+            <div class="box-layout">
+                <div class="col-sm-6 va-m">
+                    <button class="btn btn-green" ng-click="createOrder()" ng-disabled="collection.orderId"><span class="fa fa-check" ng-hide="isOrdered"></span>Create order</button>
+                    <button class="btn btn-red" ng-click="cancelCollection()" ng-disabled="collection.orderId"><span class="fa fa-check" ng-hide="isOrdered"></span> Delete</button>
+                    <button class="btn btn-default" ng-click="addCount(1)"><span class="fa fa-plus"> 1</span></button>
+                    <button class="btn btn-default" ng-click="addCount(3)"><span class="fa fa-plus"> 3</span></button>
+                    <button class="btn btn-default" ng-click="addCount(5)"><span class="fa fa-plus"> 5</span></button>
+                    <button class="btn btn-default" ng-click="removeCount()"><span class="fa fa-remove"></span></button>
+
+                </div>
+            </div>
+            <!--/ basic info heading -->
         </div>
     </div>
 </div>

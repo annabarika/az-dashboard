@@ -6,9 +6,7 @@
             </div>
             <div class="col-md-9">
                 <div class="pull-right">
-
-                        <input id="uploader" type="file" file-input="files" style="display: none" multiple/>
-
+                    <input id="uploader" type="file" file-input="files" style="display: none" multiple/>
                     <div class="btn btn-success" ng-click="upload()">Upload</div>
                     <div class="btn btn-warning" ng-click="sendToFactory()" ng-disabled="order.order.status==1">
                         <i class="fa fa-check" ng-hide="order.order.status==1"></i>
@@ -19,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <li ng-repeat="file in files">
                 {{file.name}}
 
@@ -27,17 +25,17 @@
                     <i class="fa fa-remove"></i>
                 </button>
             </li>
-        </div>
+        </div>-->
     </div>
 </div>
         <div class="container-fluid pt-md">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="tab-pane active">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="panel panel-default border-n mt-20">
-                                    <div class="table-responsive">
+                            <!--<div>-->
+                                <!--<div class="panel panel-default border-n mt-20">-->
+                                    <div class="panel">
                                         <table class="table table-hover table-bordered">
                                             <tbody>
                                                 <tr>
@@ -55,9 +53,9 @@
                                                         Ordered total
                                                     </td>
                                                     <td>
-                                                        <!--<span ng-show="order.order.type != 1">{{order.order.orderedTotal}}</span>-->
-                                                        <input numbers-only ng-disabled="order.order.type != 0" tooltip="press ENTER to save" class="form-control sm" style="float:left" type="text" ng-keyup="totalUpdate(order.order)" ng-model="order.order.orderedTotal" ng-init="order.order.orderedTotal= order.order.orderedTotal" />
-                                                        <div style="padding:7px">{{order.currency.ISOCode}}</div>
+                                                        <span ng-show="order.order.type != 0">{{order.order.orderedTotal}}&nbsp;{{order.currency.ISOCode}}</span>
+                                                        <input numbers-only ng-hide="order.order.type != 0" tooltip="press ENTER to save" class="form-control sm" style="float:left" type="text" ng-keyup="totalUpdate(price)" ng-model="price"/>
+                                                        <div ng-hide="order.order.type != 0" style="padding:7px">{{order.currency.ISOCode}}</div>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -90,11 +88,24 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                            </div>
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
                     </div>
-        </div>
+                </div>
+                <div class="col-md-6">
+                    <div ng-repeat="file in order.files" style="float:left">
+                         <!--<button ng-click="removeFiles(file.name)" class="btn btn-link">
+                            <i class="fa fa-remove"></i>
+                        </button>-->
+                        <span class="col-md-2">
+                             <img class="img_sm thumbnail" ng-src="{{imagePath}}{{file.path}}">
+                        </span>
+                    </div>
+                   <!-- <img ng-src={{imagePath}}{{order[0].files.path}}"/>-->
+                </div>
+            </div>
+
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -109,7 +120,6 @@
                     <td>
                         <img ng-show="item.product.preview[1]" ng-src="http://back95.ru/f/catalogue/{{item.product.id}}/{{item.product.preview[1]}}"/>
                         <img style="width:100px" ng-hide="item.product.preview[1]" ng-src="http://compass/files/factory/attachments/{{item.product.tmpPhotos[0]}}"/>
-
                     </td>
                     <td>{{item.product.articul}}</td>
                     <td>{{item.product.factoryArticul}}</td>

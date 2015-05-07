@@ -12,8 +12,8 @@
         'MessageCenterModule',
         "ang-drag-drop",
         "ngSanitize",
-        'ngAnimate',
-        "flow"//library for uploading files
+        'ngAnimate'
+        //"flow"//library for uploading files
     ])
 
         .run(["$rootScope","$route","AuthFactory","$location","NavService",function($rootScope,$route,AuthFactory,$location,NavService){

@@ -1,7 +1,60 @@
+'use strict';
 var app = angular.module("modules.buyer.payments", []);
 
-app.controller('PaymentListController', ['$scope','$rootScope','$location','$route','PaymentService','$modal','messageCenterService',
+app.controller('PaymentListController',
+	[
+		'$scope',
+		'$rootScope',
+		'$location',
+		'$route',
+		'PaymentService',
+		'$modal',
+		'messageCenterService',
+
 		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService) {
+			//FOR DATEPICKER RANGE
+			/*function getDate(){
+				var startDate,
+					endDate;
+				startDate=moment().date(1).format('YYYY-MM-DD');
+				$scope.firstDay=new Date(startDate);
+				$scope.maxDate=new Date();
+				console.log($scope.maxDate);
+				endDate=moment().format('YYYY-MM-DD');
+				// Show all collected payments
+				setTimeout(getPayments({'start':startDate,'end':endDate}),80);
+			};*/
+			//getDate();
+
+			/**
+			 * Datepickers functions begin
+			 */
+			$scope.minDate=moment().date(1).format('YYYY-MM-DD');
+			$scope.maxDate=moment().format('YYYY-MM-DD');
+			$scope.clear = function () {
+				$scope.date = null;
+			};
+
+			$scope.open = function($event) {
+				$event.preventDefault();
+				$event.stopPropagation();
+				$scope.opened = true;
+			};
+			$scope.dateOptions = {
+				formatYear: 'yy',
+				startingDay: 1
+			};
+			$scope.format = ' dd-MMMM-yyyy';
+			/**
+			 * 	Datepicker functions end
+			 */
+
+			/**
+			 * get Payments for current month
+			 */
+			setTimeout(getPayments({'start':$scope.minDate,'end':$scope.maxDate}),80);
+
+
 
 			$scope.$route = $route;
 			$scope.$location = $location;
@@ -14,32 +67,34 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 
 			$rootScope.documentTitle = "Payments";
 			$scope.tableHeader = [
-				{ name: "documentId"		, 	title: 'Document' },
-				{ name: "factory"			, 	title: 'Factory' },
-				{ name: "date"				, 	title: 'Payment date' },
+                { name: "date"				, 	title: 'Payment date' },
+                { name: "createDate"		, 	title: 'Create date' },
+                { name: "documentId"		, 	title: 'Document #' },
+				{ name: "factoryName"		, 	title: 'Factory name' },
 				{ name: "method"			, 	title: 'Payment method'},
-                { name: "cashierOfficeId"	,	title: "CashierOffice"},
-				{ name: "amount"			, 	title: 'Amount' },
-				{ name: "refund"			, 	title: 'Refund' }
+				{ name: "amount"			, 	title: 'Credit' },
+				{ name: "refund"			, 	title: 'Debit' }
 			];
 
             /**
              * Collect all payments
              */
-			getPayments = function(date) {
+			 function getPayments(date){
 
 				// Get draft payments
 				PaymentService.getPayments(0, date).then(function(response) {
 						if(_.isArray(response)){
-                            $scope.draftPayments = response;
-							console.log($scope.draftPayments);
+							console.log(response);
+                            $scope.draftPayments = PaymentService.resolvePaymentData(response,$rootScope.factories);
+							//console.log($scope.draftPayments);
 						}
 					}
 				);
                 // Get paid Payments
                 PaymentService.getPayments(1, date).then(function(response) {
                         if(_.isArray(response)){
-                            $scope.paidPayments = PaymentService.resolvePaymentData(response);
+							//console.log($rootScope.factories);
+                            $scope.paidPayments = PaymentService.resolvePaymentData(response,$rootScope.factories);
                             $scope.paidSummary = PaymentService.calculatePaidRows($scope.paidPayments);
 							console.log($scope.paidPayments);
                         }
@@ -47,8 +102,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
                 );
 			};
 
-            // Show all collected payments
-            getPayments();
+
 
 			PaymentService.getStatuses().then(
 				function(response){
@@ -67,7 +121,6 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 
 					$scope.payments=PaymentService.parseCashierOffice($scope.payments,$scope.cashierOfficies);
 
-
 					angular.forEach($scope.cashierOfficies,function(value){
 						if(value.id==$scope.userCO){
 							$scope.userCO=value;
@@ -82,19 +135,23 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
              *
              * @param filter
              */
-            $scope.filteredPayments = function(filter) {
-
+            $scope.filteredPayments = function() {
+				/*console.log("this",filter);
                 var filter = PaymentService.parseFilters(filter);
 
                 if(filter.hasOwnProperty('date')) {
                     getPayments(filter.date);
-                }
+                }*/
+				getPayments({
+						'start':moment($scope.minDate).format('YYYY-MM-DD'),
+						'end':$scope.maxDate
+					});
 			};
 
 			/**
 			 * Add new payment
 			 */
-			$scope.addNewPayment=function(){
+			/*$scope.addNewPayment=function(type){
 				var modalInstance=$modal.open({
 					templateUrl:"/modules/buyer/views/payments/new_payment.html",
 					controller:function($scope,PaymentService,cashierOffice,cashierId){
@@ -103,27 +160,20 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 						$scope.cashierId=cashierId;
                         $scope.filterProperty=['id'];
 
-						/**
+						*//**
 						 * Get Orders for autocomplete
-						 */
+						 *//*
 						PaymentService.getOrders().then(function(response){
 								$scope.orders = response;
+								$scope.orders.map(function(i){
+									i.createDate=moment(i.createDate).format("L");
+									if(i.deliveryDate)
+									i.deliveryDate=moment(i.deliveryDate).format("L");
+									return i;
+								});
+								console.log(response);
 							}
 						);
-
-                        /**
-                         * Get Cargo for autocomplete
-                         */
-                        PaymentService.getCargo().then(function(response){
-                                var cargo = [];
-                                if(!_.isEmpty(response)) {
-                                    response.forEach(function(items) {
-                                        cargo.push(items.cargo);
-                                    });
-                                }
-                                $scope.cargo = cargo;
-                            }
-                        );
 
                         $scope.orderType=[
                             {name:"income",value:'refund'},
@@ -144,14 +194,17 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
                             {name:"bank",value:'bank'}
                         ];
 						$scope.columnHeaders=[
-							{name  : "id"}
+							{name  : "id",			title:"Order"},
+							{name  : "createDate",	title:"CreateDate"},
+							{name  : "deliveryDate",title:"deliveryDate"},
+							{name  : "orderedTotal",title:"OrderedTotal"},
+							{name  : "paidTotal",	title:"paidTotal"}
 						];
-						/**
+						*//**
 						 *
 						 * @param payment
-						 */
+						 *//*
 						$scope.create=function(payment){
-							//console.log(payment);
 							if(_.isUndefined(payment)){
 								messageCenterService.add('danger', 'Not entered fields', {timeout: 3000});
 								return;
@@ -160,14 +213,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 								messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
 								return;
 							}
-							if(_.isNull(payment.type)|| _.isUndefined(payment.type)){
-								messageCenterService.add('danger', 'Not choose type', {timeout: 3000});
-								return;
-							}
-                            /*if(_.isNull(payment.method)|| _.isUndefined(payment.method)){
-                                messageCenterService.add('danger', 'Not choose method', {timeout: 3000});
-                                return;
-                            }*/
+
 							if(_.isNull(payment.note)|| _.isUndefined(payment.note)){
 								messageCenterService.add('danger', 'Please,enter the note', {timeout: 3000});
 								return;
@@ -175,11 +221,10 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 							else{
 								modalInstance.close(payment);
 							}
-							//modalInstance.close(payment)
 						}
 					},
 					backdrop:'static',
-					size:"sm",
+					size:"lg",
 					resolve:{
 						cashierOffice:function(){
 							return $scope.userCO;
@@ -187,6 +232,7 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 						cashierId:function(){
 							return $rootScope.user.id;
 						}
+
 					}
 				});
 				modalInstance.result.then(
@@ -205,7 +251,106 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 						)
 					}
 				)
-			};
+			};*/
+
+			$scope.addNewPayment=function(type){
+				var modalInstance=$modal.open({
+					templateUrl:"/modules/buyer/views/payments/new_payment.html",
+					controller:function($scope,PaymentService,cashierOffice,cashierId,type){
+						$scope.payment={};
+						$scope.payment.type=type;
+
+						if($scope.payment.type=='payment'){
+							$scope.title='Make new credit payment';
+							$scope.paymentFlag='payment';
+						}
+						else{
+							$scope.title='Make new debit payment';
+							$scope.paymentFlag='refund';
+						}
+						/*$scope.$watch('payment.order',function(val){
+							console.log(val);
+						});*/
+
+
+						$scope.cashierOffice=cashierOffice;
+						$scope.cashierId=cashierId;
+						$scope.filterProperty=['id'];
+						$scope.columnHeaders=[
+							{name  : "id",			title:"Order"},
+							{name  : "createDate",	title:"CreateDate"},
+							{name  : "deliveryDate",title:"deliveryDate"},
+							{name  : "orderedTotal",title:"OrderedTotal"},
+							{name  : "paidTotal",	title:"paidTotal"}
+						];
+						PaymentService.getOrders().then(function(response){
+								$scope.orders = response;
+								$scope.orders.map(function(i){
+									i.createDate=moment(i.createDate).format("L");
+									if(i.deliveryDate)
+										i.deliveryDate=moment(i.deliveryDate).format("L");
+									return i;
+								});
+							}
+						);
+						/**
+						 *
+						 * @param payment
+						 */
+						$scope.create=function(payment){
+							console.log(payment);
+							if(_.isUndefined(payment)){
+								messageCenterService.add('danger', 'Not entered fields', {timeout: 3000});
+								return;
+							}
+							if(_.isNull(payment.amount)||_.isUndefined(payment.amount)||payment.amount<0){
+								messageCenterService.add('danger', 'Not entered amount', {timeout: 3000});
+								return;
+							}
+							if(payment.method!='other'){
+								if(!_.has(payment,'order') || payment.order==""){
+									messageCenterService.add('danger', 'Not choose order', {timeout: 3000});
+									return;
+								}
+							}
+							if(_.isNull(payment.note)|| _.isUndefined(payment.note)){
+								messageCenterService.add('danger', 'Please,enter the note', {timeout: 3000});
+								return;
+							}
+							modalInstance.close(payment)
+						}
+					},
+					backdrop:"static",
+					size:'lg',
+					resolve:{
+						cashierOffice:function(){
+							return $scope.userCO;
+						},
+						cashierId:function(){
+							return $rootScope.user.id;
+						},
+						type:function(){
+							return type;
+						}
+					}
+				});
+				modalInstance.result.then(
+					function(payment){
+						PaymentService.createPayment(payment,$rootScope.user).then(
+							function(response){
+
+								if(_.isObject(response) && response.hasOwnProperty('id')) {
+									messageCenterService.add('success', 'Payment created', {timeout: 3000});
+									getPayments();
+								}
+								else{
+									messageCenterService.add('danger', 'Payment not created', {timeout: 3000});
+								}
+							}
+						)
+					})
+				};
+
 			/**
 			 * Add new cashier office
 			 */
@@ -280,11 +425,15 @@ app.controller('PaymentListController', ['$scope','$rootScope','$location','$rou
 			$scope.edit = function(item){
 				if(item){
 					console.log(item);
-					$location.path( '/buyer/payments/id/'+ item.payment.id);
+					$location.path( '/buyer/payments/id/'+ item.id);
 				}
 				else{
 					console.log($rootScope.row);
-					$location.path( '/buyer/payments/payment_order/'+ $rootScope.row.orderId);
+					if($rootScope.row.documentId=='Other'){
+						messageCenterService.add("danger","Sorry! But this payment does not include order",{timeout:3000});
+						return;
+					}
+					$location.path( '/buyer/payments/payment_order/'+ $rootScope.row.documentId);
 				}
 
 			};
@@ -317,13 +466,21 @@ app.controller("PaymentOrderController",[
 		 * @type {{name: string, title: string}[]}
 		 */
 		$scope.tableHeader = [
-			{ name: "id"				,	title: 'ID' },
-			{ name: "factory"			, 	title: 'Factory' },
+			{ name: "documentId"		,	title: 'ID' },
+			{ name: "factoryName"		, 	title: 'Factory' },
 			{ name: "date"				, 	title: 'Payment date' },
 			{ name: "method"			, 	title: 'Payment method'},
 			{ name:"cashierOfficeName"	,	title:"CashierOffice"},
-			{ name: "amount"			, 	title: 'Payment' },
-			{ name: "refund"			, 	title: 'Refund' }
+			{ name: "amount"			, 	title: 'Credit' },
+			{ name: "refund"			, 	title: 'Debit' }
+		];
+		$scope.tableHeader = [
+			{ name: "date"				, 	title: 'Payment date' },
+			{ name: "documentId"		, 	title: 'Orders' },
+			{ name: "factoryName"		, 	title: 'Factory name' },
+			{ name: "method"			, 	title: 'Payment method'},
+			{ name: "amount"			, 	title: 'Credit' },
+			{ name: "refund"			, 	title: 'Debit' }
 		];
 		/**
 		 * get Order Payments
@@ -332,7 +489,7 @@ app.controller("PaymentOrderController",[
 			function(response){
 				console.log("orderpayment",response);
 				if(_.isArray(response)){
-					$scope.data = PaymentService.resolvePaymentData(response,$scope.tableHeader);
+					$scope.data = PaymentService.resolvePaymentData(response,$rootScope.factories);
 					$scope.orderPayments=$scope.data;
 				}
 				else{
@@ -385,6 +542,7 @@ app.controller('PaymentCartController',
 			 */
 			PaymentService.getCurrentPayment($route.current.params.id).then(function(response){
 				if(response){
+					/*console.log(response);*/
 					$scope.payment= _.first(response);
 				}
 			});
@@ -392,13 +550,18 @@ app.controller('PaymentCartController',
 			 * confirm or canceled payment
 			 */
 			$scope.upload=function(){
+				var now =moment().format("YYYY-MM-DD HH:mm");
+				$scope.payment.payment.paymentDate=now;
 				PaymentService.updatePayment($scope.payment.payment).then(function(response){
+					console.log(response);
 					if(_.has(response,'status')){
 						if(response.status==1){
 							messageCenterService.add('success','Payment paid',{timeout:3000});
+							$location.path("buyer/payments");
 						}
 						if(response.status==2){
 							messageCenterService.add('success','Payment canceled',{timeout:3000});
+							$location.path("buyer/payments");
 						}
 						else{
 							messageCenterService.add('danger','Payment is not update: '+response,{timeout:3000});

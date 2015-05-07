@@ -9,7 +9,11 @@
         <h4>{{factory.name}}</h4>
         <div class="form-group">
             <label class="control-label">Amount</label>
-            <input class="form-control" type="text" ng-model="amount" placeholder="separated by point">
+            <input class="form-control" numbers-only type="text" ng-model="amount" placeholder="separated by point">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Prepayment </label>
+            <input class="form-control" numbers-only type="text" ng-model="advance" placeholder="separated by point">
         </div>
         <div class="form-control" >
             <input type="file" file-input="files" multiple/>
@@ -19,13 +23,13 @@
             <li ng-repeat="file in files"><i class="fa fa-file-o"></i>{{file.name}}</li>
         </div>
     </form>
-    <label>Sent to factory:
+    <!--<label>Sent to factory:
         <input type="checkbox" ng-model="statusModel" ng-true-value="1" ng-false-value="0">
-    </label>
+    </label>-->
 </div>
 <!--footer-->
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="saveOrder(amount)">Create</button>
+    <button type="button" class="btn btn-primary" ng-click="saveOrder(amount,advance)">Create</button>
     <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>
 </div>

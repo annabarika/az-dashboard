@@ -24,9 +24,11 @@
                         <tr ng-show="dataheader">
                             <th> # </th>
 
-                            <th class="sorting" ng-repeat="headerRow in dataheader"
-                                ng-click="sortReorder(headerRow.name, $event)"
-                                ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}"><a href="">{{headerRow.title}}</a>
+                            <th class="sorting" ng-repeat="headerRow in dataheader">
+                                <a href="" ng-click="sortReorder(headerRow.name, $event)" ng-class="{'sort-asc':headerRow.sort>0,'sort-desc':headerRow.sort<0}" ng-if="sort==headerRow.name||sort==undefined">
+                                    {{headerRow.title}}
+                                </a>
+                                <span ng-if="sort!=headerRow.name && sort !=undefined">{{headerRow.title}}</span>
                             </th>
                             <th ng-repeat="th in toolbarButtons"></th>
                         </tr>

@@ -36,7 +36,8 @@
 					method: method,
 					url: url,
 					data: data,
-                    headers : headers
+                    headers : headers,
+                    timeout:60000
 				};
                 usSpinnerService.spin('loader');
 				$http(req)
@@ -57,77 +58,119 @@
                 return deferred.promise;
             };
             /**
-            * FILE UPLOAD METHOD
+            * FILE UPLOAD METHOD 1
             * @param url
             * @param files
             * @param data
             * @param progress
             */
-            service.uploader=function(url,files,data,progress){
+            service.uploader=function(url,files){
 
-                var deferred = $q.defer();
-
-                var xhr=new XMLHttpRequest();
+                var _resultData;
                 /**
-                 * progress
-                 * @param e
+                 * start uploading
                  */
-                xhr.upload.onprogress = function(e) {
-                    console.log(e);
-                    $rootScope.$apply (function() {
-                        var percentCompleted;
-                        if (e.lengthComputable) {
-                            percentCompleted = Math.round(e.loaded / e.total * 100);
-                            if (progress) {
-                                progress(percentCompleted);
-                            } else if (deferred.notify) {
-                                deferred.notify(percentCompleted);
-                            }
+                _makeXHR(url,files,_result);
+                /**
+                 * callback function
+                 * @param data
+                 * @returns {*}
+                 * @private
+                 */
+                function _result(data){
+                    //_resultData = data;
+                    $rootScope.$apply(function(){
+                        $rootScope.resultUploadData=data;
+                    });
+                }
+                /**
+                 * make Ajax request
+                 * @param url
+                 * @param files
+                 * @param callback
+                 * @private
+                 */
+                function _makeXHR(url,files,callback){
+                    var xhr=new XMLHttpRequest();
+
+                    xhr.upload.onprogress=function(event){
+                        console.log((event.loaded / event.total) * 100);
+                        $rootScope.$apply(function(){
+                            $rootScope.uploadProgress=(event.loaded / event.total) * 100;
+
+                        })
+                    };
+                    xhr.onload = xhr.onerror = function(event) {
+
+                        if (this.status == 200) {
+                            var data=JSON.parse(event.currentTarget.response);
+                            callback(data);
                         }
-                    });
-                };
-                /**
-                 * upload complete
-                 * @param e
-                 */
-                xhr.onload = function(e) {
-                    $rootScope.$apply (function() {
-                        var ret = {
-                            files: files,
-                            data: angular.fromJson(xhr.responseText)
-                        };
-                        deferred.resolve(ret);
-                    })
-                };
-                /**
-                 * XHR error
-                 * @param e
-                 */
-                xhr.upload.onerror = function(e) {
-                    var msg = xhr.responseText ? xhr.responseText : "An unknown error occurred posting to '" + url + "'";
-                    $rootScope.$apply (function() {
-                        deferred.reject(msg);
-                    });
-                };
-
-                var formData = new FormData();
-
-                if (data) {
-                    Object.keys(data).forEach(function(key) {
-                        formData.append(key, data[key]);
-                    });
+                        else {
+                            console.log("error " + this.status);
+                            callback(this.status)
+                        }
+                    };
+                    xhr.open("POST", url, true);
+                    xhr.send(files);
                 }
+            };
+                /**
+                 * uploader method 2
+                 * @param url
+                 * @param files
+                 * @returns {service.UploadConstructor}
+                 */
+            service.fileUploader=function(url,files){
 
-                for (var idx = 0; idx < files.length; idx++) {
-                    formData.append(files[idx].name, files[idx]);
-                }
+                function UploadConstructor(){};
 
-                xhr.open("POST", url);
-                xhr.send(formData);
+                UploadConstructor.prototype._getXHR=function(){
+                    var xhr=new XMLHttpRequest();
+                    return xhr;
+                };
 
-                return deferred.promise;
+                UploadConstructor.prototype._setUrl=function(url){
+                    this.url=url;
+                };
+
+                UploadConstructor.prototype._setFiles=function(files){
+                    this.files=files;
+                };
+
+                UploadConstructor.prototype._makeXHR=function(){
+                    console.log(this.url);
+                    console.log(this.files);
+                    console.log(this._getXHR());
+                };
+
+                UploadConstructor._run=function(url,files){
+                    this._setUrl(url);
+                    this._setFiles(files);
+                    this._makeXHR();
+                };
+
+                UploadConstructor.prototype._successUpload=function(){
+
+                };
+                UploadConstructor.prototype._errorUpload=function(){
+
+                };
+                UploadConstructor.prototype._progressUpload=function(){
+
+                };
+
+
+
+
+                var myUploader=new UploadConstructor();
+
+                myUploader._run(url,files);
+                //myUploader._makeXHR();
+                return myUploader;
 
             };
+
             return service;
         }]);
 })();

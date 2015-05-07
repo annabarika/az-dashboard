@@ -4,7 +4,7 @@
         <div class="panel-body">
             <h4 class="mb-xs">Gallery Upload</h4>
             <hr class="mnr-md mnl-md">
-            <div class="dropzone text-center" image-dropzone="photo" >
+            <div class="dropzone text-center" image-dropzone="photo" accept=".jpg,.png">
                 <h4 class="fw-sb mb-md">Drag And Drop your file here</h4>
                 <div class="clearfix mb-sm">
                     <span class="btn btn-primary" ng-click="upload()">
@@ -17,7 +17,7 @@
                         <i class="fa fa-folder-open" ></i> UPLOAD FOLDER
                     </span>
 
-                    <input type="file" id="fileUpload" file-input="photo" style="display: none"  multiple accept=".jpg,.png,.pdf"/>
+                    <input type="file" id="fileUpload" file-input="photo" style="display: none"  multiple accept=".jpg,.png"/>
                 </div>
                 <p class="text-muted mb-0">Accept only *.jpg and *.png files</p>
             </div>
@@ -27,7 +27,7 @@
                     <div class="col-sm-2 col-md-2" ng-repeat="(key,value) in photo track by $index" >
 
                         <div class="thumbnail" ng-if="key!='length'&& key!='item'">
-
+                            <!--<pre>{{key}}{{value}}</pre>-->
                            <!-- <a href="" ng-click="deleteFile(value)"><i class="fa fa-remove"></i></a>-->
                             <img file-preview="value" style="height:120px;"/>
                         </div>

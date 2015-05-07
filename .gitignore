@@ -2,3 +2,5 @@
 api/config.php
 app/config.js
 f/tmp
+logs
+bower_components

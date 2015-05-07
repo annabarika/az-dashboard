@@ -18,15 +18,35 @@
                 <div class="panel panel-body">
                     <div class="row_collection" >
 
-                        <ul class="row_collection" ng-repeat="products in item.products ">
-                            <li class="img-wrapper" ng-if="$index < 3"  ng-repeat="product in products track by $index">
-                                <img style="height:100px" ng-src="{{imagePath}}{{product[0].files[0].path}}"/>
+                        <ul class="row_collection" ng-repeat="products in ::item.products ">
+                            <li class="img-wrapper" ng-if="$index < 3"  ng-repeat="product in ::products track by $index">
+                                <!--<img style="height:100px" ng-src="{{imagePath}}{{product[0].files[0].path}}"/>-->
+
+                                <span ng-repeat="file in ::product[0].files">
+                                    <!--{{file}}-->
+                                    <img style="height:100px" ng-if="$last" ng-src="{{imagePath}}{{file.path}}" />
+                                </span>
+                                <!--<img style="height:100px" ng-src="{{imagePath}}{{product[0].files[0].path}}"/>-->
                             </li>
 
                         </ul>
                     </div>
                     <div>
-                        <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<br/><span class="date">{{item.createDate}}</span></p>
+                        <p class="caption">
+                            Factory:
+                            <a ng-href="buyer/factory/{{item.factoryId}}" target="_blank" ng-click="$event.stopPropagation()">
+                                {{item.factoryName}}
+                            </a>
+                            &nbsp;&nbsp;<br/>
+                            Create date:
+                            <span class="date">
+                                {{item.createDate}}
+                            </span>
+                        </p>
+                        <p class="caption">
+                            Phone:
+                            <span ng-repeat="p in item.factoryPhone" class="date">{{p}}&nbsp;</span>
+                        </p>
                     </div>
                 </div>
             </div>

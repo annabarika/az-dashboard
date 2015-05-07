@@ -12,7 +12,7 @@ app.run(
             /**
              * load factory
              */
-            CollectionService.getFactories()
+           /* CollectionService.getFactories()
                 .success(function(data){
                     $rootScope.fullFactories=data;
                     //console.log("full",$rootScope.fullFactories);
@@ -26,8 +26,8 @@ app.run(
                      });
 
                     $rootScope.factories = factories;
-                   /* console.log("success factory", $rootScope.factories);*/
-                });
+                   *//* console.log("success factory", $rootScope.factories);*//*
+                });*/
 
             /**
              * load statusses
@@ -73,7 +73,7 @@ app.controller('CollectionsController', ['$scope', '$rootScope', 'CollectionServ
 
         function _loadCollections(url){
             CollectionService.getCollections(url).then(function (response) {
-
+                /*console.log($rootScope.factories);*/
                 $rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
 
                 var length=$rootScope.collections.length;
@@ -217,7 +217,7 @@ app.controller("CollectionsReadyController",
                 CollectionService.getCollections(url).then(function (response) {
 
                     $scope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
-                     //console.log($scope.collections);
+                     //console.log("ready",$scope.collections);
                     var keys=[],
                         length=$scope.collections.length;
 
@@ -231,7 +231,7 @@ app.controller("CollectionsReadyController",
                             });
 
                         }
-                        //console.log("keys",keys);
+                        console.log("keys",keys);
                         _getAllProducts(0,keys);
                     }
                     else{
@@ -250,10 +250,9 @@ app.controller("CollectionsReadyController",
              * @private
              */
             function _getAllProducts(i,keys){
-
                 CollectionService.getCollectionCard(keys[i].id).then(
                     function(response){
-
+                        console.log(response);
                         if(response.length!=0){
                             $scope.collections[keys[i].position]['products']=response;
                         }
@@ -267,10 +266,8 @@ app.controller("CollectionsReadyController",
                         else{
                              //console.log("final",$scope.collections);
                         }
-
                     });
             }
-
             /**
              *
              * @param item
@@ -281,9 +278,6 @@ app.controller("CollectionsReadyController",
             };
         }
     ]);
-
-
-
 /**
  * Upload photos controller
  */
@@ -297,7 +291,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
         });
         //TODO избавить от watch
         $scope.$watch("photo", function (value) {
-           // console.log(value);
+            //console.log("watcher",value);
             $rootScope.photo = value;
         });
 
@@ -481,6 +475,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                         $scope.photo=photo;
                         $scope.max=$scope.photo.length;
                         $scope.dynamic=0;
+
                         $scope.items = [];
                         $scope.flagUpload=true;
                         $scope.type='success';
@@ -497,8 +492,48 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                          * @private
                          */
                         function _Upload(i){
-                            $scope.start=0;
+                            $scope.uploadLoaded=0;
                             image=$scope.photo[keyArray[i]];
+                            /**
+                             * ITS CODE FOR FILE UPLOADER SERVICE
+                             */
+                           /* CollectionService.uploadFiles(image);
+
+                            $scope.$watch('uploadProgress',function(val){
+                                if(val){
+                                    $timeout(function(){
+                                        $scope.uploadLoaded=val;
+                                    },10);
+                                }
+                            });
+                            $scope.$watch('resultUploadData',function(val){
+                                if(val){
+                                    if (_.isArray(val)) {
+                                        $scope.items.push({
+                                            photos:val,
+                                            article:"",
+                                            sizes:"",
+                                            price:""
+                                        });
+
+                                        $rootScope.resultUploadData=undefined;
+
+                                        $timeout(function(){
+                                            $scope.dynamic ++;
+                                        }, 200);
+                                        i++;
+                                        if(i<$scope.max && $scope.flagUpload==true){
+                                            _Upload(i);
+                                        }else{
+                                            if($scope.items.length==$scope.max){
+                                                $timeout(function(){
+                                                    modalInstance.close($scope.items);
+                                                }, 1000);
+                                            }
+                                        }
+                                    }
+                                }
+                            });*/
 
                             CollectionService.uploadFiles(image).success(function (data) {
                                 if (_.isArray(data)) {
@@ -509,18 +544,19 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                         price:""
                                     });
 
-                                    $timeout(function(){
+                                    //$timeout(function(){
                                         $scope.dynamic ++;
-                                    }, 200);
+                                    //}, 200);
                                     i++;
                                     if(i<$scope.max && $scope.flagUpload==true){
+                                        console.log($scope.flagUpload);
                                         _Upload(i);
                                     }else{
-                                        if($scope.items.length==$scope.max){
-                                            $timeout(function(){
+                                        $timeout(function(){
+                                            if($scope.items.length==$scope.max && $scope.flagUpload==true){
                                                 modalInstance.close($scope.items);
-                                            }, 1000);
-                                        }
+                                            }
+                                        }, 1000);
                                     }
                                 }
                             });
@@ -534,8 +570,9 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                             id=$scope.items[i].photos[0].id;
                             CollectionService.deleteFiles(id).then(
                                 function(response){
+
                                     if(response=='true'){
-                                        $scope.dynamic --;
+                                        $scope.dynamic--;
                                         i++;
                                         if(i<$scope.items.length){
                                             _deleteFiles(i);
@@ -555,6 +592,7 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                          */
                         $scope.cancelUpload=function(){
                             $scope.flagUpload=false;
+                            console.log($scope.flagUpload);
                             $scope.type='danger';
                             //console.log($scope.items);
                             _deleteFiles(0);
@@ -569,11 +607,9 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                     }
                 });
                 modalInstance.result.then(function(array){
+                    console.log(array);
                     $scope.items=array;
-
                     $scope.imagePath = CollectionService.getImagePath();
-
-                    //console.log("result",$scope.items);
                     $scope.step++;
                     $scope.priceFlag=false;
                 });
@@ -606,10 +642,8 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                                             //console.log("update col.status",response);
                                         }
                                     );
-
                                     $scope.step++;
                                 }
-
                             }
                         )
                     }
@@ -617,8 +651,6 @@ app.controller("UploadController", ['$scope', '$rootScope', '$location', 'Collec
                 else{
                     messageCenterService.add("danger", validation,{timeout:3000});
                 }
-
-
             }
         };
         /**
@@ -792,7 +824,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                     _.map($scope.items[index].sizes,_counter);
                 }
                 else{
-                    console.log($scope.items,size);
+                    //console.log($scope.items,size);
                     var length=$scope.items.length;
                     for (var i=0;i<length;i++){
                         if($scope.items[i].catalogueProduct.id==product.catalogueProduct.id){
@@ -843,7 +875,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
             var modalInstance=CollectionService.showModal("CANCEL_COLLECTION");
             modalInstance.result.then(function(){
                 CollectionService.cancelCollection($routeParams.collectionId).then(function (response) {
-                        console.log("cancel collection",response);
+                        //console.log("cancel collection",response);
 
                     if (response.status==2) {
                         //$rootScope.collections = CollectionService.filterCollections(response, $rootScope.factories, $rootScope.statuses);
@@ -851,7 +883,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
 
                         $timeout(function () {
                             $location.path("buyer/collection");
-                        }, 2000);
+                        }, 1000);
                     }
                     else {
                         messageCenterService.add('danger', 'Failed', {timeout: 3000});
@@ -895,16 +927,16 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                 messageCenterService.add('danger', 'Can not create order with empty sizes count', {timeout: 3000});
                 return false;
             }
-
             /**
              * if orderId==null create new order
              */
             if(_.isNull($scope.orderId)){
 
                 CollectionService.orderCreate($rootScope.user.id,$scope.collection,$scope.currencyId,$scope.type).then(function(response){
+                    console.log(response);
                     if(_.has(response,'id')){
                         console.log("success create order",response);
-                        $scope.orderId =response.id;
+                        $scope.orderId =response.orderId;
                         $scope.createOrder();
                     }
                 });
@@ -936,7 +968,7 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                                             console.log($scope.collection);
                                             $scope.isOrdered = true;
                                             $rootScope.isOrderedAll = true;
-                                            window.location.reload();
+                                           // window.location.reload();
                                         }
                                     }
                                 );
@@ -947,7 +979,6 @@ app.controller('CollectionCardController', ['$scope', '$rootScope', 'CollectionS
                             }
                         });
                     }
-
                 });
             }
         };

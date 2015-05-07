@@ -1,27 +1,32 @@
 var app = angular.module("modules.buyer.orders", []);
 
-app.run(
+/*app.run(
     [
         "$rootScope",
         "$http",
 
         function($rootScope,$http){
-            /**
+            *//**
              * get factories
-             */
-            $http.get(config.API.host + "factory/load")
-                .success(function(data){
+             *//*
+            if($rootScope.fullFactories!=undefined){
+                _factoryForFilter();
+            }
+            else{
+                $http.get(config.API.host + "factory/load")
+                    .success(function(data){
 
-                     $rootScope.fullFactories=data;
-                    _factoryForFilter();
-                });
-            /**
+                        $rootScope.fullFactories=data;
+                        _factoryForFilter();
+                    });
+            }
+            *//**
              * Factory getter
              * @private
-             */
+             *//*
             function _factoryForFilter(){
                 var factory = [];
-                 /*console.log($rootScope.fullFactories );*/
+                 *//*console.log($rootScope.fullFactories );*//*
                 for( var i in $rootScope.fullFactories ){
 
                     factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: $rootScope.fullFactories[i].factory.name } );
@@ -30,7 +35,7 @@ app.run(
                // console.log(factory);
             }
         }
-    ]);
+    ]);*/
 
 app.controller('OrderListController',
 
@@ -70,19 +75,39 @@ app.controller('OrderListController',
                 RestFactory.request(url).then(
                     function(response){
                         $scope.type= _.first(response);
-                        console.log(response);
+                       /* console.log(response);*/
                     }
                 )
             }
+            _factoryForFilter();
+            /**
+             * Factory getter
+             * @private
+             */
+            function _factoryForFilter(){
+                var factory = [];
+                /*console.log($rootScope.fullFactories );*/
+                for( var i in $rootScope.fullFactories ){
+
+                    factory.push( { type:"factory", id: $rootScope.fullFactories[i].factory.id, name: $rootScope.fullFactories[i].factory.name } );
+                }
+                $rootScope.Factory=factory;
+                // console.log(factory);
+            }
+
+
             /**
              * get orders
              */
-            RestFactory.request(config.API.host+"order/load-detailed/").then(
-                function(response){
-                    //console.log("all orders",response);
-                    _parseOrders(response);
-                }
-            );
+            $scope.getOrders=function(){
+                RestFactory.request(config.API.host+"order/load-detailed/").then(
+                    function(response){
+                       /* console.log("all orders",response);*/
+                        _parseOrders(response);
+                    }
+                );
+            };
+            $scope.getOrders();
             /**
              * get payment type for orders
              */
@@ -278,10 +303,10 @@ app.controller('OrderListController',
                 event.stopPropagation();
 
                 if(type=='refund'){
-                    $scope.title="Refund from order #"+$scope.orders[index].order.id;
+                    $scope.title="Ask for refund from order #"+$scope.orders[index].order.id;
                 }
                 else{
-                    $scope.title="Make payment for order #"+$scope.orders[index].order.id;
+                    $scope.title="Ask for payment for order #"+$scope.orders[index].order.id;
                 }
 
                 var modalInstance=$modal.open({
@@ -495,7 +520,7 @@ app.controller('OrderListController',
                  */
                 var modalInstance=$modal.open({
                     templateUrl:"/modules/buyer/views/orders/new_order_factory.html",
-                    controller:function($scope,$rootScope,imagePath,$timeout,messageCenterService){
+                    controller:function($scope,imagePath,factories,$timeout,messageCenterService){
                         /**
                          * modal title
                          * @type {string}
@@ -528,7 +553,7 @@ app.controller('OrderListController',
                         /**
                          * parse factories
                          */
-                        $scope.allFactories=_getFactoriesByGroup($rootScope.fullFactories);
+                        $scope.allFactories=_getFactoriesByGroup(factories);
                         /**
                          *
                          * @param files
@@ -555,7 +580,7 @@ app.controller('OrderListController',
                         function _getFactoriesByGroup(factories){
                             var factory=[];
                             for(var f in factories){
-                                if(factories[f].factoryGroup.id=="1"){
+                                //if(factories[f].factoryGroup.id=="1"){
                                     factory.push(
                                         {
                                             name        :   factories[f].factory.name,
@@ -567,7 +592,7 @@ app.controller('OrderListController',
                                             currencyId  :   factories[f].factory.currencyId
                                         }
                                     )
-                                }
+                                //}
                             }
                             return factory;
                         }
@@ -577,8 +602,6 @@ app.controller('OrderListController',
                       /*  $timeout(function(){
                             $scope.factoryFlag=true;
                         },3000);*/
-
-
                         $scope.$watch('factory',function(val){
                             if(val==""){
                                 $scope.factoryFlag=true;
@@ -587,8 +610,10 @@ app.controller('OrderListController',
                                 $scope.factoryFlag=false;
                             }
                         });
-
-
+                        /**
+                         * close modal window
+                         * @param factory
+                         */
                         $scope.chooseFactory=function(factory){
                             if(!factory){
                                 messageCenterService.add("danger","You are not choose factory",{timeout:3000});
@@ -596,7 +621,9 @@ app.controller('OrderListController',
                             }
                             modalInstance.close(factory);
                         };
-
+                        /**
+                         * create new factory
+                         */
                         $scope.createNewFactory=function(){
                             modalInstance.close();
                         }
@@ -607,6 +634,9 @@ app.controller('OrderListController',
                     resolve:{
                         imagePath:function(){
                            return $scope.imagePath;
+                        },
+                        factories:function(){
+                            return $rootScope.fullFactories;
                         }
                     }
                 });
@@ -715,12 +745,16 @@ app.controller('OrderListController',
                                 return;
                             }
                             modalInstance.close(factory);
-                        }
+                        };
                     },
                     backdrop:'static',
                     size:"sm"
                 });
                 modalInstance.result.then(function(factory){
+                    if(!factory){
+                        $scope.addNewOrder();
+                        return;
+                    }
                     console.log("make new factory",factory,$rootScope.factoryAttachment);
                     url=config.API.host+"factory/create";
                     //@TODO переделать добавление в массив параметров
@@ -912,7 +946,7 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
      * create and save new order
      * @param data
      */
-    $scope.saveOrder = function ( amount) {
+    $scope.saveOrder = function ( amount,advance) {
 
         if(amount==""){
             messageCenterService.add('danger','please enter amount',{timeout:3000});
@@ -922,10 +956,6 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             messageCenterService.add('danger','Please use the numbers or point',{timeout:3000});
             return;
         }
-        var fd = new FormData();
-        angular.forEach($scope.files, function(file){
-            fd.append('file[]', file);
-        });
 
         var params = {
             'buyerId'       :   $rootScope.user.id,
@@ -934,63 +964,111 @@ app.controller("OrderEditController", function($scope,$rootScope,RestFactory,$lo
             'currencyId'    :   $scope.factory.currencyId,
             'status'        :   $scope.statusModel
         };
-        console.log("order params",params);
-        var url = config.API.host + "order/create";
 
-        RestFactory.request(url,"POST",params)
+        RestFactory.request(config.API.host + "order/create","POST",params)
             .then(function(response){
-                console.log("create order",response, typeof response);
-                if(response=='null'){
-                    messageCenterService.add('danger', 'Order is not created', {timeout: 3000});
-                }
-                else{
-                    if(_.isObject(response)){
-                        url=config.API.host+"order/create-manual-row";
-                        params={
-                            orderId: response.id,
-                            price: amount
-                        };
-                        console.log("row params",params);
-                        RestFactory.request(url,"POST",params).then(
-                            function(response){
-                                console.log("create-manual-row",response);
-                                if(response==null){
-                                    messageCenterService.add("danger","Row is not created",{timeout:3000});
-                                }
-                            }
-                        );
+                console.log("create order",response);
 
-                        url = config.API.host + "order/loadfiles";
-                        fd.append("id",response.id);
-                        console.log(fd);
-                        $http.post(url,fd,
-                            {
-                                transformRequest: angular.identity,
-                                headers: {'Content-Type': undefined}
-                            })
-                            .success(function(data){
-                                console.log("fileData",data);
+                    if(_.has(response,"id")){
+                        if(advance){
+                            _createPayment(response,$rootScope.user,advance);
+                        }
 
-                            })
-                            .error(function(data,status){
-                                console.log(data,status);
-                                messageCenterService.add("danger","ERROR: files is not upload, "+status,{timeout:3000});
-                            })
+                        _createManualRow(response.id,amount);
+
+                        if($scope.files){
+                            _loadOrderFiles(response.id);
+                        }
+                        messageCenterService.add('success', 'Order is created', {timeout: 3000});
+                        $location.path( '/buyer/orders/id/'+ response.id );
+                        $modalInstance.close();
                     }
-                     console.log(response);
-                    messageCenterService.add('success', 'Order is created', {timeout: 3000});
-                    $location.path( '/buyer/orders/id/'+ response.id );
-                    $modalInstance.close();
-                }
-            },
-            function(error) {
-                /*  console.log(error);*/
-                messageCenterService.add('danger', 'Order is not created', {timeout: 3000});
-            });
-
-
+                    else{
+                        messageCenterService.add('danger', 'Order is not created', {timeout: 3000});
+                    }
+            })
     };
+    /**
+     * create payment for order if advance
+     * @param order
+     * @param user
+     * @param advance
+     * @private
+     */
+    function _createPayment(order, user,advance) {
 
+        var data = {
+            documentId          : order.id,
+            currencyId          : order.currencyId,
+            paymentDocumentType : 1,
+            cashierId           : user.id,
+            cashierOfficeId     : parseInt(user.settings.cashierOffice),
+            paymentType         : "payment",
+            amount              : parseFloat(advance),
+            paymentMethod       : "bank",
+            note                : "&nbsp"
+        };
+        console.log("paymentCreate",data);
+        RestFactory.request(config.API.host + "payment/create", "POST", data).then(function(response){
+            if(_.has(response,"id")){
+                messageCenterService.add("success","Payment created",{timeout:1000});
+            }
+            else{
+                messageCenterService.add("danger","Payment is not created",{timeout:1000});
+            }
+        });
+    }
+    /**
+     * load files for order
+     * @param id
+     * @private
+     */
+    function _loadOrderFiles(id){
+        var fd = new FormData();
+        angular.forEach($scope.files, function(file){
+            fd.append('file[]', file);
+        });
+        fd.append("id",id);
+        $http.post(config.API.host + "order/loadfiles",fd,
+            {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function(data){
+                console.log("fileData",data);
+
+            })
+            .error(function(data,status){
+                console.log(data,status);
+                messageCenterService.add("danger","ERROR: files is not upload, "+status,{timeout:1000});
+            })
+    }
+    /**
+     * create manual row for new order
+     * @param id
+     * @param price
+     * @private
+     */
+    function _createManualRow(id,price){
+
+        var params={
+            orderId : id,
+            price   : price
+        };
+        //console.log("row params",params);
+        RestFactory.request(config.API.host+"order/create-manual-row","POST",params).then(
+            function(response){
+                //  console.log("create-manual-row",response);
+                if(response==null){
+                    messageCenterService.add("danger","Row is not created",{timeout:1000});
+                }
+            }
+        );
+    }
+
+    /**
+     * close modal window without creating order
+     */
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
@@ -1030,6 +1108,7 @@ app.controller("OrderController",
              * get payment type for orders
              */
             $scope.$watch('types',function(val){
+                console.log("watch",val);
                 if(val){
                     _getPaymentType();
                 }
@@ -1060,15 +1139,19 @@ app.controller("OrderController",
                 }
             }
 
-            $scope.currentType=function (){
-
+            /**
+             * get current type
+             * @private
+             */
+            /*function _currentType(){
+                console.log("type",$scope.type);
                 angular.forEach($scope.type,function(value){
 
                     if(value.id==$scope.order.order.type){
-                        return value;
+                        $scope.currentType= value;
                     }
                 });
-            };
+            };*/
 
             $scope.statusTemplates = {
                 0:'<span class="label label-info">Draft</span>',
@@ -1076,17 +1159,20 @@ app.controller("OrderController",
                 2:'<span class="label label-success">Cancelled</span>',
                 3:'<span class="label label-warning">Finished</span>'
             };
-
+            /**
+             *  set title
+             * @type {string}
+             */
             $rootScope.documentTitle = 'Order #'+ id;
-
+            /**
+             * canceled order
+             */
             $scope.cancel=function(){
 
                 if($scope.order.order.status==2){
                     messageCenterService.add('danger', 'Order has been canceled', {timeout: 3000});
                     return;
                 }
-
-
                 var modalInstance=$modal.open({
                     templateUrl:"/modules/buyer/views/orders/cancel.html",
                     size:"sm",
@@ -1094,14 +1180,12 @@ app.controller("OrderController",
 
                 });
                 modalInstance.result.then(function(){
-
                     url=config.API.host+"order/cancel";
-
                     RestFactory.request(url,"PUT",{id:id}).then(
                         function(response){
-
                             if(response.status==2){
                                 messageCenterService.add('success', 'Order cancelled', {timeout: 3000});
+                                $scope.order.order.status=response.status;
                             }
                             else{
                                 messageCenterService.add('danger', 'Order is not cancelled', {timeout: 3000});
@@ -1118,9 +1202,14 @@ app.controller("OrderController",
                 .then(function(response){
                     console.log("order",response);
                     $scope.order=response;
+                    $scope.price=response.order.orderedTotal;
+                    //$scope.files=response.files;
                     setFlag($scope.order.order.status);
+                    _getProductRows();
                     angular.forEach($scope.type,function(value,index){
+                        //console.log(value.id==$scope.order.order.type,value.id,$scope.order.order.type);
                         if(value.id==$scope.order.order.type){
+
                             $scope.currentType=$scope.type[index];
                         }
                     });
@@ -1140,38 +1229,37 @@ app.controller("OrderController",
             /**
              * load products by orderId
              * @type {Array}
+             * @private
              */
-            $scope.totalCount=0;
-            $scope.totalPrice=0;
-            RestFactory.request(config.API.host+"order/get-rows/id/"+id).then(
-                function(response){
-                    console.log('response rows', response);
-                    $scope.orderProducts=response;
-                    console.log(response);
-                    angular.forEach(response,function(value){
-
-                        if(_.has(value, 'count')){
-
-                            $scope.totalCount+=parseInt(value.count);
-
-                        }
-                        if(_.has(value.product, 'price')) {
-                            $scope.totalPrice += parseInt(value.price);
-                        }
-                    });
-                }
-            );
-
+            function _getProductRows(){
+                $scope.totalCount=0;
+                $scope.totalPrice=0;
+                RestFactory.request(config.API.host+"order/get-rows/id/"+id).then(
+                    function(response){
+                        console.log('response rows', response);
+                        $scope.orderProducts=response;
+                        console.log(response);
+                        angular.forEach(response,function(value){
+                            if(_.has(value, 'count')){
+                                $scope.totalCount+=parseInt(value.count);
+                            }
+                            if(_.has(value.product, 'price')) {
+                                $scope.totalPrice += parseInt(value.price);
+                            }
+                        });
+                    }
+                );
+            }
             /**
              * Update ordered Total value
              *
              * @param object order
              */
-            $scope.totalUpdate = function(order) {
+            $scope.totalUpdate = function(price) {
 
                 // ENTER
                 if(event.keyCode == 13) {
-                    if(order.orderedTotal == "") {
+                    if(price == ""){
                         messageCenterService.add("danger", "Ordered total can not be empty",{timeout:3000});
                         return;
                     }
@@ -1189,21 +1277,22 @@ app.controller("OrderController",
                         }
                     )}*/
                     RestFactory.request(config.API.host+"order/update-row","PUT",{
-                        id          :   order.id,
-                        orderedTotal:   order.orderedTotal,
+                        id          :   $scope.orderProducts[0].id,
+                        price       :   price,
                         size        :   $scope.orderProducts[0].size
                     }).then(function(response){
 
-                            if(_.isObject(response)){
-                                messageCenterService.add("success", "Ordered total updated",{timeout:3000});
-                            }
-                            else{
-                                messageCenterService.add("danger", "Ordered total is not updated",{timeout:3000});
-                            }
+                        if(_.isObject(response)){
+                            messageCenterService.add("success", "Ordered total updated",{timeout:3000});
+                            _getProductRows();
                         }
+                        else{
+                            messageCenterService.add("danger", "Ordered total is not updated",{timeout:3000});
+                        }
+                    }
                     )}
             };
-
+/*
             $scope.saveProduct=function(event,product,model){
 
                 if(event.keyCode==13) {
@@ -1236,9 +1325,7 @@ app.controller("OrderController",
                     )
 
                 }
-            };
-
-
+            };*/
             /**
              * location to cargo cart
              * @param id
@@ -1252,9 +1339,15 @@ app.controller("OrderController",
             $scope.showPayment=function(){
                 $location.path('/buyer/payments/payment_order/'+id);
             };
-
+            /**
+             * imagePath for products
+             * @type {string}
+             */
             $scope.imagePath=config.API.imagehost+'/files/factory/attachments/';
-
+            /**
+             * table header for products
+             * @type {{name: string, title: string}[]}
+             */
             $scope.tableHeader = [
                 { name: "photo", title: 'Photo' },
                 { name: "articul", title: 'Articul' },
@@ -1335,7 +1428,7 @@ app.controller("OrderController",
                     templateUrl: "/modules/buyer/views/orders/make_payment.html",
                     controller: function($scope,messageCenterService){
 
-                        $scope.title="Make payment";
+                        $scope.title="Ask for payment";
 
                         $scope.make=function(payment){
                             if(_.isUndefined(payment)){
@@ -1398,9 +1491,9 @@ app.controller("OrderController",
             };
 
             $scope.$watch("files",function(value){
-                console.log(value);
-                if(!_.isUndefined(value) && $scope.uploadFlag){
 
+                if(!_.isUndefined(value) && $scope.uploadFlag){
+                    console.log(value);
                     runUpload();
                 }
             });
@@ -1408,18 +1501,13 @@ app.controller("OrderController",
              * upload files
              */
             function runUpload(){
-
                 $scope.uploadFlag=false;
-
                 var fd = new FormData();
-
+                fd.append("id",id);
                 angular.forEach($scope.files, function(file){
                     fd.append('file[]', file);
                 });
-
                 url = config.API.host + "order/loadfiles";
-                fd.append("id",id);
-                console.log("fd",fd);
                 $http.post(url,fd,
                     {
                         transformRequest: angular.identity,
@@ -1429,18 +1517,21 @@ app.controller("OrderController",
                         console.log("data upload",data);
                         if(_.isArray(data)){
                             messageCenterService.add('success', 'Files uploaded', {timeout: 3000});
+                            for(var i=0,length=data.length;i<length;i++){
+                                $scope.order.files.push(data[i]);
+                            }
+                            $scope.files=undefined;
                         }
                         else{
                             messageCenterService.add('danger', 'Download failed: '+data, {timeout: 3000});
                         }
-
                     })
                     .error(function(data,status){
                         messageCenterService.add('danger', 'Error: '+data+" "+status, {timeout: 3000});
                     })
             }
 
-            $scope.removeFiles=function(name){
+            /*$scope.removeFiles=function(name){
 
                 var obj={};
 
@@ -1459,7 +1550,6 @@ app.controller("OrderController",
                 else{
                     $scope.files=obj;
                 }
-
-            }
+            }*/
 
         }]);

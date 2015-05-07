@@ -497,33 +497,61 @@ app.controller("CargoManagementController",
         function($scope,$rootScope,RestFactory,messageCenterService,$modal,$location){
 
             $rootScope.documentTitle="Cargo management";
-
-
-
+            /**
+             * checkboxs in cargo register
+             * @type {{}}
+             */
+            $scope.cargoCheckbox={};
+            /**
+             * logistic company load
+             */
             RestFactory.request(config.API.host + "logisticCompany/load")
                 .then(function(response){
                     if(response!=undefined && response!='null'){
+
+                        for(var i=0;i<response.length;i++){
+                            response[i].checked=false;
+                        }
                         $scope.logisticCompanies = response;
-                        console.log(response);
+                        console.log("suppliers",response);
                     }
                 });
-
+            /**
+             * status load
+             */
             RestFactory.request(config.API.host + "status/load/type/cargo")
                 .then(function(response){
-
-
                     for(var i=0;i<response.length;i++){
-                        if(response[i].statusId==3){
-                            response[i].ticked=true;
-                        }
+                        response[i].checked=false;
+                        /*if(response[i].statusId==3){
+                            response[i].checked=true;
+                        }*/
                     }
-                    console.log(response);
                     $scope.statuses = response;
-
+                    console.log($scope.statuses);
                 });
+            $scope.$watch('factories',function(val){
+                if(val){
+                    $scope.factoryFilter=_parseFactory();
+                }
+            });
 
-            $scope.cargoCheckbox={};
+            function _parseFactory(){
+                var array=[];
+                for(var i= 0,length=$rootScope.factories.length;i<length;i++){
+                    array.push($rootScope.factories[i]);
+                    array[i].phone=JSON.parse(array[i].phone);
+                    array[i].checked=false;
+                }
+                return array;
+            }
 
+            _getCargo(config.API.host+"cargo/load");
+            /**
+             * cargo load
+             * @param url
+             * @private
+             */
             function _getCargo(url){
                 RestFactory.request(url).then(//cargo/load/status/3
 
@@ -531,24 +559,6 @@ app.controller("CargoManagementController",
 
                         console.log(response);
                         if(_.isArray(response) && response.length!=0){
-
-                            /*mocks begin*/
-                            /*response[0].cargo.deliveryPrice=1.00;
-                             response[1].cargo.deliveryPrice=1.50;
-                             response[0].cargo.document="Cargo doc.";
-                             response[1].cargo.document="Test";
-                             response[0].cargo.arriveWeight=1234;
-                             response[1].cargo.arriveWeight=315;
-                             response[0].cargo.arrivePlaces=25;
-                             response[1].cargo.arrivePlaces=123;
-                             response[0].cargo.incomeWeight=1127;
-                             response[1].cargo.incomeWeight=234;
-                             response[0].cargo.incomePlaces=21;
-                             response[1].cargo.incomePlaces=101;
-                             response[0].cargo.deliveryPaid=500;
-                             response[1].cargo.deliveryPaid=345;*/
-                            /*Mocks end*/
-
                             _parseCargo(response);
                         }
                         else{
@@ -565,8 +575,11 @@ app.controller("CargoManagementController",
             }
 
 
-
-
+            /**
+             * cargo parse
+             * @param response
+             * @private
+             */
             function _parseCargo(response){
                 var length=response.length,
                     index,
@@ -620,12 +633,62 @@ app.controller("CargoManagementController",
 
             }
 
+            /**
+             * fiter for Cargo register
+             * @param item
+             */
+            $scope.filterCargo=function(item){
+                var url=config.API.host+"cargo/load/",
+                    filter={
+                        status:[],
+                        suppliers:[],
+                        factory:[]
+                    },
+                    i,
+                    length=$scope.statuses.length;
+                console.log(item);
+
+                for(i=0;i<length;i++){
+                    if($scope.statuses[i].checked==true){
+                        console.log($scope.statuses[i]);
+                        filter.status.push($scope.statuses[i].statusId);
+                    }
+                }
+                if($scope.logisticCompanies){
+                    length=$scope.logisticCompanies.length;
+                    for(i=0;i<length;i++){
+                        if($scope.logisticCompanies[i].checked==true){
+                            filter.suppliers.push($scope.logisticCompanies[i].id);
+                        }
+                    }
+                }
+                length=$scope.factoryFilter.length;
+                for(i=0;i<length;i++){
+                    if($scope.factoryFilter[i].checked==true){
+                        filter.factory.push($scope.factoryFilter[i].id);
+                    }
+                }
+                if(filter.status.length>0){
+                    console.log(filter.status);
+                    url+="status/"+filter.status.join()+"/";
+                }
+
+                if(filter.suppliers.length>0){
+
+                    url+="logisticCompanyId/"+filter.suppliers.join()+"/";
+                }
+                if(filter.factory.length>0){
+                    url+="factoryId/"+filter.factory.join()+"/";
+                }
+
+                console.log(url);
+
+                _getCargo(url);
+            };
 
 
 
-
-
-            var filter={},url;
+            /*var filter={},url;
             $scope.$watchCollection('result',function(value) {
 
                 if(value){
@@ -656,7 +719,7 @@ app.controller("CargoManagementController",
                         }
 
                     }
-                    /*console.log(filter);*/
+                    *//*console.log(filter);*//*
 
                     if(!$.isEmptyObject(filter)){
 
@@ -684,7 +747,7 @@ app.controller("CargoManagementController",
                         $scope.cargo=$scope.data;
                     }
                 }
-            });
+            });*/
 
             /**
              * checkboxs

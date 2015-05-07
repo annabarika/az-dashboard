@@ -6027,3 +6027,15 @@ ul.row_collection{
     display: block;
     width: 0;
 }
+
+.payment-type-payment {
+    border-left: 3px solid red;
+}
+
+.payment-type-refund {
+    border-left: 3px solid greenyellow;
+}
+
+.payment-document-Other {
+    background-color: #faffff;
+}

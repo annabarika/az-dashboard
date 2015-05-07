@@ -82,7 +82,8 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
             });*/
 
             BestsellersService.getDayDetailed('total', date).then(function(response) {
-                $scope.bestsellersTotal = response;
+               // $scope.bestsellersTotal = response;
+                $scope.bestsellersOrdered = response;
                 console.log(response);
             });
 
@@ -145,10 +146,6 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
             $scope.date = null;
         };
 
-        // Disable weekend selection
-        $scope.disabled = function(date, mode) {
-            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-        };
 
         $scope.open = function($event) {
             $event.preventDefault();
@@ -164,7 +161,7 @@ app.controller('BestsellersOrderedController', ['$scope','$rootScope','$modal', 
 ]);
 
 // Bestseller's add item
-app.controller('BestsellersAddController', function ($scope, $rootScope, searchUri) {
+app.controller('BestsellersAddController', function ($scope, searchUri) {
         // provide search action to autocomplete
         $scope.searchUri = searchUri;
         $scope.today = function() {
@@ -176,16 +173,16 @@ app.controller('BestsellersAddController', function ($scope, $rootScope, searchU
             $scope.dt = null;
         };
 
-        $scope.disabled = function(date, mode) {
+        /*$scope.disabled = function(date, mode) {
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-        };
+        };*/
 
         $scope.toggleMin = function() {
             $scope.minDate = $scope.minDate ? null : new Date();
         };
         $scope.toggleMin();
 
-        $scope.open = function($event) {
+        /*$scope.open = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
 
@@ -195,9 +192,16 @@ app.controller('BestsellersAddController', function ($scope, $rootScope, searchU
         $scope.dateOptions = {
             formatYear: 'yy',
             startingDay: 1
-        };
+        };*/
 
         $scope.format ='dd-MMMM-yyyy';
+
+        $scope.$watch('buyingDate',function(val){
+            if(val){
+                console.log(val);
+            }
+        })
+
     }
 );
 
@@ -228,7 +232,7 @@ app.controller('BestsellerItemController',[
         BestsellersService.getBestseller($routeParams.bestsellerId).then(function(response) {
 
             if(response.bestseller) {
-
+                console.log(response);
                 $scope.bestseller = response.bestseller;
                 $scope.notes=$scope.bestseller.notes;
 				$scope.factory = response.factory;
@@ -252,7 +256,7 @@ app.controller('BestsellerItemController',[
                 BestsellersService.calculate($scope.count, $scope.sizes);
 
                 BestsellersService.getBestsellerHistory($scope.bestseller.productId).then(function(response) {
-                  /*  console.log("bests history",response);*/
+                    console.log("bests history",response);
                     $scope.tmp = response;
                     angular.forEach( $scope.tmp,function(item){
                         BestsellersService.getProducts(item.orderId).then(
@@ -322,20 +326,17 @@ app.controller('BestsellerItemController',[
          */
         $scope.createOrder = function( sizes ){
 
-            //console.log("sizes",sizes);
-
+            console.log("user",$rootScope.user);
             var _sizeArray=BestsellersService.sizeCheck(sizes);
-
-            //console.log("sizeArray",_sizeArray);
+            console.log("sizeArray",_sizeArray);
 
             if(_sizeArray.length==0){
-
                 messageCenterService.add("danger","size or count is empty",{timeout:3000});
                 return;
             }
-
-            BestsellersService.createOrder( $scope.product.factoryId).then(function(response){
-                if(response.id){
+            var factory= _.find($rootScope.factories,{id:$scope.product.factoryId});
+            BestsellersService.createOrder(factory,$rootScope.user).then(function(response){
+                if(_.has(response,'id')){
                     var orderId = response.id;
                     var products = BestsellersService.prepareProducts($scope.bestseller.id, $scope.product, _sizeArray);
                     // Adding items to order
@@ -343,8 +344,8 @@ app.controller('BestsellerItemController',[
                         BestsellersService.addOrderProductRow(orderId, products[i]).then(
                             function(response){
                                 //console.log(response);
-                                if(response.id){
-
+                                if(_.has(response,'id')){
+                                    messageCenterService.add('success','Order created',{timeout:3000});
                                     products.splice(0, 1);
                                 }
                             },
@@ -361,6 +362,9 @@ app.controller('BestsellerItemController',[
                             }
                         }
                     });
+                }
+                else{
+                    messageCenterService.add("danger","Sorry,order is not created. Error: "+response,{timeout:3000});
                 }
             });
         };
@@ -386,8 +390,9 @@ app.controller('BestsellerItemController',[
                         create.betsellerId = response.id;
 
                         // Create Order
-                        BestsellersService.createOrder($scope.product.factoryId).then(function (response) {
-
+                        var factory= _.find($rootScope.factories,{id:$scope.product.factoryId});
+                        BestsellersService.createOrder(factory,$rootScope.user).then(function(response){
+                        //BestsellersService.createOrder($scope.product.factoryId).then(function (response) {
                             if (response.id) {
                                 create.orderId = response.id;
                                 create.products = BestsellersService.prepareProducts(create.betsellerId, $scope.product, create.sizes);

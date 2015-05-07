@@ -1,0 +1,67 @@
+<div class="page-header">
+    <div class="box-layout">
+        <div class="row mb-xs">
+            <div class="col-md-12">
+                <div class="pull-left">
+                    <!--<div class="btn btn-success"><i class="fa fa-plus" ng-hide="payment.payment.status==1"></i>Delete factory</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid pt-md">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-pane active">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default border-n mt-20">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>
+                                            {{current.name}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone</td>
+                                        <td>
+                                            <span ng-repeat="phone in current.phone track by $index">{{phone}}&nbsp;</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Email
+                                        </td>
+                                        <td>
+                                            <span ng-repeat="mail in current.email track by $index">{{mail}}&nbsp;</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Address
+                                        </td>
+                                        <td>
+                                            {{current.address}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Production Days</td>
+                                        <td>
+                                            {{current.productionDays}}
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
