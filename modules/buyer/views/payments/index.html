@@ -9,8 +9,14 @@
             </div>
             <div class="col-sm-5">
                 <div class="col-sm-4 va-m" ng-init="filter.createDate.startDate=firstDay">
-                    <input date-range-picker class="form-control date-picker" placeholder="Start date" type="text"
-                           ng-model="filter.createDate" ng-change="filteredPayments(filter)" max="maxDate"/>
+                    <!--<input date-range-picker class="form-control date-picker" placeholder="Start date" type="text"
+                           ng-model="filter.createDate" ng-change="filteredPayments(filter)" max="maxDate"/>-->
+                    <p class="input-group">
+                        <input type="text" class="form-control" ng-change="filteredPayments()" ng-click="open($event)" datepicker-popup="{{format}}" ng-model="minDate" is-open="opened" datepicker-options="dateOptions" show-weeks="true" ng-required="true" close-text="Close" max-date="maxDate"/>
+                        <span class="input-group-btn">
+                               <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
                 </div>
             </div>
             <!--<div class=" col-sm-2">

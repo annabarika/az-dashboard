@@ -12,7 +12,8 @@ app.controller('PaymentListController',
 		'messageCenterService',
 
 		function ($scope, $rootScope, $location, $route, PaymentService,$modal,messageCenterService) {
-			function getDate(){
+			//FOR DATEPICKER RANGE
+			/*function getDate(){
 				var startDate,
 					endDate;
 				startDate=moment().date(1).format('YYYY-MM-DD');
@@ -22,8 +23,38 @@ app.controller('PaymentListController',
 				endDate=moment().format('YYYY-MM-DD');
 				// Show all collected payments
 				setTimeout(getPayments({'start':startDate,'end':endDate}),80);
+			};*/
+			//getDate();
+
+			/**
+			 * Datepickers functions begin
+			 */
+			$scope.minDate=moment().date(1).format('YYYY-MM-DD');
+			$scope.maxDate=moment().format('YYYY-MM-DD');
+			$scope.clear = function () {
+				$scope.date = null;
 			};
-			getDate();
+
+			$scope.open = function($event) {
+				$event.preventDefault();
+				$event.stopPropagation();
+				$scope.opened = true;
+			};
+			$scope.dateOptions = {
+				formatYear: 'yy',
+				startingDay: 1
+			};
+			$scope.format = ' dd-MMMM-yyyy';
+			/**
+			 * 	Datepicker functions end
+			 */
+
+			/**
+			 * get Payments for current month
+			 */
+			setTimeout(getPayments({'start':$scope.minDate,'end':$scope.maxDate}),80);
+
+
 
 			$scope.$route = $route;
 			$scope.$location = $location;
@@ -90,7 +121,6 @@ app.controller('PaymentListController',
 
 					$scope.payments=PaymentService.parseCashierOffice($scope.payments,$scope.cashierOfficies);
 
-
 					angular.forEach($scope.cashierOfficies,function(value){
 						if(value.id==$scope.userCO){
 							$scope.userCO=value;
@@ -105,13 +135,17 @@ app.controller('PaymentListController',
              *
              * @param filter
              */
-            $scope.filteredPayments = function(filter) {
-				console.log("this",filter);
+            $scope.filteredPayments = function() {
+				/*console.log("this",filter);
                 var filter = PaymentService.parseFilters(filter);
 
                 if(filter.hasOwnProperty('date')) {
                     getPayments(filter.date);
-                }
+                }*/
+				getPayments({
+						'start':moment($scope.minDate).format('YYYY-MM-DD'),
+						'end':$scope.maxDate
+					});
 			};
 
 			/**
