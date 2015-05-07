@@ -5997,3 +5997,33 @@ ul.row_collection{
 .left {
     float: left !important;
 }
+.marker_success:after{
+    content: "";
+    position: absolute;
+    right: 15px;
+    border-width: 16px 16px 0 0;
+    border-style: solid;
+    border-color: #5cb85c #f2f5f8;
+    display: block;
+    width: 0;
+}
+.marker_info:after{
+    content: "";
+    position: absolute;
+    right: 15px;
+    border-width: 16px 16px 0 0;
+    border-style: solid;
+    border-color: #00bcd4 #f2f5f8;
+    display: block;
+    width: 0;
+}
+.marker_danger:after{
+    content: "";
+    position: absolute;
+    right: 15px;
+    border-width: 16px 16px 0 0;
+    border-style: solid;
+    border-color: #ea1c0d #f2f5f8;
+    display: block;
+    width: 0;
+}
