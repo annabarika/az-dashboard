@@ -62,7 +62,7 @@
         <h3 style="margin-bottom:30px;">Draft payments:</h3>
 
         <div class="row">
-            <div  style="min-height:160px;" class="col-sm-4 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)"><!--
+            <div  style="min-height:150px;" class="col-sm-4 col-md-2 col-bt-2" ng-repeat="item in draftPayments" ng-click="edit(item)"><!--
                 <div class="panel panel-body">
                     <div>
                         <p ng-if="item.documentId!='Other'">Order #{{item.documentId}}</p>
@@ -73,16 +73,14 @@
                         <p class="caption">{{item.factoryName}}&nbsp;&nbsp;<span class="date">{{item.paymentDate}}</span></p>
                     </div>
                 </div>-->
-                <div class="panel panel-body">
+                <div class="panel panel-body payment-type-{{item.type}} payment-document-{{item.documentId}}">
+                    <h4 ng-if="item.documentId!='Other'">
+                        <a ng-href="buyer/orders/id/{{item.documentId}}" target="_blank" ng-click="$event.stopPropagation()">Order #{{item.documentId}}</a>
+                    </h4>
+
                     <table>
-                        <tr>
-                            <td colspan="2" ng-if="item.documentId!='Other'">
-                                <a ng-href="buyer/orders/id/{{item.documentId}}" target="_blank" ng-click="$event.stopPropagation()">Order #{{item.documentId}}</a>
-                            </td>
-                            <td colspan="2" ng-if="item.documentId=='Other'">{{item.documentId}} payment</td>
-                        </tr>
                         <tr ng-if="item.documentId!='Other'">
-                            <td>Factory:</td>
+                            <td style="color: gray;">Factory:</td>
                             <td>
                                 <a ng-if="item.factoryName" href="buyer/factory/{{item.factory}}" target="_blank" ng-click="$event.stopPropagation()">{{item.factoryName}}</a>
                                 <span ng-if="!item.factoryName">none</span>
@@ -90,19 +88,18 @@
 
                         </tr>
                         <tr>
+                            <td style="color: gray;">Note:</td>
+                            <td>{{item.notes}}</td>
+                        </tr>
+                        <!--
+                        <tr>
                             <td>Type:</td>
                             <td>{{item.type}}</td>
                         </tr>
-                        <tr>
-                            <td>Credit:</td>
-                            <td ng-if="item.type=='payment'">{{item.amount}} {{item.currency}}</td>
-                            <td ng-if="item.type=='refund'">{{item.refund}} {{item.currency}}</td>
-                        </tr>
-                        <tr>
-                            <td>Note:</td>
-                            <td>{{item.notes}}</td>
-                        </tr>
+                        -->
                     </table>
+                    <h4 ng-if="item.type=='payment'">{{item.amount}} <small>{{item.currency}}</small></h4>
+                    <h4 ng-if="item.type=='refund'">{{item.refund}} {{item.currency}}</h4>
                 </div>
             </div>
         </div>
@@ -112,6 +109,31 @@
 <div class="col-sm-12 col-md-12" >
     <div ng-show="paidPayments.length">
         <h3 style="margin:0 0 0 40px;">Balance:</h3>
+        <div class="pa-md" style="margin:0 0 0 30px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>Income:</td>
+                            <td style="text-align: right; padding-right:10px;">{{paidSummary.refund}}</td>
+                            <td>{{paidSummary.currency}}</td>
+                        </tr>
+                        <tr>
+                            <td>Credit:</td>
+                            <td style="text-align: right; padding-right:10px;">{{paidSummary.amount}}</td>
+                            <td>{{paidSummary.currency}}</td>
+                        </tr>
+                        <tr style="font-size: 1.5em;">
+                            <td style="padding-right:10px; color: gray">Balance:</td>
+                            <td style="text-align: right; padding-right:10px;">{{paidSummary.difference}}</td>
+                            <td>{{paidSummary.currency}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
         <widget-table
                 datarows="paidPayments"
                 dataheader="tableHeader"
@@ -120,21 +142,5 @@
                 sort="date"
                 >
         </widget-table>
-        <div class="pa-md">
-            <div class="row">
-                <div class="col-md-12">
-                    <table class="table table-bordered table-striped dataTable no-footer">
-                        <tbody>
-                        <tr>
-                            <td colspan="7"><strong>Total</strong></td>
-                            <td>Credit: {{paidSummary.amount}} {{paidSummary.currency}}</td>
-                            <td>Debit: {{paidSummary.refund}} {{paidSummary.currency}}</td>
-                            <td>Balance: {{paidSummary.difference}} {{paidSummary.currency}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

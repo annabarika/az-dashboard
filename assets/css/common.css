@@ -5997,3 +5997,15 @@ ul.row_collection{
 .left {
     float: left !important;
 }
+
+.payment-type-payment {
+    border-left: 3px solid red;
+}
+
+.payment-type-refund {
+    border-left: 3px solid greenyellow;
+}
+
+.payment-document-Other {
+    background-color: #faffff;
+}
